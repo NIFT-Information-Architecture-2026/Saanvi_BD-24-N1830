@@ -137,3 +137,28 @@ journey
 | **4. Reveal** | Completely detached from monitoring status. | Opens app when relaxed; unwraps the custom vessel (unfolding/unboxing). | Emotional delight: *"They took time out of their day to make this."* |
 | **5. Scrapbook & Annotate** | Receives a gentle note whenever the keeper adds their layer or memory. | Circles a detail, links a memory of the day, leaves voice note, saves to album. | Collaborative layering without altering original artwork. |
 | **6. Revisit** | Re-discovers the gift 6 months or 1 year later. | Re-discovers the memory alongside the maker. | Nostalgic closure: memories gain patina rather than disappearing. |
+
+---
+
+## 7. Formal Persona Profiles & Primary Research Survey Instrument
+
+### A. Persona 1: The Long-Distance Kin / Chosen Partner
+- **Name:** Meera, 22 (Design Student living away from family & partner)
+- **Context:** Overwhelmed by back-to-back studio submissions and hostel life. She feels guilty about exchanging rushed 2-minute WhatsApp calls or dry logistical texts.
+- **Goal:** Wants to send something tactile, tender, and crafted that proves she is thinking of her person without triggering a demanding conversational loop.
+- **Frustration:** *"I hate that sweet photos or words of encouragement get buried under grocery lists and WhatsApp forwards."*
+- **A Little Something Touchpoint:** Uses the Studio to assemble a wildflower bouquet with a tied tag and a postcard with travel memories.
+
+### B. Persona 2: The Nostalgic Low-Frequency Confidant
+- **Name:** Rohan, 24 (Childhood Best Friend)
+- **Context:** Lives in another city; neither he nor his childhood friends like calling daily or texting small talk. They connect deeply only a few times a year.
+- **Goal:** Wants an unhurried digital archive to store their inside jokes, road trip tickets, and annual birthday cards without using ephemeral social media stories.
+- **Frustration:** *"Instagram DMs feel performative and disposable. If I want to save a memory with someone who really matters, I don't want an algorithm shoving ads in between."*
+- **A Little Something Touchpoint:** Pins train ticket stubs and postcards into a shared *"Trips & Detours"* scrapbook chapter, and schedules a return point for their graduation anniversary.
+
+### C. Academic Google Form Survey Instrument (Primary Research Kit)
+1. **Digital Archiving:** When someone sends you a meaningful message, photo, or note, where does it end up? *(Options: Screenshot folder / Starred in chat / Buried & lost / Saved in a note)*
+2. **Chat Pressure Index (1–5):** How often do typing bubbles ('...') and read receipts ('Seen') make you feel anxious or obligated to reply immediately?
+3. **Physical Ephemera:** Do you keep physical cards, tickets, letters, or pressed flowers from people close to you? *(Yes/No/Occasionally)*
+4. **Slow Gifting Value:** Would you prefer receiving a single hand-crafted digital letter/bouquet over dozens of casual chat messages? *(Scale: 1 [No difference] to 5 [Significantly more meaningful])*
+5. **Open Reflection:** *"What is the most thoughtful thing anyone has ever made or kept for you?"*
