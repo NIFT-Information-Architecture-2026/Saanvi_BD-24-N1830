@@ -1,0 +1,1351 @@
+/* ==========================================================================
+   VISUAL DESIGN SYSTEM & TOKENS
+   A Little Something, From Me to You — Digital Atelier
+   ========================================================================== */
+
+:root {
+  /* Archival Paper & Canvas Tokens */
+  --paper-white: #FFFFFF;
+  --paper-cloud: #F0EEE9;        /* Pantone Cloud Dancer */
+  --paper-blush: #F4EBE5;        /* Soft Cream Blush */
+  --paper-cotton: #FDFBF7;
+  --paper-oat: #F5EFEB;
+  --paper-border: #DCD7CE;
+  --paper-border-soft: #E8E4DC;
+
+  /* Deep Ink & Typography Tokens */
+  --ink-black: #1A1A1A;
+  --ink-brown: #382923;
+  --ink-blue: #1B263B;
+  --ink-muted: #736B63;
+  --ink-light: #9C948B;
+
+  /* Envelope & Seal Accents */
+  --seal-gold: #C5A059;
+  --seal-cream: #EFECE6;
+  --seal-maroon: #6B202A;
+  --envelope-maroon: #5C1D24;
+
+  /* Typography Scales */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-script: 'Caveat', cursive;
+  --font-mono: 'Courier Prime', monospace;
+
+  /* Radii & Layout */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+}
+
+/* ================= RESET & BASE ================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: #EAE6DF;
+  color: var(--ink-black);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 10px;
+}
+
+/* Zero shadows rule strictly enforced across all elements */
+*, *::before, *::after {
+  box-shadow: none !important;
+}
+
+/* ================= APP DEVICE SHELL ================= */
+.app-device {
+  width: 100%;
+  max-width: 480px;
+  min-height: 840px;
+  background-color: var(--paper-cotton);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ================= ATMOSPHERIC HEADER ================= */
+.app-header {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid var(--paper-border);
+  background-color: var(--paper-white);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header-pretitle {
+  display: block;
+  font-family: var(--font-script);
+  font-size: 19px;
+  color: var(--ink-muted);
+  line-height: 1.1;
+}
+
+.header-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink-black);
+  outline: none;
+  cursor: text;
+  border-bottom: 1px dashed transparent;
+  display: inline-block;
+  margin-top: 2px;
+}
+.header-title:hover, .header-title:focus {
+  border-bottom-color: var(--ink-light);
+}
+
+.header-subtitle {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-light);
+  margin-top: 3px;
+  letter-spacing: 0.02em;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--paper-oat);
+  border: 1px solid var(--paper-border-soft);
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+.status-indicator {
+  width: 6px;
+  height: 6px;
+  background-color: #7C8B76;
+  border-radius: 50%;
+}
+
+/* ================= MAIN STAGE & ROOM VIEWS ================= */
+.app-stage {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px 80px;
+}
+
+.room-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ================= STUDIO MEDIUM SELECTOR ================= */
+.studio-intro h2 {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 500;
+}
+.studio-intro p {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+.studio-medium-selector {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.medium-card {
+  background-color: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.medium-card:hover {
+  background-color: var(--paper-oat);
+}
+
+.medium-card.active {
+  border: 2px solid var(--ink-black);
+  background-color: var(--paper-white);
+}
+
+.medium-icon {
+  font-size: 24px;
+}
+
+.medium-meta strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-black);
+}
+
+.medium-meta small {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-muted);
+  line-height: 1.2;
+}
+
+/* ================= WORKSPACE TOOLBARS ================= */
+.canvas-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--paper-oat);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip-btn {
+  background-color: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--ink-black);
+  font-family: var(--font-sans);
+}
+
+.chip-btn.active {
+  background-color: var(--ink-black);
+  color: var(--paper-white);
+  border-color: var(--ink-black);
+}
+
+.color-palette {
+  display: flex;
+  gap: 6px;
+}
+
+.color-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+
+.color-dot.active::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  color: var(--ink-black);
+}
+
+/* ================= POSTCARD ATELIER ================= */
+.postcard-wrapper {
+  perspective: 1000px;
+  width: 100%;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+.postcard-wrapper.portrait {
+  height: 380px;
+}
+.postcard-wrapper.landscape {
+  height: 280px;
+}
+
+.postcard-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--paper-white);
+}
+
+.postcard-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.postcard-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Postcard Front */
+.postcard-front {
+  background-color: var(--paper-white);
+}
+
+.card-photo-slot {
+  flex: 1;
+  background-color: var(--paper-oat);
+  border: 1px dashed var(--paper-border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.photo-placeholder {
+  font-size: 12px;
+  color: var(--ink-muted);
+  text-align: center;
+  padding: 10px;
+}
+
+.card-attached-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-front-text {
+  margin-top: 12px;
+}
+
+.card-input-title {
+  width: 100%;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  border: none;
+  border-bottom: 1px solid var(--paper-border-soft);
+  background: transparent;
+  color: var(--ink-black);
+  padding: 4px 0;
+  outline: none;
+}
+
+.card-input-caption {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  border: none;
+  background: transparent;
+  color: var(--ink-muted);
+  padding: 4px 0;
+  resize: none;
+  outline: none;
+  line-height: 1.4;
+}
+
+/* Postcard Back */
+.postcard-back {
+  background-color: var(--paper-cloud);
+  transform: rotateY(180deg);
+}
+
+.postcard-back-split {
+  display: flex;
+  height: 100%;
+  gap: 12px;
+}
+
+.postcard-left-pane {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.postcard-back-message {
+  width: 100%;
+  height: 80%;
+  font-family: var(--font-script);
+  font-size: 19px;
+  line-height: 1.4;
+  border: none;
+  background: transparent;
+  color: var(--ink-black);
+  resize: none;
+  outline: none;
+}
+
+.postcard-divider-line {
+  width: 1px;
+  background-color: var(--paper-border);
+  height: 90%;
+  align-self: center;
+}
+
+.postcard-right-pane {
+  flex: 0.9;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+/* ================= DISTINCT PERFORATED POSTAGE STAMPS ================= */
+.stamp-slot {
+  width: 65px;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.postage-stamp {
+  width: 58px;
+  height: 70px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Genuine perforated postal stamp edges */
+  border: 2px dashed #FFFFFF;
+  outline: 2px solid #DCD7CE;
+  outline-offset: 1px;
+  color: #FFFFFF;
+}
+
+.stamp-heart {
+  background-color: #C93B3B; /* Crimson red */
+}
+.stamp-flower {
+  background-color: #E28FA8; /* Botanical pink */
+}
+.stamp-smiley {
+  background-color: #E5AC38; /* Sunflower yellow */
+}
+
+.stamp-icon {
+  font-size: 20px;
+}
+.stamp-date {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.postmark-circle {
+  border: 1px dashed var(--ink-light);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--ink-light);
+  transform: rotate(-12deg);
+}
+
+.address-lines {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 8px;
+}
+.address-line {
+  width: 100%;
+  height: 1px;
+  background-color: var(--paper-border);
+}
+
+.dedication-signoff {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.from-to-badge {
+  font-family: var(--font-script);
+  font-size: 16px;
+  color: var(--ink-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.from-to-badge input {
+  font-family: var(--font-script);
+  font-size: 16px;
+  border: none;
+  border-bottom: 1px dotted var(--ink-light);
+  background: transparent;
+  color: var(--ink-black);
+  width: 80px;
+  outline: none;
+}
+
+.card-action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn-subtle {
+  background: transparent;
+  border: 1px solid var(--paper-border);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--ink-black);
+}
+.btn-subtle:hover {
+  background-color: var(--paper-oat);
+}
+
+.stamp-selector-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+.stamp-option-btn {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  cursor: pointer;
+}
+.stamp-option-btn.active {
+  border: 2px solid var(--ink-black);
+}
+
+/* ================= LETTER ATELIER ================= */
+.letter-sheet {
+  background-color: var(--paper-cloud);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.letter-sheet.paper-cotton { background-color: #FFFFFF; }
+.letter-sheet.paper-cloud { background-color: #F0EEE9; }
+.letter-sheet.paper-linen { background-color: #F5EFEB; border-style: double; }
+.letter-sheet.paper-speckle { background-color: #FAF7F2; }
+
+.letter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--paper-border-soft);
+  padding-bottom: 8px;
+}
+.letter-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+.letter-body {
+  width: 100%;
+  font-family: var(--font-script);
+  font-size: 20px;
+  line-height: 1.5;
+  border: none;
+  background: transparent;
+  color: var(--ink-black);
+  resize: vertical;
+  outline: none;
+}
+
+.letter-stickers-tray {
+  background-color: var(--paper-white);
+  border: 1px solid var(--paper-border-soft);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  font-size: 12px;
+}
+.letter-stickers-tray label {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+.sticker-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sticker-pill {
+  background: var(--paper-oat);
+  border: 1px solid var(--paper-border);
+  border-radius: 12px;
+  padding: 3px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.sticker-pill:hover {
+  background: var(--paper-white);
+}
+
+.placed-stickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.active-sticker-chip {
+  background: var(--paper-cloud);
+  border: 1px solid var(--paper-border);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+/* Polaroid Tuck-in */
+.polaroid-tuckin {
+  margin-top: 10px;
+  width: 140px;
+}
+.polaroid-frame {
+  background: #FFFFFF;
+  border: 1px solid var(--paper-border);
+  padding: 8px 8px 14px;
+  text-align: center;
+}
+.polaroid-image-box {
+  width: 100%;
+  height: 100px;
+  background: var(--paper-oat);
+  border: 1px dashed var(--paper-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.polaroid-caption {
+  font-family: var(--font-script);
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-top: 6px;
+  border: none;
+  text-align: center;
+  width: 100%;
+  outline: none;
+  background: transparent;
+}
+
+/* Envelope & Seal Config */
+.envelope-config-box {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+.envelope-config-box h4 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+.config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.config-grid label {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
+}
+.atelier-select {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  background: var(--paper-white);
+}
+
+.seal-selector {
+  display: flex;
+  gap: 6px;
+}
+.seal-btn {
+  padding: 6px 10px;
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  cursor: pointer;
+  color: #FFFFFF;
+}
+.seal-btn.active {
+  outline: 2px solid var(--ink-black);
+}
+
+/* ================= BOUQUET ATELIER ================= */
+.bouquet-mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.flower-catalog {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.flower-catalog h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.flower-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.flower-item {
+  background: var(--paper-cotton);
+  border: 1px solid var(--paper-border-soft);
+  border-radius: var(--radius-sm);
+  padding: 6px 4px;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: left;
+}
+.flower-item:hover {
+  background: var(--paper-oat);
+}
+.flower-item.selected {
+  border-color: var(--ink-black);
+  background: var(--paper-cloud);
+}
+
+.bouquet-display-card {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.bouquet-visual {
+  height: 180px;
+  background: var(--paper-oat);
+  border: 1px solid var(--paper-border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.bouquet-wrap-render {
+  width: 80%;
+  height: 85%;
+  border: 1px solid var(--paper-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+}
+.wrap-kraft { background: #D9C2A7; }
+.wrap-vellum { background: #ECE8E1; border-style: dashed; }
+.wrap-linen { background: #FAF7F0; }
+.wrap-news { background: #E6E1D8; }
+
+.bouquet-stems-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.stem-chip {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--paper-border);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+}
+
+.bouquet-ribbon {
+  align-self: center;
+  padding: 4px 10px;
+  font-size: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--paper-border);
+}
+.ribbon-silk { background: #F4EFEB; color: #4A443F; }
+.ribbon-grosgrain { background: #68705C; color: #FFFFFF; }
+.ribbon-velvet { background: #5E2638; color: #FFFFFF; }
+.ribbon-jute { background: #A08264; color: #FFFFFF; }
+
+.bouquet-tag-note {
+  background: var(--paper-cotton);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+.tag-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+.bouquet-letter-input {
+  width: 100%;
+  font-family: var(--font-script);
+  font-size: 18px;
+  border: none;
+  background: transparent;
+  outline: none;
+  resize: vertical;
+}
+.wrap-ribbon-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+/* ================= GREETING CARD WORKSHOP ================= */
+.greeting-bifold-container {
+  background: var(--paper-cloud);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+.bifold-spread {
+  display: flex;
+  gap: 12px;
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  padding: 14px;
+}
+.bifold-page {
+  flex: 1;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+.bifold-crease {
+  width: 1px;
+  background: var(--paper-border);
+}
+.pocket-placeholder {
+  flex: 1;
+  background: var(--paper-oat);
+  border: 1px dashed var(--paper-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--ink-muted);
+  padding: 10px;
+  text-align: center;
+}
+.greeting-message-area {
+  flex: 1;
+  font-family: var(--font-script);
+  font-size: 18px;
+  border: none;
+  background: transparent;
+  outline: none;
+  resize: none;
+  margin-top: 8px;
+}
+
+/* ================= STRICTLY 3 DELIVERY VESSELS ================= */
+.packaging-vessel-bar {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-top: 20px;
+}
+.vessel-selector-head h3 {
+  font-family: var(--font-serif);
+  font-size: 16px;
+}
+.vessel-selector-head p {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+.vessel-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 14px 0;
+}
+.vessel-card {
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--paper-cotton);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.vessel-card input {
+  display: none;
+}
+.vessel-card.active {
+  border: 2px solid var(--ink-black);
+  background: var(--paper-white);
+}
+.vessel-glyph {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+.vessel-card strong {
+  display: block;
+  font-size: 12px;
+}
+.vessel-card small {
+  display: block;
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+.save-destination-row {
+  border-top: 1px solid var(--paper-border-soft);
+  padding-top: 12px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+.save-destination-row label {
+  color: var(--ink-muted);
+}
+.dest-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.dispatch-action-row {
+  margin-top: 16px;
+}
+.btn-primary-dispatch {
+  width: 100%;
+  background: var(--ink-black);
+  color: #FFFFFF;
+  border: none;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+.btn-primary-dispatch:hover {
+  background: #333333;
+}
+
+/* ================= KEEPSAKES ROOM ================= */
+.keepsakes-nav-segmented {
+  display: flex;
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--paper-white);
+}
+.seg-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 8px 4px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-family: var(--font-sans);
+}
+.seg-btn.active {
+  background: var(--ink-black);
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+.shelf-intro h3, .scrapbook-intro h3, .log-intro h3, .vault-header h3, .revisit-header h3 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+}
+.shelf-intro p, .scrapbook-intro p, .log-intro p, .vault-header p, .revisit-header p {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+.shelf-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+.shelf-item-card {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  cursor: pointer;
+}
+.shelf-item-card:hover {
+  background: var(--paper-cotton);
+}
+.item-tag-vessel {
+  display: inline-block;
+  font-size: 10px;
+  background: var(--paper-oat);
+  border: 1px solid var(--paper-border-soft);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+.item-badge-type {
+  float: right;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+.shelf-item-card h4 {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--ink-black);
+}
+.item-snippet {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin: 6px 0 10px;
+  line-height: 1.4;
+}
+.item-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--ink-light);
+  border-top: 1px solid var(--paper-border-soft);
+  padding-top: 6px;
+}
+
+/* Scrapbooks */
+.chapters-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+.chapter-card {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+.chapter-cover h4 {
+  font-family: var(--font-serif);
+  font-size: 16px;
+}
+.chapter-cover small {
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+.chapter-ephemera-preview {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.ephemera-chip {
+  background: var(--paper-cloud);
+  border: 1px solid var(--paper-border);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+}
+
+/* Relationship Log */
+.timeline-stream {
+  margin-top: 14px;
+  border-left: 1px solid var(--paper-border);
+  padding-left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.timeline-entry {
+  position: relative;
+}
+.timeline-entry::before {
+  content: "";
+  position: absolute;
+  left: -19px;
+  top: 4px;
+  width: 9px;
+  height: 9px;
+  background: var(--ink-black);
+  border-radius: 50%;
+}
+.timeline-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+.timeline-card {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  margin-top: 4px;
+}
+.timeline-card strong {
+  display: block;
+  font-size: 13px;
+}
+.timeline-card p {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+/* ================= MY VAULT ================= */
+.vault-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+.vault-folder {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+.vault-folder h4 {
+  font-family: var(--font-serif);
+  font-size: 15px;
+}
+.vault-folder p {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+/* ================= REVISIT ROOM ================= */
+.revisit-cards-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+.revisit-box-card {
+  background: var(--paper-white);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+.revisit-badge {
+  font-size: 10px;
+  background: var(--paper-oat);
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+.revisit-box-card h4 {
+  font-family: var(--font-serif);
+  font-size: 16px;
+}
+.revisit-box-card p {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin: 4px 0 10px;
+}
+.lock-status {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--ink-light);
+}
+
+/* ================= BOTTOM NAVIGATION ================= */
+.app-bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: var(--paper-white);
+  border-top: 1px solid var(--paper-border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-tab {
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-family: var(--font-sans);
+  font-size: 11px;
+}
+
+.nav-tab.active {
+  color: var(--ink-black);
+  font-weight: 600;
+}
+.nav-icon {
+  font-size: 18px;
+}
+
+/* ================= UNWRAPPING MODAL ================= */
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(44, 40, 37, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.unwrap-dialog {
+  background: var(--paper-cotton);
+  border: 1px solid var(--paper-border);
+  border-radius: var(--radius-md);
+  width: 100%;
+  max-height: 90%;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.unwrap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.unwrap-kicker {
+  font-family: var(--font-serif);
+  font-size: 16px;
+}
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.vessel-stage {
+  text-align: center;
+  padding: 20px 0;
+}
+.vessel-huge-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 10px;
+}
+.vessel-interactive-graphic {
+  cursor: pointer;
+  padding: 20px;
+  background: var(--paper-white);
+  border: 1px dashed var(--paper-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+.unwrap-dedication-tag {
+  font-family: var(--font-script);
+  font-size: 18px;
+  color: var(--ink-muted);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.btn-skip-unboxing {
+  margin-top: 8px;
+}
+
+.collaborative-patina-bar {
+  margin-top: 16px;
+  border-top: 1px solid var(--paper-border-soft);
+  padding-top: 12px;
+}
+.collaborative-patina-bar h4 {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-bottom: 8px;
+}
+.collab-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.collab-save-confirm {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #386641;
+}
