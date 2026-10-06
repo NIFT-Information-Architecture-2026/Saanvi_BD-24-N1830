@@ -3,131 +3,151 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Little Something, From Me to You — Digital Atelier</title>
+  <title>A Little Something, From Me to You</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Courier+Prime&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app-device">
-    <!-- Top Atmospheric Header -->
-    <header class="app-header">
-      <div class="header-titles">
-        <span class="header-pretitle">A little something, from me to you</span>
-        <h1 class="header-title" id="space-title" contenteditable="true" title="Tap to rename your corner">Our Little Corner</h1>
-        <span class="header-subtitle" id="space-subtitle">Since Autumn 2024 • A quiet sanctuary</span>
+
+    <!-- ================= 0. OPENING ENVELOPE SPLASH SCREEN ================= -->
+    <div class="splash-screen" id="splash-screen">
+      <div class="splash-envelope-container" id="splash-envelope" title="Tap to open your atelier">
+        <div class="splash-envelope">
+          <div class="splash-envelope-flap"></div>
+          <div class="splash-envelope-heart">♥</div>
+          <div class="splash-envelope-pocket"></div>
+        </div>
+        <p class="splash-caption">a little something</p>
       </div>
-      <div class="header-status">
-        <span class="status-indicator"></span>
-        <span class="status-text">Quiet Atelier</span>
+    </div>
+
+    <!-- ================= TOP ATMOSPHERIC HEADER ================= -->
+    <header class="app-header" id="app-header" style="display:none;">
+      <div class="header-titles">
+        <h1 class="header-title" id="space-title" contenteditable="true" title="Tap to rename">Our Little Corner</h1>
+        <span class="header-subtitle">a little something, from me to you</span>
+      </div>
+      <div class="header-actions">
+        <!-- Minimal Save Symbol with Pop-up -->
+        <button class="save-icon-btn" id="btn-save-popover" title="Save options">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </button>
+        <!-- Save Popover -->
+        <div class="save-popover" id="save-popover" style="display:none;">
+          <div class="popover-title">Save to:</div>
+          <label class="popover-item">
+            <input type="checkbox" id="pop-dest-vault" checked>
+            <span>Personal: <em>Saanvi's Vault</em></span>
+          </label>
+          <label class="popover-item">
+            <input type="checkbox" id="pop-dest-shared" checked>
+            <span>Shared: <em>Our Little Corner</em></span>
+          </label>
+        </div>
       </div>
     </header>
 
-    <!-- Main Content Container with 4 Rooms -->
-    <main class="app-stage" id="app-stage">
+    <!-- ================= MAIN STAGE WITH 4 ROOMS ================= -->
+    <main class="app-stage" id="app-stage" style="display:none;">
       
       <!-- ================= ROOM 1: THE STUDIO ================= -->
       <section class="room-view active" id="room-studio">
-        <!-- Studio Category Picker -->
-        <div class="studio-intro">
-          <h2>The Craft Atelier</h2>
-          <p>What would you like to make today?</p>
+        <!-- Clean minimal prompt -->
+        <div class="studio-clean-prompt">
+          <h2>What would you like to make today?</h2>
         </div>
 
-        <div class="studio-medium-selector" id="studio-medium-selector">
-          <button class="medium-card active" data-medium="postcard">
-            <span class="medium-icon">🪪</span>
-            <div class="medium-meta">
-              <strong>Postcard</strong>
-              <small>Two-sided flip & stamps</small>
-            </div>
+        <!-- 4 Minimal Clean Medium Buttons -->
+        <div class="studio-medium-selector">
+          <button class="medium-card active" data-medium="postcard" title="Postcard">
+            <svg class="med-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="15" y1="8" x2="19" y2="8"/><line x1="15" y1="12" x2="19" y2="12"/></svg>
+            <span>Postcard</span>
           </button>
-          <button class="medium-card" data-medium="letter">
-            <span class="medium-icon">✉️</span>
-            <div class="medium-meta">
-              <strong>Letter</strong>
-              <small>Cream stationery & wax seal</small>
-            </div>
+          <button class="medium-card" data-medium="letter" title="Letter">
+            <svg class="med-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>Letter</span>
           </button>
-          <button class="medium-card" data-medium="bouquet">
-            <span class="medium-icon">💐</span>
-            <div class="medium-meta">
-              <strong>Bouquet</strong>
-              <small>15 botanical blooms & ribbon</small>
-            </div>
+          <button class="medium-card" data-medium="bouquet" title="Bouquet">
+            <svg class="med-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22v-8"/><path d="M12 14c-3-2-6-6-3-9 2.5 0 4 3 3 5"/><path d="M12 14c3-2 6-6 3-9-2.5 0-4 3-3 5"/><circle cx="12" cy="7" r="2"/></svg>
+            <span>Bouquet</span>
           </button>
-          <button class="medium-card" data-medium="greeting-card">
-            <span class="medium-icon">💌</span>
-            <div class="medium-meta">
-              <strong>Greeting Card</strong>
-              <small>Folded bi-fold & pocket</small>
-            </div>
+          <button class="medium-card" data-medium="greeting-card" title="Greeting Card">
+            <svg class="med-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M4 2h8v20H4z"/><path d="M12 12l4-2v6l-4-2"/></svg>
+            <span>Card</span>
           </button>
         </div>
 
-        <!-- 1. Postcard Atelier Canvas -->
+        <!-- ---------------- 1. POSTCARD WORKSPACE ---------------- -->
         <div class="canvas-workspace" id="canvas-postcard">
           <div class="canvas-toolbar">
             <div class="tool-group">
-              <label>Orientation:</label>
               <button class="chip-btn active" id="btn-postcard-orient-port">Portrait</button>
               <button class="chip-btn" id="btn-postcard-orient-land">Landscape</button>
             </div>
             <div class="tool-group">
-              <label>Paper Color:</label>
+              <!-- Strictly White, Cloud Dancer, Soft Cream Blush -->
               <div class="color-palette">
-                <button class="color-dot active" data-color="#FFFFFF" title="Crisp White" style="background:#FFFFFF; border:1px solid #dcd7ce;"></button>
-                <button class="color-dot" data-color="#F0EEE9" title="Cloud Dancer" style="background:#F0EEE9; border:1px solid #dcd7ce;"></button>
-                <button class="color-dot" data-color="#F4EBE5" title="Soft Cream Blush" style="background:#F4EBE5; border:1px solid #dcd7ce;"></button>
+                <button class="color-dot active" data-color="#FFFFFF" title="White" style="background:#FFFFFF;"></button>
+                <button class="color-dot" data-color="#F0EEE9" title="Cloud Dancer" style="background:#F0EEE9;"></button>
+                <button class="color-dot" data-color="#F4EBE5" title="#f4ebe5" style="background:#F4EBE5;"></button>
               </div>
             </div>
           </div>
 
-          <!-- Flip Card Container -->
+          <!-- Flip Postcard Wrapper -->
           <div class="postcard-wrapper portrait" id="postcard-container">
             <div class="postcard-card" id="postcard-card">
               <!-- Front Face -->
               <div class="postcard-face postcard-front" id="postcard-front-face">
-                <div class="card-photo-slot" id="card-photo-slot">
-                  <div class="photo-placeholder" id="photo-placeholder">
-                    <span>📷 Tap to choose botanical artwork</span>
+                <div class="card-photo-area" id="postcard-photo-area">
+                  <input type="file" id="postcard-file-input" accept="image/*" style="display:none;">
+                  <img id="postcard-image-preview" src="" alt="" style="display:none;">
+                  <div class="photo-upload-hint" id="photo-upload-hint">
+                    <span>+ Upload image (optional)</span>
                   </div>
-                  <img id="postcard-uploaded-img" class="card-attached-img" src="" alt="" style="display:none;">
                 </div>
-                <div class="card-front-text">
-                  <input type="text" class="card-input-title" placeholder="A quiet morning title..." id="postcard-title-input">
-                  <textarea class="card-input-caption" rows="2" placeholder="One or two lines of thought from your day..." id="postcard-caption-input"></textarea>
+                <!-- Draggable / Repositionable Front Text Block -->
+                <div class="draggable-text-block" id="postcard-front-text-block">
+                  <input type="text" class="card-input-title" placeholder="Title..." value="Morning light">
+                  <textarea class="card-input-caption" rows="2" placeholder="Write a note on front..."></textarea>
                 </div>
               </div>
 
               <!-- Back Face -->
               <div class="postcard-face postcard-back" id="postcard-back-face">
                 <div class="postcard-back-split">
+                  <!-- Left side: Handwritten message -->
                   <div class="postcard-left-pane">
-                    <textarea class="postcard-back-message" placeholder="Write your handwritten note here...&#10;&#10;Take your time." id="postcard-note-input"></textarea>
-                    <div class="dedication-signoff">
-                      <span class="from-to-badge">From: <input type="text" value="Saanvi" id="postcard-from-input"></span>
-                      <span class="from-to-badge">To: <input type="text" value="Kabir" id="postcard-to-input"></span>
-                    </div>
+                    <textarea class="postcard-back-message" id="postcard-back-message" placeholder="Write your note here..."></textarea>
                   </div>
                   <div class="postcard-divider-line"></div>
+                  <!-- Right side: Date line, Dedication From/To, Visual Stamp -->
                   <div class="postcard-right-pane">
-                    <!-- Collectible Stamp Area -->
-                    <div class="stamp-slot" id="selected-stamp-display">
-                      <div class="postage-stamp stamp-heart">
-                        <span class="stamp-icon">❤️</span>
-                        <span class="stamp-date">OCT 2026</span>
+                    <!-- Separate Date line -->
+                    <div class="postcard-date-line">
+                      <span id="postcard-date-display">October 6, 2026</span>
+                    </div>
+                    <!-- Visual Stamp Display -->
+                    <div class="stamp-display-slot" id="postcard-stamp-display">
+                      <div class="perforated-stamp stamp-heart">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="#FFFFFF"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                       </div>
                     </div>
-                    <div class="postmark-circle">
-                      <span>POSTAL ATELIER</span>
-                      <small>HYDERABAD</small>
-                    </div>
-                    <div class="address-lines">
-                      <div class="address-line"></div>
-                      <div class="address-line"></div>
-                      <div class="address-line"></div>
+                    <!-- Right-side From & To -->
+                    <div class="postcard-right-dedication">
+                      <div class="from-to-row">
+                        <span class="lbl">To:</span>
+                        <input type="text" value="Kabir" id="postcard-to-input">
+                      </div>
+                      <div class="from-to-row">
+                        <span class="lbl">From:</span>
+                        <input type="text" value="Saanvi" id="postcard-from-input">
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -135,269 +155,335 @@
             </div>
           </div>
 
-          <!-- Flip Action Bar -->
-          <div class="card-action-bar">
-            <button class="btn-subtle" id="btn-flip-postcard">🔄 Flip to Back / Front</button>
-            <div class="stamp-selector-bar">
-              <label>Select Stamp:</label>
-              <button class="stamp-option-btn active" data-stamp="heart" title="Red with Heart">🔴 Heart</button>
-              <button class="stamp-option-btn" data-stamp="flower" title="Pink with Flower">🌸 Flower</button>
-              <button class="stamp-option-btn" data-stamp="smiley" title="Yellow with Smiley">🟡 Smiley</button>
+          <!-- Flip Button & Visual Stamp Selector -->
+          <div class="postcard-controls-row">
+            <button class="btn-flip" id="btn-flip-postcard">Flip to the back</button>
+            <div class="stamp-visual-picker">
+              <!-- Strictly 3 Visual Stamps without text: Red Heart, Pink Flower, Yellow Smiley -->
+              <button class="stamp-pick-btn active" data-stamp="heart" title="Red Heart">
+                <div class="mini-stamp stamp-heart">♥</div>
+              </button>
+              <button class="stamp-pick-btn" data-stamp="flower" title="Pink Flower">
+                <div class="mini-stamp stamp-flower">✿</div>
+              </button>
+              <button class="stamp-pick-btn" data-stamp="smiley" title="Yellow Smiley">
+                <div class="mini-stamp stamp-smiley">☺</div>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- 2. Letter Atelier Canvas -->
+        <!-- ---------------- 2. LETTER WORKSPACE ---------------- -->
         <div class="canvas-workspace" id="canvas-letter" style="display:none;">
           <div class="canvas-toolbar">
             <div class="tool-group">
-              <label>Stationery (White & Cream Only):</label>
-              <select id="letter-paper-select" class="atelier-select">
-                <option value="paper-cotton">Pure White Wove</option>
-                <option value="paper-cloud" selected>Cloud Dancer Cream</option>
-                <option value="paper-linen">Linen Cream Textured</option>
-                <option value="paper-speckle">Soft Flecked Cotton</option>
-              </select>
+              <!-- 4 small circles with paper color options (white/cream only) -->
+              <div class="paper-circles-row">
+                <button class="paper-circle active" data-paper="paper-pure" style="background:#FFFFFF;" title="Pure White"></button>
+                <button class="paper-circle" data-paper="paper-cloud" style="background:#F0EEE9;" title="Cloud Dancer"></button>
+                <button class="paper-circle" data-paper="paper-cream" style="background:#F7F4EE;" title="Warm Cream"></button>
+                <button class="paper-circle" data-paper="paper-linen" style="background:#ECE7DE;" title="Linen Texture"></button>
+              </div>
             </div>
             <div class="tool-group">
-              <label>Ink Color:</label>
-              <div class="color-palette">
-                <button class="color-dot active" data-ink="#1A1A1A" title="Black Ink" style="background:#1A1A1A;"></button>
-                <button class="color-dot" data-ink="#382923" title="Dark Brown Ink" style="background:#382923;"></button>
-                <button class="color-dot" data-ink="#1B263B" title="Dark Blue Ink" style="background:#1B263B;"></button>
+              <!-- Ink colors: Black, Dark Brown, Dark Blue -->
+              <div class="ink-palette">
+                <button class="ink-dot active" data-ink="#1A1A1A" style="background:#1A1A1A;" title="Black"></button>
+                <button class="ink-dot" data-ink="#382923" style="background:#382923;" title="Dark Brown"></button>
+                <button class="ink-dot" data-ink="#1B263B" style="background:#1B263B;" title="Dark Blue"></button>
               </div>
             </div>
           </div>
 
-          <div class="letter-sheet" id="letter-sheet">
-            <div class="letter-header">
-              <span class="letter-date">October 6, 2026</span>
-              <div class="from-to-badge">
-                <span>From: <input type="text" value="Saanvi" id="letter-from-input"></span>
-                <span>To: <input type="text" value="Kabir" id="letter-to-input"></span>
-              </div>
-            </div>
-            <textarea class="letter-body" id="letter-body-input" rows="8" placeholder="My dear,&#10;&#10;I saw something today that reminded me of you. The sun was filtering quietly through the trees..."></textarea>
-            
-            <!-- Stickers Canvas Placement Area -->
-            <div class="letter-stickers-tray" id="letter-stickers-tray">
-              <label>Cute Ephemera (Tap to add):</label>
-              <div class="sticker-pills">
-                <button class="sticker-pill" data-sticker="washi">Tape 🥢</button>
-                <button class="sticker-pill" data-sticker="paperclip">Paperclip 📎</button>
-                <button class="sticker-pill" data-sticker="star">Star ⭐</button>
-                <button class="sticker-pill" data-sticker="heart">Heart 🤎</button>
-                <button class="sticker-pill" data-sticker="bear">Little Bear 🧸</button>
-                <button class="sticker-pill" data-sticker="flower">Flower 🌼</button>
-                <button class="sticker-pill" data-sticker="smiley">Smiley 🙂</button>
-                <button class="sticker-pill" data-sticker="iloveyou">"i love you" ✍️</button>
-              </div>
-              <div class="placed-stickers" id="placed-stickers"></div>
-            </div>
-
-            <!-- Polaroid Tuck-in Feature -->
-            <div class="polaroid-tuckin" id="polaroid-tuckin-zone">
-              <div class="polaroid-frame">
-                <div class="polaroid-image-box" id="polaroid-img-preview">
-                  <span>📷 Tuck in a polaroid photo</span>
+          <!-- Letter Sheet with Draggable Stickers & Polaroid -->
+          <div class="letter-sheet-container" id="letter-sheet-container">
+            <div class="letter-sheet paper-pure" id="letter-sheet">
+              <div class="letter-header-row">
+                <span class="letter-date">October 6, 2026</span>
+                <div class="letter-from-to">
+                  <span>To: <input type="text" value="Kabir" id="letter-to-input"></span>
+                  <span>From: <input type="text" value="Saanvi" id="letter-from-input"></span>
                 </div>
-                <input type="text" class="polaroid-caption" placeholder="handwritten caption..." value="a moment we kept">
+              </div>
+              <textarea class="letter-textarea" id="letter-body-textarea" placeholder="Write your note here..."></textarea>
+              
+              <!-- Draggable Stickers Layer -->
+              <div class="stickers-canvas-overlay" id="stickers-canvas-overlay"></div>
+
+              <!-- Polaroid Tuck-in Slot (Uploadable from gallery) -->
+              <div class="polaroid-tuckin-card" id="polaroid-tuckin-card">
+                <input type="file" id="polaroid-file-input" accept="image/*" style="display:none;">
+                <div class="polaroid-inner" id="polaroid-trigger">
+                  <img id="polaroid-img" src="" alt="" style="display:none;">
+                  <div class="polaroid-empty" id="polaroid-empty-text">
+                    <span>+ Photo from gallery</span>
+                  </div>
+                </div>
+                <input type="text" class="polaroid-label" placeholder="add note..." value="">
               </div>
             </div>
           </div>
 
-          <!-- Envelope Configuration -->
-          <div class="envelope-config-box">
-            <h4>Envelope & Wax Seal Finish</h4>
-            <div class="config-grid">
-              <div>
-                <label>Envelope Finish:</label>
-                <select id="envelope-finish-select" class="atelier-select">
-                  <option value="env-manila">Kraft Manila</option>
-                  <option value="env-vellum">Pleated Cream Vellum</option>
-                  <option value="env-maroon" selected>Maroon with White Lace Detail</option>
-                  <option value="env-charcoal">Classic Charcoal Linen</option>
-                </select>
-              </div>
-              <div>
-                <label>Wax Seal Color:</label>
-                <div class="seal-selector">
-                  <button class="seal-btn active" data-seal="gold" style="background:#C5A059;">Gold</button>
-                  <button class="seal-btn" data-seal="cream" style="background:#EFECE6; color:#333;">Cream</button>
-                  <button class="seal-btn" data-seal="maroon" style="background:#6B202A;">Maroon</button>
-                </div>
+          <!-- Visual Stickers Tray (Icons Only, No text) -->
+          <div class="stickers-visual-tray" id="stickers-visual-tray">
+            <button class="sticker-icon-btn" data-sticker="🥢" title="Washi tape">🥢</button>
+            <button class="sticker-icon-btn" data-sticker="📎" title="Paperclip">📎</button>
+            <button class="sticker-icon-btn" data-sticker="⭐" title="Star">⭐</button>
+            <button class="sticker-icon-btn" data-sticker="🤎" title="Heart">🤎</button>
+            <button class="sticker-icon-btn" data-sticker="🧸" title="Bear">🧸</button>
+            <button class="sticker-icon-btn" data-sticker="🌼" title="Flower">🌼</button>
+            <button class="sticker-icon-btn" data-sticker="🙂" title="Smiley">🙂</button>
+            <button class="sticker-icon-btn" data-sticker="i love you" title="i love you"><small>i love you</small></button>
+          </div>
+
+          <!-- Envelope Finishes (4 Visuals Only, No dropdown) & Wax Seal Visuals -->
+          <div class="envelope-visual-section">
+            <div class="envelope-swatches-row">
+              <button class="env-swatch-btn" data-env="manila" title="Kraft Manila">
+                <div class="swatch-box swatch-manila"></div>
+              </button>
+              <button class="env-swatch-btn" data-env="vellum" title="Pleated Cream Vellum">
+                <div class="swatch-box swatch-vellum"></div>
+              </button>
+              <button class="env-swatch-btn active" data-env="maroon-lace" title="Maroon with White Lace">
+                <div class="swatch-box swatch-maroon-lace"><span class="lace-trim"></span></div>
+              </button>
+              <button class="env-swatch-btn" data-env="charcoal" title="Classic Charcoal">
+                <div class="swatch-box swatch-charcoal"></div>
+              </button>
+            </div>
+
+            <!-- Wax Seals (Visuals only, no text) -->
+            <div class="seals-swatches-row">
+              <button class="seal-swatch-btn active" data-seal="gold" title="Gold Seal">
+                <span class="seal-disc seal-gold"></span>
+              </button>
+              <button class="seal-swatch-btn" data-seal="cream" title="Cream Seal">
+                <span class="seal-disc seal-cream"></span>
+              </button>
+              <button class="seal-swatch-btn" data-seal="maroon" title="Maroon Seal">
+                <span class="seal-disc seal-maroon"></span>
+              </button>
+            </div>
+
+            <!-- Live Preview of chosen envelope & seal -->
+            <div class="envelope-live-preview" id="envelope-live-preview">
+              <div class="preview-envelope env-maroon-lace" id="preview-envelope-render">
+                <div class="preview-lace-border"></div>
+                <div class="preview-wax-seal seal-gold" id="preview-seal-render"></div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 3. Bouquet Atelier Canvas -->
+        <!-- ---------------- 3. BOUQUET WORKSPACE ---------------- -->
         <div class="canvas-workspace" id="canvas-bouquet" style="display:none;">
-          <div class="bouquet-mode-toggle">
-            <button class="chip-btn active" id="btn-mode-bespoke">Bespoke Stem-by-Stem</button>
-            <button class="chip-btn" id="btn-mode-readymade">Curated Readymade Sets</button>
+          <!-- Mode Tabs: Bespoke vs Curated Readymade Sets -->
+          <div class="bouquet-tab-bar">
+            <button class="b-tab active" id="btn-tab-bespoke">Bespoke Bouquet</button>
+            <button class="b-tab" id="btn-tab-readymade">8 Readymade Sets</button>
           </div>
 
-          <div class="bouquet-builder-layout">
-            <!-- 15 Flower Catalog -->
-            <div class="flower-catalog" id="flower-catalog">
-              <h4>Choose Blooms (15 Botanical Varieties):</h4>
-              <div class="flower-grid">
-                <button class="flower-item" data-flower="Dahlia">🌸 Dahlia</button>
-                <button class="flower-item" data-flower="Tulip">🌷 Tulip</button>
-                <button class="flower-item" data-flower="Gardenia">🌼 Gardenia</button>
-                <button class="flower-item" data-flower="Peony">🌺 Peony</button>
-                <button class="flower-item" data-flower="Lily">🪷 Lily</button>
-                <button class="flower-item" data-flower="Orchid">💮 Orchid</button>
-                <button class="flower-item" data-flower="Rose">🌹 Rose</button>
-                <button class="flower-item" data-flower="Sunflower">🌻 Sunflower</button>
-                <button class="flower-item" data-flower="Lilac">🪻 Lilac</button>
-                <button class="flower-item" data-flower="Baby's Breath">🌾 Baby's Breath</button>
-                <button class="flower-item" data-flower="Hydrangea">💐 Hydrangea</button>
-                <button class="flower-item" data-flower="Snapdragon">🌿 Snapdragon</button>
-                <button class="flower-item" data-flower="Japanese Anemones">🥀 Japanese Anemones</button>
-                <button class="flower-item" data-flower="Persian Buttercup">🏵️ Persian Buttercup</button>
-                <button class="flower-item" data-flower="Foxglove">🌱 Foxglove</button>
-              </div>
+          <!-- Bespoke Flower Selection -->
+          <div id="bouquet-bespoke-view">
+            <!-- 15 Illustrated Blooms with small names -->
+            <div class="illustrated-blooms-grid" id="illustrated-blooms-grid">
+              <!-- 15 flowers -->
+              <button class="bloom-card selected" data-flower="Dahlia"><span class="fl-art">🌺</span><small>Dahlia</small></button>
+              <button class="bloom-card" data-flower="Tulip"><span class="fl-art">🌷</span><small>Tulip</small></button>
+              <button class="bloom-card" data-flower="Gardenia"><span class="fl-art">🌼</span><small>Gardenia</small></button>
+              <button class="bloom-card selected" data-flower="Peony"><span class="fl-art">🌸</span><small>Peony</small></button>
+              <button class="bloom-card" data-flower="Lily"><span class="fl-art">🪷</span><small>Lily</small></button>
+              <button class="bloom-card" data-flower="Orchid"><span class="fl-art">💮</span><small>Orchid</small></button>
+              <button class="bloom-card" data-flower="Rose"><span class="fl-art">🌹</span><small>Rose</small></button>
+              <button class="bloom-card" data-flower="Sunflower"><span class="fl-art">🌻</span><small>Sunflower</small></button>
+              <button class="bloom-card" data-flower="Lilac"><span class="fl-art">🪻</span><small>Lilac</small></button>
+              <button class="bloom-card selected" data-flower="Baby's Breath"><span class="fl-art">🌾</span><small>Baby's Breath</small></button>
+              <button class="bloom-card" data-flower="Hydrangea"><span class="fl-art">💐</span><small>Hydrangea</small></button>
+              <button class="bloom-card" data-flower="Snapdragon"><span class="fl-art">🌿</span><small>Snapdragon</small></button>
+              <button class="bloom-card" data-flower="Japanese Anemones"><span class="fl-art">🥀</span><small>J. Anemones</small></button>
+              <button class="bloom-card" data-flower="Persian Buttercup"><span class="fl-art">🏵️</span><small>Buttercup</small></button>
+              <button class="bloom-card" data-flower="Foxglove"><span class="fl-art">🌱</span><small>Foxglove</small></button>
             </div>
+          </div>
 
-            <!-- Bouquet Preview & Wrap Customizer -->
-            <div class="bouquet-display-card">
-              <div class="bouquet-visual" id="bouquet-visual-frame">
-                <div class="bouquet-wrap-render wrap-kraft" id="bouquet-wrap-render">
-                  <div class="bouquet-stems-container" id="bouquet-stems-container">
-                    <span class="stem-chip">🌸 Dahlia</span>
-                    <span class="stem-chip">🌾 Baby's Breath</span>
-                    <span class="stem-chip">🪻 Lilac</span>
-                  </div>
-                  <div class="bouquet-ribbon ribbon-silk" id="bouquet-ribbon-render">
-                    <span>Ribbon: Raw Silk</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Attached Florist Letter Tag (Unbounded words) -->
-              <div class="bouquet-tag-note">
-                <div class="tag-header">
-                  <span>Florist Tag Note:</span>
-                  <div class="from-to-badge">
-                    <span>From: <input type="text" value="Saanvi" id="bouquet-from-input"></span>
-                    <span>To: <input type="text" value="Kabir" id="bouquet-to-input"></span>
-                  </div>
-                </div>
-                <textarea class="bouquet-letter-input" id="bouquet-letter-input" rows="3" placeholder="Attach a personal letter with your blooms... (no word limit)"></textarea>
-              </div>
-
-              <div class="wrap-ribbon-controls">
-                <div>
-                  <label>Wrapping Paper (4 options):</label>
-                  <select id="bouquet-wrap-select" class="atelier-select">
-                    <option value="wrap-kraft">Natural Brown Kraft</option>
-                    <option value="wrap-vellum">Frosted Botanical Vellum</option>
-                    <option value="wrap-linen">Pleated Ivory Linen</option>
-                    <option value="wrap-news">Vintage Newsprint</option>
-                  </select>
-                </div>
-                <div>
-                  <label>Ribbon Tie (4 options):</label>
-                  <select id="bouquet-ribbon-select" class="atelier-select">
-                    <option value="ribbon-silk">Raw Frayed Silk</option>
-                    <option value="ribbon-grosgrain">Grosgrain Stripe</option>
-                    <option value="ribbon-velvet">Deep Plum Velvet</option>
-                    <option value="ribbon-jute">Twisted Jute Twine</option>
-                  </select>
-                </div>
-              </div>
+          <!-- 8 Readymade Sets View (Interactive) -->
+          <div id="bouquet-readymade-view" style="display:none;">
+            <div class="readymade-sets-grid" id="readymade-sets-grid">
+              <!-- Dynamically rendered or static 8 combinations -->
             </div>
+          </div>
+
+          <!-- Immediate Live Preview of the Bouquet -->
+          <div class="bouquet-assembled-preview" id="bouquet-assembled-preview">
+            <div class="bouquet-wrap-frame wrap-kraft" id="bouquet-wrap-frame">
+              <div class="stems-bloom-cluster" id="stems-bloom-cluster">
+                <!-- Stems render here -->
+                <span class="cluster-flower">🌺</span>
+                <span class="cluster-flower">🌸</span>
+                <span class="cluster-flower">🌾</span>
+              </div>
+              <div class="bouquet-ribbon-node ribbon-silk" id="bouquet-ribbon-node"></div>
+            </div>
+          </div>
+
+          <!-- Wrapping Paper Visuals (Clicking immediately updates preview) -->
+          <div class="wrap-visual-selector">
+            <span class="swatch-label">Wrap:</span>
+            <button class="wrap-swatch-btn active" data-wrap="wrap-kraft" title="Natural Kraft"><span class="sw-kraft"></span></button>
+            <button class="wrap-swatch-btn" data-wrap="wrap-vellum" title="Frosted Vellum"><span class="sw-vellum"></span></button>
+            <button class="wrap-swatch-btn" data-wrap="wrap-linen" title="Pleated Linen"><span class="sw-linen"></span></button>
+            <button class="wrap-swatch-btn" data-wrap="wrap-news" title="Vintage Newsprint"><span class="sw-news"></span></button>
+          </div>
+
+          <!-- Ribbon Tie Visuals (Visuals only, no names) -->
+          <div class="ribbon-visual-selector">
+            <span class="swatch-label">Ribbon:</span>
+            <button class="ribbon-swatch-btn active" data-ribbon="ribbon-silk" title="Silk"><span class="rb-swatch rb-silk"></span></button>
+            <button class="ribbon-swatch-btn" data-ribbon="ribbon-grosgrain" title="Grosgrain"><span class="rb-swatch rb-grosgrain"></span></button>
+            <button class="ribbon-swatch-btn" data-ribbon="ribbon-velvet" title="Velvet"><span class="rb-swatch rb-velvet"></span></button>
+            <button class="ribbon-swatch-btn" data-ribbon="ribbon-jute" title="Jute Twine"><span class="rb-swatch rb-jute"></span></button>
+          </div>
+
+          <!-- Attached Florist Letter (no word limit) -->
+          <div class="bouquet-attached-note">
+            <div class="attached-note-header">
+              <span>To: <input type="text" value="Kabir" id="bouquet-to-input"></span>
+              <span>From: <input type="text" value="Saanvi" id="bouquet-from-input"></span>
+            </div>
+            <textarea class="bouquet-note-body" placeholder="Write your letter here..."></textarea>
           </div>
         </div>
 
-        <!-- 4. Greeting Card Canvas -->
+        <!-- ---------------- 4. GREETING CARD WORKSPACE ---------------- -->
         <div class="canvas-workspace" id="canvas-greeting-card" style="display:none;">
           <div class="canvas-toolbar">
             <div class="tool-group">
-              <label>Card Size:</label>
-              <button class="chip-btn active" id="btn-card-size-std">Standard Bi-fold</button>
+              <button class="chip-btn active" id="btn-card-size-std">Standard</button>
               <button class="chip-btn" id="btn-card-size-mini">Mini Keepsake</button>
             </div>
             <div class="tool-group">
-              <label>Orientation:</label>
               <button class="chip-btn active" id="btn-card-orient-port">Portrait</button>
               <button class="chip-btn" id="btn-card-orient-land">Landscape</button>
             </div>
           </div>
 
-          <div class="greeting-bifold-container" id="greeting-bifold-container">
-            <div class="bifold-spread">
-              <div class="bifold-page bifold-left">
-                <div class="pocket-placeholder">
-                  <span>📸 Left Page Tuck-in Pocket (Polaroid / Keepsake)</span>
+          <!-- 10 Creative Templates Selector for Cover -->
+          <div class="card-templates-bar" id="card-templates-bar">
+            <button class="template-thumb-btn active" data-tmpl="1" title="Botanical Minimal">01</button>
+            <button class="template-thumb-btn" data-tmpl="2" title="Woven Linen">02</button>
+            <button class="template-thumb-btn" data-tmpl="3" title="Archival Framed">03</button>
+            <button class="template-thumb-btn" data-tmpl="4" title="Poetic Script">04</button>
+            <button class="template-thumb-btn" data-tmpl="5" title="Subtle Constellation">05</button>
+            <button class="template-thumb-btn" data-tmpl="6" title="Quiet Meadow">06</button>
+            <button class="template-thumb-btn" data-tmpl="7" title="Sunburst Stamp">07</button>
+            <button class="template-thumb-btn" data-tmpl="8" title="Pressed Fern">08</button>
+            <button class="template-thumb-btn" data-tmpl="9" title="Soft Terracotta">09</button>
+            <button class="template-thumb-btn" data-tmpl="10" title="Classic Clean">10</button>
+          </div>
+
+          <!-- Greeting Card Bifold Container -->
+          <div class="greeting-interactive-card portrait size-standard" id="greeting-card-element">
+            <!-- Front Cover View -->
+            <div class="greeting-face greeting-cover" id="greeting-cover-view">
+              <div class="cover-art-container" id="cover-art-container">
+                <input type="file" id="card-cover-upload" accept="image/*" style="display:none;">
+                <img id="card-cover-preview" src="" alt="" style="display:none;">
+                <div class="cover-default-art" id="cover-art-placeholder">
+                  <span>✿</span>
                 </div>
               </div>
-              <div class="bifold-crease"></div>
-              <div class="bifold-page bifold-right">
-                <input type="text" class="card-input-title" placeholder="Happy Special Day..." value="A quiet wish for you">
-                <textarea class="greeting-message-area" rows="6" placeholder="Write your heartfelt note inside..."></textarea>
-                <div class="dedication-signoff">
-                  <span class="from-to-badge">From: <input type="text" value="Saanvi" id="card-from-input"></span>
-                  <span class="from-to-badge">To: <input type="text" value="Kabir" id="card-to-input"></span>
+              <input type="text" class="cover-editable-title" value="A quiet wish" placeholder="Card title...">
+              <small class="cover-sub-hint">Tap to edit text / upload art</small>
+            </div>
+
+            <!-- Inside Spread View (Unlocked via Flip to Inside) -->
+            <div class="greeting-face greeting-inside" id="greeting-inside-view" style="display:none;">
+              <!-- Left inside pocket: Polaroid, Pressed Flower, or Vinyl Record -->
+              <div class="inside-left-pocket">
+                <div class="pocket-attachment-selector">
+                  <button class="pocket-tab-btn active" data-pocket="polaroid">Polaroid</button>
+                  <button class="pocket-tab-btn" data-pocket="flower">Pressed Flower</button>
+                  <button class="pocket-tab-btn" data-pocket="vinyl">Vinyl Record</button>
+                </div>
+                <!-- Polaroid Slot -->
+                <div class="pocket-content-zone" id="pocket-polaroid-zone">
+                  <input type="file" id="card-pocket-file" accept="image/*" style="display:none;">
+                  <div class="pocket-photo-card" id="pocket-photo-trigger">
+                    <img id="pocket-photo-img" src="" alt="" style="display:none;">
+                    <span id="pocket-photo-text">+ Add polaroid</span>
+                  </div>
+                </div>
+                <!-- Pressed Flower Slot -->
+                <div class="pocket-content-zone" id="pocket-flower-zone" style="display:none;">
+                  <div class="pressed-flower-token">
+                    <span>🪷 Pressed Lily & Fern</span>
+                  </div>
+                </div>
+                <!-- Vinyl Record Slot (One dedicated song) -->
+                <div class="pocket-content-zone" id="pocket-vinyl-zone" style="display:none;">
+                  <div class="mini-vinyl-record">
+                    <div class="vinyl-grooves">
+                      <div class="vinyl-label">♫</div>
+                    </div>
+                    <input type="text" class="vinyl-song-input" placeholder="Song title & artist..." value="Norah Jones — Come Away With Me">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right inside spread: Handwritten letter -->
+              <div class="inside-right-spread">
+                <textarea class="inside-handwritten-note" placeholder="Write your heartfelt note inside..."></textarea>
+                <div class="inside-dedication">
+                  <span>To: <input type="text" value="Kabir"></span>
+                  <span>From: <input type="text" value="Saanvi"></span>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Flip Card Inside/Cover Button -->
+          <div class="card-flip-action-bar">
+            <button class="btn-flip" id="btn-flip-greeting">Flip to inside</button>
+          </div>
         </div>
 
-        <!-- Final Packaging Bar: Strictly 3 Delivery Vessels -->
-        <section class="packaging-vessel-bar">
-          <div class="vessel-selector-head">
-            <h3>Choose How It Arrives (3 Delivery Vessels)</h3>
-            <p>Every gesture deserves an unhurried, tactile arrival.</p>
+        <!-- ---------------- DELIVERY VESSELS (3 OPTIONS ONLY) ---------------- -->
+        <section class="delivery-vessel-clean-section">
+          <h3>Choose how it arrives</h3>
+
+          <!-- Vessel Options: Envelope, Keepsake Box, Delivery Truck -->
+          <div class="vessels-minimal-grid">
+            <button class="vessel-btn active" data-vessel="envelope">
+              <span class="vessel-icon">✉️</span>
+              <span class="vessel-label">Envelope</span>
+            </button>
+            <button class="vessel-btn" data-vessel="box">
+              <span class="vessel-icon">🎁</span>
+              <span class="vessel-label">Keepsake Box</span>
+            </button>
+            <button class="vessel-btn" data-vessel="truck">
+              <span class="vessel-icon">🚚</span>
+              <span class="vessel-label">Delivery Truck</span>
+            </button>
           </div>
 
-          <div class="vessel-options-grid">
-            <label class="vessel-card active">
-              <input type="radio" name="vessel-radio" value="envelope" checked>
-              <span class="vessel-glyph">✉️</span>
-              <strong>Envelope</strong>
-              <small>Wax seal & unfolding flap</small>
-            </label>
-            <label class="vessel-card">
-              <input type="radio" name="vessel-radio" value="box">
-              <span class="vessel-glyph">🎁</span>
-              <strong>Keepsake Box</strong>
-              <small>Linen box & untying ribbon</small>
-            </label>
-            <label class="vessel-card">
-              <input type="radio" name="vessel-radio" value="truck">
-              <span class="vessel-glyph">🚚</span>
-              <strong>Vintage Toy Truck</strong>
-              <small>Miniature door & cargo bed</small>
-            </label>
-          </div>
-
-          <!-- Save Destination Selector -->
-          <div class="save-destination-row">
-            <label>Save Destination:</label>
-            <div class="dest-checkboxes">
-              <label class="checkbox-label">
-                <input type="checkbox" id="dest-vault" checked> Save to Personal Space: <em>"Saanvi's Vault"</em>
-              </label>
-              <label class="checkbox-label">
-                <input type="checkbox" id="dest-shared" checked> Add to Shared Log: <em>"Our Little Corner"</em>
-              </label>
+          <!-- Live Preview of Chosen Vessel -->
+          <div class="vessel-live-preview-box" id="vessel-live-preview-box">
+            <div class="vessel-preview-render" id="vessel-preview-render">
+              <span class="preview-big-icon">✉️</span>
+              <p class="preview-vessel-name">Maroon Lace Envelope with Wax Seal</p>
             </div>
           </div>
 
           <!-- Dispatch Button -->
-          <div class="dispatch-action-row">
-            <button class="btn-primary-dispatch" id="btn-dispatch-gift">
-              Dispatch Gently 🕊️
-            </button>
+          <div class="dispatch-row">
+            <button class="btn-dispatch" id="btn-dispatch-action">Dispatch</button>
           </div>
         </section>
       </section>
 
-      <!-- ================= ROOM 2: KEEPSAKES (SHARED LIVING ARCHIVE) ================= -->
+      <!-- ================= ROOM 2: KEEPSAKES ================= -->
       <section class="room-view" id="room-keepsakes" style="display:none;">
         <div class="keepsakes-nav-segmented">
           <button class="seg-btn active" data-tab="shelf">Keepsake Shelf</button>
@@ -405,214 +491,107 @@
           <button class="seg-btn" data-tab="log">Relationship Log</button>
         </div>
 
-        <!-- Tab 1: Keepsake Shelf (Master Exchanged Gifts) -->
         <div class="keepsakes-subtab active" id="tab-shelf">
-          <div class="shelf-intro">
-            <h3>The Master Shelf</h3>
-            <p>Every gift exchanged between us, preserved permanently in one place.</p>
-          </div>
           <div class="shelf-grid" id="shelf-items-grid">
-            <!-- Example Pre-populated Keepsake -->
-            <div class="shelf-item-card" data-id="gift-1">
-              <div class="item-tag-vessel">🚚 Delivered via Toy Truck</div>
-              <div class="item-badge-type">🪪 Postcard</div>
+            <div class="shelf-item-card">
+              <div class="item-tag-vessel">🚚 Delivery Truck</div>
               <h4>Hawa Mahal Morning</h4>
               <p class="item-snippet">"Thinking of you as the pigeons took flight over the pink walls..."</p>
-              <div class="item-footer">
-                <span>From: Saanvi</span>
-                <span>Sep 24, 2026</span>
-              </div>
+              <div class="item-footer"><span>From: Saanvi</span><span>Sep 24, 2026</span></div>
             </div>
-
-            <div class="shelf-item-card" data-id="gift-2">
+            <div class="shelf-item-card">
               <div class="item-tag-vessel">✉️ Maroon Lace Envelope</div>
-              <div class="item-badge-type">✉️ Letter</div>
               <h4>A Quiet Apology & Tea</h4>
-              <p class="item-snippet">"I'm sorry about yesterday. Let's sit quietly with our tea tonight..."</p>
-              <div class="item-footer">
-                <span>From: Kabir</span>
-                <span>Sep 28, 2026</span>
-              </div>
-            </div>
-
-            <div class="shelf-item-card" data-id="gift-3">
-              <div class="item-tag-vessel">🎁 Keepsake Box</div>
-              <div class="item-badge-type">💐 Bouquet</div>
-              <h4>Dahlia & Wild Chamomile</h4>
-              <p class="item-snippet">Hand-tied with raw frayed silk ribbon and attached florist letter.</p>
-              <div class="item-footer">
-                <span>From: Saanvi</span>
-                <span>Oct 02, 2026</span>
-              </div>
+              <p class="item-snippet">"I'm sorry about yesterday. Let's sit quietly with our tea tonight."</p>
+              <div class="item-footer"><span>From: Kabir</span><span>Sep 28, 2026</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Tab 2: Scrapbooks (Story Chapters) -->
         <div class="keepsakes-subtab" id="tab-scrapbooks" style="display:none;">
-          <div class="scrapbook-intro">
-            <h3>Curated Scrapbook Chapters</h3>
-            <p>How we choose to remember our days. Pinned gifts, ticket stubs, and polaroids.</p>
-          </div>
           <div class="chapters-grid">
             <div class="chapter-card">
-              <div class="chapter-cover">
-                <span class="cover-icon">🚂</span>
-                <h4>Jaipur Trip 2025</h4>
-                <small>4 kept moments • 1 pinned postcard</small>
-              </div>
-              <div class="chapter-ephemera-preview">
-                <span class="ephemera-chip">🎫 Train Ticket</span>
-                <span class="ephemera-chip">📷 Hawa Mahal Polaroid</span>
-                <span class="ephemera-chip">🪪 Stamped Postcard</span>
-              </div>
+              <h4>Jaipur Trip 2025</h4>
+              <small>4 kept moments • 1 pinned postcard</small>
             </div>
-
             <div class="chapter-card">
-              <div class="chapter-cover">
-                <span class="cover-icon">🍵</span>
-                <h4>Late Night Tea & Talks</h4>
-                <small>3 kept moments</small>
-              </div>
-              <div class="chapter-ephemera-preview">
-                <span class="ephemera-chip">✉️ Folded Note</span>
-                <span class="ephemera-chip">📸 Mug Polaroid</span>
-                <span class="ephemera-chip">📝 Inside Joke</span>
-              </div>
+              <h4>Late Night Tea & Talks</h4>
+              <small>3 kept moments</small>
             </div>
           </div>
         </div>
 
-        <!-- Tab 3: Relationship Log -->
         <div class="keepsakes-subtab" id="tab-log" style="display:none;">
-          <div class="log-intro">
-            <h3>Milestone Ledger</h3>
-            <p>Chronological moments of our shared history.</p>
-          </div>
           <div class="timeline-stream">
             <div class="timeline-entry">
               <span class="timeline-date">Oct 2026</span>
-              <div class="timeline-card">
-                <strong>1 Month Special</strong>
-                <p>Exchanged wildflower bouquet & promised to keep our quiet rituals.</p>
-              </div>
+              <div class="timeline-card"><strong>1 Month Special</strong></div>
             </div>
             <div class="timeline-entry">
               <span class="timeline-date">Sep 2026</span>
-              <div class="timeline-card">
-                <strong>Jaipur Detour</strong>
-                <p>Got lost near the old market and wrote postcards at a tea stall.</p>
-              </div>
+              <div class="timeline-card"><strong>Jaipur Detour</strong></div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ================= ROOM 3: MY VAULT (PRIVATE SPACE) ================= -->
+      <!-- ================= ROOM 3: MY VAULT ================= -->
       <section class="room-view" id="room-vault" style="display:none;">
-        <div class="vault-header">
-          <h3>Saanvi's Vault (Private Space)</h3>
-          <p>Unsent drafts, personal reflections, and private gift ideas. Visible only to you.</p>
+        <div class="vault-folder">
+          <h4>Unsent Drafts (2)</h4>
         </div>
-        <div class="vault-categories">
-          <div class="vault-folder">
-            <span class="folder-icon">📝</span>
-            <h4>Unsent Drafts (2)</h4>
-            <p>Postcard draft: "When rain came to the terrace"</p>
-          </div>
-          <div class="vault-folder">
-            <span class="folder-icon">💭</span>
-            <h4>Tag: "For Him" (4 notes)</h4>
-            <p>Book recommendations, birthday ideas, pressed leaf token</p>
-          </div>
+        <div class="vault-folder">
+          <h4>Tag: "For Him" (4 notes)</h4>
         </div>
       </section>
 
-      <!-- ================= ROOM 4: REVISIT (RESURFACING ROOM) ================= -->
+      <!-- ================= ROOM 4: REVISIT ================= -->
       <section class="room-view" id="room-revisit" style="display:none;">
-        <div class="revisit-header">
-          <h3>Revisit</h3>
-          <p>Moments returning across time. User-controlled return points without algorithmic noise.</p>
-        </div>
-
-        <div class="revisit-cards-stream">
-          <div class="revisit-box-card upcoming">
-            <div class="revisit-badge">📅 Upcoming Return Point</div>
-            <h4>November 14, 2026 (In 39 days)</h4>
-            <p>A surprise locked by Kabir: <em>"Open when the first winter morning arrives."</em></p>
-            <span class="lock-status">🔒 Sealed until November 14</span>
-          </div>
-
-          <div class="revisit-box-card ready">
-            <div class="revisit-badge">✨ Echo Ready to Open</div>
-            <h4>First Rainy Day Letter</h4>
-            <p>Scheduled 1 year ago. Tap to relive the memory together.</p>
-            <button class="btn-subtle" onclick="alert('Opening past letter from September 2025...')">Revisit Keepsake</button>
-          </div>
+        <div class="revisit-box-card upcoming">
+          <small>📅 November 14, 2026</small>
+          <h4>Surprise from Kabir</h4>
+          <p>"Open when the first winter morning arrives."</p>
         </div>
       </section>
-
     </main>
 
-    <!-- Global Bottom 4-Room Navigation -->
-    <nav class="app-bottom-nav">
+    <!-- ================= BOTTOM NAVIGATION ================= -->
+    <nav class="app-bottom-nav" id="app-bottom-nav" style="display:none;">
       <button class="nav-tab active" data-room="studio">
-        <span class="nav-icon">✏️</span>
-        <span class="nav-label">Studio</span>
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span>Studio</span>
       </button>
       <button class="nav-tab" data-room="keepsakes">
-        <span class="nav-icon">🎁</span>
-        <span class="nav-label">Keepsakes</span>
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12V22H4V12"/><path d="M22 7H2V12H22V7Z"/><path d="M12 22V7"/><path d="M12 7H7.5A2.5 2.5 0 0 1 7.5 2C11 2 12 7 12 7Z"/><path d="M12 7H16.5A2.5 2.5 0 0 0 16.5 2C13 2 12 7 12 7Z"/></svg>
+        <span>Keepsakes</span>
       </button>
       <button class="nav-tab" data-room="vault">
-        <span class="nav-icon">🔒</span>
-        <span class="nav-label">My Vault</span>
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Vault</span>
       </button>
       <button class="nav-tab" data-room="revisit">
-        <span class="nav-icon">🕰️</span>
-        <span class="nav-label">Revisit</span>
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Revisit</span>
       </button>
     </nav>
 
-    <!-- ================= UNWRAPPING MODAL (RECEIVING SIMULATION) ================= -->
+    <!-- ================= UNWRAPPING MODAL ================= -->
     <div class="modal-backdrop" id="unwrap-modal" style="display:none;">
       <div class="unwrap-dialog">
-        <div class="unwrap-header">
-          <span class="unwrap-kicker">A little something has arrived...</span>
-          <button class="btn-close-modal" id="btn-close-modal">✕</button>
+        <div class="unwrap-top-bar">
+          <span>A little something arrived</span>
+          <button class="btn-close" id="btn-close-modal">✕</button>
         </div>
-
-        <div class="vessel-stage" id="vessel-stage">
-          <div class="vessel-interactive-graphic" id="vessel-graphic">
-            <!-- Dynamic graphic based on chosen vessel -->
-            <div class="vessel-art vessel-truck" id="vessel-art">
-              <span class="vessel-huge-icon">🚚</span>
-              <p id="vessel-action-hint">Tap the truck door to reveal your gift</p>
-            </div>
+        <div class="unwrap-stage" id="modal-vessel-stage">
+          <div class="modal-vessel-art" id="modal-vessel-art">
+            <span class="huge-vessel-icon" id="huge-vessel-icon">✉️</span>
+            <p id="modal-vessel-hint">Tap to open</p>
           </div>
-          <div class="unwrap-dedication-tag">
-            <span id="unwrap-from-label">From: Saanvi</span>
-            <span id="unwrap-to-label">To: Kabir</span>
-          </div>
-          <button class="btn-subtle btn-skip-unboxing" id="btn-skip-unboxing">Instant Open (Skip Animation)</button>
+          <button class="btn-flip" id="btn-instant-open">Open immediately</button>
         </div>
-
-        <!-- The Revealed Artifact Inside Modal -->
-        <div class="revealed-stage" id="revealed-stage" style="display:none;">
-          <div class="revealed-card-container" id="revealed-card-container">
-            <!-- Will receive the cloned crafted object -->
-          </div>
-          <div class="collaborative-patina-bar">
-            <h4>Leave something on it (Collaborative Patina):</h4>
-            <div class="collab-actions">
-              <button class="chip-btn" id="btn-circle-detail">✏️ Circle a Detail</button>
-              <button class="chip-btn" id="btn-add-polaroid">📸 Attach Photo</button>
-              <button class="chip-btn" id="btn-schedule-revisit">🕰️ Set Revisit Date</button>
-            </div>
-            <div class="collab-save-confirm">
-              <span class="success-check">✓ Safely saved to Keepsake Shelf and Shared Log</span>
-            </div>
-          </div>
+        <div class="unwrap-stage" id="modal-revealed-stage" style="display:none;">
+          <div id="modal-revealed-content"></div>
+          <div class="modal-saved-note">✓ Preserved on your Keepsake Shelf</div>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 // ==========================================================================
-// A LITTLE SOMETHING, FROM ME TO YOU — INTERACTIVE ATELIER ENGINE
+// A LITTLE SOMETHING, FROM ME TO YOU — MINIMAL ATELIER SCRIPT
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  // State management
+  // Application State
   const state = {
     activeRoom: 'studio',
     activeMedium: 'postcard',
@@ -12,35 +12,68 @@ document.addEventListener('DOMContentLoaded', () => {
       orientation: 'portrait',
       color: '#FFFFFF',
       stamp: 'heart',
-      title: 'A quiet morning title',
-      caption: '',
-      note: '',
-      from: 'Saanvi',
-      to: 'Kabir',
       flipped: false
     },
     letter: {
-      paper: 'paper-cloud',
+      paper: 'paper-pure',
       ink: '#1A1A1A',
-      from: 'Saanvi',
-      to: 'Kabir',
-      body: '',
-      stickers: [],
-      envelope: 'env-maroon',
+      envelope: 'maroon-lace',
       seal: 'gold'
     },
     bouquet: {
-      selectedFlowers: ['Dahlia', "Baby's Breath", 'Lilac'],
+      mode: 'bespoke',
+      flowers: ['Dahlia', 'Peony', "Baby's Breath"],
       wrap: 'wrap-kraft',
-      ribbon: 'ribbon-silk',
-      letter: '',
-      from: 'Saanvi',
-      to: 'Kabir'
+      ribbon: 'ribbon-silk'
     },
-    keepsakes: []
+    greetingCard: {
+      size: 'standard',
+      orientation: 'portrait',
+      template: '1',
+      inside: false,
+      pocketMode: 'polaroid'
+    }
   };
 
-  // ================= 1. GLOBAL NAVIGATION =================
+  // ================= 0. OPENING ENVELOPE SPLASH =================
+  const splashScreen = document.getElementById('splash-screen');
+  const splashEnvelope = document.getElementById('splash-envelope');
+  const appHeader = document.getElementById('app-header');
+  const appStage = document.getElementById('app-stage');
+  const appBottomNav = document.getElementById('app-bottom-nav');
+
+  if (splashEnvelope) {
+    splashEnvelope.addEventListener('click', () => {
+      splashScreen.style.opacity = '0';
+      splashScreen.style.transition = 'opacity 0.4s ease';
+      setTimeout(() => {
+        splashScreen.style.display = 'none';
+        appHeader.style.display = 'flex';
+        appStage.style.display = 'block';
+        appBottomNav.style.display = 'flex';
+      }, 400);
+    });
+  }
+
+  // ================= HEADER SAVE POPOVER =================
+  const btnSavePopover = document.getElementById('btn-save-popover');
+  const savePopover = document.getElementById('save-popover');
+
+  if (btnSavePopover && savePopover) {
+    btnSavePopover.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = savePopover.style.display === 'flex';
+      savePopover.style.display = isVisible ? 'none' : 'flex';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!savePopover.contains(e.target) && e.target !== btnSavePopover) {
+        savePopover.style.display = 'none';
+      }
+    });
+  }
+
+  // ================= GLOBAL ROOM NAVIGATION =================
   const navTabs = document.querySelectorAll('.nav-tab');
   const roomViews = document.querySelectorAll('.room-view');
 
@@ -58,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ================= 2. STUDIO MEDIUM SELECTION =================
+  // ================= STUDIO MEDIUM SELECTOR =================
   const mediumCards = document.querySelectorAll('.medium-card');
   const canvasPostcard = document.getElementById('canvas-postcard');
   const canvasLetter = document.getElementById('canvas-letter');
@@ -74,34 +107,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   mediumCards.forEach(card => {
     card.addEventListener('click', () => {
-      const medium = card.dataset.medium;
-      state.activeMedium = medium;
+      const med = card.dataset.medium;
+      state.activeMedium = med;
 
       mediumCards.forEach(c => c.classList.toggle('active', c === card));
       Object.keys(canvases).forEach(key => {
         if (canvases[key]) {
-          canvases[key].style.display = key === medium ? 'block' : 'none';
+          canvases[key].style.display = key === med ? 'block' : 'none';
         }
       });
     });
   });
 
-  // ================= 3. POSTCARD ATELIER INTERACTIONS =================
+  // ================= 1. POSTCARD WORKSPACE =================
   const postcardCard = document.getElementById('postcard-card');
   const btnFlipPostcard = document.getElementById('btn-flip-postcard');
-  const postcardFrontFace = document.getElementById('postcard-front-face');
   const postcardWrapper = document.getElementById('postcard-container');
   const btnOrientPort = document.getElementById('btn-postcard-orient-port');
   const btnOrientLand = document.getElementById('btn-postcard-orient-land');
-  const colorDots = document.querySelectorAll('.color-palette .color-dot');
-  const stampBtns = document.querySelectorAll('.stamp-option-btn');
-  const selectedStampDisplay = document.getElementById('selected-stamp-display');
+  const postcardColorDots = document.querySelectorAll('#canvas-postcard .color-dot');
+  const stampPickBtns = document.querySelectorAll('.stamp-pick-btn');
+  const postcardStampDisplay = document.getElementById('postcard-stamp-display');
+  const postcardPhotoArea = document.getElementById('postcard-photo-area');
+  const postcardFileInput = document.getElementById('postcard-file-input');
+  const postcardImagePreview = document.getElementById('postcard-image-preview');
+  const photoUploadHint = document.getElementById('photo-upload-hint');
+  const postcardFrontFace = document.getElementById('postcard-front-face');
+  const postcardBackFace = document.getElementById('postcard-back-face');
 
-  // Flip action
+  // Flip Postcard with dynamic text
   if (btnFlipPostcard) {
     btnFlipPostcard.addEventListener('click', () => {
       state.postcard.flipped = !state.postcard.flipped;
       postcardCard.classList.toggle('flipped', state.postcard.flipped);
+      btnFlipPostcard.innerText = state.postcard.flipped ? 'Flip to the front' : 'Flip to the back';
     });
   }
 
@@ -121,282 +160,563 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Front color palette (Strictly White, Cloud Dancer, Soft Cream Blush)
-  colorDots.forEach(dot => {
+  // Paper color changes BOTH front and back
+  postcardColorDots.forEach(dot => {
     dot.addEventListener('click', () => {
-      colorDots.forEach(d => d.classList.toggle('active', d === dot));
-      const color = dot.dataset.color;
-      if (color) {
-        state.postcard.color = color;
-        postcardFrontFace.style.backgroundColor = color;
-      }
+      postcardColorDots.forEach(d => d.classList.toggle('active', d === dot));
+      const col = dot.dataset.color;
+      state.postcard.color = col;
+      postcardCard.style.backgroundColor = col;
+      postcardFrontFace.style.backgroundColor = col;
+      postcardBackFace.style.backgroundColor = col;
     });
   });
 
-  // Stamp selector (Heart, Flower, Smiley)
-  const stampStyles = {
-    heart: `<div class="postage-stamp stamp-heart"><span class="stamp-icon">❤️</span><span class="stamp-date">OCT 2026</span></div>`,
-    flower: `<div class="postage-stamp stamp-flower"><span class="stamp-icon">🌸</span><span class="stamp-date">OCT 2026</span></div>`,
-    smiley: `<div class="postage-stamp stamp-smiley"><span class="stamp-icon">🙂</span><span class="stamp-date">OCT 2026</span></div>`
+  // Image Upload on Postcard Front
+  if (postcardPhotoArea && postcardFileInput) {
+    postcardPhotoArea.addEventListener('click', () => {
+      postcardFileInput.click();
+    });
+
+    postcardFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          postcardImagePreview.src = event.target.result;
+          postcardImagePreview.style.display = 'block';
+          photoUploadHint.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Stamp selection: Heart, Flower, Smiley
+  const stampTemplates = {
+    heart: `<div class="perforated-stamp stamp-heart"><svg viewBox="0 0 24 24" width="22" height="22" fill="#FFFFFF"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>`,
+    flower: `<div class="perforated-stamp stamp-flower"><span style="font-size:24px;">✿</span></div>`,
+    smiley: `<div class="perforated-stamp stamp-smiley"><span style="font-size:24px;">☺</span></div>`
   };
 
-  stampBtns.forEach(btn => {
+  stampPickBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      stampBtns.forEach(b => b.classList.toggle('active', b === btn));
-      const stampKey = btn.dataset.stamp;
-      state.postcard.stamp = stampKey;
-      if (selectedStampDisplay && stampStyles[stampKey]) {
-        selectedStampDisplay.innerHTML = stampStyles[stampKey];
+      stampPickBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const key = btn.dataset.stamp;
+      state.postcard.stamp = key;
+      if (postcardStampDisplay && stampTemplates[key]) {
+        postcardStampDisplay.innerHTML = stampTemplates[key];
       }
     });
   });
 
-  // Photo upload click simulation
-  const cardPhotoSlot = document.getElementById('card-photo-slot');
-  const uploadedImg = document.getElementById('postcard-uploaded-img');
-  const photoPlaceholder = document.getElementById('photo-placeholder');
-
-  const sampleBotanicals = [
-    'https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=600&q=80'
-  ];
-  let photoIndex = 0;
-
-  if (cardPhotoSlot) {
-    cardPhotoSlot.addEventListener('click', () => {
-      photoPlaceholder.style.display = 'none';
-      uploadedImg.style.display = 'block';
-      uploadedImg.src = sampleBotanicals[photoIndex % sampleBotanicals.length];
-      photoIndex++;
-    });
-  }
-
-  // ================= 4. LETTER ATELIER INTERACTIONS =================
-  const letterPaperSelect = document.getElementById('letter-paper-select');
+  // ================= 2. LETTER WORKSPACE =================
   const letterSheet = document.getElementById('letter-sheet');
-  const inkDots = document.querySelectorAll('[data-ink]');
-  const letterBody = document.getElementById('letter-body-input');
-  const stickerPills = document.querySelectorAll('.sticker-pill');
-  const placedStickersZone = document.getElementById('placed-stickers');
-  const sealBtns = document.querySelectorAll('.seal-btn');
+  const paperCircles = document.querySelectorAll('.paper-circle');
+  const inkDots = document.querySelectorAll('.ink-dot');
+  const letterTextarea = document.getElementById('letter-body-textarea');
+  const stickerIconBtns = document.querySelectorAll('.sticker-icon-btn');
+  const stickersCanvasOverlay = document.getElementById('stickers-canvas-overlay');
+  const polaroidTrigger = document.getElementById('polaroid-trigger');
+  const polaroidFileInput = document.getElementById('polaroid-file-input');
+  const polaroidImg = document.getElementById('polaroid-img');
+  const polaroidEmptyText = document.getElementById('polaroid-empty-text');
 
-  if (letterPaperSelect && letterSheet) {
-    letterPaperSelect.addEventListener('change', (e) => {
-      letterSheet.className = `letter-sheet ${e.target.value}`;
+  // Paper options
+  paperCircles.forEach(circle => {
+    circle.addEventListener('click', () => {
+      paperCircles.forEach(c => c.classList.toggle('active', c === circle));
+      const paperClass = circle.dataset.paper;
+      state.letter.paper = paperClass;
+      letterSheet.className = `letter-sheet ${paperClass}`;
     });
-  }
+  });
 
+  // Ink options
   inkDots.forEach(dot => {
     dot.addEventListener('click', () => {
       inkDots.forEach(d => d.classList.toggle('active', d === dot));
-      const inkColor = dot.dataset.ink;
-      if (letterBody && inkColor) {
-        letterBody.style.color = inkColor;
-        state.letter.ink = inkColor;
-      }
+      const ink = dot.dataset.ink;
+      state.letter.ink = ink;
+      letterTextarea.style.color = ink;
     });
   });
 
-  stickerPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      const stickerText = pill.innerText;
-      state.letter.stickers.push(stickerText);
-      const chip = document.createElement('span');
-      chip.className = 'active-sticker-chip';
-      chip.innerText = stickerText;
-      placedStickersZone.appendChild(chip);
-    });
-  });
-
-  sealBtns.forEach(btn => {
+  // Draggable Stickers implementation
+  stickerIconBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      sealBtns.forEach(b => b.classList.toggle('active', b === btn));
-      state.letter.seal = btn.dataset.seal;
+      const stickerGlyph = btn.dataset.sticker;
+      createDraggableSticker(stickerGlyph);
     });
   });
 
-  // ================= 5. BOUQUET ATELIER INTERACTIONS =================
-  const flowerItems = document.querySelectorAll('.flower-item');
-  const stemsContainer = document.getElementById('bouquet-stems-container');
-  const bouquetWrapSelect = document.getElementById('bouquet-wrap-select');
-  const bouquetRibbonSelect = document.getElementById('bouquet-ribbon-select');
-  const bouquetWrapRender = document.getElementById('bouquet-wrap-render');
-  const bouquetRibbonRender = document.getElementById('bouquet-ribbon-render');
+  function createDraggableSticker(glyph) {
+    const el = document.createElement('div');
+    el.className = 'draggable-sticker-placed';
+    el.innerText = glyph;
+    el.style.left = '40%';
+    el.style.top = '40%';
 
-  flowerItems.forEach(item => {
-    item.addEventListener('click', () => {
-      item.classList.toggle('selected');
-      const flowerName = item.dataset.flower;
-      
-      const idx = state.bouquet.selectedFlowers.indexOf(flowerName);
-      if (idx > -1) {
-        state.bouquet.selectedFlowers.splice(idx, 1);
-      } else {
-        state.bouquet.selectedFlowers.push(flowerName);
-      }
+    let isDragging = false;
+    let startX, startY, initialLeft, initialTop;
 
-      // Re-render stem chips
-      if (stemsContainer) {
-        stemsContainer.innerHTML = '';
-        state.bouquet.selectedFlowers.forEach(f => {
-          const chip = document.createElement('span');
-          chip.className = 'stem-chip';
-          chip.innerText = `🌸 ${f}`;
-          stemsContainer.appendChild(chip);
-        });
+    el.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      initialLeft = el.offsetLeft;
+      initialTop = el.offsetTop;
+      e.stopPropagation();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        el.style.left = `${initialLeft + dx}px`;
+        el.style.top = `${initialTop + dy}px`;
       }
     });
-  });
 
-  if (bouquetWrapSelect && bouquetWrapRender) {
-    bouquetWrapSelect.addEventListener('change', (e) => {
-      bouquetWrapRender.className = `bouquet-wrap-render ${e.target.value}`;
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    stickersCanvasOverlay.appendChild(el);
+  }
+
+  // Polaroid upload from gallery
+  if (polaroidTrigger && polaroidFileInput) {
+    polaroidTrigger.addEventListener('click', () => {
+      polaroidFileInput.click();
+    });
+
+    polaroidFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          polaroidImg.src = event.target.result;
+          polaroidImg.style.display = 'block';
+          polaroidEmptyText.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
     });
   }
 
-  if (bouquetRibbonSelect && bouquetRibbonRender) {
-    bouquetRibbonSelect.addEventListener('change', (e) => {
-      bouquetRibbonRender.className = `bouquet-ribbon ${e.target.value}`;
-      bouquetRibbonRender.innerText = `Ribbon: ${e.target.options[e.target.selectedIndex].text}`;
-    });
-  }
+  // Envelope Swatches & Wax Seal
+  const envSwatchBtns = document.querySelectorAll('.env-swatch-btn');
+  const sealSwatchBtns = document.querySelectorAll('.seal-swatch-btn');
+  const previewEnvelopeRender = document.getElementById('preview-envelope-render');
+  const previewSealRender = document.getElementById('preview-seal-render');
 
-  // ================= 6. DELIVERY VESSEL & PACKAGING =================
-  const vesselCards = document.querySelectorAll('.vessel-card');
-  vesselCards.forEach(card => {
-    card.addEventListener('click', () => {
-      vesselCards.forEach(c => c.classList.toggle('active', c === card));
-      const radio = card.querySelector('input[type="radio"]');
-      if (radio) {
-        radio.checked = true;
-        state.vessel = radio.value;
-      }
-    });
-  });
-
-  // ================= 7. DISPATCH GENTLY & UNWRAPPING MODAL =================
-  const btnDispatch = document.getElementById('btn-dispatch-gift');
-  const unwrapModal = document.getElementById('unwrap-modal');
-  const btnCloseModal = document.getElementById('btn-close-modal');
-  const vesselArt = document.getElementById('vessel-art');
-  const vesselStage = document.getElementById('vessel-stage');
-  const revealedStage = document.getElementById('revealed-stage');
-  const btnSkipUnboxing = document.getElementById('btn-skip-unboxing');
-  const revealedCardContainer = document.getElementById('revealed-card-container');
-  const unwrapFromLabel = document.getElementById('unwrap-from-label');
-  const unwrapToLabel = document.getElementById('unwrap-to-label');
-  const shelfItemsGrid = document.getElementById('shelf-items-grid');
-
-  const vesselIcons = {
-    envelope: { icon: '✉️', title: 'Wax-Sealed Maroon Envelope', hint: 'Slide wax seal to open' },
-    box: { icon: '🎁', title: 'Tied Keepsake Box', hint: 'Untie ribbon and lift lid' },
-    truck: { icon: '🚚', title: 'Vintage Toy Truck', hint: 'Tap truck door to reveal your gift' }
+  const envClassMap = {
+    'manila': 'swatch-manila',
+    'vellum': 'swatch-vellum',
+    'maroon-lace': 'env-maroon-lace',
+    'charcoal': 'swatch-charcoal'
   };
 
-  if (btnDispatch) {
-    btnDispatch.addEventListener('click', () => {
-      // Setup unboxing modal
-      const v = vesselIcons[state.vessel] || vesselIcons.envelope;
-      vesselArt.innerHTML = `<span class="vessel-huge-icon">${v.icon}</span><p id="vessel-action-hint">${v.hint}</p>`;
-      
-      const fromVal = document.getElementById('postcard-from-input')?.value || 'Saanvi';
-      const toVal = document.getElementById('postcard-to-input')?.value || 'Kabir';
-      unwrapFromLabel.innerText = `From: ${fromVal}`;
-      unwrapToLabel.innerText = `To: ${toVal}`;
+  envSwatchBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      envSwatchBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const envKey = btn.dataset.env;
+      state.letter.envelope = envKey;
+      previewEnvelopeRender.className = `preview-envelope env-${envKey}`;
+      updateVesselLivePreview();
+    });
+  });
 
-      // Reset modal stages
-      vesselStage.style.display = 'block';
-      revealedStage.style.display = 'none';
+  sealSwatchBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sealSwatchBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const sealKey = btn.dataset.seal;
+      state.letter.seal = sealKey;
+      previewSealRender.className = `preview-wax-seal seal-${sealKey}`;
+      updateVesselLivePreview();
+    });
+  });
+
+  // ================= 3. BOUQUET WORKSPACE =================
+  const btnTabBespoke = document.getElementById('btn-tab-bespoke');
+  const btnTabReadymade = document.getElementById('btn-tab-readymade');
+  const bespokeView = document.getElementById('bouquet-bespoke-view');
+  const readymadeView = document.getElementById('bouquet-readymade-view');
+  const bloomCards = document.querySelectorAll('.bloom-card');
+  const stemsBloomCluster = document.getElementById('stems-bloom-cluster');
+  const bouquetWrapFrame = document.getElementById('bouquet-wrap-frame');
+  const bouquetRibbonNode = document.getElementById('bouquet-ribbon-node');
+  const wrapSwatchBtns = document.querySelectorAll('.wrap-swatch-btn');
+  const ribbonSwatchBtns = document.querySelectorAll('.ribbon-swatch-btn');
+  const readymadeGrid = document.getElementById('readymade-sets-grid');
+
+  // Mode Toggles
+  if (btnTabBespoke && btnTabReadymade) {
+    btnTabBespoke.addEventListener('click', () => {
+      btnTabBespoke.classList.add('active');
+      btnTabReadymade.classList.remove('active');
+      bespokeView.style.display = 'block';
+      readymadeView.style.display = 'none';
+      state.bouquet.mode = 'bespoke';
+    });
+
+    btnTabReadymade.addEventListener('click', () => {
+      btnTabReadymade.classList.add('active');
+      btnTabBespoke.classList.remove('active');
+      bespokeView.style.display = 'none';
+      readymadeView.style.display = 'block';
+      state.bouquet.mode = 'readymade';
+    });
+  }
+
+  // 15 Blooms Selection
+  const flowerEmojis = {
+    'Dahlia': '🌺', 'Tulip': '🌷', 'Gardenia': '🌼', 'Peony': '🌸', 'Lily': '🪷',
+    'Orchid': '💮', 'Rose': '🌹', 'Sunflower': '🌻', 'Lilac': '🪻', "Baby's Breath": '🌾',
+    'Hydrangea': '💐', 'Snapdragon': '🌿', 'Japanese Anemones': '🥀',
+    'Persian Buttercup': '🏵️', 'Foxglove': '🌱'
+  };
+
+  bloomCards.forEach(card => {
+    card.addEventListener('click', () => {
+      card.classList.toggle('selected');
+      const flower = card.dataset.flower;
+      const idx = state.bouquet.flowers.indexOf(flower);
+      if (idx > -1) {
+        state.bouquet.flowers.splice(idx, 1);
+      } else {
+        state.bouquet.flowers.push(flower);
+      }
+      renderBouquetPreview();
+    });
+  });
+
+  function renderBouquetPreview() {
+    if (!stemsBloomCluster) return;
+    stemsBloomCluster.innerHTML = '';
+    state.bouquet.flowers.forEach(f => {
+      const span = document.createElement('span');
+      span.className = 'cluster-flower';
+      span.innerText = flowerEmojis[f] || '🌸';
+      stemsBloomCluster.appendChild(span);
+    });
+  }
+
+  // 8 Readymade Combinations (6 flower types, 8-9 flowers each)
+  const readymadeSetsData = [
+    { name: 'Dawn Meadow', flowers: ['Dahlia', 'Peony', 'Lily', "Baby's Breath", 'Lilac', 'Gardenia'] },
+    { name: 'Warm Terracotta', flowers: ['Sunflower', 'Rose', 'Persian Buttercup', 'Foxglove', 'Snapdragon', 'Dahlia'] },
+    { name: 'Quiet Solace', flowers: ['Lily', 'Orchid', 'Gardenia', "Baby's Breath", 'Tulip', 'Hydrangea'] },
+    { name: 'Nostalgic Tea', flowers: ['Peony', 'Lilac', 'Japanese Anemones', 'Rose', 'Lily', "Baby's Breath"] },
+    { name: 'Linen & Moss', flowers: ['Snapdragon', 'Foxglove', 'Hydrangea', 'Gardenia', 'Tulip', 'Lily'] },
+    { name: 'Midnight Bloom', flowers: ['Japanese Anemones', 'Dahlia', 'Rose', 'Orchid', 'Persian Buttercup', 'Lilac'] },
+    { name: 'Spring Gentle', flowers: ['Tulip', 'Peony', 'Gardenia', 'Hydrangea', "Baby's Breath", 'Sunflower'] },
+    { name: 'Archival Flora', flowers: ['Foxglove', 'Dahlia', 'Lilac', 'Rose', 'Snapdragon', 'Persian Buttercup'] }
+  ];
+
+  if (readymadeGrid) {
+    readymadeGrid.innerHTML = '';
+    readymadeSetsData.forEach((set, i) => {
+      const card = document.createElement('div');
+      card.className = 'set-card';
+      card.innerHTML = `
+        <h5>0${i+1}. ${set.name}</h5>
+        <p>${set.flowers.slice(0, 4).join(', ')} & more</p>
+      `;
+      card.addEventListener('click', () => {
+        state.bouquet.flowers = [...set.flowers];
+        bloomCards.forEach(c => {
+          c.classList.toggle('selected', set.flowers.includes(c.dataset.flower));
+        });
+        renderBouquetPreview();
+        btnTabBespoke.click(); // Switch back to view preview
+      });
+      readymadeGrid.appendChild(card);
+    });
+  }
+
+  // Wrapping Paper
+  wrapSwatchBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      wrapSwatchBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const wrapClass = btn.dataset.wrap;
+      state.bouquet.wrap = wrapClass;
+      bouquetWrapFrame.className = `bouquet-wrap-frame ${wrapClass}`;
+    });
+  });
+
+  // Ribbon Tie
+  ribbonSwatchBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      ribbonSwatchBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const ribClass = btn.dataset.ribbon;
+      state.bouquet.ribbon = ribClass;
+      bouquetRibbonNode.className = `bouquet-ribbon-node ${ribClass}`;
+    });
+  });
+
+  // ================= 4. GREETING CARD WORKSPACE =================
+  const greetingCardEl = document.getElementById('greeting-card-element');
+  const btnCardSizeStd = document.getElementById('btn-card-size-std');
+  const btnCardSizeMini = document.getElementById('btn-card-size-mini');
+  const btnCardOrientPort = document.getElementById('btn-card-orient-port');
+  const btnCardOrientLand = document.getElementById('btn-card-orient-land');
+  const templateBtns = document.querySelectorAll('.template-thumb-btn');
+  const btnFlipGreeting = document.getElementById('btn-flip-greeting');
+  const greetingCoverView = document.getElementById('greeting-cover-view');
+  const greetingInsideView = document.getElementById('greeting-inside-view');
+  const pocketTabBtns = document.querySelectorAll('.pocket-tab-btn');
+  const pocketPolaroidZone = document.getElementById('pocket-polaroid-zone');
+  const pocketFlowerZone = document.getElementById('pocket-flower-zone');
+  const pocketVinylZone = document.getElementById('pocket-vinyl-zone');
+  const coverArtContainer = document.getElementById('cover-art-container');
+  const cardCoverUpload = document.getElementById('card-cover-upload');
+  const cardCoverPreview = document.getElementById('card-cover-preview');
+  const coverArtPlaceholder = document.getElementById('cover-art-placeholder');
+  const pocketPhotoTrigger = document.getElementById('pocket-photo-trigger');
+  const cardPocketFile = document.getElementById('card-pocket-file');
+  const pocketPhotoImg = document.getElementById('pocket-photo-img');
+  const pocketPhotoText = document.getElementById('pocket-photo-text');
+
+  // Card Size
+  if (btnCardSizeStd && btnCardSizeMini) {
+    btnCardSizeStd.addEventListener('click', () => {
+      btnCardSizeStd.classList.add('active');
+      btnCardSizeMini.classList.remove('active');
+      greetingCardEl.classList.remove('size-mini');
+      state.greetingCard.size = 'standard';
+    });
+    btnCardSizeMini.addEventListener('click', () => {
+      btnCardSizeMini.classList.add('active');
+      btnCardSizeStd.classList.remove('active');
+      greetingCardEl.classList.add('size-mini');
+      state.greetingCard.size = 'mini';
+    });
+  }
+
+  // Card Orientation
+  if (btnCardOrientPort && btnCardOrientLand) {
+    btnCardOrientPort.addEventListener('click', () => {
+      btnCardOrientPort.classList.add('active');
+      btnCardOrientLand.classList.remove('active');
+      greetingCardEl.classList.add('portrait');
+      greetingCardEl.classList.remove('landscape');
+      state.greetingCard.orientation = 'portrait';
+    });
+    btnCardOrientLand.addEventListener('click', () => {
+      btnCardOrientLand.classList.add('active');
+      btnCardOrientPort.classList.remove('active');
+      greetingCardEl.classList.remove('portrait');
+      greetingCardEl.classList.add('landscape');
+      state.greetingCard.orientation = 'landscape';
+    });
+  }
+
+  // 10 Templates
+  templateBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      templateBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const tmpl = btn.dataset.tmpl;
+      state.greetingCard.template = tmpl;
+      const titleInput = greetingCardEl.querySelector('.cover-editable-title');
+      if (titleInput) {
+        const sampleTitles = [
+          'A quiet wish', 'With fond thoughts', 'For dear days', 'A little joy',
+          'Across the miles', 'Gentle autumn', 'A tender note', 'Always kept',
+          'Small blessings', 'From my desk'
+        ];
+        titleInput.value = sampleTitles[(parseInt(tmpl)-1) % sampleTitles.length];
+      }
+    });
+  });
+
+  // Flip Greeting Card Inside / Cover
+  if (btnFlipGreeting) {
+    btnFlipGreeting.addEventListener('click', () => {
+      state.greetingCard.inside = !state.greetingCard.inside;
+      greetingCoverView.style.display = state.greetingCard.inside ? 'none' : 'flex';
+      greetingInsideView.style.display = state.greetingCard.inside ? 'flex' : 'none';
+      btnFlipGreeting.innerText = state.greetingCard.inside ? 'Flip to cover' : 'Flip to inside';
+    });
+  }
+
+  // Cover image upload
+  if (coverArtContainer && cardCoverUpload) {
+    coverArtContainer.addEventListener('click', () => {
+      cardCoverUpload.click();
+    });
+    cardCoverUpload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          cardCoverPreview.src = event.target.result;
+          cardCoverPreview.style.display = 'block';
+          coverArtPlaceholder.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Inside Left Pocket: Polaroid vs Pressed Flower vs Vinyl
+  pocketTabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      pocketTabBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const pMode = btn.dataset.pocket;
+      state.greetingCard.pocketMode = pMode;
+      pocketPolaroidZone.style.display = pMode === 'polaroid' ? 'block' : 'none';
+      pocketFlowerZone.style.display = pMode === 'flower' ? 'block' : 'none';
+      pocketVinylZone.style.display = pMode === 'vinyl' ? 'block' : 'none';
+    });
+  });
+
+  if (pocketPhotoTrigger && cardPocketFile) {
+    pocketPhotoTrigger.addEventListener('click', () => {
+      cardPocketFile.click();
+    });
+    cardPocketFile.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          pocketPhotoImg.src = event.target.result;
+          pocketPhotoImg.style.display = 'block';
+          pocketPhotoText.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // ================= 5. DELIVERY VESSELS (3 OPTIONS) =================
+  const vesselBtns = document.querySelectorAll('.vessel-btn');
+  const vesselPreviewRender = document.getElementById('vessel-preview-render');
+
+  vesselBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      vesselBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const v = btn.dataset.vessel;
+      state.vessel = v;
+      updateVesselLivePreview();
+    });
+  });
+
+  function updateVesselLivePreview() {
+    if (!vesselPreviewRender) return;
+    if (state.vessel === 'envelope') {
+      vesselPreviewRender.innerHTML = `
+        <span class="preview-big-icon">✉️</span>
+        <p class="preview-vessel-name">${state.letter.envelope === 'maroon-lace' ? 'Maroon Lace Envelope' : 'Stationery Envelope'} with ${state.letter.seal.toUpperCase()} Seal</p>
+      `;
+    } else if (state.vessel === 'box') {
+      vesselPreviewRender.innerHTML = `
+        <span class="preview-big-icon">🎁</span>
+        <p class="preview-vessel-name">Tied Keepsake Box with Ribbon</p>
+      `;
+    } else {
+      vesselPreviewRender.innerHTML = `
+        <span class="preview-big-icon">🚚</span>
+        <p class="preview-vessel-name">Delivery Truck</p>
+      `;
+    }
+  }
+
+  // ================= 6. DISPATCH & UNWRAPPING MODAL =================
+  const btnDispatchAction = document.getElementById('btn-dispatch-action');
+  const unwrapModal = document.getElementById('unwrap-modal');
+  const btnCloseModal = document.getElementById('btn-close-modal');
+  const modalVesselArt = document.getElementById('modal-vessel-art');
+  const hugeVesselIcon = document.getElementById('huge-vessel-icon');
+  const modalVesselHint = document.getElementById('modal-vessel-hint');
+  const modalVesselStage = document.getElementById('modal-vessel-stage');
+  const modalRevealedStage = document.getElementById('modal-revealed-stage');
+  const modalRevealedContent = document.getElementById('modal-revealed-content');
+  const btnInstantOpen = document.getElementById('btn-instant-open');
+  const shelfItemsGrid = document.getElementById('shelf-items-grid');
+
+  if (btnDispatchAction) {
+    btnDispatchAction.addEventListener('click', () => {
+      modalVesselStage.style.display = 'block';
+      modalRevealedStage.style.display = 'none';
+
+      if (state.vessel === 'envelope') {
+        hugeVesselIcon.innerText = '✉️';
+        modalVesselHint.innerText = 'Slide wax seal to open';
+      } else if (state.vessel === 'box') {
+        hugeVesselIcon.innerText = '🎁';
+        modalVesselHint.innerText = 'Untie ribbon to open';
+      } else {
+        hugeVesselIcon.innerText = '🚚';
+        modalVesselHint.innerText = 'Tap truck door to reveal';
+      }
+
       unwrapModal.style.display = 'flex';
     });
   }
 
-  function revealGiftArtifact() {
-    vesselStage.style.display = 'none';
-    revealedStage.style.display = 'block';
+  function revealGiftModal() {
+    modalVesselStage.style.display = 'none';
+    modalRevealedStage.style.display = 'block';
 
-    // Clone the active crafted object preview
-    let previewHTML = '';
+    let html = '';
     const fromVal = document.getElementById('postcard-from-input')?.value || 'Saanvi';
-    const titleVal = document.getElementById('postcard-title-input')?.value || 'A quiet morning thought';
+    const toVal = document.getElementById('postcard-to-input')?.value || 'Kabir';
 
     if (state.activeMedium === 'postcard') {
-      previewHTML = `
-        <div style="background:${state.postcard.color}; border:1px solid #DCD7CE; padding:16px; border-radius:4px;">
-          <h3 style="font-family:'Playfair Display', serif; font-size:18px;">${titleVal}</h3>
-          <p style="font-size:13px; color:#736B63; margin-top:4px;">"${document.getElementById('postcard-caption-input')?.value || 'Thinking of you as the light filtered through...'}"</p>
-          <div style="margin-top:12px; border-top:1px dashed #DCD7CE; padding-top:8px; font-family:'Caveat', cursive; font-size:18px;">
-            ${document.getElementById('postcard-note-input')?.value || 'Just a little something to brighten your day.'}
-          </div>
-          <div style="margin-top:8px; font-size:11px; color:#9C948B; display:flex; justify-content:space-between;">
-            <span>From: ${fromVal}</span>
-            <span>Stamp: ${state.postcard.stamp.toUpperCase()}</span>
-          </div>
+      html = `
+        <div style="background:${state.postcard.color}; border:1px solid #DCD7CE; padding:12px; border-radius:4px;">
+          <h4 style="font-family:'Playfair Display', serif; font-size:15px;">Morning light</h4>
+          <p style="font-family:'Caveat', cursive; font-size:18px; margin:8px 0;">"${document.getElementById('postcard-back-message')?.value || 'A quiet dispatch from my morning.'}"</p>
+          <small style="color:#736B63;">To: ${toVal} • From: ${fromVal}</small>
         </div>
       `;
     } else if (state.activeMedium === 'letter') {
-      previewHTML = `
-        <div style="background:#F0EEE9; border:1px solid #DCD7CE; padding:16px; border-radius:4px; font-family:'Caveat', cursive; font-size:20px; color:${state.letter.ink};">
-          <p>${document.getElementById('letter-body-input')?.value || 'I saw something today that reminded me of you...'}</p>
-          <div style="font-size:14px; margin-top:12px; font-family:'Plus Jakarta Sans', sans-serif; color:#736B63;">
-            Envelope: Maroon with White Lace • Wax Seal: ${state.letter.seal.toUpperCase()}
-          </div>
+      html = `
+        <div style="background:#FFFFFF; border:1px solid #DCD7CE; padding:14px; border-radius:4px; font-family:'Caveat', cursive; font-size:18px;">
+          <p>"${document.getElementById('letter-body-textarea')?.value || 'Just a note to say I am thinking of you.'}"</p>
+          <div style="font-size:12px; color:#736B63; margin-top:8px;">Delivered in Maroon Lace Envelope</div>
         </div>
       `;
     } else if (state.activeMedium === 'bouquet') {
-      previewHTML = `
-        <div style="background:#FAF7F0; border:1px solid #DCD7CE; padding:16px; border-radius:4px;">
-          <h4 style="font-family:'Playfair Display', serif;">Botanical Bouquet: ${state.bouquet.selectedFlowers.join(', ')}</h4>
-          <p style="font-size:12px; color:#736B63; margin:6px 0;">Hand-tied with ribbon and wrapped in kraft paper.</p>
-          <div style="font-family:'Caveat', cursive; font-size:18px; color:#1A1A1A; margin-top:8px;">
-            Florist Note: "${document.getElementById('bouquet-letter-input')?.value || 'A few quiet blossoms for your desk.'}"
-          </div>
+      html = `
+        <div style="background:#F7F4EE; border:1px solid #DCD7CE; padding:12px; border-radius:4px;">
+          <h4 style="font-family:'Playfair Display', serif; font-size:14px;">Botanical Bouquet</h4>
+          <p style="font-size:12px; color:#736B63; margin-top:4px;">${state.bouquet.flowers.join(' • ')}</p>
         </div>
       `;
     } else {
-      previewHTML = `
-        <div style="background:#FFFFFF; border:1px solid #DCD7CE; padding:16px; border-radius:4px;">
-          <h4 style="font-family:'Playfair Display', serif;">Bi-fold Greeting Card</h4>
-          <p style="font-family:'Caveat', cursive; font-size:18px; margin-top:6px;">"A quiet wish for you today."</p>
+      html = `
+        <div style="background:#FFFFFF; border:1px solid #DCD7CE; padding:12px; border-radius:4px;">
+          <h4 style="font-family:'Playfair Display', serif; font-size:14px;">Folded Greeting Card</h4>
+          <p style="font-family:'Caveat', cursive; font-size:16px; margin-top:4px;">"A quiet wish for you today."</p>
         </div>
       `;
     }
 
-    revealedCardContainer.innerHTML = previewHTML;
+    modalRevealedContent.innerHTML = html;
 
-    // Automatically add to Keepsake Shelf
+    // Prepend to Keepsake Shelf
     if (shelfItemsGrid) {
-      const newCard = document.createElement('div');
-      newCard.className = 'shelf-item-card';
-      const vesselTitle = vesselIcons[state.vessel]?.title || 'Envelope';
-      newCard.innerHTML = `
-        <div class="item-tag-vessel">${vesselIcons[state.vessel]?.icon} Delivered via ${vesselTitle}</div>
-        <div class="item-badge-type">${state.activeMedium.toUpperCase()}</div>
-        <h4>${titleVal}</h4>
-        <p class="item-snippet">Preserved freshly from today's studio session.</p>
-        <div class="item-footer">
-          <span>From: ${fromVal}</span>
-          <span>Just now</span>
-        </div>
+      const card = document.createElement('div');
+      card.className = 'shelf-item-card';
+      const vesselNames = { envelope: '✉️ Envelope', box: '🎁 Keepsake Box', truck: '🚚 Delivery Truck' };
+      card.innerHTML = `
+        <div class="item-tag-vessel">${vesselNames[state.vessel]}</div>
+        <h4>${state.activeMedium.toUpperCase()}</h4>
+        <p class="item-snippet">Preserved freshly from today's atelier.</p>
+        <div class="item-footer"><span>From: ${fromVal}</span><span>Just now</span></div>
       `;
-      shelfItemsGrid.prepend(newCard);
+      shelfItemsGrid.prepend(card);
     }
   }
 
-  if (vesselArt) {
-    vesselArt.addEventListener('click', revealGiftArtifact);
-  }
-  if (btnSkipUnboxing) {
-    btnSkipUnboxing.addEventListener('click', revealGiftArtifact);
-  }
-  if (btnCloseModal) {
-    btnCloseModal.addEventListener('click', () => {
-      unwrapModal.style.display = 'none';
-    });
-  }
+  if (modalVesselArt) modalVesselArt.addEventListener('click', revealGiftModal);
+  if (btnInstantOpen) btnInstantOpen.addEventListener('click', revealGiftModal);
+  if (btnCloseModal) btnCloseModal.addEventListener('click', () => { unwrapModal.style.display = 'none'; });
 
-  // ================= 8. KEEPSAKES SUB-TABS =================
+  // ================= 7. KEEPSAKES TABS =================
   const segBtns = document.querySelectorAll('.seg-btn');
   const subtabs = document.querySelectorAll('.keepsakes-subtab');
 
@@ -412,11 +732,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Collaborative Action: Circle detail simulation
-  const btnCircleDetail = document.getElementById('btn-circle-detail');
-  if (btnCircleDetail) {
-    btnCircleDetail.addEventListener('click', () => {
-      alert('✏️ Marginalia Layer active: You can now draw or circle a detail without altering the original gift.');
-    });
-  }
 });
