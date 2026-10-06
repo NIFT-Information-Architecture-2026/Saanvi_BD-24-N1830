@@ -12,7 +12,7 @@ graph TD
     B -->|Select Medium| C[Crafting Canvas: Letter / Postcard / Card / Bouquet]
     C --> D[Craft Artifact: Artwork, Photos, Type, Arrangement]
     D --> E["The 'From & To' Signature Tag (Final Touch)"]
-    E --> F[Select Delivery Vessel: Envelope / Box / Truck / Manila Folder]
+    E --> F[Select Delivery Vessel: Envelope / Box / Truck]
     F --> G[Dispatch & Destination Selection]
     G --> H{"Save Choice"}
     H -->|Save Copy to| I["Personal Space (e.g., 'Saanvi's Vault')"]
@@ -33,7 +33,7 @@ graph TD
     E1 --> F1[Artifact Display: Flip Postcard / Open Card Spread / Bouquet View]
     F1 --> G1[Collaborative Action Bar]
     G1 --> H1[Circle/Draw Marginalia]
-    G1 --> I1[Attach Audio Whisper or Memory Note]
+    G1 --> I1[Attach Memory Photo or Written Note]
     G1 --> J1["Save Button: File to Shared Log or Personal Vault"]
     G1 --> K1["Schedule in 'Revisit' for a Future Date"]
 ```
@@ -116,8 +116,7 @@ graph TD
 │ To:   [ Kabir___________ ]              │
 │                                         │
 │ CHOOSE PACKAGING VESSEL:                │
-│ (•) Parchment Envelope  ( ) Tied Box    │
-│ ( ) Vintage Toy Truck   ( ) Manila File │
+│ (•) Envelope   ( ) Tied Box   ( ) Truck │
 │                                         │
 │ SAVE TO:                                │
 │ [☑] Personal Space: "Saanvi's Vault"    │
@@ -152,7 +151,7 @@ graph TD
 │  └───────────────────────────────────┘  │
 │                                         │
 │ COLLABORATIVE ACTIONS:                  │
-│ [ ✏️ Circle a Detail ] [ 🎙️ Voice Note ] │
+│ [ ✏️ Circle a Detail ] [ 📸 Add Photo ]  │
 │ [ 📌 Save to Keepsakes ] [ 🕰️ Revisit Later ]│
 └─────────────────────────────────────────┘
 ```

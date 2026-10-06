@@ -40,7 +40,7 @@
 #### B. Contemporary Letter
 - **Aesthetic Tone:** Warm, modern tactile simplicity (avoiding exaggerated faux-parchment clichés).
 - **Typography Engine:** Curated pairing of modern serif and expressive handwriting scripts; adjustable letter-spacing, line height, and ink opacity.
-- **Paper Canvas:** Subtle pastel and earthy paper washes (linen white, sage, dusty oat, terracotta).
+- **Paper Canvas:** Pure white and warm cream stationery washes (pure cotton, cloud dancer, linen cream).
 - **Ephemera Layer:** Placement of contemporary stickers, pressed botanical stamps, and margin notes.
 - **Dedication:** Elegant top or footer sign-off: *"From: [Name] / To: [Name]"*.
 
@@ -50,15 +50,15 @@
 - **Exterior Cover:** Curated festive, sentimental, or whimsical cover art; customizable cover title.
 - **Interior Spread:** 
   - Left page: Optional tuck-in photo pocket (for a polaroid or keepsake snapshot).
-  - Right page: Handwritten personal message spread.
+  - Right page: Handwritten personal message spread (Black, Dark Brown, Dark Blue ink).
   - Dedication: Embossed or handwritten *"From: [Name] / To: [Name]"* closure.
 
 #### D. Botanical Bouquet
 - **Mode 1: Bespoke Atelier (Stem-by-Stem):**
-  - Stem selection from a rich botanical index (e.g., wild cosmos, sweet pea, ranunculus, olive branch).
+  - Stem selection from a rich botanical index (Dahlia, Tulip, Gardenia, Peony, Lily, Orchid, Rose, Sunflower, Lilac, Baby's Breath, Hydrangea, Snapdragon, Japanese Anemones, Persian Buttercup, Foxglove).
   - Arrangement canvas allowing custom flower placement, rotation, and layering.
-  - Wrapping paper selection (kraft paper, frosted wax paper, pleated linen).
-  - Ribbon choice (raw silk, grosgrain, twine knot).
+  - Wrapping paper selection (kraft paper, frosted wax paper, pleated linen, vintage newsprint).
+  - Ribbon choice (raw silk, grosgrain, velvet, twisted jute twine).
   - Florist gift tag tied to the ribbon bearing the personal dedication: *"From: [Name] / To: [Name]"*.
 - **Mode 2: Readymade Bouquets:**
   - Pre-arranged bouquets for effortless, spontaneous gestures when the sender wants to offer immediate comfort or celebration.
@@ -72,7 +72,7 @@ graph TD
     subgraph Studio [The Studio]
         Maker[Maker Canvas] --> CreateGift[Craft Gift: Postcard / Letter / Card / Bouquet]
         CreateGift --> AddDedication["Attach 'From: & To:' Dedication"]
-        AddDedication --> ChooseVessel[Package in Vessel: Envelope / Box / Truck]
+        AddDedication --> ChooseVessel[Package in 3 Vessels: Envelope / Box / Truck]
         ChooseVessel --> Dispatch[Send to Recipient]
     end
 
@@ -90,7 +90,7 @@ graph TD
         
         Photo1[Trip Photo] --> ChapterA
         Ticket[Train Ticket Stub] --> ChapterA
-        VoiceNote[Audio Whisper] --> ChapterB
+        WrittenNote[Handwritten Inside Joke] --> ChapterB
     end
 
     subgraph Ledger [Relationship Log & Timeline]
