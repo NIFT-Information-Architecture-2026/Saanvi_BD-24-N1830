@@ -131,7 +131,7 @@ body {
 
 /* ================= APP HEADER ================= */
 .app-header {
-  padding: 18px 18px 12px;
+  padding: 16px 18px 14px;
   border-bottom: 1px solid var(--paper-border-soft);
   background-color: var(--paper-white);
   display: flex;
@@ -140,24 +140,47 @@ body {
   position: relative;
 }
 
+.header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-pretitle {
+  display: block;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
 .header-title {
   font-family: var(--font-serif);
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 500;
   color: var(--ink-black);
   outline: none;
+  letter-spacing: -0.01em;
 }
 
-.header-subtitle {
-  display: block;
-  font-size: 11px;
-  color: var(--ink-light);
-  margin-top: 2px;
-  letter-spacing: 0.02em;
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.header-actions {
-  position: relative;
+.tiny-envelope-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: transform 0.2s ease;
+}
+.tiny-envelope-visual:hover {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .save-icon-btn {
