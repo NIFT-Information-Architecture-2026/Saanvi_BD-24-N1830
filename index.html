@@ -139,7 +139,25 @@
             <span>Postcard</span>
           </button>
           <button class="medium-card" data-medium="letter" title="Letter">
-            <svg class="med-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <svg class="med-svg med-svg-letter" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Open Top Flap -->
+              <path d="M 4 16 L 20 2 L 36 16 Z" fill="#F0A6BA" stroke="#E292A8" stroke-width="0.5" stroke-linejoin="round"/>
+              <!-- Envelope Inside -->
+              <rect x="4" y="16" width="32" height="20" fill="#E6C0CA"/>
+              <!-- White Heart Card -->
+              <path d="M 20 27 C 20 27, 8 18, 8 11 C 8 5.5, 15 5.5, 20 11 C 25 5.5, 32 5.5, 32 11 C 32 18, 20 27, 20 27 Z" fill="#FFFDF9" stroke="#EAE0D8" stroke-width="0.8" stroke-linejoin="round"/>
+              <!-- Left Flap -->
+              <path d="M 4 16 L 17 26 L 4 36 Z" fill="#EFA9BC" stroke="#DF8BA1" stroke-width="0.5" stroke-linejoin="round"/>
+              <!-- Right Flap -->
+              <path d="M 36 16 L 23 26 L 36 36 Z" fill="#EFA9BC" stroke="#DF8BA1" stroke-width="0.5" stroke-linejoin="round"/>
+              <!-- Bottom Flap -->
+              <path d="M 4 36 L 20 23 L 36 36 Z" fill="#F4B4C6" stroke="#E49AB1" stroke-width="0.8" stroke-linejoin="round"/>
+              <!-- Wax Seal -->
+              <circle cx="20" cy="24" r="4.5" fill="#DF6584"/>
+              <!-- Wax Seal Inner Details -->
+              <circle cx="20" cy="24" r="3" fill="none" stroke="#B84261" stroke-width="0.5"/>
+              <path d="M 20 25.5 C 20 25.5, 18.2 23.5, 18.2 22.5 C 18.2 21.6, 19.3 21.6, 20 22.5 C 20.7 21.6, 21.8 21.6, 21.8 22.5 C 21.8 23.5, 20 25.5, 20 25.5 Z" fill="#B84261"/>
+            </svg>
             <span>Letter</span>
           </button>
           <button class="medium-card" data-medium="bouquet" title="Bouquet">

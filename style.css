@@ -299,6 +299,10 @@ body {
   width: 36px;
   height: 28px;
 }
+.med-svg-letter {
+  width: 34px;
+  height: 34px;
+}
 
 .medium-card span {
   font-size: 11px;
