@@ -4,28 +4,36 @@
    ========================================================================== */
 
 :root {
+  /* The Aesthetic Palette: Baby Pink, Soft Pink, Red, White, and Deep Maroon */
   --paper-white: #FFFFFF;
-  --paper-cloud: #F0EEE9;        /* Pantone Cloud Dancer */
-  --paper-blush: #F4EBE5;        /* Soft Cream Blush #f4ebe5 */
-  --paper-cream: #F7F4EE;
-  --paper-linen: #ECE7DE;
-  --paper-border: #DCD7CE;
-  --paper-border-soft: #EAE6DF;
+  --paper-babypink: #FDE8ED;       /* Soft baby pink */
+  --paper-pink-soft: #FBD5DE;      /* Delicate sweet pink */
+  --paper-blush: #FCE6EC;          /* Rose cream blush */
+  --paper-cloud: #FFF9FA;          /* Pure white with baby-pink whisper */
+  --paper-border: #F3CAD4;         /* Soft pink contour line */
+  --paper-border-soft: #F9E2E7;    /* Subtle pink divider */
 
-  --ink-black: #1A1A1A;
-  --ink-brown: #382923;
-  --ink-blue: #1B263B;
-  --ink-muted: #736B63;
-  --ink-light: #9C948B;
+  --ink-maroon: #521319;           /* Deep rich luxury maroon */
+  --ink-red: #D8263B;              /* Warm cherry red */
+  --ink-muted: #8E4A56;            /* Muted dusty rose-maroon */
+  --ink-light: #B88590;            /* Soft rose-grey */
+  --ink-black: #3A0F14;            /* Softened near-black with deep maroon undertone */
+
+  /* Envelope & Seal Accents */
+  --seal-gold: #D4AF37;
+  --seal-cream: #FFF4F6;
+  --seal-maroon: #6B1720;
+  --seal-red: #D8263B;
 
   --font-serif: 'Playfair Display', Georgia, serif;
+  --font-editorial: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
   --font-script: 'Caveat', cursive;
   --font-mono: 'Courier Prime', monospace;
 
   --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
 }
 
 * {
@@ -41,7 +49,7 @@
 }
 
 body {
-  background-color: #E7E3DC;
+  background-color: #F8E7EB;       /* Soft baby pink atmosphere */
   color: var(--ink-black);
   font-family: var(--font-sans);
   min-height: 100vh;
@@ -56,7 +64,7 @@ body {
   max-width: 440px;
   min-height: 820px;
   background-color: var(--paper-cloud);
-  border: 1px solid var(--paper-border);
+  border: 1.5px solid var(--paper-border);
   border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
@@ -71,7 +79,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--paper-cloud);
+  background-color: #FDF1F4;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,7 +103,7 @@ body {
   width: 130px;
   height: 90px;
   background-color: #FFFFFF;
-  border: 1px solid var(--paper-border);
+  border: 1.5px solid var(--paper-border);
   border-radius: var(--radius-sm);
   position: relative;
   display: flex;
@@ -111,29 +119,30 @@ body {
   height: 0;
   border-left: 65px solid transparent;
   border-right: 65px solid transparent;
-  border-top: 45px solid #F7F4EE;
+  border-top: 45px solid var(--paper-babypink);
   border-top-color: var(--paper-border-soft);
 }
 
 .splash-envelope-heart {
-  font-size: 18px;
-  color: #C93B3B;
+  font-size: 20px;
+  color: var(--ink-red);
   z-index: 2;
   margin-top: 4px;
 }
 
 .splash-caption {
-  font-family: var(--font-serif);
-  font-size: 13px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
   letter-spacing: 0.04em;
-  color: var(--ink-muted);
+  color: var(--ink-maroon);
 }
 
 /* ================= APP HEADER ================= */
 .app-header {
   padding: 16px 18px 14px;
   border-bottom: 1px solid var(--paper-border-soft);
-  background-color: var(--paper-white);
+  background-color: #FFFFFF;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -145,25 +154,28 @@ body {
   flex-direction: column;
 }
 
+/* "a little something, from me to you" made bigger, elegant, deep maroon */
 .header-pretitle {
   display: block;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--ink-maroon);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+
+/* "Between Us" made a bit smaller, delicate, subtle uppercase */
+.header-title {
+  font-family: var(--font-serif);
   font-size: 14.5px;
   font-weight: 500;
   color: var(--ink-muted);
-  letter-spacing: 0.03em;
-  line-height: 1.2;
-  margin-bottom: 2px;
-}
-
-.header-title {
-  font-family: var(--font-serif);
-  font-size: 21px;
-  font-weight: 500;
-  color: var(--ink-black);
   outline: none;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .header-right {
@@ -184,19 +196,19 @@ body {
 }
 
 .save-icon-btn {
-  background: transparent;
-  border: 1px solid var(--paper-border-soft);
+  background: var(--paper-babypink);
+  border: 1px solid var(--paper-border);
   border-radius: var(--radius-sm);
   padding: 6px;
   cursor: pointer;
-  color: var(--ink-muted);
+  color: var(--ink-maroon);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.15s ease;
 }
 .save-icon-btn:hover {
-  background-color: var(--paper-cloud);
-  color: var(--ink-black);
+  background-color: var(--paper-pink-soft);
 }
 
 .save-popover {
@@ -247,7 +259,7 @@ body {
   font-family: var(--font-serif);
   font-size: 18px;
   font-weight: 400;
-  color: var(--ink-black);
+  color: var(--ink-maroon);
   letter-spacing: -0.01em;
 }
 
@@ -271,23 +283,23 @@ body {
   transition: all 0.15s ease;
 }
 .medium-card:hover {
-  background-color: var(--paper-cream);
+  background-color: var(--paper-babypink);
 }
 .medium-card.active {
-  border: 1.5px solid var(--ink-black);
-  background-color: var(--paper-white);
+  border: 1.5px solid var(--ink-maroon);
+  background-color: var(--paper-babypink);
 }
 
 .med-svg {
   width: 20px;
   height: 20px;
-  color: var(--ink-black);
+  color: var(--ink-maroon);
 }
 
 .medium-card span {
   font-size: 11px;
   font-weight: 500;
-  color: var(--ink-black);
+  color: var(--ink-maroon);
 }
 
 /* ================= TOOLBARS ================= */
@@ -318,10 +330,13 @@ body {
   font-family: var(--font-sans);
   color: var(--ink-muted);
 }
+.chip-btn:hover {
+  background-color: var(--paper-babypink);
+}
 .chip-btn.active {
-  background-color: var(--ink-black);
+  background-color: var(--ink-maroon);
   color: #FFFFFF;
-  border-color: var(--ink-black);
+  border-color: var(--ink-maroon);
 }
 
 /* Color palettes */
@@ -538,10 +553,11 @@ body {
   padding: 6px 12px;
   font-size: 12px;
   cursor: pointer;
-  color: var(--ink-black);
+  color: var(--ink-maroon);
+  transition: background-color 0.15s ease;
 }
 .btn-flip:hover {
-  background-color: var(--paper-cream);
+  background-color: var(--paper-babypink);
 }
 
 .stamp-visual-picker {
@@ -556,7 +572,7 @@ body {
   border-radius: 2px;
 }
 .stamp-pick-btn.active {
-  border-color: var(--ink-black);
+  border-color: var(--ink-maroon);
 }
 .mini-stamp {
   width: 26px;
@@ -1313,7 +1329,7 @@ body {
 }
 .btn-dispatch {
   width: 100%;
-  background: var(--ink-black);
+  background: var(--ink-maroon);
   color: #FFFFFF;
   border: none;
   padding: 10px;
@@ -1322,9 +1338,10 @@ body {
   border-radius: var(--radius-sm);
   cursor: pointer;
   letter-spacing: 0.02em;
+  transition: background-color 0.15s ease;
 }
 .btn-dispatch:hover {
-  background: #333333;
+  background: var(--ink-cherry);
 }
 
 /* ================= KEEPSAKES & VAULT & REVISIT ================= */
@@ -1344,7 +1361,7 @@ body {
   color: var(--ink-muted);
 }
 .seg-btn.active {
-  background: var(--ink-black);
+  background: var(--ink-maroon);
   color: #FFFFFF;
 }
 
@@ -1408,7 +1425,7 @@ body {
   font-size: 10px;
 }
 .nav-tab.active {
-  color: var(--ink-black);
+  color: var(--ink-red);
   font-weight: 600;
 }
 .nav-svg {
