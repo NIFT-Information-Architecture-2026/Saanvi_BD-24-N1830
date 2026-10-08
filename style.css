@@ -291,9 +291,13 @@ body {
 }
 
 .med-svg {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   color: var(--ink-maroon);
+}
+.med-svg-postcard {
+  width: 36px;
+  height: 28px;
 }
 
 .medium-card span {
