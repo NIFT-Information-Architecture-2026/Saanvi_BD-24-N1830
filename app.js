@@ -169,6 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
       postcardCard.style.backgroundColor = col;
       postcardFrontFace.style.backgroundColor = col;
       postcardBackFace.style.backgroundColor = col;
+      const backSplit = document.querySelector('.postcard-back-split');
+      if (backSplit) backSplit.style.backgroundColor = col;
     });
   });
 

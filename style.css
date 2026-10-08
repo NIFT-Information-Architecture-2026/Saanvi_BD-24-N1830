@@ -449,17 +449,44 @@ body {
 /* Postcard Back */
 .postcard-back {
   transform: rotateY(180deg);
+  padding: 0;
+  overflow: hidden;
 }
+
+/* Candy-striped airmail border frame */
+.postcard-airmail-frame {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  background: repeating-linear-gradient(
+    135deg,
+    #EE3A4C 0,
+    #EE3A4C 14px,
+    #FCE7EB 14px,
+    #FCE7EB 28px
+  );
+  border-radius: var(--radius-sm);
+  display: flex;
+}
+
 .postcard-back-split {
   display: flex;
+  width: 100%;
   height: 100%;
   gap: 12px;
+  background-color: var(--paper-white);
+  padding: 12px 14px;
+  border-radius: 2px;
+  box-sizing: border-box;
 }
+
 .postcard-left-pane {
   flex: 1.1;
   display: flex;
   flex-direction: column;
 }
+
 .postcard-back-message {
   width: 100%;
   height: 100%;
@@ -472,36 +499,46 @@ body {
   outline: none;
   resize: none;
 }
+
+/* Center vertical dashed line in candy red */
 .postcard-divider-line {
-  width: 1px;
-  background-color: var(--paper-border-soft);
-  height: 90%;
+  width: 0;
+  border-left: 1.5px dashed #EE3A4C;
+  height: 94%;
   align-self: center;
+  margin: 0 4px;
 }
+
 .postcard-right-pane {
-  flex: 0.9;
+  flex: 0.95;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
 }
-.postcard-date-line {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--ink-muted);
+
+/* Postmark + stamp top row */
+.postcard-postmark-stamp-row {
   width: 100%;
-  text-align: right;
-  border-bottom: 1px dotted var(--paper-border-soft);
-  padding-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.love-cancellation-mark {
+  display: flex;
+  align-items: center;
+  opacity: 0.88;
 }
 
 /* Perforated Stamps */
 .stamp-display-slot {
-  margin: 8px 0;
+  margin: 0;
 }
 .perforated-stamp {
-  width: 52px;
-  height: 62px;
+  width: 48px;
+  height: 58px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -509,34 +546,52 @@ body {
   outline: 1.5px solid var(--paper-border);
   color: #FFFFFF;
 }
-.stamp-heart { background-color: #C93B3B; }
-.stamp-flower { background-color: #E28FA8; }
-.stamp-smiley { background-color: #E5AC38; }
+.stamp-heart { background-color: #EE3A4C; }
+.stamp-flower { background-color: #F495B3; }
+.stamp-smiley { background-color: #F2BD44; }
 
 .postcard-right-dedication {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  margin-top: 4px;
 }
+
 .from-to-row {
   display: flex;
   align-items: center;
   font-family: var(--font-script);
   font-size: 16px;
+  color: var(--ink-maroon);
+  border-bottom: 1px solid #E6D0D3;
+  padding-bottom: 2px;
+}
+
+.from-to-row .lbl {
+  width: 52px;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--ink-muted);
 }
-.from-to-row .lbl {
-  width: 44px;
-}
+
 .from-to-row input {
   font-family: var(--font-script);
   font-size: 16px;
   border: none;
-  border-bottom: 1px dotted var(--paper-border);
   background: transparent;
   outline: none;
-  width: 80px;
+  flex: 1;
+  color: var(--ink-black);
+}
+
+.from-to-row.date-row .postcard-date-val {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-muted);
 }
 
 /* Postcard Controls Row */
