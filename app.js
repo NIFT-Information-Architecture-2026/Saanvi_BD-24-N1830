@@ -191,23 +191,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Stamp selection: Heart, Flower, Smiley
+  // Stamp selection: 5 Candy theme stamps
+  const makeStamp = (svgContent) => `
+    <div style="width: 40px; height: 50px; background-color: #EE3A4C; border: 2px dashed #FFFFFF; outline: 1px solid #EE3A4C; outline-offset: -1px; display: flex; align-items: center; justify-content: center; padding: 4px; box-sizing: border-box;">
+      <div style="width: 100%; height: 100%; background-color: #FCE7EB; display: flex; align-items: center; justify-content: center;">
+        <svg viewBox="0 0 24 24" width="22" height="22">${svgContent}</svg>
+      </div>
+    </div>
+  `;
+
   const stampTemplates = {
-    heart: `<div class="perforated-stamp stamp-heart"><svg viewBox="0 0 24 24" width="22" height="22" fill="#FFFFFF"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>`,
-    flower: `<div class="perforated-stamp stamp-flower"><span style="font-size:24px;">✿</span></div>`,
-    smiley: `<div class="perforated-stamp stamp-smiley"><span style="font-size:24px;">☺</span></div>`
+    candy_bear: makeStamp(`<path d="M 8 15 C 6 18 7 21 7 21 L 17 21 C 17 21 18 18 16 15" fill="#FCE7EB"/><circle cx="12" cy="11" r="5" fill="#FCE7EB"/><circle cx="8" cy="7" r="2.5" fill="#FCE7EB"/><circle cx="16" cy="7" r="2.5" fill="#FCE7EB"/><path d="M 8 15 C 6 18 7 21 7 21 L 17 21 C 17 21 18 18 16 15" fill="none" stroke="#EE3A4C" stroke-width="1.2" stroke-linejoin="round"/><circle cx="12" cy="11" r="5" fill="none" stroke="#EE3A4C" stroke-width="1.2"/><circle cx="8" cy="7" r="2.5" fill="none" stroke="#EE3A4C" stroke-width="1.2"/><circle cx="16" cy="7" r="2.5" fill="none" stroke="#EE3A4C" stroke-width="1.2"/><circle cx="10" cy="10" r="0.8" fill="#EE3A4C"/><circle cx="14" cy="10" r="0.8" fill="#EE3A4C"/><circle cx="12" cy="12" r="1.5" fill="none" stroke="#EE3A4C" stroke-width="0.8"/><path d="M12 12.5 v1.5" stroke="#EE3A4C" stroke-width="0.8"/><path d="M12 14.5 L9 16.5 L9 13.5 Z" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1"/><path d="M12 14.5 L15 16.5 L15 13.5 Z" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1"/><circle cx="12" cy="14.5" r="1.5" fill="#EE3A4C"/>`),
+    candy_heart: makeStamp(`<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#EE3A4C"/>`),
+    candy_lock: makeStamp(`<path d="M 8 10 V 7 A 4 4 0 0 1 16 7 V 10" fill="none" stroke="#EE3A4C" stroke-width="1.5"/><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1.2"/><path d="M12 13.5 A 1.5 1.5 0 1 0 12 16.5 L 11 18 H 13 L 12 16.5" fill="#EE3A4C"/><path d="M 16 7 L 19 5 L 19 9 Z" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1"/><path d="M 16 7 L 13 5 L 13 9 Z" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1"/><circle cx="16" cy="7" r="1.5" fill="#EE3A4C"/>`),
+    candy_tulip: makeStamp(`<path d="M 12 13 L 12 21" stroke="#5C4333" stroke-width="1.5"/><path d="M 12 18 C 9 17 8 14 8 14 C 9 15 11 16 12 16" fill="#5C4333"/><path d="M 12 17 C 15 16 16 13 16 13 C 15 14 13 15 12 15" fill="#5C4333"/><path d="M 8 9 C 8 13 12 15 12 15 C 12 15 16 13 16 9 C 16 6 14 4 12 6 C 10 4 8 6 8 9 Z" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1.2"/><path d="M 10 6 L 12 10 L 14 6" fill="none" stroke="#EE3A4C" stroke-width="1.2"/>`),
+    candy_butterfly: makeStamp(`<path d="M 12 5 L 12 19" stroke="#EE3A4C" stroke-width="2" stroke-linecap="round"/><path d="M 12 7 C 18 3 21 8 20 12 C 19 16 15 13 12 14" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1.2"/><path d="M 12 7 C 6 3 3 8 4 12 C 5 16 9 13 12 14" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1.2"/><path d="M 12 14 C 18 16 18 20 16 21 C 14 22 13 18 12 18" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1.2"/><path d="M 12 14 C 6 16 6 20 8 21 C 10 22 11 18 12 18" fill="#FCE7EB" stroke="#EE3A4C" stroke-width="1.2"/><path d="M 12 5 C 11 3 9 3 9 4 M 12 5 C 13 3 15 3 15 4" fill="none" stroke="#EE3A4C" stroke-width="1.2"/>`)
   };
 
+  // Initialize stamp buttons
   stampPickBtns.forEach(btn => {
+    const key = btn.dataset.stamp;
+    if (stampTemplates[key]) {
+      btn.innerHTML = stampTemplates[key];
+    }
+    
     btn.addEventListener('click', () => {
       stampPickBtns.forEach(b => b.classList.toggle('active', b === btn));
-      const key = btn.dataset.stamp;
       state.postcard.stamp = key;
       if (postcardStampDisplay && stampTemplates[key]) {
         postcardStampDisplay.innerHTML = stampTemplates[key];
       }
     });
   });
+
+  // Set default stamp
+  if (postcardStampDisplay && stampTemplates['candy_bear']) {
+    postcardStampDisplay.innerHTML = stampTemplates['candy_bear'];
+  }
 
   // ================= 2. LETTER WORKSPACE =================
   const letterSheet = document.getElementById('letter-sheet');

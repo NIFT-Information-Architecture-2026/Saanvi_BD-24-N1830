@@ -574,6 +574,7 @@ body {
 .postcard-wrapper[data-theme="floral"] .postcard-front-inner,
 .postcard-wrapper[data-theme="floral"] .postcard-back-split {
   background-color: #FCE6EA;
+  padding: 24px;
   background-image: 
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='10,5 5,10 5,95 10,100 90,100 95,95 95,10 90,5' fill='none' stroke='%23C94C66' stroke-width='3' vector-effect='non-scaling-stroke'/%3E%3Cpolygon points='10,5 5,10 5,95 10,100 90,100 95,95 95,10 90,5' fill='none' stroke='%23FFFFFF' stroke-width='1.5' stroke-dasharray='4 4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
   background-size: 100% 100%;
@@ -610,8 +611,35 @@ body {
   border-left: 1.5px solid #2C4159;
 }
 
+/* Hearts Theme */
+.postcard-wrapper[data-theme="hearts"] .postcard-theme-frame {
+  padding: 16px;
+  background-color: #FFF0F2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10,17.5 L8.6,16.2 C3.4,11.5 0,8.4 0,4.5 C0,1.7 2.2,-0.5 5,-0.5 C6.6,-0.5 8.1,0.2 9,1.4 C9.9,0.2 11.4,-0.5 13,-0.5 C15.8,-0.5 18,1.7 18,4.5 C18,8.4 14.6,11.5 9.4,16.2 L10,17.5 Z' fill='%23EE3A4C' transform='translate(1,1) scale(0.9)'/%3E%3C/svg%3E");
+  background-size: 24px 24px;
+}
+.postcard-wrapper[data-theme="hearts"] .postcard-front-inner,
+.postcard-wrapper[data-theme="hearts"] .postcard-back-split {
+  background-color: #FFFFFF;
+  border: 2px solid #EE3A4C;
+  border-radius: 8px;
+}
+.postcard-wrapper[data-theme="hearts"] .postcard-divider-line {
+  border-left: 1.5px dashed #EE3A4C;
+}
+/* Hearts scattered around inside back-split */
+.postcard-wrapper[data-theme="hearts"] .postcard-back-split {
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFB3C1'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD6DE'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 80% 20%, 20% 80%;
+  background-size: 24px 24px, 36px 36px;
+}
+
+
 .postcard-left-pane {
-  flex: 6;
+  flex: 7;
   display: flex;
   flex-direction: column;
 }
@@ -639,7 +667,7 @@ body {
 }
 
 .postcard-right-pane {
-  flex: 4;
+  flex: 3;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
