@@ -272,6 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
     <circle cx="50" cy="45" r="1.5" fill="#E6D9C8"/>
   </svg>`;
 
+  const makeBlueStampCustomImg = (imgPath, zoom = "100%") => `
+    <div style="width: 44px; height: 54px; background-color: #2C4159; display: flex; align-items: center; justify-content: center; border: 1.5px dashed #A9C2D8; padding: 3px; box-sizing: border-box; border-radius: 3px;">
+      <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 1px; display: flex; align-items: center; justify-content: center; background-color: #A9C2D8;">
+        <img src="${imgPath}" style="width: ${zoom}; height: ${zoom}; max-width: none; object-fit: cover; object-position: center;" alt="stamp"/>
+      </div>
+    </div>
+  `;
+
   const themeStamps = {
     candy: [
       { id: 'candy_bear', html: makeCandyStampCroppedImg('assets/stamps/stamp_bear.png') },
@@ -286,6 +294,13 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: 'kraft_stars', html: makeKraftComplexSvg(complexStarsSvg) },
       { id: 'kraft_heart', html: makeKraftComplexSvg(complexHeartSvg) },
       { id: 'kraft_medallion', html: makeKraftComplexSvg(complexMedallionSvg) }
+    ],
+    'blue-ribbon': [
+      { id: 'blue_bunny', html: makeBlueStampCustomImg('assets/stamps/stamp_blue_bunny.png', '130%') },
+      { id: 'blue_card', html: makeBlueStampCustomImg('assets/stamps/stamp_blue_card.png', '100%') },
+      { id: 'blue_cherries', html: makeBlueStampCustomImg('assets/stamps/stamp_blue_cherries.png', '130%') },
+      { id: 'blue_tickets', html: makeBlueStampCustomImg('assets/stamps/stamp_blue_tickets.png', '100%') },
+      { id: 'blue_heart', html: makeBlueStampCustomImg('assets/stamps/stamp_blue_heart.png', '130%') }
     ]
   };
 
