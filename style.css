@@ -574,43 +574,26 @@ body {
   border-left: 1.5px solid #2C4159;
 }
 
-/* Vintage Theme */
-.postcard-wrapper[data-theme="vintage"] .postcard-theme-frame {
-  padding: 10px;
-  background: repeating-linear-gradient(135deg, #2C4159 0, #2C4159 14px, #EAE0D1 14px, #EAE0D1 28px, #C15B3E 28px, #C15B3E 42px, #EAE0D1 42px, #EAE0D1 56px);
-}
-.postcard-wrapper[data-theme="vintage"] .postcard-front-inner,
-.postcard-wrapper[data-theme="vintage"] .postcard-back-split {
-  background-color: #EAE0D1;
-}
-.postcard-wrapper[data-theme="vintage"] .postcard-divider-line {
-  border-left: 1.5px solid #2C4159;
-}
-
 /* Hearts Theme */
 .postcard-wrapper[data-theme="hearts"] .postcard-theme-frame {
-  padding: 16px;
-  background-color: #FFF0F2;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10,17.5 L8.6,16.2 C3.4,11.5 0,8.4 0,4.5 C0,1.7 2.2,-0.5 5,-0.5 C6.6,-0.5 8.1,0.2 9,1.4 C9.9,0.2 11.4,-0.5 13,-0.5 C15.8,-0.5 18,1.7 18,4.5 C18,8.4 14.6,11.5 9.4,16.2 L10,17.5 Z' fill='%23EE3A4C' transform='translate(1,1) scale(0.9)'/%3E%3C/svg%3E");
-  background-size: 24px 24px;
+  padding: 24px;
+  background-color: #FFF9F4;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='25'%3E%3Cpath d='M 10 5 C 10 5, 2 13, 2 18 C 2 23, 7 25, 10 20 C 13 25, 18 23, 18 18 C 18 13, 10 5, 10 5 Z' fill='%23C1121F'/%3E%3Cpath d='M 30 5 C 30 5, 22 13, 22 18 C 22 23, 27 25, 30 20 C 33 25, 38 23, 38 18 C 38 13, 30 5, 30 5 Z' fill='%23FF99A8'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='25'%3E%3Cg transform='rotate(180 20 12.5)'%3E%3Cpath d='M 10 5 C 10 5, 2 13, 2 18 C 2 23, 7 25, 10 20 C 13 25, 18 23, 18 18 C 18 13, 10 5, 10 5 Z' fill='%23C1121F'/%3E%3Cpath d='M 30 5 C 30 5, 22 13, 22 18 C 22 23, 27 25, 30 20 C 33 25, 38 23, 38 18 C 38 13, 30 5, 30 5 Z' fill='%23FF99A8'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='25' height='40'%3E%3Cpath d='M 5 10 C 5 10, 13 2, 18 2 C 23 2, 25 7, 20 10 C 25 13, 23 18, 18 18 C 13 18, 5 10, 5 10 Z' fill='%23C1121F'/%3E%3Cpath d='M 5 30 C 5 30, 13 22, 18 22 C 23 22, 25 27, 20 30 C 25 33, 23 38, 18 38 C 13 38, 5 30, 5 30 Z' fill='%23FF99A8'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='25' height='40'%3E%3Cpath d='M 20 10 C 20 10, 12 2, 7 2 C 2 2, 0 7, 5 10 C 0 13, 2 18, 7 18 C 12 18, 20 10, 20 10 Z' fill='%23C1121F'/%3E%3Cpath d='M 20 30 C 20 30, 12 22, 7 22 C 2 22, 0 27, 5 30 C 0 33, 2 38, 7 38 C 12 38, 20 30, 20 30 Z' fill='%23FF99A8'/%3E%3C/svg%3E");
+  background-position: top left, bottom left, top left, top right;
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 32px 20px, 32px 20px, 20px 32px, 20px 32px;
 }
 .postcard-wrapper[data-theme="hearts"] .postcard-front-inner,
 .postcard-wrapper[data-theme="hearts"] .postcard-back-split {
-  background-color: #FFFFFF;
-  border: 2px solid #EE3A4C;
-  border-radius: 8px;
+  background-color: #FFF9F4;
+  border-radius: 2px;
 }
 .postcard-wrapper[data-theme="hearts"] .postcard-divider-line {
-  border-left: 1.5px dashed #EE3A4C;
-}
-/* Hearts scattered around inside back-split */
-.postcard-wrapper[data-theme="hearts"] .postcard-back-split {
-  background-image: 
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFB3C1'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD6DE'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: 80% 20%, 20% 80%;
-  background-size: 24px 24px, 36px 36px;
+  border-left: 1.5px dashed #FF99A8;
 }
 
 
