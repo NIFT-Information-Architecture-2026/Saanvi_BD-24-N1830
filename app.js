@@ -168,6 +168,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const theme = dot.dataset.theme;
       state.postcard.color = theme; // storing theme under color
       postcardWrapper.dataset.theme = theme;
+      if (typeof updateStampPicker === 'function') {
+        updateStampPicker(theme);
+      }
     });
   });
 
@@ -191,42 +194,75 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Stamp selection: 5 Candy theme stamps
-  // Stamp selection: 5 Candy theme stamps using exact provided images
+  // Stamp Templates by Theme
   const makeStampImg = (imgPath) => `
     <div style="width: 44px; height: 54px; display: flex; align-items: center; justify-content: center; background: transparent;">
       <img src="${imgPath}" style="width: 100%; height: 100%; object-fit: contain;" alt="stamp"/>
     </div>
   `;
 
-  const stampTemplates = {
-    candy_bear: makeStampImg('assets/stamps/stamp_bear.png'),
-    candy_heart: makeStampImg('assets/stamps/stamp_heart.png'),
-    candy_lock: makeStampImg('assets/stamps/stamp_lock.png'),
-    candy_tulip: makeStampImg('assets/stamps/stamp_tulip.png'),
-    candy_butterfly: makeStampImg('assets/stamps/stamp_butterfly.png')
+  const makeKraftStampSvg = (svgContent) => `
+    <div style="width: 44px; height: 54px; display: flex; align-items: center; justify-content: center; background: transparent;">
+      <div style="width: 100%; height: 100%; background-color: #4A3124; display: flex; align-items: center; justify-content: center; border: 1.5px dashed #E6D9C8; padding: 2px; box-sizing: border-box; border-radius: 4px;">
+        <svg viewBox="0 0 24 24" width="22" height="22">${svgContent}</svg>
+      </div>
+    </div>
+  `;
+
+  const themeStamps = {
+    candy: [
+      { id: 'candy_bear', html: makeStampImg('assets/stamps/stamp_bear.png') },
+      { id: 'candy_heart', html: makeStampImg('assets/stamps/stamp_heart.png') },
+      { id: 'candy_lock', html: makeStampImg('assets/stamps/stamp_lock.png') },
+      { id: 'candy_tulip', html: makeStampImg('assets/stamps/stamp_tulip.png') },
+      { id: 'candy_butterfly', html: makeStampImg('assets/stamps/stamp_butterfly.png') }
+    ],
+    kraft: [
+      { id: 'kraft_butterfly', html: makeStampImg('assets/stamps/stamp_kraft_butterfly.png') },
+      { id: 'kraft_flower', html: makeStampImg('assets/stamps/stamp_kraft_flower.png') },
+      { id: 'kraft_stars', html: makeStampImg('assets/stamps/stamp_kraft_stars.png') },
+      { id: 'kraft_heart', html: makeKraftStampSvg(`<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#E6D9C8"/>`) },
+      { id: 'kraft_key', html: makeKraftStampSvg(`<circle cx="7.5" cy="15.5" r="4.5" fill="none" stroke="#E6D9C8" stroke-width="2"/><path d="M10.5 12.5 L19 4 L22 7 L19 10" fill="none" stroke="#E6D9C8" stroke-width="2" stroke-linejoin="round"/><path d="M16 7 L14.5 8.5" fill="none" stroke="#E6D9C8" stroke-width="2" stroke-linecap="round"/>`) }
+    ]
   };
 
-  // Initialize stamp buttons
-  stampPickBtns.forEach(btn => {
-    const key = btn.dataset.stamp;
-    if (stampTemplates[key]) {
-      btn.innerHTML = stampTemplates[key];
-    }
+  function updateStampPicker(theme) {
+    const stamps = themeStamps[theme] || themeStamps['candy'];
     
+    stampPickBtns.forEach((btn, index) => {
+      if (stamps[index]) {
+        btn.dataset.stamp = stamps[index].id;
+        btn.innerHTML = stamps[index].html;
+        btn.style.display = 'block';
+      } else {
+        btn.style.display = 'none';
+      }
+    });
+
+    // Auto-select first stamp
+    if (stamps.length > 0) {
+      stampPickBtns.forEach(b => b.classList.remove('active'));
+      stampPickBtns[0].classList.add('active');
+      state.postcard.stamp = stamps[0].id;
+      if (postcardStampDisplay) {
+        postcardStampDisplay.innerHTML = stamps[0].html;
+      }
+    }
+  };
+
+  // Click listeners for stamp buttons
+  stampPickBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       stampPickBtns.forEach(b => b.classList.toggle('active', b === btn));
-      state.postcard.stamp = key;
-      if (postcardStampDisplay && stampTemplates[key]) {
-        postcardStampDisplay.innerHTML = stampTemplates[key];
+      state.postcard.stamp = btn.dataset.stamp;
+      if (postcardStampDisplay) {
+        postcardStampDisplay.innerHTML = btn.innerHTML;
       }
     });
   });
 
-  // Set default stamp
-  if (postcardStampDisplay && stampTemplates['candy_bear']) {
-    postcardStampDisplay.innerHTML = stampTemplates['candy_bear'];
-  }
+  // Initialize with candy theme stamps
+  updateStampPicker('candy');
 
   // ================= 2. LETTER WORKSPACE =================
   const letterSheet = document.getElementById('letter-sheet');
