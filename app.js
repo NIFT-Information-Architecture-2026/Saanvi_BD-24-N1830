@@ -247,6 +247,31 @@ document.addEventListener('DOMContentLoaded', () => {
     <circle cx="50" cy="50" r="26" stroke-dasharray="1 3" stroke-width="3"/>
   </svg>`;
 
+  const complexStarsSvg = `<svg viewBox="0 0 100 100" width="100%" height="100%">
+    <path d="M 60,30 L 68,52 L 92,55 L 75,68 L 82,90 L 60,78 L 38,90 L 45,68 L 28,55 L 52,52 Z" fill="#E6D9C8" stroke="#E6D9C8" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="55" y1="62" x2="55" y2="68" stroke="#4A3124" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="67" y1="62" x2="67" y2="68" stroke="#4A3124" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 60,65 L 61,71 L 65,71" stroke="#4A3124" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="50" cy="70" r="4" fill="#C15B3E" opacity="0.8"/>
+    <circle cx="72" cy="70" r="4" fill="#C15B3E" opacity="0.8"/>
+
+    <g transform="rotate(-15 30 25)">
+      <path d="M 30,5 L 34,16 L 46,18 L 37,25 L 41,36 L 30,30 L 19,36 L 23,25 L 14,18 L 26,16 Z" fill="#E6D9C8" stroke="#E6D9C8" stroke-width="2" stroke-linejoin="round"/>
+      <line x1="26" y1="22" x2="26" y2="26" stroke="#4A3124" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="33" y1="22" x2="33" y2="26" stroke="#4A3124" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 29,24 L 29.5,28 L 32,28" stroke="#4A3124" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="23" cy="27" r="3" fill="#C15B3E" opacity="0.8"/>
+      <circle cx="36" cy="27" r="3" fill="#C15B3E" opacity="0.8"/>
+    </g>
+
+    <path d="M 75 15 L 77 22 L 84 24 L 77 26 L 75 33 L 73 26 L 66 24 L 73 22 Z" fill="#E6D9C8"/>
+    <path d="M 15 45 L 16 50 L 21 51 L 16 52 L 15 57 L 14 52 L 9 51 L 14 50 Z" fill="#E6D9C8"/>
+    <path d="M 40 85 L 41 88 L 44 89 L 41 90 L 40 93 L 39 90 L 36 89 L 39 88 Z" fill="#E6D9C8"/>
+    <circle cx="85" cy="45" r="1.5" fill="#E6D9C8"/>
+    <circle cx="25" cy="75" r="1.5" fill="#E6D9C8"/>
+    <circle cx="50" cy="45" r="1.5" fill="#E6D9C8"/>
+  </svg>`;
+
   const themeStamps = {
     candy: [
       { id: 'candy_bear', html: makeCandyStampCroppedImg('assets/stamps/stamp_bear.png') },
@@ -258,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
     kraft: [
       { id: 'kraft_butterfly', html: makeKraftStampCroppedImg('assets/stamps/stamp_kraft_butterfly.png') },
       { id: 'kraft_flower', html: makeKraftStampCroppedImg('assets/stamps/stamp_kraft_flower.png') },
-      { id: 'kraft_stars', html: makeKraftStampCroppedImg('assets/stamps/stamp_kraft_stars.png') },
+      { id: 'kraft_stars', html: makeKraftComplexSvg(complexStarsSvg) },
       { id: 'kraft_heart', html: makeKraftComplexSvg(complexHeartSvg) },
       { id: 'kraft_medallion', html: makeKraftComplexSvg(complexMedallionSvg) }
     ]
