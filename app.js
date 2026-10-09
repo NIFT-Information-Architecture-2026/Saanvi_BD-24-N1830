@@ -125,22 +125,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const postcardWrapper = document.getElementById('postcard-container');
   const btnOrientPort = document.getElementById('btn-postcard-orient-port');
   const btnOrientLand = document.getElementById('btn-postcard-orient-land');
-  const postcardColorDots = document.querySelectorAll('#canvas-postcard .color-dot');
+  const postcardThemeDots = document.querySelectorAll('#postcard-theme-palette .theme-dot');
   const stampPickBtns = document.querySelectorAll('.stamp-pick-btn');
   const postcardStampDisplay = document.getElementById('postcard-stamp-display');
+  const postcardStampPicker = document.getElementById('postcard-stamp-picker');
   const postcardPhotoArea = document.getElementById('postcard-photo-area');
   const postcardFileInput = document.getElementById('postcard-file-input');
   const postcardImagePreview = document.getElementById('postcard-image-preview');
   const photoUploadHint = document.getElementById('photo-upload-hint');
-  const postcardFrontFace = document.getElementById('postcard-front-face');
-  const postcardBackFace = document.getElementById('postcard-back-face');
 
-  // Flip Postcard with dynamic text
+  // Flip Postcard with stamp picker toggle
   if (btnFlipPostcard) {
     btnFlipPostcard.addEventListener('click', () => {
       state.postcard.flipped = !state.postcard.flipped;
       postcardCard.classList.toggle('flipped', state.postcard.flipped);
-      btnFlipPostcard.innerText = state.postcard.flipped ? 'Flip to the front' : 'Flip to the back';
+      if (postcardStampPicker) {
+        postcardStampPicker.style.display = state.postcard.flipped ? 'flex' : 'none';
+      }
     });
   }
 
@@ -160,17 +161,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Paper color changes BOTH front and back
-  postcardColorDots.forEach(dot => {
+  // Theme changes
+  postcardThemeDots.forEach(dot => {
     dot.addEventListener('click', () => {
-      postcardColorDots.forEach(d => d.classList.toggle('active', d === dot));
-      const col = dot.dataset.color;
-      state.postcard.color = col;
-      postcardCard.style.backgroundColor = col;
-      postcardFrontFace.style.backgroundColor = col;
-      postcardBackFace.style.backgroundColor = col;
-      const backSplit = document.querySelector('.postcard-back-split');
-      if (backSplit) backSplit.style.backgroundColor = col;
+      postcardThemeDots.forEach(d => d.classList.toggle('active', d === dot));
+      const theme = dot.dataset.theme;
+      state.postcard.color = theme; // storing theme under color
+      postcardWrapper.dataset.theme = theme;
     });
   });
 

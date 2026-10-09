@@ -289,11 +289,13 @@
               <button class="chip-btn" id="btn-postcard-orient-land">Landscape</button>
             </div>
             <div class="tool-group">
-              <!-- Strictly White, Cloud Dancer, Soft Cream Blush -->
-              <div class="color-palette">
-                <button class="color-dot active" data-color="#FFFFFF" title="White" style="background:#FFFFFF;"></button>
-                <button class="color-dot" data-color="#F0EEE9" title="Cloud Dancer" style="background:#F0EEE9;"></button>
-                <button class="color-dot" data-color="#F4EBE5" title="#f4ebe5" style="background:#F4EBE5;"></button>
+              <!-- Postcard Themes -->
+              <div class="theme-palette" id="postcard-theme-palette">
+                <button class="theme-dot active" data-theme="candy" title="Candy Airmail" style="background: repeating-linear-gradient(135deg, #EE3A4C 0, #EE3A4C 4px, #FCE7EB 4px, #FCE7EB 8px);"></button>
+                <button class="theme-dot" data-theme="kraft" title="Handmade Kraft" style="background:#A3A3A3;"></button>
+                <button class="theme-dot" data-theme="floral" title="Floral Pink" style="background:#C94C66;"></button>
+                <button class="theme-dot" data-theme="blue-ribbon" title="Blue Ribbon" style="background:#A9C2D8;"></button>
+                <button class="theme-dot" data-theme="vintage" title="Vintage French" style="background:#2C4159;"></button>
               </div>
             </div>
           </div>
@@ -303,23 +305,26 @@
             <div class="postcard-card" id="postcard-card">
               <!-- Front Face -->
               <div class="postcard-face postcard-front" id="postcard-front-face">
-                <div class="card-photo-area" id="postcard-photo-area">
-                  <input type="file" id="postcard-file-input" accept="image/*" style="display:none;">
-                  <img id="postcard-image-preview" src="" alt="" style="display:none;">
-                  <div class="photo-upload-hint" id="photo-upload-hint">
-                    <span>+ Upload image (optional)</span>
+                <div class="postcard-theme-frame">
+                  <div class="postcard-front-inner">
+                    <div class="card-photo-area" id="postcard-photo-area">
+                      <input type="file" id="postcard-file-input" accept="image/*" style="display:none;">
+                      <img id="postcard-image-preview" src="" alt="" style="display:none;">
+                      <div class="photo-upload-hint" id="photo-upload-hint">
+                        <span>+ Upload image (optional)</span>
+                      </div>
+                    </div>
+                    <!-- Draggable / Repositionable Front Text Block -->
+                    <div class="draggable-text-block" id="postcard-front-text-block">
+                      <input type="text" class="card-input-title" placeholder="Add title..." value="">
+                    </div>
                   </div>
-                </div>
-                <!-- Draggable / Repositionable Front Text Block -->
-                <div class="draggable-text-block" id="postcard-front-text-block">
-                  <input type="text" class="card-input-title" placeholder="Title..." value="Morning light">
-                  <textarea class="card-input-caption" rows="2" placeholder="Write a note on front..."></textarea>
                 </div>
               </div>
 
               <!-- Back Face -->
               <div class="postcard-face postcard-back" id="postcard-back-face">
-                <div class="postcard-airmail-frame">
+                <div class="postcard-theme-frame">
                   <div class="postcard-back-split">
                     <!-- Left side: Handwritten message -->
                     <div class="postcard-left-pane">
@@ -386,8 +391,10 @@
 
           <!-- Flip Button & Visual Stamp Selector -->
           <div class="postcard-controls-row">
-            <button class="btn-flip" id="btn-flip-postcard">Flip to the back</button>
-            <div class="stamp-visual-picker">
+            <button class="btn-flip-icon" id="btn-flip-postcard" title="Flip Card">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D32F3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"></path><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><path d="M7 23l-4-4 4-4"></path><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+            </button>
+            <div class="stamp-visual-picker" id="postcard-stamp-picker" style="display:none;">
               <!-- Strictly 3 Visual Stamps without text: Red Heart, Pink Flower, Yellow Smiley -->
               <button class="stamp-pick-btn active" data-stamp="heart" title="Red Heart">
                 <div class="mini-stamp stamp-heart">♥</div>
