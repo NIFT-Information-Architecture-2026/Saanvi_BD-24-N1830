@@ -195,34 +195,72 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Stamp Templates by Theme
-  const makeStampImg = (imgPath) => `
-    <div style="width: 44px; height: 54px; display: flex; align-items: center; justify-content: center; background: transparent;">
-      <img src="${imgPath}" style="width: 100%; height: 100%; object-fit: contain;" alt="stamp"/>
-    </div>
-  `;
-
-  const makeKraftStampSvg = (svgContent) => `
-    <div style="width: 44px; height: 54px; display: flex; align-items: center; justify-content: center; background: transparent;">
-      <div style="width: 100%; height: 100%; background-color: #4A3124; display: flex; align-items: center; justify-content: center; border: 1.5px dashed #E6D9C8; padding: 2px; box-sizing: border-box; border-radius: 4px;">
-        <svg viewBox="0 0 24 24" width="22" height="22">${svgContent}</svg>
+  const makeCandyStampCroppedImg = (imgPath) => `
+    <div style="width: 44px; height: 54px; background-color: #EE3A4C; display: flex; align-items: center; justify-content: center; border: 2px dashed #FFFFFF; outline: 1.5px solid #EE3A4C; outline-offset: -1px; padding: 3px; box-sizing: border-box;">
+      <div style="width: 100%; height: 100%; overflow: hidden; background-color: #FCE7EB; display: flex; align-items: center; justify-content: center;">
+        <img src="${imgPath}" style="width: 140%; height: 140%; max-width: none; object-fit: cover; object-position: center;" alt="stamp"/>
       </div>
     </div>
   `;
 
+  const makeKraftStampCroppedImg = (imgPath) => `
+    <div style="width: 44px; height: 54px; background-color: #4A3124; display: flex; align-items: center; justify-content: center; border: 1.5px dashed #E6D9C8; padding: 3px; box-sizing: border-box; border-radius: 3px;">
+      <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 1px; display: flex; align-items: center; justify-content: center; background-color: #E6D9C8;">
+        <img src="${imgPath}" style="width: 140%; height: 140%; max-width: none; object-fit: cover; object-position: center;" alt="stamp"/>
+      </div>
+    </div>
+  `;
+
+  const makeKraftComplexSvg = (svgContent) => `
+    <div style="width: 44px; height: 54px; background-color: #4A3124; display: flex; align-items: center; justify-content: center; border: 1.5px dashed #E6D9C8; padding: 3px; box-sizing: border-box; border-radius: 3px;">
+      <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+        ${svgContent}
+      </div>
+    </div>
+  `;
+
+  const complexHeartSvg = `<svg viewBox="0 0 100 100" width="100%" height="100%" fill="none" stroke="#E6D9C8" stroke-width="2">
+    <rect x="5" y="5" width="90" height="90" rx="5" stroke-dasharray="2 4"/>
+    <path d="M 5 20 C 15 20 20 15 20 5 M 80 5 C 80 15 85 20 95 20 M 95 80 C 85 80 80 85 80 95 M 20 95 C 20 85 15 80 5 80" stroke-width="1.5"/>
+    <path d="M 50 85 C 40 70 10 55 15 30 C 18 15 35 15 45 25 C 48 28 50 35 50 35" stroke-width="2.5"/>
+    <path d="M 50 85 C 60 70 90 55 85 30 C 82 15 65 15 55 25 C 52 28 50 35 50 35" stroke-width="2.5"/>
+    <path d="M 25 35 C 30 45 40 40 45 35 C 40 30 30 25 25 35 Z" fill="#E6D9C8"/>
+    <path d="M 75 35 C 70 45 60 40 55 35 C 60 30 70 25 75 35 Z" fill="#E6D9C8"/>
+    <path d="M 50 45 C 40 55 45 65 50 70 C 55 65 60 55 50 45 Z" stroke-dasharray="1 2"/>
+    <path d="M 15 30 C 10 20 20 10 30 15 M 85 30 C 90 20 80 10 70 15" stroke-width="1.5"/>
+    <circle cx="50" cy="25" r="3.5" fill="#E6D9C8"/>
+    <path d="M 50 85 C 45 95 35 90 40 80 M 50 85 C 55 95 65 90 60 80" stroke-width="1.5"/>
+  </svg>`;
+
+  const complexMedallionSvg = `<svg viewBox="0 0 100 100" width="100%" height="100%" fill="none" stroke="#E6D9C8" stroke-width="1.5">
+    <circle cx="50" cy="50" r="45"/>
+    <circle cx="50" cy="50" r="39" stroke-dasharray="3 4"/>
+    <path d="M 50 15 L 56 44 L 85 50 L 56 56 L 50 85 L 44 56 L 15 50 L 44 44 Z" fill="#E6D9C8" fill-opacity="0.2"/>
+    <path d="M 50 5 L 50 95 M 5 50 L 95 50" stroke-width="1" opacity="0.7"/>
+    <path d="M 20 20 L 80 80 M 20 80 L 80 20" stroke-dasharray="2 3"/>
+    <path d="M 15 15 C 25 10 30 20 25 25 C 20 30 10 25 15 15 Z" fill="#E6D9C8"/>
+    <path d="M 85 15 C 75 10 70 20 75 25 C 80 30 90 25 85 15 Z" fill="#E6D9C8"/>
+    <path d="M 15 85 C 25 90 30 80 25 75 C 20 70 10 75 15 85 Z" fill="#E6D9C8"/>
+    <path d="M 85 85 C 75 90 70 80 75 75 C 80 70 90 75 85 85 Z" fill="#E6D9C8"/>
+    <circle cx="50" cy="50" r="12" fill="#E6D9C8"/>
+    <circle cx="50" cy="50" r="4" fill="#4A3124"/>
+    <circle cx="50" cy="50" r="26" stroke-dasharray="1 3" stroke-width="3"/>
+  </svg>`;
+
   const themeStamps = {
     candy: [
-      { id: 'candy_bear', html: makeStampImg('assets/stamps/stamp_bear.png') },
-      { id: 'candy_heart', html: makeStampImg('assets/stamps/stamp_heart.png') },
-      { id: 'candy_lock', html: makeStampImg('assets/stamps/stamp_lock.png') },
-      { id: 'candy_tulip', html: makeStampImg('assets/stamps/stamp_tulip.png') },
-      { id: 'candy_butterfly', html: makeStampImg('assets/stamps/stamp_butterfly.png') }
+      { id: 'candy_bear', html: makeCandyStampCroppedImg('assets/stamps/stamp_bear.png') },
+      { id: 'candy_heart', html: makeCandyStampCroppedImg('assets/stamps/stamp_heart.png') },
+      { id: 'candy_lock', html: makeCandyStampCroppedImg('assets/stamps/stamp_lock.png') },
+      { id: 'candy_tulip', html: makeCandyStampCroppedImg('assets/stamps/stamp_tulip.png') },
+      { id: 'candy_butterfly', html: makeCandyStampCroppedImg('assets/stamps/stamp_butterfly.png') }
     ],
     kraft: [
-      { id: 'kraft_butterfly', html: makeStampImg('assets/stamps/stamp_kraft_butterfly.png') },
-      { id: 'kraft_flower', html: makeStampImg('assets/stamps/stamp_kraft_flower.png') },
-      { id: 'kraft_stars', html: makeStampImg('assets/stamps/stamp_kraft_stars.png') },
-      { id: 'kraft_heart', html: makeKraftStampSvg(`<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#E6D9C8"/>`) },
-      { id: 'kraft_key', html: makeKraftStampSvg(`<circle cx="7.5" cy="15.5" r="4.5" fill="none" stroke="#E6D9C8" stroke-width="2"/><path d="M10.5 12.5 L19 4 L22 7 L19 10" fill="none" stroke="#E6D9C8" stroke-width="2" stroke-linejoin="round"/><path d="M16 7 L14.5 8.5" fill="none" stroke="#E6D9C8" stroke-width="2" stroke-linecap="round"/>`) }
+      { id: 'kraft_butterfly', html: makeKraftStampCroppedImg('assets/stamps/stamp_kraft_butterfly.png') },
+      { id: 'kraft_flower', html: makeKraftStampCroppedImg('assets/stamps/stamp_kraft_flower.png') },
+      { id: 'kraft_stars', html: makeKraftStampCroppedImg('assets/stamps/stamp_kraft_stars.png') },
+      { id: 'kraft_heart', html: makeKraftComplexSvg(complexHeartSvg) },
+      { id: 'kraft_medallion', html: makeKraftComplexSvg(complexMedallionSvg) }
     ]
   };
 
