@@ -546,12 +546,13 @@ body {
 
 /* Kraft Theme */
 .postcard-wrapper[data-theme="kraft"] .postcard-theme-frame {
-  padding: 12px;
-  background-color: #A3A3A3;
+  padding: 10px;
+  background-color: #8C989F;
 }
 .postcard-wrapper[data-theme="kraft"] .postcard-front-inner,
 .postcard-wrapper[data-theme="kraft"] .postcard-back-split {
   background-color: #E6D9C8;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
 }
 .postcard-wrapper[data-theme="kraft"] .postcard-divider-line {
   border-left: 1.5px solid #8FA2AD;
@@ -559,13 +560,23 @@ body {
 
 /* Floral Theme */
 .postcard-wrapper[data-theme="floral"] .postcard-theme-frame {
-  padding: 8px;
+  padding: 16px;
   background-color: #FCE6EA;
-  border: 4px double #C94C66;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none' stroke='%23C94C66' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 30 Q15 20 25 15 M15 25 Q10 20 8 15 Q12 12 18 18'/%3E%3Ccircle cx='28' cy='12' r='2'/%3E%3Cpath d='M28 9 A2 2 0 0 1 28 5 A2 2 0 0 1 28 9'/%3E%3Cpath d='M31 12 A2 2 0 0 1 35 12 A2 2 0 0 1 31 12'/%3E%3Cpath d='M28 15 A2 2 0 0 1 28 19 A2 2 0 0 1 28 15'/%3E%3Cpath d='M25 12 A2 2 0 0 1 21 12 A2 2 0 0 1 25 12'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none' stroke='%23C94C66' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate(40,0) scale(-1,1)'%3E%3Cpath d='M10 30 Q15 20 25 15 M15 25 Q10 20 8 15 Q12 12 18 18'/%3E%3Ccircle cx='28' cy='12' r='2'/%3E%3Cpath d='M28 9 A2 2 0 0 1 28 5 A2 2 0 0 1 28 9'/%3E%3Cpath d='M31 12 A2 2 0 0 1 35 12 A2 2 0 0 1 31 12'/%3E%3Cpath d='M28 15 A2 2 0 0 1 28 19 A2 2 0 0 1 28 15'/%3E%3Cpath d='M25 12 A2 2 0 0 1 21 12 A2 2 0 0 1 25 12'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none' stroke='%23C94C66' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate(0,40) scale(1,-1)'%3E%3Cpath d='M10 30 Q15 20 25 15 M15 25 Q10 20 8 15 Q12 12 18 18'/%3E%3Ccircle cx='28' cy='12' r='2'/%3E%3Cpath d='M28 9 A2 2 0 0 1 28 5 A2 2 0 0 1 28 9'/%3E%3Cpath d='M31 12 A2 2 0 0 1 35 12 A2 2 0 0 1 31 12'/%3E%3Cpath d='M28 15 A2 2 0 0 1 28 19 A2 2 0 0 1 28 15'/%3E%3Cpath d='M25 12 A2 2 0 0 1 21 12 A2 2 0 0 1 25 12'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none' stroke='%23C94C66' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate(40,40) scale(-1,-1)'%3E%3Cpath d='M10 30 Q15 20 25 15 M15 25 Q10 20 8 15 Q12 12 18 18'/%3E%3Ccircle cx='28' cy='12' r='2'/%3E%3Cpath d='M28 9 A2 2 0 0 1 28 5 A2 2 0 0 1 28 9'/%3E%3Cpath d='M31 12 A2 2 0 0 1 35 12 A2 2 0 0 1 31 12'/%3E%3Cpath d='M28 15 A2 2 0 0 1 28 19 A2 2 0 0 1 28 15'/%3E%3Cpath d='M25 12 A2 2 0 0 1 21 12 A2 2 0 0 1 25 12'/%3E%3C/g%3E%3C/svg%3E");
+  background-position: top 2px left 2px, top 2px right 2px, bottom 2px left 2px, bottom 2px right 2px;
+  background-repeat: no-repeat;
+  background-size: 32px 32px;
 }
 .postcard-wrapper[data-theme="floral"] .postcard-front-inner,
 .postcard-wrapper[data-theme="floral"] .postcard-back-split {
   background-color: #FCE6EA;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='10,5 5,10 5,95 10,100 90,100 95,95 95,10 90,5' fill='none' stroke='%23C94C66' stroke-width='3' vector-effect='non-scaling-stroke'/%3E%3Cpolygon points='10,5 5,10 5,95 10,100 90,100 95,95 95,10 90,5' fill='none' stroke='%23FFFFFF' stroke-width='1.5' stroke-dasharray='4 4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
 }
 .postcard-wrapper[data-theme="floral"] .postcard-divider-line {
   border-left: 1.5px solid #C94C66;
@@ -573,16 +584,17 @@ body {
 
 /* Blue Ribbon Theme */
 .postcard-wrapper[data-theme="blue-ribbon"] .postcard-theme-frame {
-  background: repeating-linear-gradient(90deg, #FFFFFF 0, #FFFFFF 12px, #A9C2D8 12px, #A9C2D8 24px);
+  background: repeating-linear-gradient(90deg, #A9C2D8 0, #A9C2D8 12px, #FFFFFF 12px, #FFFFFF 24px);
+  background-position: 0 0;
 }
 .postcard-wrapper[data-theme="blue-ribbon"] .postcard-front-inner,
 .postcard-wrapper[data-theme="blue-ribbon"] .postcard-back-split {
   background-color: #FFFFFF;
-  border: 2px solid #F495B3;
+  border: 2.5px solid #2C4159;
   border-radius: 6px;
 }
 .postcard-wrapper[data-theme="blue-ribbon"] .postcard-divider-line {
-  border-left: 1.5px solid #F495B3;
+  border-left: 1.5px solid #2C4159;
 }
 
 /* Vintage Theme */
@@ -599,7 +611,7 @@ body {
 }
 
 .postcard-left-pane {
-  flex: 1.1;
+  flex: 6;
   display: flex;
   flex-direction: column;
 }
@@ -617,7 +629,7 @@ body {
   resize: none;
 }
 
-/* Center vertical dashed line in candy red */
+/* Center vertical line */
 .postcard-divider-line {
   width: 0;
   border-left: 1.5px dashed #EE3A4C;
@@ -627,7 +639,7 @@ body {
 }
 
 .postcard-right-pane {
-  flex: 0.95;
+  flex: 4;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -643,10 +655,16 @@ body {
   gap: 6px;
 }
 
-.love-cancellation-mark {
+.postcard-date-top {
   display: flex;
   align-items: center;
-  opacity: 0.88;
+  margin-right: auto;
+  padding-left: 8px;
+}
+.postcard-date-val {
+  font-family: var(--font-script);
+  font-size: 14px;
+  color: var(--ink-muted);
 }
 
 /* Perforated Stamps */

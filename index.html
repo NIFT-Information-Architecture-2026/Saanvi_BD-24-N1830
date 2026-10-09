@@ -335,25 +335,8 @@
                     <div class="postcard-right-pane">
                       <!-- Postmark with LOVE ring and wavy cancellation lines + Stamp Slot -->
                       <div class="postcard-postmark-stamp-row">
-                        <!-- Love Cancellation Mark -->
-                        <div class="love-cancellation-mark" title="Airmail Love Postmark">
-                          <svg viewBox="0 0 100 45" width="110" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Wavy cancellation lines flowing left -->
-                            <path d="M 4 12 C 14 6, 26 18, 36 12 C 43 7, 50 14, 55 12" stroke="#EE3A4C" stroke-width="1.2" stroke-linecap="round"/>
-                            <path d="M 2 20 C 12 14, 24 26, 34 20 C 41 15, 48 22, 55 20" stroke="#EE3A4C" stroke-width="1.2" stroke-linecap="round"/>
-                            <path d="M 4 28 C 14 22, 26 34, 36 28 C 43 23, 50 30, 55 28" stroke="#EE3A4C" stroke-width="1.2" stroke-linecap="round"/>
-                            <!-- Outer Love Ring -->
-                            <circle cx="76" cy="22.5" r="19" stroke="#EE3A4C" stroke-width="1.3" stroke-dasharray="1 0"/>
-                            <!-- Inner Ring -->
-                            <circle cx="76" cy="22.5" r="14" stroke="#EE3A4C" stroke-width="0.9"/>
-                            <!-- Center Heart -->
-                            <path d="M 76 26 C 76 26, 71 22, 71 18.5 C 71 16.5, 73 15.5, 74.5 17 C 76 15.5, 78 16.5, 78 18.5 C 78 22, 76 26, 76 26 Z" fill="#EE3A4C"/>
-                            <!-- Circular LOVE Text Around Ring -->
-                            <path id="lovePath" d="M 76 5 A 17.5 17.5 0 1 1 75.9 5" fill="none"/>
-                            <text font-family="'Courier Prime', monospace" font-size="5" font-weight="bold" fill="#EE3A4C" letter-spacing="1.2">
-                              <textPath href="#lovePath" startOffset="5%">LOVE · LOVE · LOVE · LOVE ·</textPath>
-                            </text>
-                          </svg>
+                        <div class="postcard-date-top">
+                          <span class="postcard-date-val" id="postcard-date-display">October 6, 2026</span>
                         </div>
                         <!-- Visual Stamp Display -->
                         <div class="stamp-display-slot" id="postcard-stamp-display">
@@ -370,16 +353,8 @@
                           <input type="text" value="Kabir" id="postcard-to-input">
                         </div>
                         <div class="from-to-row">
-                          <span class="lbl">Address:</span>
-                          <input type="text" value="In my heart" id="postcard-addr-input">
-                        </div>
-                        <div class="from-to-row">
                           <span class="lbl">From:</span>
                           <input type="text" value="Saanvi" id="postcard-from-input">
-                        </div>
-                        <div class="from-to-row date-row">
-                          <span class="lbl">Date:</span>
-                          <span class="postcard-date-val" id="postcard-date-display">October 6, 2026</span>
                         </div>
                       </div>
                     </div>
