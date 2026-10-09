@@ -280,10 +280,10 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   `;
 
-  const makeHeartsStampCustomImg = (imgPath, zoom = "100%") => `
+  const makeHeartsStampCustomImg = (imgPath, zoom = "100%", pos = "center") => `
     <div style="width: 44px; height: 54px; background-color: #C1121F; display: flex; align-items: center; justify-content: center; border: 1.5px dashed #FFF9F4; padding: 3px; box-sizing: border-box; border-radius: 3px;">
       <div style="width: 100%; height: 100%; overflow: hidden; border-radius: 1px; display: flex; align-items: center; justify-content: center; background-color: #FFF9F4;">
-        <img src="${imgPath}" style="width: ${zoom}; height: ${zoom}; max-width: none; object-fit: cover; object-position: center;" alt="stamp"/>
+        <img src="${imgPath}" style="width: ${zoom}; height: ${zoom}; max-width: none; object-fit: cover; object-position: ${pos};" alt="stamp"/>
       </div>
     </div>
   `;
@@ -311,11 +311,11 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: 'blue_heart', html: makeBlueStampCustomImg('assets/stamps/stamp_blue_heart.png', '130%') }
     ],
     'hearts': [
-      { id: 'hearts_sending', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_sending.png', '135%') },
-      { id: 'hearts_dice', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_dice.png', '100%') },
-      { id: 'hearts_painted', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_painted.png', '115%') },
-      { id: 'hearts_lucky', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_lucky.png', '100%') },
-      { id: 'hearts_text', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_text.png', '100%') }
+      { id: 'hearts_sending', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_sending.png', '170%', '30% 30%') },
+      { id: 'hearts_dice', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_dice.png', '140%', '20% 50%') },
+      { id: 'hearts_painted', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_painted.png', '160%', '35% 50%') },
+      { id: 'hearts_lucky', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_lucky.png', '145%', '15% 50%') },
+      { id: 'hearts_text', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_text.png', '135%', '50% 30%') }
     ]
   };
 
