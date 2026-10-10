@@ -311,11 +311,11 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: 'blue_heart', html: makeBlueStampCustomImg('assets/stamps/stamp_blue_heart.png', '130%') }
     ],
     'hearts': [
-      { id: 'hearts_sending', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_sending.png', '125%', '20% 40%') },
-      { id: 'hearts_dice', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_dice.png', '115%', '10% 50%') },
-      { id: 'hearts_painted', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_painted.png', '115%', '20% 50%') },
-      { id: 'hearts_lucky', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_lucky.png', '115%', '0% 50%') },
-      { id: 'hearts_text', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_text.png', '115%', '50% 10%') }
+      { id: 'hearts_sending', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_sending.png', '165%', '35% 40%') },
+      { id: 'hearts_dice', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_dice.png', '135%', '35% 50%') },
+      { id: 'hearts_painted', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_painted.png', '115%', '45% 50%') },
+      { id: 'hearts_lucky', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_lucky.png', '125%', '35% 50%') },
+      { id: 'hearts_text', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_text.png', '115%', '50% 20%') }
     ]
   };
 
