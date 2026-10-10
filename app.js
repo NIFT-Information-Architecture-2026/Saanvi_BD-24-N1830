@@ -151,11 +151,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Handle Font Change
+  // Handle Font Change & Size
+  let currentFontSize = 16;
+  const btnFontMinus = document.getElementById('btn-font-minus');
+  const btnFontPlus = document.getElementById('btn-font-plus');
   if (postcardFontSelect && postcardBackMessage) {
     postcardFontSelect.addEventListener('change', (e) => {
       postcardBackMessage.style.fontFamily = e.target.value;
     });
+    if (btnFontMinus) {
+      btnFontMinus.addEventListener('click', () => {
+        currentFontSize = Math.max(10, currentFontSize - 1);
+        postcardBackMessage.style.fontSize = currentFontSize + 'px';
+      });
+    }
+    if (btnFontPlus) {
+      btnFontPlus.addEventListener('click', () => {
+        currentFontSize = Math.min(32, currentFontSize + 1);
+        postcardBackMessage.style.fontSize = currentFontSize + 'px';
+      });
+    }
   }
 
   // Orientation
@@ -187,10 +202,59 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Image Upload on Postcard Front
+  // Image Upload & Pan/Zoom on Postcard Front
   if (postcardPhotoArea && postcardFileInput) {
-    postcardPhotoArea.addEventListener('click', () => {
-      postcardFileInput.click();
+    let imgState = { scale: 1, tx: 0, ty: 0 };
+    let isDraggingImg = false;
+    let hasMoved = false;
+    let startX = 0, startY = 0;
+
+    const updateImgTransform = () => {
+      if (postcardImagePreview) {
+        postcardImagePreview.style.transform = `translate(${imgState.tx}px, ${imgState.ty}px) scale(${imgState.scale})`;
+        postcardImagePreview.style.transformOrigin = 'center';
+      }
+    };
+
+    postcardPhotoArea.addEventListener('mousedown', (e) => {
+      if (postcardImagePreview.style.display === 'block') {
+        isDraggingImg = true;
+        hasMoved = false;
+        startX = e.clientX - imgState.tx;
+        startY = e.clientY - imgState.ty;
+        postcardImagePreview.style.cursor = 'grabbing';
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDraggingImg) {
+        hasMoved = true;
+        imgState.tx = e.clientX - startX;
+        imgState.ty = e.clientY - startY;
+        updateImgTransform();
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDraggingImg) {
+        isDraggingImg = false;
+        postcardImagePreview.style.cursor = 'grab';
+      }
+    });
+
+    postcardPhotoArea.addEventListener('wheel', (e) => {
+      if (postcardImagePreview.style.display === 'block') {
+        e.preventDefault();
+        imgState.scale += e.deltaY * -0.002;
+        imgState.scale = Math.max(0.2, Math.min(imgState.scale, 5));
+        updateImgTransform();
+      }
+    });
+
+    postcardPhotoArea.addEventListener('click', (e) => {
+      if (!hasMoved) {
+        postcardFileInput.click();
+      }
     });
 
     postcardFileInput.addEventListener('change', (e) => {
@@ -200,7 +264,10 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.onload = (event) => {
           postcardImagePreview.src = event.target.result;
           postcardImagePreview.style.display = 'block';
+          postcardImagePreview.style.cursor = 'grab';
           photoUploadHint.style.display = 'none';
+          imgState = { scale: 1, tx: 0, ty: 0 };
+          updateImgTransform();
         };
         reader.readAsDataURL(file);
       }

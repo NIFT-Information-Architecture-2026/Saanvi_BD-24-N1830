@@ -379,7 +379,12 @@
               </div>
               
               <!-- Font Picker for the Back -->
-              <div class="font-picker-container" id="postcard-font-picker" style="display:none;">
+              <div class="font-picker-container" id="postcard-font-picker" style="display:none; flex-direction: row; align-items: center; gap: 6px;">
+                <div style="display: flex; gap: 2px; align-items: center; background: #FFF0F2; padding: 3px 6px; border-radius: 12px; border: 1px solid #FF99A8;">
+                  <button id="btn-font-minus" title="Decrease Font Size" style="border: none; background: transparent; cursor: pointer; color: #D32F3D; font-weight: bold; font-size: 14px; padding: 0 4px; outline: none;">A-</button>
+                  <button id="btn-font-plus" title="Increase Font Size" style="border: none; background: transparent; cursor: pointer; color: #D32F3D; font-weight: bold; font-size: 14px; padding: 0 4px; outline: none;">A+</button>
+                </div>
+                
                 <select id="postcard-font-select" class="postcard-font-select" style="padding: 4px 10px; border-radius: 12px; border: 1px solid #FF99A8; background: #FFF0F2; font-family: inherit; font-size: 13px; outline: none; cursor: pointer; color: #D32F3D; font-weight: 500;">
                   <option value="'Caveat', cursive" style="font-family: 'Caveat', cursive; font-size: 15px;">Caveat</option>
                   <option value="'Pacifico', cursive" style="font-family: 'Pacifico', cursive; font-size: 14px;">Pacifico</option>
