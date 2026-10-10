@@ -1487,7 +1487,7 @@ body {
 /* Live Vessel Preview Box */
 .vessel-live-preview-box {
   margin-top: 10px;
-  border: 1px dashed var(--paper-border);
+  border: none;
   border-radius: var(--radius-sm);
   padding: 10px;
   text-align: center;
