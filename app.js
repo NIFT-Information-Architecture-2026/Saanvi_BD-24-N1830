@@ -908,6 +908,90 @@ document.addEventListener('DOMContentLoaded', () => {
     </svg>
   `;
 
+  const getBoxSVG = () => `
+    <svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="boxShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#D3A5AF" flood-opacity="0.25"/>
+        </filter>
+        <filter id="bowShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#C68A9A" flood-opacity="0.3"/>
+        </filter>
+        <filter id="innerShadowBox" x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="-2" stdDeviation="2" flood-color="#000000" flood-opacity="0.03"/>
+        </filter>
+
+        <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#F9D3D8"/>
+          <stop offset="100%" stop-color="#EAA3B3"/>
+        </linearGradient>
+        <linearGradient id="ribbonDark" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#EAA3B3"/>
+          <stop offset="100%" stop-color="#D68A9B"/>
+        </linearGradient>
+
+        <pattern id="floralPattern" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse">
+          <path d="M7,7 Q12,2 17,7 Q12,12 7,7 Z" fill="#F2D8D8" opacity="0.9"/>
+          <path d="M17,7 Q22,5 20,10 Q15,12 17,7 Z" fill="#E1DACB" opacity="0.7"/>
+          <circle cx="12" cy="7" r="1.5" fill="#E8B2BC"/>
+          
+          <path d="M17,18 Q22,13 27,18 Q22,23 17,18 Z" fill="#F2D8D8" opacity="0.7"/>
+          <path d="M7,18 Q5,23 10,21 Q12,16 7,18 Z" fill="#E1DACB" opacity="0.7"/>
+          <circle cx="22" cy="18" r="1.5" fill="#E8B2BC"/>
+        </pattern>
+      </defs>
+
+      <g transform="translate(10, 20)">
+        <!-- Body Left -->
+        <polygon points="10,32 40,44 40,74 10,62" fill="#FDF7F2" filter="url(#boxShadow)"/>
+        <polygon points="10,32 40,44 40,74 10,62" fill="none" stroke="#E5D9CC" stroke-width="0.5"/>
+        <polygon points="10,32 40,44 40,74 10,62" fill="url(#floralPattern)" />
+        <polygon points="21,36.4 29,39.6 29,69.6 21,66.4" fill="url(#ribbonDark)"/>
+
+        <!-- Body Right -->
+        <polygon points="40,44 70,32 70,62 40,74" fill="#F5EFEA" filter="url(#boxShadow)"/>
+        <polygon points="40,44 70,32 70,62 40,74" fill="none" stroke="#E5D9CC" stroke-width="0.5"/>
+        <polygon points="40,44 70,32 70,62 40,74" fill="url(#floralPattern)" />
+        <polygon points="51,39.6 59,36.4 59,66.4 51,69.6" fill="url(#ribbonDark)"/>
+
+        <!-- Lid Left Face -->
+        <polygon points="8,29 40,42 40,46 8,33" fill="#FFFBF8" stroke="#E5D9CC" stroke-width="0.5"/>
+        <polygon points="20,33.87 28,37.12 28,41.12 20,37.87" fill="url(#ribbonGrad)"/>
+        
+        <!-- Lid Right Face -->
+        <polygon points="40,42 72,29 72,33 40,46" fill="#FDF7F2" stroke="#E5D9CC" stroke-width="0.5" filter="url(#innerShadowBox)"/>
+        <polygon points="52,37.12 60,33.87 60,37.87 52,41.12" fill="url(#ribbonGrad)"/>
+
+        <!-- Lid Top Face (True Isometric) -->
+        <g transform="translate(40, 29) scale(1, 0.406) rotate(45)">
+          <rect x="-22.6" y="-22.6" width="45.2" height="45.2" fill="#FFFBF8" stroke="#E5D9CC" stroke-width="0.5"/>
+          <rect x="-22.6" y="-22.6" width="45.2" height="45.2" fill="url(#floralPattern)" />
+          <rect x="-4" y="-23" width="8" height="46" fill="url(#ribbonGrad)" />
+          <rect x="-23" y="-4" width="46" height="8" fill="url(#ribbonGrad)" />
+        </g>
+
+        <!-- The Big Bow -->
+        <g transform="translate(40, 27)" filter="url(#bowShadow)">
+          <!-- Ribbon Tails -->
+          <path d="M-3,2 Q-16,12 -14,28 Q-10,26 -8,28 Q-5,16 -1,4" fill="url(#ribbonDark)"/>
+          <path d="M3,2 Q16,12 14,28 Q10,26 8,28 Q5,16 1,4" fill="url(#ribbonDark)"/>
+          
+          <!-- Left loops -->
+          <path d="M-1,0 C-22,-14 -32,-6 -24,8 C-16,14 -5,8 -1,0" fill="url(#ribbonGrad)" stroke="#D68A9B" stroke-width="0.6"/>
+          <path d="M-1,0 C-14,-22 -24,-20 -16,-3 C-12,-6 -5,-3 -1,0" fill="url(#ribbonGrad)" stroke="#D68A9B" stroke-width="0.6"/>
+          
+          <!-- Right loops -->
+          <path d="M1,0 C22,-14 32,-6 24,8 C16,14 5,8 1,0" fill="url(#ribbonGrad)" stroke="#D68A9B" stroke-width="0.6"/>
+          <path d="M1,0 C14,-22 24,-20 16,-3 C12,-6 5,-3 1,0" fill="url(#ribbonGrad)" stroke="#D68A9B" stroke-width="0.6"/>
+          
+          <!-- Center knot -->
+          <ellipse cx="0" cy="0" rx="4" ry="5.5" fill="url(#ribbonGrad)" stroke="#D68A9B" stroke-width="0.6"/>
+          <path d="M-2,-2 Q0,2 2,-2" fill="none" stroke="#D68A9B" stroke-width="0.5" opacity="0.6"/>
+        </g>
+      </g>
+    </svg>
+  `;
+
   vesselBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       vesselBtns.forEach(b => b.classList.toggle('active', b === btn));
@@ -922,10 +1006,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (state.vessel === 'envelope') {
       vesselPreviewRender.innerHTML = getEnvelopeSVG();
     } else if (state.vessel === 'box') {
-      vesselPreviewRender.innerHTML = `
-        <span class="preview-big-icon">🎁</span>
-        <p class="preview-vessel-name">Tied Keepsake Box with Ribbon</p>
-      `;
+      vesselPreviewRender.innerHTML = getBoxSVG();
     } else {
       vesselPreviewRender.innerHTML = `
         <span class="preview-big-icon">🚚</span>
