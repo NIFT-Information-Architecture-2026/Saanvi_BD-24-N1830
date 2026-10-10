@@ -694,11 +694,26 @@
           <!-- Vessel Options: Envelope, Keepsake Box, Delivery Truck -->
           <div class="vessels-minimal-grid">
             <button class="vessel-btn active" data-vessel="envelope" style="padding-top: 10px;">
-              <div class="vessel-icon-composite" style="width: 46px; height: 46px; position: relative; margin: 0 auto 6px auto;">
-                <img src="assets/envelope_red.png" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; filter: contrast(1.1) saturate(1.1);" />
-                <div style="position: absolute; top: -10%; right: -15%; width: 65%; height: 65%; overflow: hidden; pointer-events: none; z-index: 2;">
-                  <img src="assets/envelope_hearts.jpg" style="position: absolute; width: 220%; height: 220%; top: 0; right: 0; object-fit: cover; object-position: right top; mix-blend-mode: multiply;" />
-                </div>
+              <div class="vessel-icon-composite" style="width: 50px; height: 50px; position: relative; margin: 0 auto 6px auto; display: flex; align-items: flex-end; justify-content: center; overflow: visible;">
+                <img src="assets/envelope_pink.jpg" style="width: 140%; height: 140%; object-fit: cover; object-position: center 65%; mix-blend-mode: multiply;" />
+                
+                <svg style="position: absolute; top: -15%; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible;" viewBox="0 0 100 100">
+                  <defs>
+                    <g id="miniHeartBtn"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></g>
+                    <g id="sparkleBtn"><path d="M12,0 C12,8 20,12 20,12 C20,12 12,16 12,24 C12,16 4,12 4,12 C4,12 12,8 12,0 Z" /></g>
+                  </defs>
+                  <!-- Cute Hearts -->
+                  <g fill="#FF4D6D" transform="translate(35, 10) scale(0.8) rotate(-15)"><use href="#miniHeartBtn"/></g>
+                  <g fill="#FF8FA3" transform="translate(60, -5) scale(0.6) rotate(20)"><use href="#miniHeartBtn"/></g>
+                  <g fill="#FF4D6D" transform="translate(75, 20) scale(1.1) rotate(10)"><use href="#miniHeartBtn"/></g>
+                  <g fill="#FFB3C6" transform="translate(15, 25) scale(1) rotate(-25)"><use href="#miniHeartBtn"/></g>
+                  <g fill="#FF8FA3" transform="translate(45, 35) scale(0.9) rotate(5)"><use href="#miniHeartBtn"/></g>
+                  <!-- Cute Sparkles -->
+                  <g fill="#FFB3C6" transform="translate(25, -5) scale(0.5)"><use href="#sparkleBtn"/></g>
+                  <g fill="#FF8FA3" transform="translate(85, 5) scale(0.4)"><use href="#sparkleBtn"/></g>
+                  <g fill="#FF4D6D" transform="translate(65, 45) scale(0.6)"><use href="#sparkleBtn"/></g>
+                  <g fill="#FFB3C6" transform="translate(5, 45) scale(0.5)"><use href="#sparkleBtn"/></g>
+                </svg>
               </div>
               <span class="vessel-label">Envelope</span>
             </button>
