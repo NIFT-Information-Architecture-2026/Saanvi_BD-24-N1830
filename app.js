@@ -288,6 +288,28 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   `;
 
+  const makeHeartsStampSendingYouLove = () => `
+    <div style="width: 44px; height: 54px; background-color: #C1121F; display: flex; align-items: center; justify-content: center; border: 1.5px dashed #FFF9F4; padding: 3px; box-sizing: border-box; border-radius: 3px;">
+      <div style="width: 100%; height: 100%; border-radius: 1px; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #EF6069; position: relative; overflow: hidden;">
+        
+        <!-- Big red heart -->
+        <svg style="position: absolute; top: 12%; width: 34px; height: 34px;" viewBox="0 0 24 24" fill="#D32531">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+
+        <!-- Script Text -->
+        <div style="position: relative; font-family: 'Caveat', cursive; color: #FFF9F4; font-size: 10.5px; font-weight: 600; line-height: 0.85; text-align: center; margin-top: -6px; transform: rotate(-6deg);">
+          Sending<br>You<br>Love!
+        </div>
+
+        <!-- Subtext -->
+        <div style="position: absolute; bottom: 3.5px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: #FFF9F4; font-size: 3.5px; text-align: center; letter-spacing: 0.3px;">
+          I LOVE<br>ALL OF YOU
+        </div>
+      </div>
+    </div>
+  `;
+
   const themeStamps = {
     candy: [
       { id: 'candy_bear', html: makeCandyStampCroppedImg('assets/stamps/stamp_bear.png') },
@@ -311,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: 'blue_heart', html: makeBlueStampCustomImg('assets/stamps/stamp_blue_heart.png', '130%') }
     ],
     'hearts': [
-      { id: 'hearts_sending', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_sending.png', '165%', '35% 40%') },
+      { id: 'hearts_sending', html: makeHeartsStampSendingYouLove() },
       { id: 'hearts_dice', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_dice.png', '135%', '35% 50%') },
       { id: 'hearts_painted', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_painted.png', '115%', '45% 50%') },
       { id: 'hearts_lucky', html: makeHeartsStampCustomImg('assets/stamps/stamp_hearts_lucky.png', '125%', '35% 50%') },
