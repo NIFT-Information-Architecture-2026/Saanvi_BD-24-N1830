@@ -593,7 +593,7 @@ body {
 
 
 .postcard-left-pane {
-  flex: 7;
+  flex: 8;
   display: flex;
   flex-direction: column;
 }
@@ -621,7 +621,7 @@ body {
 }
 
 .postcard-right-pane {
-  flex: 3;
+  flex: 2;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

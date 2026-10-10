@@ -129,6 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const stampPickBtns = document.querySelectorAll('.stamp-pick-btn');
   const postcardStampDisplay = document.getElementById('postcard-stamp-display');
   const postcardStampPicker = document.getElementById('postcard-stamp-picker');
+  const postcardFontPicker = document.getElementById('postcard-font-picker');
+  const postcardFontSelect = document.getElementById('postcard-font-select');
+  const postcardBackMessage = document.getElementById('postcard-back-message');
   const postcardPhotoArea = document.getElementById('postcard-photo-area');
   const postcardFileInput = document.getElementById('postcard-file-input');
   const postcardImagePreview = document.getElementById('postcard-image-preview');
@@ -142,6 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (postcardStampPicker) {
         postcardStampPicker.style.display = state.postcard.flipped ? 'flex' : 'none';
       }
+      if (postcardFontPicker) {
+        postcardFontPicker.style.display = state.postcard.flipped ? 'flex' : 'none';
+      }
+    });
+  }
+
+  // Handle Font Change
+  if (postcardFontSelect && postcardBackMessage) {
+    postcardFontSelect.addEventListener('change', (e) => {
+      postcardBackMessage.style.fontFamily = e.target.value;
     });
   }
 
