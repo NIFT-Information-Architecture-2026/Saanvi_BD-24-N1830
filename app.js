@@ -849,13 +849,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const getEnvelopeImage = (size = "120px") => {
     let clip = "";
-    if (state.envelopeIndex == 5) {
-      clip = "clip-path: polygon(15% 40%, 50% 15%, 85% 40%, 85% 90%, 15% 90%);";
+    let scale = "1";
+    if (state.envelopeIndex == 1) {
+      scale = "1.05";
+    } else if (state.envelopeIndex == 2) {
+      scale = "1.15";
+    } else if (state.envelopeIndex == 3) {
+      scale = "1.4";
+    } else if (state.envelopeIndex == 4) {
+      scale = "1.15";
+    } else if (state.envelopeIndex == 5) {
+      clip = "clip-path: polygon(18% 44%, 50% 21%, 82% 44%, 82% 87%, 18% 87%);";
+      scale = "1.6";
     }
     
     return `
-      <div style="width: ${size}; height: ${size}; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-        <img src="assets/envelopes/env${state.envelopeIndex}.jpg" style="width: 100%; height: 100%; object-fit: contain; ${clip ? clip : 'mix-blend-mode: multiply;'}" />
+      <div style="width: ${size}; height: ${size}; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+        <img src="assets/envelopes/env${state.envelopeIndex}.jpg" style="width: 100%; height: 100%; object-fit: contain; ${clip ? clip : 'mix-blend-mode: multiply;'} transform: scale(${scale});" />
       </div>
     `;
   };
