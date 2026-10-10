@@ -849,10 +849,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const getEnvelopeImage = (size = "120px") => {
     let clip = "";
-    if (state.envelopeIndex == 1) {
-      clip = "clip-path: polygon(8% 48%, 8% 81%, 92% 81%, 92% 48%, 82% 48%, 78% 30%, 50% 18%, 22% 30%, 18% 48%);";
-    } else if (state.envelopeIndex == 2) {
-      clip = "clip-path: polygon(17% 43%, 17% 68%, 82% 68%, 82% 43%, 49% 21%);";
+    if (state.envelopeIndex == 5) {
+      clip = "clip-path: polygon(15% 40%, 50% 15%, 85% 40%, 85% 90%, 15% 90%);";
     }
     
     return `
