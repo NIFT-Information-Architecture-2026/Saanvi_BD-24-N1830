@@ -415,39 +415,22 @@
         <!-- ---------------- 2. LETTER WORKSPACE ---------------- -->
         <div class="canvas-workspace" id="canvas-letter" style="display:none;">
           <div class="canvas-toolbar">
-            <div class="tool-group">
-              <!-- 4 small circles with paper color options (white/cream only) -->
-              <div class="paper-circles-row">
-                <button class="paper-circle active" data-paper="paper-pure" style="background:#FFFFFF;" title="Pure White"></button>
-                <button class="paper-circle" data-paper="paper-cloud" style="background:#F0EEE9;" title="Cloud Dancer"></button>
-                <button class="paper-circle" data-paper="paper-cream" style="background:#F7F4EE;" title="Warm Cream"></button>
-                <button class="paper-circle" data-paper="paper-linen" style="background:#ECE7DE;" title="Linen Texture"></button>
-              </div>
-            </div>
-            <div class="tool-group">
-              <!-- Ink colors: Black, Dark Brown, Dark Blue -->
-              <div class="ink-palette">
-                <button class="ink-dot active" data-ink="#1A1A1A" style="background:#1A1A1A;" title="Black"></button>
-                <button class="ink-dot" data-ink="#382923" style="background:#382923;" title="Dark Brown"></button>
-                <button class="ink-dot" data-ink="#1B263B" style="background:#1B263B;" title="Dark Blue"></button>
+            <div class="tool-group" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <span style="font-family: 'DM Serif Display', serif; font-size: 0.95rem; color: #7F5539; margin-bottom: 8px;">Select Letter Theme:</span>
+              <div id="letter-theme-thumbs-row" style="display: flex; gap: 15px; justify-content: center;">
+                <!-- Rendered via JS -->
               </div>
             </div>
           </div>
 
-          <!-- Letter Sheet with Draggable Stickers & Polaroid -->
+          <!-- Letter Sheet with Themes -->
           <div class="letter-sheet-container" id="letter-sheet-container">
-            <div class="letter-sheet paper-pure" id="letter-sheet">
-              <div class="letter-header-row">
-                <span class="letter-date">October 6, 2026</span>
-                <div class="letter-from-to">
-                  <span>To: <input type="text" value="Kabir" id="letter-to-input"></span>
-                  <span>From: <input type="text" value="Saanvi" id="letter-from-input"></span>
-                </div>
-              </div>
-              <textarea class="letter-textarea" id="letter-body-textarea" placeholder="Write your note here..."></textarea>
-              
-              <!-- Draggable Stickers Layer -->
-              <div class="stickers-canvas-overlay" id="stickers-canvas-overlay"></div>
+            <div class="letter-sheet" id="letter-sheet" style="padding: 0; background: transparent; box-shadow: none;">
+              <!-- Rendered via JS -->
+            </div>
+            
+            <!-- Draggable Stickers Layer -->
+            <div class="stickers-canvas-overlay" id="stickers-canvas-overlay"></div>
 
               <!-- Polaroid Tuck-in Slot (Uploadable from gallery) -->
               <div class="polaroid-tuckin-card" id="polaroid-tuckin-card">

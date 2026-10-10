@@ -1666,3 +1666,27 @@ body {
   color: #386641;
   margin-top: 10px;
 }
+/* Theme specific overrides */
+.theme-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+}
+.theme-input:focus {
+  outline: none;
+}
+.theme-textarea {
+  border: none;
+  background: transparent;
+  outline: none;
+  resize: none;
+  width: 100%;
+}
+.theme-textarea:focus {
+  outline: none;
+}

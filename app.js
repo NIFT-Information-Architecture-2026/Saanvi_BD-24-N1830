@@ -459,37 +459,199 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize with candy theme stamps
   updateStampPicker('candy');
 
+// --- Letter Themes Logic ---
+const letterThemes = {
+  1: {
+    bg: 'assets/themes/theme1.jpg',
+    render: () => \
+      <div style="position:absolute; width:100%; height:100%; top:0; left:0; background: url('assets/themes/theme1.jpg') center/cover;"></div>
+      <!-- Cover Patch to hide box, lines, stamps -->
+      <div style="position:absolute; top:8%; left:8%; right:8%; bottom:8%; background: url('assets/themes/theme1.jpg') 50% 10%/400%; border-radius: 4px; box-shadow: 0 0 20px rgba(242,235,224,0.8);"></div>
+      <div style="position:relative; z-index:2; padding: 12%; height:100%; display:flex; flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:'Playfair Display', serif; color:#8C4A52;">
+          <div style="display:flex; flex-direction:column; gap:5px;">
+            <div style="display:flex; align-items:baseline;">
+              <span style="font-weight:bold; margin-right:5px;">From:</span>
+              <input type="text" id="letter-from-input" class="theme-input" value="\" style="border-bottom:1px solid #8C4A52; color:#8C4A52; font-family:'Playfair Display', serif; background:transparent;" />
+            </div>
+            <div style="display:flex; align-items:baseline;">
+              <span style="font-weight:bold; margin-right:5px;">To:</span>
+              <input type="text" id="letter-to-input" class="theme-input" value="\" style="border-bottom:1px solid #8C4A52; color:#8C4A52; font-family:'Playfair Display', serif; background:transparent;" />
+            </div>
+          </div>
+          <div style="display:flex; align-items:baseline;">
+            <span style="font-weight:bold; margin-right:5px;">Date:</span>
+            <input type="text" id="letter-date-input" class="theme-input" value="\" style="border-bottom:1px solid #8C4A52; color:#8C4A52; font-family:'Playfair Display', serif; width:80px; background:transparent;" />
+          </div>
+        </div>
+        <textarea id="letter-body-textarea" class="theme-textarea" style="flex:1; background:transparent; border:none; resize:none; color:#4A3B3C; font-family:'Caveat', cursive; font-size:24px; line-height:36px; padding:0; outline:none;">\</textarea>
+      </div>
+    \
+  },
+  2: {
+    bg: 'assets/themes/theme2.jpg',
+    render: () => \
+      <!-- Cropped to hide bow -->
+      <div style="position:absolute; width:100%; height:110%; top:-5%; left:0; background: url('assets/themes/theme2.jpg') center/cover;"></div>
+      <div style="position:relative; z-index:2; padding: 20%; padding-top:25%; height:100%; display:flex; flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:'Playfair Display', serif; color:#4A151A;">
+          <div style="display:flex; flex-direction:column; gap:5px;">
+            <div style="display:flex; align-items:baseline;">
+              <span style="font-weight:bold; margin-right:5px;">From:</span>
+              <input type="text" id="letter-from-input" class="theme-input" value="\" style="border-bottom:1px dotted #4A151A; color:#4A151A; width: 100px; background:transparent;" />
+            </div>
+            <div style="display:flex; align-items:baseline;">
+              <span style="font-weight:bold; margin-right:5px;">To:</span>
+              <input type="text" id="letter-to-input" class="theme-input" value="\" style="border-bottom:1px dotted #4A151A; color:#4A151A; width: 100px; background:transparent;" />
+            </div>
+          </div>
+          <div style="display:flex; align-items:baseline;">
+            <span style="font-weight:bold; margin-right:5px;">Date:</span>
+            <input type="text" id="letter-date-input" class="theme-input" value="\" style="border-bottom:1px dotted #4A151A; color:#4A151A; width:80px; background:transparent;" />
+          </div>
+        </div>
+        <textarea id="letter-body-textarea" class="theme-textarea" style="flex:1; background:transparent; border:none; resize:none; color:#1A080A; font-family:'Caveat', cursive; font-size:24px; line-height:1.5; outline:none;">\</textarea>
+      </div>
+    \
+  },
+  3: {
+    bg: 'assets/themes/theme3.jpg',
+    render: () => \
+      <!-- Denim Background intact -->
+      <div style="position:absolute; width:100%; height:100%; top:0; left:0; background: url('assets/themes/theme3.jpg') center/cover;"></div>
+      <!-- Tilted patch perfectly covering the original paper and hiding text/teddy -->
+      <div style="position:absolute; top: 11%; left: 8.5%; width: 85%; height: 80%; background: #F3F1ED; transform: rotate(-2deg); border-radius: 2px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);">
+        <div style="padding: 10%; height:100%; display:flex; flex-direction:column; transform: rotate(0deg);">
+          <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:'Courier New', monospace; color:#183257; font-size: 14px;">
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div style="display:flex; align-items:baseline;">
+                <span style="font-weight:bold; margin-right:5px;">From:</span>
+                <input type="text" id="letter-from-input" class="theme-input" value="\" style="color:#183257; font-family:'Courier New', monospace; background:transparent; border-bottom:1px solid transparent;" />
+              </div>
+              <div style="display:flex; align-items:baseline;">
+                <span style="font-weight:bold; margin-right:5px;">To:</span>
+                <input type="text" id="letter-to-input" class="theme-input" value="\" style="color:#183257; font-family:'Courier New', monospace; background:transparent; border-bottom:1px solid transparent;" />
+              </div>
+            </div>
+            <div style="display:flex; align-items:baseline;">
+              <span style="font-weight:bold; margin-right:5px;">Date:</span>
+              <input type="text" id="letter-date-input" class="theme-input" value="\" style="color:#183257; font-family:'Courier New', monospace; width:80px; background:transparent; border-bottom:1px solid transparent;" />
+            </div>
+          </div>
+          <textarea id="letter-body-textarea" class="theme-textarea" style="flex:1; background:transparent; border:none; resize:none; color:#183257; font-family:'Caveat', cursive; font-size:26px; line-height:32px; outline:none;">\</textarea>
+        </div>
+      </div>
+      <div style="position:absolute; top: 12%; right: 12%; width: 25px; height: 70px; border: 3px solid #777; border-radius: 15px; transform: rotate(-2deg);"></div>
+    \
+  },
+  4: {
+    bg: 'assets/themes/theme4.jpg',
+    render: () => \
+      <!-- Recreate plain white paper with red thin lines -->
+      <div style="position:absolute; width:100%; height:100%; top:0; left:0; background: #FFF;">
+        <!-- Ruled lines -->
+        <div style="position:absolute; width:100%; height:100%; top:0; left:0; background-image: repeating-linear-gradient(transparent, transparent 30px, #EF9A9A 30px, #EF9A9A 31px); margin-top: 100px;"></div>
+      </div>
+      <div style="position:relative; z-index:2; padding: 8%; height:100%; display:flex; flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; margin-bottom: 25px; font-family:sans-serif; color:#B71C1C;">
+          <div style="display:flex; flex-direction:column; gap:5px;">
+            <div style="display:flex; align-items:baseline;">
+              <span style="font-weight:bold; margin-right:5px;">From:</span>
+              <input type="text" id="letter-from-input" class="theme-input" value="\" style="color:#B71C1C; background:transparent; border-bottom:1px solid transparent;" />
+            </div>
+            <div style="display:flex; align-items:baseline;">
+              <span style="font-weight:bold; margin-right:5px;">To:</span>
+              <input type="text" id="letter-to-input" class="theme-input" value="\" style="color:#B71C1C; background:transparent; border-bottom:1px solid transparent;" />
+            </div>
+          </div>
+          <div style="display:flex; align-items:baseline;">
+            <span style="font-weight:bold; margin-right:5px;">Date:</span>
+            <input type="text" id="letter-date-input" class="theme-input" value="\" style="color:#B71C1C; width:80px; background:transparent; border-bottom:1px solid transparent;" />
+          </div>
+        </div>
+        <textarea id="letter-body-textarea" class="theme-textarea" style="flex:1; background:transparent; border:none; resize:none; color:#333; font-family:'Caveat', cursive; font-size:24px; line-height:31px; outline:none;">\</textarea>
+      </div>
+    \
+  },
+  5: {
+    bg: 'assets/themes/theme5.jpg',
+    render: () => \
+      <!-- Stretched width -->
+      <div style="position:absolute; width:100%; height:100%; top:0; left:0; background: url('assets/themes/theme5.jpg') no-repeat; background-size: 100% 100%;"></div>
+      <div style="position:relative; z-index:2; padding: 15%; height:100%; display:flex; flex-direction:column;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-family:'Playfair Display', serif; color:#CE93D8;">
+          <div style="display:flex; flex-direction:column; gap:5px;">
+            <div style="display:flex; align-items:baseline;">
+              <span style="font-weight:bold; margin-right:5px;">From:</span>
+              <input type="text" id="letter-from-input" class="theme-input" value="\" style="color:#CE93D8; border-bottom:1px solid #CE93D8; width: 80px; background:transparent;" />
+            </div>
+            <div style="display:flex; align-items:baseline;">
+              <span style="font-weight:bold; margin-right:5px;">To:</span>
+              <input type="text" id="letter-to-input" class="theme-input" value="\" style="color:#CE93D8; border-bottom:1px solid #CE93D8; width: 80px; background:transparent;" />
+            </div>
+          </div>
+          <div style="display:flex; align-items:baseline;">
+            <span style="font-weight:bold; margin-right:5px;">Date:</span>
+            <input type="text" id="letter-date-input" class="theme-input" value="\" style="color:#CE93D8; border-bottom:1px solid #CE93D8; width:60px; background:transparent;" />
+          </div>
+        </div>
+        <textarea id="letter-body-textarea" class="theme-textarea" style="flex:1; background:transparent; border:none; resize:none; color:#4A148C; font-family:'Caveat', cursive; font-size:22px; line-height:1.5; outline:none;">\</textarea>
+      </div>
+    \
+  }
+};
+
   // ================= 2. LETTER WORKSPACE =================
   const letterSheet = document.getElementById('letter-sheet');
-  const paperCircles = document.querySelectorAll('.paper-circle');
-  const inkDots = document.querySelectorAll('.ink-dot');
-  const letterTextarea = document.getElementById('letter-body-textarea');
-  const stickerIconBtns = document.querySelectorAll('.sticker-icon-btn');
+  const letterThemeThumbsRow = document.getElementById('letter-theme-thumbs-row');
   const stickersCanvasOverlay = document.getElementById('stickers-canvas-overlay');
   const polaroidTrigger = document.getElementById('polaroid-trigger');
   const polaroidFileInput = document.getElementById('polaroid-file-input');
   const polaroidImg = document.getElementById('polaroid-img');
   const polaroidEmptyText = document.getElementById('polaroid-empty-text');
 
-  // Paper options
-  paperCircles.forEach(circle => {
-    circle.addEventListener('click', () => {
-      paperCircles.forEach(c => c.classList.toggle('active', c === circle));
-      const paperClass = circle.dataset.paper;
-      state.letter.paper = paperClass;
-      letterSheet.className = `letter-sheet ${paperClass}`;
-    });
-  });
+  state.letterTheme = 1;
+  state.letter.date = "Oct 6, 2026";
 
-  // Ink options
-  inkDots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      inkDots.forEach(d => d.classList.toggle('active', d === dot));
-      const ink = dot.dataset.ink;
-      state.letter.ink = ink;
-      letterTextarea.style.color = ink;
+  const renderLetterTheme = () => {
+    if (!letterSheet) return;
+    const theme = letterThemes[state.letterTheme];
+    letterSheet.innerHTML = theme.render();
+    
+    // Bind inputs to state so they persist
+    const fromInp = document.getElementById('letter-from-input');
+    const toInp = document.getElementById('letter-to-input');
+    const dateInp = document.getElementById('letter-date-input');
+    const bodyInp = document.getElementById('letter-body-textarea');
+    
+    if(fromInp) fromInp.addEventListener('input', (e) => state.letter.from = e.target.value);
+    if(toInp) toInp.addEventListener('input', (e) => state.letter.to = e.target.value);
+    if(dateInp) dateInp.addEventListener('input', (e) => state.letter.date = e.target.value);
+    if(bodyInp) bodyInp.addEventListener('input', (e) => state.letter.body = e.target.value);
+  };
+
+  if (letterThemeThumbsRow) {
+    let thumbsHtml = '';
+    for (let i=1; i<=5; i++) {
+      thumbsHtml += \<button class="env-thumb-btn \" data-theme="\" style="flex-shrink: 0; width: 50px; height: 50px; border: 2px solid \; border-radius: 8px; background: url('assets/themes/theme\.jpg') center/cover; cursor: pointer; padding: 0;"></button>\;
+    }
+    letterThemeThumbsRow.innerHTML = thumbsHtml;
+    
+    const themeBtns = document.querySelectorAll('#letter-theme-thumbs-row .env-thumb-btn');
+    themeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        themeBtns.forEach(b => {
+          b.classList.toggle('active', b === btn);
+          b.style.borderColor = b === btn ? '#D4A373' : 'transparent';
+        });
+        state.letterTheme = parseInt(btn.dataset.theme);
+        renderLetterTheme();
+      });
     });
-  });
+  }
+
+  // Initial render
+  renderLetterTheme();
 
   // Draggable Stickers implementation
   stickerIconBtns.forEach(btn => {
@@ -1052,3 +1214,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+
+
