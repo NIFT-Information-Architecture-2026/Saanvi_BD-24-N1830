@@ -845,27 +845,48 @@ document.addEventListener('DOMContentLoaded', () => {
   const envSelectorContainer = document.getElementById('envelope-selector-container');
   const envThumbBtns = document.querySelectorAll('.env-thumb-btn');
 
-  state.envelopeIndex = 1;
+  state.envelopeIndex = 0;
+
+  const getEnvelopeSVG = () => `
+    <svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#D3A5AF" flood-opacity="0.5"/></filter>
+        <filter id="innerShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.08"/></filter>
+        <linearGradient id="envBack" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#F2C4CD"/><stop offset="100%" stop-color="#E8B2BC"/></linearGradient>
+        <linearGradient id="envFront" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FADCE3"/><stop offset="100%" stop-color="#F4C8D2"/></linearGradient>
+        <linearGradient id="waxSeal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E57373"/><stop offset="100%" stop-color="#C62828"/></linearGradient>
+      </defs>
+      <g transform="translate(10, 20)">
+        <path d="M0,20 L80,20 L80,60 L0,60 Z" fill="url(#envBack)"/>
+        <path d="M0,20 L40,45 L80,20" fill="#DFA4B0"/>
+        <rect x="5" y="3" width="70" height="42" fill="#FFF9F4" rx="1.5" filter="url(#innerShadow)"/>
+        <line x1="15" y1="14" x2="35" y2="14" stroke="#E2D9D1" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="15" y1="21" x2="65" y2="21" stroke="#E2D9D1" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="15" y1="28" x2="55" y2="28" stroke="#E2D9D1" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M35 37 l-1-1 c-1.5-1.5 -4 0.5 -1.5 2.5 l2.5 2.5 l2.5-2.5 c2.5-2 0-4 -1.5-2.5 z" fill="#FF99A8" />
+        <path d="M0,20 L40,50 L80,20 L80,65 C80,67 78,69 76,69 L4,69 C2,69 0,67 0,65 Z" fill="url(#envFront)" filter="url(#softShadow)"/>
+        <path d="M0,69 L40,40 L80,69" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0.6"/>
+        <path d="M0,20 L40,50 L80,20" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.8"/>
+        <circle cx="40" cy="48" r="6" fill="url(#waxSeal)" filter="url(#innerShadow)"/>
+        <circle cx="40" cy="48" r="4.5" fill="none" stroke="#FFFFFF" stroke-width="0.5" opacity="0.4"/>
+        <path d="M38.5,48.5 Q40,45 41.5,48.5 Q40,51 38.5,48.5" fill="#FFFFFF" opacity="0.6"/>
+      </g>
+      <g fill="#FF99A8" opacity="0.8"><circle cx="85" cy="20" r="1.5" /><circle cx="75" cy="10" r="1" /><circle cx="20" cy="15" r="2" /><circle cx="15" cy="25" r="1" /></g>
+      <g fill="#E2B4BD" opacity="0.6"><path d="M90,30 Q90,33 93,33 Q90,33 90,36 Q90,33 87,33 Q90,33 90,30 Z" /><path d="M25,5 Q25,7 27,7 Q25,7 25,9 Q25,7 23,7 Q25,7 25,5 Z" /></g>
+    </svg>
+  `;
 
   const getEnvelopeImage = (size = "120px") => {
-    let clip = "";
-    let scale = "1";
-    if (state.envelopeIndex == 1) {
-      scale = "1.05";
-    } else if (state.envelopeIndex == 2) {
-      scale = "1.15";
-    } else if (state.envelopeIndex == 3) {
-      scale = "1.4";
-    } else if (state.envelopeIndex == 4) {
-      scale = "1.15";
-    } else if (state.envelopeIndex == 5) {
-      clip = "clip-path: polygon(18% 44%, 50% 21%, 82% 44%, 82% 87%, 18% 87%);";
-      scale = "1.6";
+    if (state.envelopeIndex == 0) {
+      return `<div style="width: ${size}; height: ${size}; margin: 0 auto; display: flex; align-items: center; justify-content: center;">${getEnvelopeSVG()}</div>`;
     }
-    
+    let clip = "";
+    if (state.envelopeIndex == 5) {
+      clip = "clip-path: polygon(18% 44%, 50% 21%, 82% 44%, 82% 87%, 18% 87%);";
+    }
     return `
-      <div style="width: ${size}; height: ${size}; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-        <img src="assets/envelopes/env${state.envelopeIndex}.jpg" style="width: 100%; height: 100%; object-fit: contain; ${clip ? clip : 'mix-blend-mode: multiply;'} transform: scale(${scale});" />
+      <div style="width: ${size}; height: ${size}; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+        <img src="assets/envelopes/env${state.envelopeIndex}.jpg" style="width: 100%; height: 100%; object-fit: contain; ${clip ? clip : 'mix-blend-mode: multiply;'}" />
       </div>
     `;
   };
