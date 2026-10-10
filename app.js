@@ -843,6 +843,53 @@ document.addEventListener('DOMContentLoaded', () => {
   const vesselBtns = document.querySelectorAll('.vessel-btn');
   const vesselPreviewRender = document.getElementById('vessel-preview-render');
 
+  const getEnvelopeSVG = () => `
+    <svg viewBox="0 0 200 200" width="160" height="160" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+      <defs>
+        <radialGradient id="heartGrad" cx="30%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#FF6B6B" />
+          <stop offset="60%" stop-color="#D32531" />
+          <stop offset="100%" stop-color="#8A0712" />
+        </radialGradient>
+        
+        <g id="glossyHeart">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="url(#heartGrad)"/>
+          <path d="M7.5 4c-1.5 0-2.8.9-3.3 2.2.5-1.5 2.1-2 3.3-2z" fill="#FFFFFF" opacity="0.6"/>
+        </g>
+      </defs>
+
+      <!-- Envelope Back (Inside) -->
+      <polygon points="10,130 190,130 190,180 10,180" fill="#751111" />
+      <polygon points="10,80 100,140 190,80 190,180 10,180" fill="#8A1515" />
+      
+      <!-- Letter sticking out -->
+      <g transform="translate(30, 40) rotate(-4)">
+        <rect width="130" height="90" fill="#FFC2D1" rx="2" />
+        <path d="M20 20 Q 30 10, 40 20 T 60 20 T 80 20" fill="none" stroke="#D32531" stroke-width="2" stroke-linecap="round"/>
+        <path d="M20 40 Q 30 30, 40 40 T 60 40 T 80 40 T 100 40" fill="none" stroke="#D32531" stroke-width="2" stroke-linecap="round"/>
+        <path d="M20 60 Q 30 50, 40 60 T 60 60" fill="none" stroke="#D32531" stroke-width="2" stroke-linecap="round"/>
+        <!-- Drawn heart -->
+        <path d="M100 65 l-2-2 c-3-3 -8 1 -3 5 l5 5 l5-5 c5-4 0-8 -3-5 z" fill="#D32531" />
+      </g>
+
+      <!-- Envelope Front Flaps -->
+      <polygon points="10,80 100,140 190,80 100,190" fill="#A61B1B" />
+      <polygon points="10,80 10,180 100,190" fill="#B32020" />
+      <polygon points="190,80 190,180 100,190" fill="#9C1717" />
+      
+      <!-- Sketchy strokes -->
+      <path d="M10,80 L100,140 L190,80" fill="none" stroke="#FFD1D8" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <path d="M10,80 L10,180 L100,190 L190,180 L190,80" fill="none" stroke="#751111" stroke-width="2"/>
+      
+      <!-- Floating Hearts (3D) -->
+      <g transform="translate(85, 120) scale(2.2) rotate(-5)"><use href="#glossyHeart"/></g>
+      <g transform="translate(135, 45) scale(1.3) rotate(15)"><use href="#glossyHeart"/></g>
+      <g transform="translate(115, 10) scale(0.8) rotate(-15)"><use href="#glossyHeart"/></g>
+      <g transform="translate(165, 5) scale(1) rotate(25)"><use href="#glossyHeart"/></g>
+      <g transform="translate(175, 55) scale(0.9) rotate(5)"><use href="#glossyHeart"/></g>
+    </svg>
+  `;
+
   vesselBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       vesselBtns.forEach(b => b.classList.toggle('active', b === btn));
@@ -855,10 +902,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateVesselLivePreview() {
     if (!vesselPreviewRender) return;
     if (state.vessel === 'envelope') {
-      vesselPreviewRender.innerHTML = `
-        <span class="preview-big-icon">✉️</span>
-        <p class="preview-vessel-name">${state.letter.envelope === 'maroon-lace' ? 'Maroon Lace Envelope' : 'Stationery Envelope'} with ${state.letter.seal.toUpperCase()} Seal</p>
-      `;
+      vesselPreviewRender.innerHTML = getEnvelopeSVG();
     } else if (state.vessel === 'box') {
       vesselPreviewRender.innerHTML = `
         <span class="preview-big-icon">🎁</span>
@@ -925,7 +969,7 @@ document.addEventListener('DOMContentLoaded', () => {
       html = `
         <div style="background:#FFFFFF; border:1px solid #DCD7CE; padding:14px; border-radius:4px; font-family:'Caveat', cursive; font-size:18px;">
           <p>"${document.getElementById('letter-body-textarea')?.value || 'Just a note to say I am thinking of you.'}"</p>
-          <div style="font-size:12px; color:#736B63; margin-top:8px;">Delivered in Maroon Lace Envelope</div>
+          <div style="font-size:12px; color:#736B63; margin-top:8px;">Delivered in Envelope</div>
         </div>
       `;
     } else if (state.activeMedium === 'bouquet') {
