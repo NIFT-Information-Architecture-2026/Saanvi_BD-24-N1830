@@ -843,34 +843,69 @@ document.addEventListener('DOMContentLoaded', () => {
   const vesselBtns = document.querySelectorAll('.vessel-btn');
   const vesselPreviewRender = document.getElementById('vessel-preview-render');
 
-  const getEnvelopeComposite = (size = "120px") => `
-    <div style="width: ${size}; height: ${size}; position: relative; margin: 0 auto; display: flex; align-items: flex-end; justify-content: center; overflow: visible;">
-      <img src="assets/envelope_pink.jpg" style="width: 140%; height: 140%; object-fit: cover; object-position: center 65%; mix-blend-mode: multiply;" />
-      
-      <svg style="position: absolute; top: -15%; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible;" viewBox="0 0 100 100">
-        <defs>
-          <g id="miniHeart">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </g>
-          <g id="sparkle">
-            <path d="M12,0 C12,8 20,12 20,12 C20,12 12,16 12,24 C12,16 4,12 4,12 C4,12 12,8 12,0 Z" />
-          </g>
-        </defs>
+  const getEnvelopeSVG = () => `
+    <svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Soft Drop Shadow -->
+        <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#D3A5AF" flood-opacity="0.5"/>
+        </filter>
+        <filter id="innerShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.08"/>
+        </filter>
 
-        <!-- Cute Hearts -->
-        <g fill="#FF4D6D" transform="translate(35, 10) scale(0.8) rotate(-15)"><use href="#miniHeart"/></g>
-        <g fill="#FF8FA3" transform="translate(60, -5) scale(0.6) rotate(20)"><use href="#miniHeart"/></g>
-        <g fill="#FF4D6D" transform="translate(75, 20) scale(1.1) rotate(10)"><use href="#miniHeart"/></g>
-        <g fill="#FFB3C6" transform="translate(15, 25) scale(1) rotate(-25)"><use href="#miniHeart"/></g>
-        <g fill="#FF8FA3" transform="translate(45, 35) scale(0.9) rotate(5)"><use href="#miniHeart"/></g>
+        <!-- Gradients -->
+        <linearGradient id="envBack" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#F2C4CD"/>
+          <stop offset="100%" stop-color="#E8B2BC"/>
+        </linearGradient>
+        <linearGradient id="envFront" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#FADCE3"/>
+          <stop offset="100%" stop-color="#F4C8D2"/>
+        </linearGradient>
+        <linearGradient id="waxSeal" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#E57373"/>
+          <stop offset="100%" stop-color="#C62828"/>
+        </linearGradient>
+      </defs>
 
-        <!-- Cute Sparkles -->
-        <g fill="#FFB3C6" transform="translate(25, -5) scale(0.5)"><use href="#sparkle"/></g>
-        <g fill="#FF8FA3" transform="translate(85, 5) scale(0.4)"><use href="#sparkle"/></g>
-        <g fill="#FF4D6D" transform="translate(65, 45) scale(0.6)"><use href="#sparkle"/></g>
-        <g fill="#FFB3C6" transform="translate(5, 45) scale(0.5)"><use href="#sparkle"/></g>
-      </svg>
-    </div>
+      <g transform="translate(10, 20)">
+        <!-- Back flap / Inside -->
+        <path d="M0,20 L80,20 L80,60 L0,60 Z" fill="url(#envBack)"/>
+        <path d="M0,20 L40,45 L80,20" fill="#DFA4B0"/>
+
+        <!-- Letter sticking out -->
+        <rect x="5" y="3" width="70" height="42" fill="#FFF9F4" rx="1.5" filter="url(#innerShadow)"/>
+        <!-- Elegant lines on letter -->
+        <line x1="15" y1="14" x2="35" y2="14" stroke="#E2D9D1" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="15" y1="21" x2="65" y2="21" stroke="#E2D9D1" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="15" y1="28" x2="55" y2="28" stroke="#E2D9D1" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M35 37 l-1-1 c-1.5-1.5 -4 0.5 -1.5 2.5 l2.5 2.5 l2.5-2.5 c2.5-2 0-4 -1.5-2.5 z" fill="#FF99A8" />
+
+        <!-- Front flaps -->
+        <path d="M0,20 L40,50 L80,20 L80,65 C80,67 78,69 76,69 L4,69 C2,69 0,67 0,65 Z" fill="url(#envFront)" filter="url(#softShadow)"/>
+        <!-- Flap fold highlights -->
+        <path d="M0,69 L40,40 L80,69" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0.6"/>
+        <path d="M0,20 L40,50 L80,20" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.8"/>
+
+        <!-- Wax Seal -->
+        <circle cx="40" cy="48" r="6" fill="url(#waxSeal)" filter="url(#innerShadow)"/>
+        <circle cx="40" cy="48" r="4.5" fill="none" stroke="#FFFFFF" stroke-width="0.5" opacity="0.4"/>
+        <path d="M38.5,48.5 Q40,45 41.5,48.5 Q40,51 38.5,48.5" fill="#FFFFFF" opacity="0.6"/>
+      </g>
+
+      <!-- Elegant floating accents (not loud) -->
+      <g fill="#FF99A8" opacity="0.8">
+        <circle cx="85" cy="20" r="1.5" />
+        <circle cx="75" cy="10" r="1" />
+        <circle cx="20" cy="15" r="2" />
+        <circle cx="15" cy="25" r="1" />
+      </g>
+      <g fill="#E2B4BD" opacity="0.6">
+        <path d="M90,30 Q90,33 93,33 Q90,33 90,36 Q90,33 87,33 Q90,33 90,30 Z" />
+        <path d="M25,5 Q25,7 27,7 Q25,7 25,9 Q25,7 23,7 Q25,7 25,5 Z" />
+      </g>
+    </svg>
   `;
 
   vesselBtns.forEach(btn => {
@@ -885,7 +920,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateVesselLivePreview() {
     if (!vesselPreviewRender) return;
     if (state.vessel === 'envelope') {
-      vesselPreviewRender.innerHTML = getEnvelopeComposite();
+      vesselPreviewRender.innerHTML = getEnvelopeSVG();
     } else if (state.vessel === 'box') {
       vesselPreviewRender.innerHTML = `
         <span class="preview-big-icon">🎁</span>
