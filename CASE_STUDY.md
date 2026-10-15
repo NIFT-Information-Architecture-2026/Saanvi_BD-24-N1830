@@ -87,13 +87,18 @@ Rooted in fashion communication, paper archives, and tactile florist rituals:
   - 🔴 Crimson Red with a delicate white heart
   - 🌸 Botanical Pink with a flower
   - 🟡 Sunflower Yellow with a quiet smile
-- **Stationery & Envelope Craft:**
-  - White and cream paper stocks only (no synthetic pastel washes).
-  - Customizable envelopes including **Deep Maroon with simple white lace detail**.
-  - Embossed wax seals in Gold, Cream, and Maroon.
-  - Tuck-in physical polaroid photo enclosure.
-- **Botanical Bouquet Atelier:** 15 curated blooms (*Dahlia, Tulip, Gardenia, Peony, Lily, Orchid, Rose, Sunflower, Lilac, Baby's Breath, Hydrangea, Snapdragon, Japanese Anemones, Persian Buttercup, Foxglove*), 4 wrapping papers, 4 ribbons, and an attached letter card with no word limit.
-- **The 3 Delivery Vessels:** Strictly Envelope, Keepsake Box, or Vintage Toy Truck.
+- **Stationery & Thematic Letter Craft:**
+  - 5 Dedicated Stationery Themes replacing generic color pickers: Crumpled Vintage Parchment, Lace-Bordered Romantic, Slanted Notebook on Denim, Clean White Red-Ruled, and Wide-Format Lavender.
+  - Universal pinned `From: [Name]`, `To: [Name]`, and `Date:` dedication header.
+  - Tuck-in physical polaroid photo enclosure and draggable ephemera layer.
+- **Botanical Bouquet Atelier (DigiBouquet Paradigm Shift):**
+  - High-fidelity botanical flower illustrations (strictly no emojis).
+  - Clean, bare-stem floral compositions stripped of artificial cellophane wrapping paper and ribbons.
+  - 5-step choreographed flow: Flower selection -> Reshuffle & Rearrange -> Greenery & Fillers -> Thematic Note Writing -> Assembled Bouquet with attached miniature note that unfolds into a full readable letter upon tap.
+- **The 3 Delivery Vessels & Tactile Envelopes:**
+  - Strictly 3 delivery vessels: Envelope, Keepsake Box, and Delivery Van/Truck.
+  - Anchored in tactile, authentic physical raster references (avoiding cartoonish, overly animated vector SVGs).
+  - 5 curated envelope designs displayed in a clean, uniform 50×50px centered row directly above the live preview, progressively disclosed when the Envelope vessel is selected.
 - **Purely Visual & Written:** Zero voice notes/audio clutter—preserving serene, unhurried reading.
 
 ---

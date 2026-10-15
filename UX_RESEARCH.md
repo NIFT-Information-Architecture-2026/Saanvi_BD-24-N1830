@@ -28,10 +28,10 @@ The heart of the app is the **Creative Atelier**—giving the sender distinct, t
 
 | Artifact Medium | Metaphor & Materiality | Emotional Nuance & Use Case | Craft Elements & Anatomy |
 | :--- | :--- | :--- | :--- |
-| **Handwritten Letter** | Textured stationery, fountain pen ink, wax seal | Deep intimacy, quiet apologies, unhurried reflections, vulnerability | Paper texture choices, margins, custom handwriting font/stroke, folded layout |
-| **Digital Postcard** | Heavy cardstock, stamped corner, front/back flip | Everyday dispatches, travel moments, quick "thinking of you" notes | Front: Curated photo/illustration; Back: Short message, stamp, postal mark |
+| **Handwritten Letter** | 5 Thematic physical stationeries, fountain pen ink, wax seal | Deep intimacy, quiet apologies, unhurried reflections, vulnerability | 5 curated paper themes (crumpled vintage, lace border, slanted notebook on denim, thin red-ruled, wide lavender), From/To/Date header |
+| **Digital Postcard** | Heavy cardstock, stamped corner, front/back flip | Everyday dispatches, travel moments, quick "thinking of you" notes | Front: Curated photo/illustration; Back: 20-font message, collectible stamp, postmark |
 | **Greeting Card** | Bi-fold linen card, tactile paper crease | Celebrations, birthdays, holidays, congratulations | Cover illustration, interior spread with handwritten message, optional photo tuck-in |
-| **Virtual Botanical Bouquet** | Hand-tied florist paper, botanicals & stems | Wordless comfort, cheer, symbolic gestures, gratitude | Curated flower selection, floral symbolism, ribbon tie, mini card tag on stems |
+| **Botanical Bouquet** | Bare-stem floristry (DigiBouquet paradigm), high-fidelity botanical illustrations | Wordless comfort, cheer, symbolic gestures, gratitude | Curated flower stems (no emojis), organic bare stems (no wrapping/ribbons), greenery/fillers, attached miniature note that unfolds on tap |
 | **Custom Keepsake / Collage** | Mixed-media scrapbook page | Inside jokes, milestone celebrations, trip recaps | Layered ephemera, photo cutouts, washi tape, ticket stubs, scribbles |
 
 ---
@@ -45,8 +45,8 @@ Beyond gifting in isolated moments, the app functions as a **living, tactile arc
 ├────────────────────┬────────────────────┬──────────────────────────────┤
 │  EVERYDAY MOMENTS  │     MILESTONES     │      JOURNEYS & TRIPS        │
 │  "Coffee on rainy  │  First apartment,  │  Ticket stubs, travel snaps, │
-│   Tuesday", inside │  anniversary, new  │  co-curated audio & location │
-│   jokes, voicenotes│  job celebration   │  postcards                   │
+│   Tuesday", inside │  anniversary, new  │  co-curated written notes    │
+│   jokes, memories  │  job celebration   │  and location postcards      │
 └────────────────────┴────────────────────┴──────────────────────────────┘
                          │                                 │
                          ▼                                 ▼
@@ -54,7 +54,7 @@ Beyond gifting in isolated moments, the app functions as a **living, tactile arc
 ```
 
 ### Digital Scrapbooking Pillars:
-1. **Unscripted Life Logging:** Capture both the small ordinary days (an unprompted voice whisper, a snapshot of morning coffee) and major milestones without the performance pressure of public social media.
+1. **Unscripted Life Logging:** Capture both the small ordinary days (a quiet reflection, a snapshot of morning coffee) and major milestones without the performance pressure of public social media.
 2. **Dual-Perspective Memory Entries:** A memory entry can hold both people's recollections—his memory of a concert, her snapshot of the ticket stub, side-by-side.
 3. **Tactile Scrapbook Aesthetics:** Digital elements mirror real-world scrapbooking—washi tape, paper clips, pressed leaves, polaroid frames, and handwritten captions.
 4. **Living Memory Albums:** Custom-organized chapters (e.g., *"Our First Year in Hyderabad"*, *"Sunday Morning Walks"*, *"Late Night Conversations"*).
@@ -64,12 +64,13 @@ Beyond gifting in isolated moments, the app functions as a **living, tactile arc
 ## 4. The Delivery Vessel System (Packaging Metaphor)
 The sender does not simply "hit send." They choose how the gesture arrives, anchoring the aesthetic in physical craft and playful whimsy:
 
-| Vessel Type | Visual Metaphor | Best Suited For | Unwrapping Interaction |
+| Vessel Type | Visual Metaphor & Materiality | Best Suited For | Unwrapping Interaction |
 | :--- | :--- | :--- | :--- |
-| **The Folded Parchment** | Letter with wax seal or paper ribbon | Quiet apologies, heartfelt notes, letters | Slide seal / unfold flaps |
-| **The Tied Box** | Linen-textured box with grosgrain ribbon | Bouquets, multiple photos, cards | Untie ribbon / lift lid |
-| **The Whimsical Truck** | Miniature vintage delivery truck | Playful jokes, postcards, spontaneous cheer | Tap truck door / open cargo bed |
-| **The Archival Folder** | Manila envelope with string-and-button closure | Memory dumps, trip souvenirs, collages | Unwind twine around button |
+| **1. The Envelope (5 Styles)** | Curated tactile envelopes (linen, lace-trimmed, floral vintage, soft pastel, archival) | Letters, postcards, quiet heartfelt notes | Slide wax seal / gentle flap unfold |
+| **2. The Keepsake Box** | Tactile vintage floral/botanical keepsake box | Bouquets, cards, multi-photo enclosures | Untie ribbon / lift lid |
+| **3. The Delivery Truck** | Miniature vintage pastel delivery van | Postcards, spontaneous surprises, playful cheer | Tap vehicle door / open cargo bay |
+
+*(All packaging visuals are strictly anchored in authentic physical raster references, eschewing cartoonish or overly animated vector graphics).*
 
 ---
 

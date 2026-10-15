@@ -9,11 +9,27 @@
 ```mermaid
 graph TD
     A[Enter Studio] --> B[4-Medium Picker Carousel]
-    B -->|Select Medium| C[Crafting Canvas: Letter / Postcard / Card / Bouquet]
-    C --> D[Craft Artifact: Artwork, Photos, Type, Arrangement]
-    D --> E["The 'From & To' Signature Tag (Final Touch)"]
+    B -->|Postcard| C1[Canvas: Front Photo/Art + 3D Flip Back + 20-Font Note + Stamps]
+    B -->|Letter| C2[Canvas: 5 Thematic Stationeries + From/To/Date Header + Stickers]
+    B -->|Greeting Card| C3[Canvas: Bi-fold Cover + Inside Spread Note + Tuck-in Slot]
+    B -->|Bouquet: DigiBouquet Flow| C4[Canvas: 5-Step Bare-Stem Botanical Composition]
+    
+    subgraph BouquetCreationFlow [DigiBouquet 5-Step Flow]
+        C4 --> BQ1[Step 1: Pick Illustrated Flower Stems]
+        BQ1 --> BQ2[Step 2: Reshuffle & Rearrange Composition]
+        BQ2 --> BQ3[Step 3: Add Greenery & Foliage Fillers]
+        BQ3 --> BQ4[Step 4: Select Note Theme & Write Heartfelt Note]
+        BQ4 --> BQ5[Step 5: Preview Assembled Bouquet with Tucked Mini Note]
+    end
+
+    C1 --> E["The 'From & To' Signature Tag (Final Touch)"]
+    C2 --> E
+    C3 --> E
+    BQ5 --> E
     E --> F[Select Delivery Vessel: Envelope / Box / Truck]
-    F --> G[Dispatch & Destination Selection]
+    F -->|If Envelope Selected| F1[Choose from 5 Tactile Envelope Styles]
+    F1 --> G[Dispatch & Destination Selection]
+    F -->|If Box or Truck Selected| G
     G --> H{"Save Choice"}
     H -->|Save Copy to| I["Personal Space (e.g., 'Saanvi's Vault')"]
     H -->|Add Directly to| J["Shared Log (e.g., 'Our Little Corner')"]
@@ -26,12 +42,14 @@ graph TD
 ```mermaid
 graph TD
     A1[App Icon / Gentle Lock-Screen Indication] --> B1[Open App: Arrival Waiting on Quiet Stand]
-    B1 --> C1[Vessel Reveal Screen: Envelope / Tied Box / Vintage Truck]
+    B1 --> C1[Vessel Reveal Screen: Tactile Envelope / Keepsake Box / Vintage Van]
     C1 --> D1{"Unwrapping Ritual"}
-    D1 -->|Micro-Interaction: 1-2 sec| E1[Unfold Flaps / Untie Ribbon / Open Truck Door]
+    D1 -->|Micro-Interaction: 1-2 sec| E1[Slide Envelope Seal / Untie Box Ribbon / Open Truck Door]
     D1 -->|Direct Tap| E1[Instant Reveal - Skip]
-    E1 --> F1[Artifact Display: Flip Postcard / Open Card Spread / Bouquet View]
+    E1 --> F1[Artifact Display: Flip Postcard / Open Card Spread / Letter Theme / Bare-Stem Bouquet]
+    F1 -->|If Bouquet| BQ_Tap[Tap Tucked Mini Note -> Unfolds Full Message]
     F1 --> G1[Collaborative Action Bar]
+    BQ_Tap --> G1
     G1 --> H1[Circle/Draw Marginalia]
     G1 --> I1[Attach Memory Photo or Written Note]
     G1 --> J1["Save Button: File to Shared Log or Personal Vault"]
@@ -74,7 +92,7 @@ graph TD
 
 ---
 
-### Screen 2: The Studio — 4-Medium Atelier Picker
+#### Screen 2: The Studio — 4-Medium Atelier Picker
 ```
 ┌─────────────────────────────────────────┐
 │ 09:41                                   │
@@ -84,12 +102,12 @@ graph TD
 │                                         │
 │ ┌───────────────────┐ ┌───────────────┐ │
 │ │  ✉️ LETTER         │ │ 🪪 POSTCARD   │ │
-│ │  Quiet handwriting│ │ Two-sided flip│ │
+│ │  5 curated themes │ │ 2-sided + 20F │ │
 │ └───────────────────┘ └───────────────┘ │
 │                                         │
 │ ┌───────────────────┐ ┌───────────────┐ │
 │ │  💌 GREETING CARD │ │ 💐 BOUQUET    │ │
-│ │  Folded bi-fold   │ │ Stem-by-stem  │ │
+│ │  Folded bi-fold   │ │ Bare-stem art │ │
 │ └───────────────────┘ └───────────────┘ │
 │                                         │
 │ [ Recently Saved Drafts (2) ────────► ] │
@@ -101,22 +119,23 @@ graph TD
 ### Screen 3: Studio Crafting Canvas & The "From/To" Packaging Step
 ```
 ┌─────────────────────────────────────────┐
-│ ◄ Back               Postcard Canvas  Next ►│
+│ ◄ Back               Canvas Workspace   │
 ├─────────────────────────────────────────┤
-│ ┌─────────────────────────────────────┐ │
-│ │                                     │ │
-│ │     [ FRONT: Photo / Artwork ]      │ │
-│ │                                     │ │
-│ └─────────────────────────────────────┘ │
-│   [ 🔄 Flip to Back for Message & Stamp ]│
+│ [ ACTIVE CANVAS: Postcard / Letter /   │
+│   Greeting Card / Bare-Stem Bouquet ]   │
 │                                         │
 │ ─────────────────────────────────────── │
 │ FINAL TOUCH: ATTACH DEDICATION          │
 │ From: [ Saanvi__________ ]              │
 │ To:   [ Kabir___________ ]              │
 │                                         │
-│ CHOOSE PACKAGING VESSEL:                │
-│ (•) Envelope   ( ) Tied Box   ( ) Truck │
+│ CHOOSE HOW IT ARRIVES:                  │
+│ (•) Envelope   ( ) Keepsake Box ( ) Van │
+│                                         │
+│ [If Envelope Selected: 5 Tactile Styles]│
+│ ┌────┐ ┌────┐ ┌────┐ ┌────┐ ┌────┐      │
+│ │Env1│ │Env2│ │Env3│ │Env4│ │Env5│      │
+│ └────┘ └────┘ └────┘ └────┘ └────┘      │
 │                                         │
 │ SAVE TO:                                │
 │ [☑] Personal Space: "Saanvi's Vault"    │

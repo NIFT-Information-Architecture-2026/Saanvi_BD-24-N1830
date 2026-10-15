@@ -69,66 +69,49 @@ Rooted in clean archival paper, delicate creams, and classic fountain pen inks. 
 
 ---
 
-### 2. The Contemporary Letter & Sealed Envelope
+### 2. The Contemporary Letter & Thematic Stationery
 *An unhurried space for deeper vulnerability, tactile stationery, and tuck-in keepsakes.*
 
-- **Stationery Paper Stock (Strictly White & Cream Variations — No Sage):**
-  1. *Pure White Wove* (Crisp, clean, smooth cotton tooth)
-  2. *Cloud Dancer Cream* (Airy, warm neutral paper)
-  3. *Linen Cream Textured* (Subtle cross-hatch woven grain)
-  4. *Soft Flecked Cotton* (Organic off-white with tiny subtle fibers)
-- **Ink Colors:**
-  - **Black** (`#1A1A1A`)
-  - **Dark Brown** (`#382923`)
-  - **Dark Blue** (`#1B263B`)
-- **Decorative Ephemera & Cute Stickers:**
-  - Washi tape strips, vintage paperclips, delicate stars, subtle hearts, *"i love you"* script sticker, sweet little bear, botanical flowers, quiet smiley, and other tasteful, non-cringey ephemera.
-- **Customizable Delivery Envelope (4 Finishes):**
-  1. *Kraft Manila* (Warm natural craft paper)
-  2. *Pleated Cream Vellum* (Semi-translucent frosted envelope)
-  3. *Maroon with Simple White Lace* (Deep rich maroon body with delicate white lace border trim)
-  4. *Classic Charcoal Linen* (Muted dark slate paper)
-- **Authentic Seal Selection:**
-  - Embossed Wax Seal in: **Gold**, **Cream**, or **Maroon**.
-- **Tuck-In Keepsake Enclosures:**
-  - Senders can slip a physical-style white-bordered polaroid photo or additional personal token inside the envelope alongside the letter.
+- **Stationery Theme Architecture (Replaces Generic Color Circles):**
+  Instead of generic pastel color pickers, the Letter Workspace offers **5 Curated Stationery Themes** rooted in physical paper archives:
+  1. **Theme 1: Crumpled Vintage Parchment**
+     - Textured, distressed edge-wear wove paper with warm tea-stained patina.
+     - Clean central writing field (cleanly masked to remove distracting pre-printed graphics/stamps).
+     - Header: Pinned `From: [Name]`, `To: [Name]` on the left, `Date:` on the right.
+  2. **Theme 2: Lace-Bordered Stationery**
+     - Delicate romantic lace-trim outer border with deep crimson backdrop.
+     - Strictly constrained writing boundaries within the interior lace frame (ribbon cropped out).
+     - Pinned `From:`, `To:`, and `Date:` dedication header.
+  3. **Theme 3: Slanted Notebook / Denim Stationery**
+     - Informal, tilted notebook page resting on raw denim fabric.
+     - Slanted typography engine: typed text flows parallel to the angled paper angle for authentic physical realism.
+     - Pinned `From:`, `To:`, and `Date:` dedication header.
+  4. **Theme 4: Clean White Red-Ruled Stationery**
+     - Crisp, pure white cotton paper with delicate thin red horizontal ruled lines.
+     - Classic epistolary format with pinned `From:`, `To:`, and `Date:` header.
+  5. **Theme 5: Wide-Format Lavender / Botanical Stationery**
+     - Extended horizontal aspect ratio for expansive prose.
+     - Soft botanical mauve/lavender accents with pinned `From:`, `To:`, and `Date:` header.
+- **Ephemera & Tuck-Ins:**
+  - Draggable sticker layer (tasteful postage stamps, paper clips, pressed tokens).
+  - Polaroid tuck-in enclosure slot for attaching a physical-style photo.
 
 ---
 
-### 3. The Botanical Bouquet Atelier
-*A sensory floral arrangement offering comfort, celebration, or tenderness.*
+### 3. The Botanical Bouquet Atelier (DigiBouquet Paradigm)
+*An organic, bare-stem floral arrangement inspired by contemporary digital floristry (DigiBouquet reference).*
 
-- **Botanical Flower Catalog (15 Curated Blooms):**
-  1. Dahlia
-  2. Tulip
-  3. Gardenia
-  4. Peony
-  5. Lily
-  6. Orchid
-  7. Rose
-  8. Sunflower
-  9. Lilac
-  10. Baby's Breath
-  11. Hydrangea
-  12. Snapdragon
-  13. Japanese Anemones
-  14. Persian Buttercup
-  15. Foxglove
-- **Arrangement Mode:**
-  - **Bespoke Atelier:** Pick and arrange flowers stem-by-stem from the catalog.
-  - **Readymade Bouquets:** Pre-arranged compositions for quick, thoughtful gifting.
-- **Wrapping Paper Options (4 Choices):**
-  1. *Natural Brown Kraft Paper*
-  2. *Frosted Botanical Vellum*
-  3. *Pleated Ivory Linen*
-  4. *Vintage Newspaper Newsprint*
-- **Ribbon Tie Options (4 Choices):**
-  1. *Raw Frayed Silk* (Soft ecru)
-  2. *Grosgrain Stripe* (Earthy olive)
-  3. *Velvet Ribbon* (Deep plum)
-  4. *Twisted Jute Twine* (Rustic single knot)
-- **Attached Letter Tag:**
-  - Florist letter card tied directly to the ribbon stems: supports unbounded personal text (no word limit).
+- **Design Philosophy Shift:**
+  - **Zero Emojis:** Strictly composed of illustrated, high-fidelity botanical flower assets.
+  - **No Artificial Wrappings or Ribbons:** Stripped of unnecessary cellophane wrapping papers and oversized ribbon ties; flowers and greenery stand naturally as an organic, bare-stem hand-tied bouquet.
+- **Choreographed 5-Step Creation Flow:**
+  1. **Step 1: Select Flowers:** Choose individual stems from a curated index of illustrated botanicals.
+  2. **Step 2: Rearrange & Reshuffle:** Dynamic layout engine allowing senders to reshuffle, reorder, and adjust stem layering for a balanced organic composition.
+  3. **Step 3: Choose Greenery & Fillers:** Add complementary botanical foliage, eucalyptus sprigs, fern fronds, or baby's breath.
+  4. **Step 4: Select Note Theme & Write Note:** Pick a tactile note card theme (archival parchment, minimalist cream, botanical bordered card) and write an unrestricted personal message.
+  5. **Step 5: Send & Tucked Note Interaction:** 
+     - The recipient receives the complete, freestanding floral arrangement with a **small note card tucked into the stems**.
+     - **Interactive Tap-to-Read:** Tapping the miniature attached note triggers a smooth modal/card unfold, revealing the sender's full heartfelt note.
 
 ---
 
@@ -150,14 +133,21 @@ Rooted in clean archival paper, delicate creams, and classic fountain pen inks. 
 
 ---
 
-### 5. Delivery Vessels (Strictly 3 Options)
-Once crafted, the gift is placed inside one of **three distinct delivery vessels**:
+### 5. Delivery Vessels & Tactile Packaging (Strictly 3 Options)
+Once crafted, the gift is packaged inside one of **three distinct delivery vessels**, adhering strictly to **tactile photographic/raster materiality** (rejecting cartoonish, overly animated vector SVGs in favor of authentic physical references):
 
-| Vessel | Visual Metaphor | Opening Experience |
+| Vessel | Visual Metaphor & Materiality | Opening Experience |
 | :--- | :--- | :--- |
-| **1. Envelope** | Letter/parcel envelope sealed with wax | Slide wax seal / unfold flap |
-| **2. Box** | Linen-textured keepsake box tied with ribbon | Untie ribbon / lift lid |
-| **3. Truck** | Miniature vintage delivery toy truck | Tap truck door / open cargo bed |
+| **1. Envelope** | Curated tactile paper envelope with wax seal | Slide wax seal / gentle flap unfold |
+| **2. Box** | Tactile vintage botanical keepsake box | Untie ribbon / lift lid |
+| **3. Truck** | Miniature vintage pastel delivery van/truck | Tap truck door / open cargo bay |
+
+#### The Envelope Selector System:
+When the **Envelope** vessel is active, an integrated selector appears directly above the live preview:
+- **5 Curated Envelope Designs:** Derived from authentic physical stationery references (linen grain, lace trim, floral vintage print, soft pastel, archival wove).
+- **Thumbnail Specifications:** Uniform 50×50px crisp square thumbnails, evenly spaced in a centered single row (no awkward horizontal scrolling or drag overflow).
+- **Progressive Disclosure:** Kept hidden by default; seamlessly appears only when the sender chooses the Envelope vessel.
+- **Dispatch Choreography:** Tactile slide-in animation where the crafted letter/postcard/card slides into the selected envelope and is sealed with an embossed wax stamp.
 
 *(Zero voice notes/audio whispers across all features — keeping the platform purely visual, written, and tactile).*
 

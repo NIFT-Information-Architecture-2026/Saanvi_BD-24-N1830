@@ -21,11 +21,11 @@
 │                                OOUX OBJECT TAXONOMY                                    │
 ├────────────────────┬────────────────────┬────────────────────┬─────────────────────────┤
 │  1. THE POSTCARD   │   2. THE LETTER    │  3. GREETING CARD  │     4. THE BOUQUET      │
-│  • Front Artwork   │  • Contemporary    │  • Tactile Bi-fold │  • Bespoke: Stem picker │
-│  • 3D Flip Action  │    Stationery Tint │  • Cover Artwork   │  • Readymade: Sets      │
-│  • Back Message    │  • Typography Scale│  • Interior Spread │  • Wrapping Paper Craft │
-│  • Postal Stamps   │  • Ink Nuances     │  • Tuck-in Polaroid│  • Ribbon Material      │
-│  • "From & To" Tag │  • Sticker Ephemera│  • "From & To" Seal│  • Florist Tag Dedication│
+│  • Front Artwork   │  • 5 Stationery    │  • Tactile Bi-fold │  • Illustrated Stems    │
+│  • 3D Flip Action  │    Themes          │  • Cover Artwork   │  • Bare-stem Composition│
+│  • Back Message    │  • From/To & Date  │  • Interior Spread │  • Greenery & Fillers   │
+│  • Perforated Stamp│  • Slanted Engine  │  • Tuck-in Polaroid│  • Thematic Note Card   │
+│  • "From & To" Tag │  • Draggable Layer │  • "From & To" Seal│  • Tap-to-Open Mini Note│
 └────────────────────┴────────────────────┴────────────────────┴─────────────────────────┘
 ```
 
@@ -37,12 +37,15 @@
 - **Front Face:** High-resolution photo, custom illustration, or studio art.
 - **Back Face:** Divided layout—left side for handwritten note; right side for address block, collectible postal date stamps, and a handwritten *"From: [Name] / To: [Name]"* mark.
 
-#### B. Contemporary Letter
-- **Aesthetic Tone:** Warm, modern tactile simplicity (avoiding exaggerated faux-parchment clichés).
-- **Typography Engine:** Curated pairing of modern serif and expressive handwriting scripts; adjustable letter-spacing, line height, and ink opacity.
-- **Paper Canvas:** Pure white and warm cream stationery washes (pure cotton, cloud dancer, linen cream).
-- **Ephemera Layer:** Placement of contemporary stickers, pressed botanical stamps, and margin notes.
-- **Dedication:** Elegant top or footer sign-off: *"From: [Name] / To: [Name]"*.
+#### B. Contemporary Letter & Thematic Stationery
+- **Stationery Engine (5 Curated Themes):**
+  1. *Crumpled Vintage Parchment:* Warm aged paper grain, clean center writing canvas, pinned From/To & Date.
+  2. *Lace-Bordered Romantic:* Crimson base, delicate outer lace frame, strict interior text boundaries.
+  3. *Slanted Notebook / Denim:* Slanted typography engine matching angled paper orientation on denim canvas.
+  4. *Clean White Red-Ruled:* Crisp wove paper with subtle thin red horizontal ruled lines.
+  5. *Wide-Format Lavender:* Extended width proportions with soft botanical mauve accents.
+- **Header Architecture:** Universal pinned `From: [Name]`, `To: [Name]`, and `Date:` header across all themes.
+- **Ephemera Layer:** Placement of contemporary stickers, pressed botanical stamps, and polaroid photo tuck-in.
 
 #### C. Greeting Card
 - **Visual Presentation:** Premium bi-fold card with realistic paper crease physics.
@@ -53,15 +56,14 @@
   - Right page: Handwritten personal message spread (Black, Dark Brown, Dark Blue ink).
   - Dedication: Embossed or handwritten *"From: [Name] / To: [Name]"* closure.
 
-#### D. Botanical Bouquet
-- **Mode 1: Bespoke Atelier (Stem-by-Stem):**
-  - Stem selection from a rich botanical index (Dahlia, Tulip, Gardenia, Peony, Lily, Orchid, Rose, Sunflower, Lilac, Baby's Breath, Hydrangea, Snapdragon, Japanese Anemones, Persian Buttercup, Foxglove).
-  - Arrangement canvas allowing custom flower placement, rotation, and layering.
-  - Wrapping paper selection (kraft paper, frosted wax paper, pleated linen, vintage newsprint).
-  - Ribbon choice (raw silk, grosgrain, velvet, twisted jute twine).
-  - Florist gift tag tied to the ribbon bearing the personal dedication: *"From: [Name] / To: [Name]"*.
-- **Mode 2: Readymade Bouquets:**
-  - Pre-arranged bouquets for effortless, spontaneous gestures when the sender wants to offer immediate comfort or celebration.
+#### D. Botanical Bouquet (DigiBouquet Paradigm)
+- **Visual Materiality:** High-fidelity botanical flower illustrations (strictly no emojis); natural bare-stem arrangement free of artificial cellophane wrapping paper and ribbons.
+- **5-Step Choreographed Creation Flow:**
+  - **1. Stem Selection:** Add individual botanical flower stems from curated illustrated catalog.
+  - **2. Rearrange & Reshuffle:** Reorganize, shuffle, and layer stems organically.
+  - **3. Greenery & Fillers:** Add botanical foliage, eucalyptus, and fern fronds to balance the arrangement.
+  - **4. Thematic Note Writing:** Select a themed card and compose an unrestricted heartfelt note.
+  - **5. Dispatch & Interactive Unfolding:** The final bouquet arrives with a miniature attached note; tapping the note unfolds it into a full, readable letter view.
 
 ---
 

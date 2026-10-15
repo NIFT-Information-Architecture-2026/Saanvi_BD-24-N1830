@@ -30,11 +30,11 @@ Most communication tools treat messages as **disposable transactions** (sent, se
 ## 3. Materiality & Aesthetic Direction
 
 ### Tactile References
-- **Folded Parchment & Envelopes:** Origami-inspired folds, sliding panels, delicate paper grain.
-- **Botanical Pressings:** The quiet nostalgia of discovering a dried clover or pressed flower inside an old linen-bound book.
-- **Handwritten Details:** Marginalia, ink stamps, physical labels, subtle paper creases.
-- **Hidden Compartments:** Drawers that pull out quietly, layered envelopes, two-sided cards.
-- **Visual Tone:** Warm muted neutrals, archival paper tones, botanical pigments, refined typography with human handwriting accents. No bubblegum romanticism.
+- **Folded Parchment & Envelopes:** Curated physical paper textures, origami folds, wax seals, authentic tactile raster references (strictly avoiding flat, cartoonish vector animations).
+- **Botanical Stems & Bare-Stem Floristry:** The organic, bare-stem beauty of freshly gathered flowers and foliage pressed or tied together without synthetic plastic wrappings.
+- **Handwritten Details:** Epistolary stationery themes, ink stamps, physical labels, subtle paper creases, parallel slanted handwriting.
+- **Physical Packaging Vessels:** Tactile paper envelopes, floral keepsake boxes, and vintage delivery vehicles.
+- **Visual Tone:** Warm muted neutrals, archival paper tones, botanical pigments, refined typography with human handwriting accents. No bubblegum romanticism or sterile vector graphics.
 
 ---
 
@@ -109,8 +109,8 @@ stateDiagram-v2
 ## 7. The Four Experience Pillars
 
 ### Pillar 1: Make & Send (The Studio)
-- Expressive craft canvas: handwritten letters, digital postcards, botanical arrangements, audio notes.
-- Focus on personal nuance over generic digital cards.
+- Expressive craft canvas: 5-theme handwritten letters, digital postcards with 20 fonts, bare-stem botanical arrangements with expandable note tags, and bi-fold greeting cards.
+- Focus on personal nuance, physical materiality, and tactile delivery packaging (strictly visual and written; zero audio clutter).
 
 ### Pillar 2: Keep (The Vaults)
 - Dual private vaults + one shared cabinet.
