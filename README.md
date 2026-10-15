@@ -77,13 +77,31 @@ Gifts are never simply dispatched via an instant send button. Senders package th
 
 ---
 
-## 6. Project Documentation Index
+## 6. Repository Structure & Documentation Index
 
-- [`PROJECT_BRIEF.md`](./PROJECT_BRIEF.md): Core axioms, precedent & anti-pattern audits, data sovereignty, and experience pillars.
-- [`UX_RESEARCH.md`](./UX_RESEARCH.md): Relational elasticity archetypes, empathy mapping, and dual-actor asynchronous journey.
-- [`IA_SPEC.md`](./IA_SPEC.md): Object-Oriented UX (OOUX) taxonomy, sitemap, and Master Shelf vs. Narrative Scrapbook architecture.
-- [`WIREFRAMES.md`](./WIREFRAMES.md): Choreographed task flows, screen schematics, and spatial ASCII wireframes.
-- [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md): Materiality tokens, color palettes, typography scales, and studio artifact configuration matrix.
-- [`CASE_STUDY.md`](./CASE_STUDY.md): Academic graduation project case study for Fashion Communication, NIFT Hyderabad.
-- [`Instructions.md`](./Instructions.md): Collaboration contract and operational rules.
+```
+├── app/                  # Web Atelier interactive prototype
+│   ├── index.html        # Main atelier interface & 4 rooms
+│   ├── style.css         # Visual design tokens & layout
+│   ├── app.js            # Atelier interaction logic & state
+│   └── assets/           # Curated physical imagery, stamps & themes
+├── docs/                 # Formal academic & UX documentation
+│   ├── PROJECT_BRIEF.md  # Core axioms, precedent audit & experience pillars
+│   ├── UX_RESEARCH.md    # Relational archetypes & asynchronous journey
+│   ├── IA_SPEC.md        # OOUX taxonomy & Master Shelf vs Scrapbook
+│   ├── WIREFRAMES.md     # Task flows & spatial ASCII wireframes
+│   ├── DESIGN_SYSTEM.md  # Materiality tokens & artifact configurations
+│   ├── CASE_STUDY.md     # Academic NIFT graduation project case study
+│   └── Instructions.md   # Collaboration contract & operational rules
+└── README.md             # Master project overview (Root)
+```
+
+- **Interactive Prototype:** Located in [`app/`](./app/) ([`index.html`](./app/index.html))
+- [`PROJECT_BRIEF.md`](./docs/PROJECT_BRIEF.md): Core axioms, precedent & anti-pattern audits, data sovereignty, and experience pillars.
+- [`UX_RESEARCH.md`](./docs/UX_RESEARCH.md): Relational elasticity archetypes, empathy mapping, and dual-actor asynchronous journey.
+- [`IA_SPEC.md`](./docs/IA_SPEC.md): Object-Oriented UX (OOUX) taxonomy, sitemap, and Master Shelf vs. Narrative Scrapbook architecture.
+- [`WIREFRAMES.md`](./docs/WIREFRAMES.md): Choreographed task flows, screen schematics, and spatial ASCII wireframes.
+- [`DESIGN_SYSTEM.md`](./docs/DESIGN_SYSTEM.md): Materiality tokens, color palettes, typography scales, and studio artifact configuration matrix.
+- [`CASE_STUDY.md`](./docs/CASE_STUDY.md): Academic graduation project case study for Fashion Communication, NIFT Hyderabad.
+- [`Instructions.md`](./docs/Instructions.md): Collaboration contract and operational rules.
 
