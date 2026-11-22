@@ -626,6 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const unfoldedTo = document.getElementById('unfolded-to');
   const unfoldedFrom = document.getElementById('unfolded-from');
   const unfoldedNoteBodyText = document.getElementById('unfolded-note-body-text');
+  const bareStemStage = document.getElementById('bare-stem-stage');
 
   // Step Switcher
   function setBouquetStep(stepKey) {
@@ -637,6 +638,12 @@ document.addEventListener('DOMContentLoaded', () => {
         bqPanels[key].style.display = key === stepKey ? 'block' : 'none';
       }
     });
+    if (bareStemStage) {
+      bareStemStage.classList.toggle('step-arrange-active', stepKey === 'arrange');
+    }
+    if (stepKey === 'arrange') {
+      renderStemOrderStrip();
+    }
   }
 
   bStepBtns.forEach(btn => {
@@ -689,6 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.bouquet.flowers.push({ flower: flowerName, file: flowerFile });
     updateStemCardsUI();
     renderBouquetPreview();
+    if (state.bouquet.step === 'arrange') renderStemOrderStrip();
   }
 
   function removeStem(flowerName) {
@@ -697,6 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
       state.bouquet.flowers.splice(idx, 1);
       updateStemCardsUI();
       renderBouquetPreview();
+      if (state.bouquet.step === 'arrange') renderStemOrderStrip();
     }
   }
 
@@ -752,6 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
         [state.bouquet.flowers[i], state.bouquet.flowers[j]] = [state.bouquet.flowers[j], state.bouquet.flowers[i]];
       }
       renderBouquetPreview(true);
+      renderStemOrderStrip();
     });
   }
 
@@ -759,6 +769,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnClearStems.addEventListener('click', () => {
       state.bouquet.shuffleSeed = 1;
       renderBouquetPreview();
+      renderStemOrderStrip();
     });
   }
 
@@ -830,7 +841,104 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Bare-Stem Bouquet Rendering Engine (Side-by-Side with Interleaved Greenery)
+  // Step 2 Direct Hand Tool: Pointer Drag & Reordering
+  let activeDragIndex = -1;
+  let dragStartX = 0;
+  let dragHasMoved = false;
+
+  function attachStemDragHandlers(stemEl, index, baseTransform, total) {
+    stemEl.addEventListener('pointerdown', (e) => {
+      if (state.bouquet.step !== 'arrange') return;
+      e.preventDefault();
+      activeDragIndex = index;
+      dragStartX = e.clientX;
+      dragHasMoved = false;
+      stemEl.classList.add('is-dragging');
+      try {
+        stemEl.setPointerCapture(e.pointerId);
+      } catch (err) {}
+    });
+
+    stemEl.addEventListener('pointermove', (e) => {
+      if (activeDragIndex !== index) return;
+      const deltaX = e.clientX - dragStartX;
+      if (Math.abs(deltaX) > 3) dragHasMoved = true;
+      stemEl.style.transform = `${baseTransform} translateX(${deltaX}px) scale(1.08)`;
+    });
+
+    const onPointerDone = (e) => {
+      if (activeDragIndex !== index) return;
+      stemEl.classList.remove('is-dragging');
+      try {
+        stemEl.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+
+      if (dragHasMoved && bareStemStage) {
+        const stageRect = bareStemStage.getBoundingClientRect();
+        const stageCenterX = stageRect.left + (stageRect.width / 2);
+        const relX = e.clientX - stageCenterX; // relative px offset from center (-90 to +90)
+        const fanHalfWidth = 85;
+        const normalized = Math.max(0, Math.min(1, (relX + fanHalfWidth) / (fanHalfWidth * 2)));
+        let targetIndex = Math.round(normalized * (total - 1));
+        targetIndex = Math.max(0, Math.min(total - 1, targetIndex));
+
+        if (targetIndex !== index) {
+          const [movedItem] = state.bouquet.flowers.splice(index, 1);
+          state.bouquet.flowers.splice(targetIndex, 0, movedItem);
+          renderBouquetPreview(true);
+          renderStemOrderStrip();
+        } else {
+          stemEl.style.transform = baseTransform;
+        }
+      } else {
+        stemEl.style.transform = baseTransform;
+      }
+      activeDragIndex = -1;
+      dragHasMoved = false;
+    };
+
+    stemEl.addEventListener('pointerup', onPointerDone);
+    stemEl.addEventListener('pointercancel', onPointerDone);
+  }
+
+  // Interactive Reorder Strip in Step 2 Panel
+  function renderStemOrderStrip() {
+    const stripEl = document.getElementById('stem-reorder-strip');
+    if (!stripEl) return;
+    stripEl.innerHTML = '';
+    state.bouquet.flowers.forEach((item, idx) => {
+      const pill = document.createElement('div');
+      pill.className = 'stem-reorder-pill';
+      pill.innerHTML = `
+        <button type="button" class="stem-reorder-arrow btn-nudge-left" title="Move Left" ${idx === 0 ? 'disabled' : ''}>‹</button>
+        <img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-reorder-thumb">
+        <span class="stem-reorder-name">${idx + 1}. ${item.flower}</span>
+        <button type="button" class="stem-reorder-arrow btn-nudge-right" title="Move Right" ${idx === state.bouquet.flowers.length - 1 ? 'disabled' : ''}>›</button>
+      `;
+
+      pill.querySelector('.btn-nudge-left')?.addEventListener('click', () => {
+        if (idx > 0) {
+          const [moved] = state.bouquet.flowers.splice(idx, 1);
+          state.bouquet.flowers.splice(idx - 1, 0, moved);
+          renderBouquetPreview(true);
+          renderStemOrderStrip();
+        }
+      });
+
+      pill.querySelector('.btn-nudge-right')?.addEventListener('click', () => {
+        if (idx < state.bouquet.flowers.length - 1) {
+          const [moved] = state.bouquet.flowers.splice(idx, 1);
+          state.bouquet.flowers.splice(idx + 1, 0, moved);
+          renderBouquetPreview(true);
+          renderStemOrderStrip();
+        }
+      });
+
+      stripEl.appendChild(pill);
+    });
+  }
+
+  // Bare-Stem Bouquet Rendering Engine (Gathered at Base Twine, Fan Arc with Interleaved Greenery)
   function renderBouquetPreview(animated = false) {
     const total = state.bouquet.flowers.length;
 
@@ -846,63 +954,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const seed = state.bouquet.shuffleSeed;
 
-    // 1. Interleaved Greenery (Positioned in intermediate niches BETWEEN flowers)
+    // 1. Interleaved Greenery (Gathered at central base, fanning out in intermediate niches)
     if (greeneryLayer) {
       greeneryLayer.innerHTML = '';
 
       const greenerySlots = {
-        eucalyptus: { slotRatio: 0.18, angle: -18, yOffset: -18, zIdx: 5 },
-        fern:       { slotRatio: 0.38, angle: -8,  yOffset: -24, zIdx: 6 },
-        olive:      { slotRatio: 0.62, angle: +8,  yOffset: -22, zIdx: 6 },
-        ruscus:     { slotRatio: 0.82, angle: +18, yOffset: -18, zIdx: 5 }
+        eucalyptus: { angle: -30, yOffset: -10, zIdx: 6, shiftX: -5 },
+        fern:       { angle: -12, yOffset: -18, zIdx: 8, shiftX: -2 },
+        olive:      { angle: +12, yOffset: -16, zIdx: 8, shiftX: +2 },
+        ruscus:     { angle: +30, yOffset: -10, zIdx: 6, shiftX: +5 }
       };
 
       state.bouquet.greenery.forEach(foliage => {
-        const config = greenerySlots[foliage] || { slotRatio: 0.5, angle: 0, yOffset: -20, zIdx: 5 };
-        const slotX = -115 + (230 * config.slotRatio);
-        const jitterX = Math.sin(seed * 9 + config.slotRatio * 17) * 4;
-        const finalSlotX = Math.round(slotX + jitterX);
-        const finalAngle = Math.round(config.angle + Math.sin(seed * 7 + config.slotRatio * 13) * 3);
-        const finalY = Math.round(config.yOffset + Math.sin(seed * 13 + config.slotRatio * 19) * 4);
+        const config = greenerySlots[foliage] || { angle: 0, yOffset: -14, zIdx: 7, shiftX: 0 };
+        const finalAngle = Math.round(config.angle + Math.sin(seed * 7) * 2);
+        const finalY = Math.round(config.yOffset + Math.sin(seed * 13) * 3);
 
         const item = document.createElement('div');
         item.className = `greenery-item greenery-${foliage}`;
-        item.style.left = `calc(50% + ${finalSlotX}px)`;
+        item.style.left = `calc(50% + ${config.shiftX}px)`;
         item.style.transform = `rotate(${finalAngle}deg) translateY(${finalY}px)`;
         item.style.zIndex = config.zIdx;
-        item.innerHTML = `<img src="assets/greenery/${foliage}.svg" alt="${foliage}">`;
+        item.innerHTML = `<img src="assets/greenery/${foliage}.svg" alt="${foliage}" draggable="false">`;
         greeneryLayer.appendChild(item);
       });
     }
 
-    // 2. Flower Stems Cluster (Positioned BESIDE one another, staggered heights)
+    // 2. Flower Stems Cluster (Gathered together at jute band base, fanned side-by-side at top)
     if (stemsBloomCluster) {
       stemsBloomCluster.innerHTML = '';
 
       state.bouquet.flowers.forEach((item, i) => {
         const t = total > 1 ? (i / (total - 1)) : 0.5;
-        const centerOffset = total > 1 ? -110 + (220 * t) : 0;
-        const baseAngle = total > 1 ? -16 + (32 * t) : 0;
 
-        const arch = total > 1 ? Math.sin(t * Math.PI) * 16 : 0;
-        const tier = (i % 2 === 0 ? 8 : -10);
-        const staggerY = -arch + tier;
+        // Fanning angles: -28deg on far left to +28deg on far right
+        const maxAngle = total > 1 ? Math.min(28, 18 + total * 1.4) : 0;
+        const baseAngle = total > 1 ? -maxAngle + (2 * maxAngle * t) : 0;
 
-        const jitterX = Math.sin(seed * 11 + i * 5.3) * 4;
-        const jitterAngle = Math.sin(seed * 7 + i * 4.1) * 2.5;
-        const jitterY = Math.sin(seed * 17 + i * 7.1) * 4;
+        // Natural dome arch: center stems stand slightly higher
+        const domeArch = total > 1 ? Math.sin(t * Math.PI) * 16 : 0;
+        // Alternating tier offset ensures adjacent bloom heads sit beside each other without burying each other
+        const tierY = (i % 2 === 0 ? 0 : 8);
+        const finalY = Math.round(-domeArch + tierY);
 
-        const finalX = Math.round(centerOffset + jitterX);
+        // All stem bottoms are gathered together inside the 46px tie band at the center base
+        // baseShiftX gives a tiny, natural 8-12px bundle spread so stems pack snugly inside the band
+        const bundleSpread = Math.min(12, total * 1.8);
+        const baseShiftX = Math.round((t - 0.5) * bundleSpread);
+
+        // Jitter for organic botanical naturalness
+        const jitterAngle = Number((Math.sin(seed * 7 + i * 4.1) * 1.5).toFixed(1));
+        const jitterY = Math.round(Math.sin(seed * 17 + i * 7.1) * 3);
+
         const finalAngle = (baseAngle + jitterAngle).toFixed(1);
-        const finalY = Math.round(staggerY + jitterY);
-        const zIdx = (i % 2 === 0 ? 4 : 7);
+        const totalY = finalY + jitterY;
+
+        // Z-Index: outer stems layer behind, center stems layer forward, all under tie band (z-index 25)
+        const zIdx = 10 + Math.round(Math.sin(t * Math.PI) * 5) + (i % 2 === 0 ? 1 : 2);
 
         const stemEl = document.createElement('div');
         stemEl.className = 'stem-flower-item';
-        stemEl.style.left = `calc(50% + ${finalX}px)`;
-        stemEl.style.transform = `rotate(${finalAngle}deg) translateY(${finalY}px)`;
+        stemEl.dataset.stemIndex = i;
+        stemEl.dataset.flower = item.flower;
+        stemEl.title = `${item.flower} (Stem ${i + 1} of ${total} - Drag in Step 2 to rearrange)`;
+        stemEl.style.left = `calc(50% + ${baseShiftX}px)`;
+        stemEl.style.transform = `rotate(${finalAngle}deg) translateY(${totalY}px)`;
         stemEl.style.zIndex = zIdx;
-        stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img">`;
+        stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img" draggable="false">`;
+
+        // Attach Step 2 Hand Tool drag handlers
+        const baseTransform = `rotate(${finalAngle}deg) translateY(${totalY}px)`;
+        attachStemDragHandlers(stemEl, i, baseTransform, total);
+
         stemsBloomCluster.appendChild(stemEl);
       });
     }
@@ -1281,5 +1404,29 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  // URL Param direct deep-linking (e.g. ?nosplash=1&medium=bouquet&step=arrange)
+  try {
+    const rawQuery = window.location.search || (window.location.href.includes('?') ? window.location.href.slice(window.location.href.indexOf('?')) : '');
+    const urlParams = new URLSearchParams(rawQuery);
+    if (urlParams.has('nosplash') || urlParams.has('medium') || window.location.href.includes('nosplash')) {
+      if (splashScreen) splashScreen.style.display = 'none';
+      if (appHeader) appHeader.style.display = 'flex';
+      if (appStage) appStage.style.display = 'block';
+      if (appBottomNav) appBottomNav.style.display = 'flex';
+    }
+    const paramMedium = urlParams.get('medium') || (window.location.href.includes('medium=bouquet') ? 'bouquet' : null);
+    if (paramMedium && canvases[paramMedium]) {
+      state.activeMedium = paramMedium;
+      mediumCards.forEach(c => c.classList.toggle('active', c.dataset.medium === paramMedium));
+      Object.keys(canvases).forEach(key => {
+        if (canvases[key]) canvases[key].style.display = key === paramMedium ? 'block' : 'none';
+      });
+    }
+    const paramStep = urlParams.get('step') || (window.location.href.includes('step=arrange') ? 'arrange' : null);
+    if (paramStep && typeof setBouquetStep === 'function') {
+      setBouquetStep(paramStep);
+    }
+  } catch (err) {}
 
 });

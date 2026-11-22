@@ -1089,7 +1089,7 @@ body {
 .bare-stem-stage {
   position: relative;
   width: 100%;
-  height: 270px;
+  height: 280px;
   background: radial-gradient(circle at 50% 68%, #FFFDFB 0%, #F9ECEF 100%);
   border: 1px solid var(--paper-border);
   border-radius: var(--radius-md);
@@ -1099,7 +1099,30 @@ body {
   justify-content: center;
 }
 
-/* Greenery Layer (Interleaved between stems) */
+/* Step 2: Hand Tool active on stage and stems */
+.bare-stem-stage.step-arrange-active {
+  cursor: grab;
+}
+.bare-stem-stage.step-arrange-active .stems-bloom-cluster {
+  pointer-events: auto;
+}
+.bare-stem-stage.step-arrange-active .stem-flower-item {
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+.bare-stem-stage.step-arrange-active .stem-flower-item:hover {
+  cursor: grab;
+  filter: drop-shadow(0 2px 8px rgba(82, 19, 25, 0.22)) brightness(1.02);
+}
+.bare-stem-stage.step-arrange-active .stem-flower-item.is-dragging {
+  cursor: grabbing !important;
+  z-index: 60 !important;
+  filter: drop-shadow(0 6px 16px rgba(82, 19, 25, 0.35)) scale(1.06) !important;
+  transition: none !important;
+}
+
+/* Greenery Layer (Gathered at central base, interleaved between stems) */
 .greenery-layer {
   position: absolute;
   top: 0;
@@ -1111,39 +1134,42 @@ body {
 }
 .greenery-item {
   position: absolute;
-  bottom: 24px;
-  transform-origin: 50% 95%;
+  bottom: 12px;
+  left: 50%;
+  transform-origin: 50% 88%;
   pointer-events: none;
   opacity: 0.92;
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .greenery-eucalyptus {
-  width: 85px;
-  height: 175px;
-  margin-left: -42.5px;
-}
-.greenery-ruscus {
-  width: 80px;
-  height: 170px;
-  margin-left: -40px;
-}
-.greenery-fern {
   width: 90px;
-  height: 185px;
+  height: 195px;
   margin-left: -45px;
 }
-.greenery-olive {
+.greenery-ruscus {
   width: 85px;
-  height: 170px;
+  height: 190px;
   margin-left: -42.5px;
+}
+.greenery-fern {
+  width: 95px;
+  height: 200px;
+  margin-left: -47.5px;
+}
+.greenery-olive {
+  width: 90px;
+  height: 190px;
+  margin-left: -45px;
 }
 .greenery-item img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
 }
 
-/* Stems Blooms Cluster Layer */
+/* Stems Blooms Cluster Layer (Gathered at jute tie band base, fanning out at top) */
 .stems-bloom-cluster {
   position: absolute;
   top: 0;
@@ -1154,37 +1180,42 @@ body {
 }
 .stem-flower-item {
   position: absolute;
-  bottom: 24px;
-  width: 100px;
-  height: 185px;
-  margin-left: -50px;
-  transform-origin: 50% 95%;
+  bottom: 12px;
+  left: 50%;
+  width: 105px;
+  height: 205px;
+  margin-left: -52.5px;
+  transform-origin: 50% 88%;
   pointer-events: none;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), left 0.4s ease, opacity 0.3s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
 }
 .stem-flower-item img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   pointer-events: none;
+  -webkit-user-drag: none;
 }
 
-/* Stem Tie Band (Natural Jute Twine) */
+/* Stem Tie Band (Natural Jute Twine - wraps firmly over all stem sticks) */
 .stem-tie-band {
   position: absolute;
-  bottom: 18px;
+  bottom: 22px;
   left: 50%;
   transform: translateX(-50%);
-  width: 48px;
-  height: 16px;
+  width: 46px;
+  height: 18px;
   background: #C4A47C;
   border-radius: 3px;
   border: 1px solid #9C7A53;
-  z-index: 5;
+  z-index: 25;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 .stem-tie-band::before {
   content: '';
@@ -1192,7 +1223,7 @@ body {
   width: 100%;
   height: 2px;
   background: #937149;
-  top: 6px;
+  top: 7px;
 }
 .stem-tie-band::after {
   content: '🎀';
@@ -1202,13 +1233,13 @@ body {
   opacity: 0.85;
 }
 
-/* Tucked Miniature Note (Tucked at stems origin) */
+/* Tucked Miniature Note (Tucked into twine above tie band) */
 .tucked-mini-note {
   position: absolute;
-  bottom: 30px;
-  left: calc(50% + 8px);
+  bottom: 34px;
+  left: calc(50% + 6px);
   transform: rotate(8deg);
-  z-index: 8;
+  z-index: 26;
   cursor: pointer;
   background: #FFFDF8;
   border: 1px solid #D8C29C;
@@ -1448,6 +1479,72 @@ body {
   line-height: 1.35;
   text-align: center;
   margin: 4px 0 8px;
+}
+
+/* Manual Stem Reorder Strip in Step 2 */
+.stem-reorder-strip-container {
+  margin: 8px 0 10px;
+  padding: 8px 10px;
+  background: var(--paper-cloud);
+  border: 1px dashed var(--paper-border);
+  border-radius: var(--radius-sm);
+}
+.stem-reorder-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.stem-reorder-strip {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  padding-bottom: 3px;
+}
+.stem-reorder-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FFFFFF;
+  border: 1px solid var(--paper-border);
+  border-radius: 12px;
+  padding: 3px 6px;
+  white-space: nowrap;
+  font-size: 10.5px;
+  color: var(--ink-maroon);
+}
+.stem-reorder-thumb {
+  width: 16px;
+  height: 20px;
+  object-fit: contain;
+}
+.stem-reorder-name {
+  font-weight: 500;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stem-reorder-arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 1px 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--ink-muted);
+  border-radius: 3px;
+  line-height: 1;
+}
+.stem-reorder-arrow:hover {
+  background: var(--paper-babypink);
+  color: var(--ink-maroon);
+}
+.stem-reorder-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
 }
 
 /* Step 3: Greenery Selector */
