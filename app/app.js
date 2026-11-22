@@ -21,10 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
       seal: 'gold'
     },
     bouquet: {
-      mode: 'bespoke',
-      flowers: ['Dahlia', 'Peony', "Baby's Breath"],
-      wrap: 'wrap-kraft',
-      ribbon: 'ribbon-silk'
+      step: 'stems',
+      flowers: [
+        { flower: 'Rose', file: 'rose.jpg' },
+        { flower: 'Peony', file: 'peony.jpg' },
+        { flower: "Baby's Breath", file: 'babys_breath.jpg' }
+      ],
+      greenery: ['eucalyptus', 'olive'],
+      noteTheme: 'cream',
+      noteTo: 'Kabir',
+      noteFrom: 'Saanvi',
+      noteBody: 'A little botanical bouquet handpicked just for you.',
+      shuffleSeed: 1
     },
     greetingCard: {
       size: 'standard',
@@ -587,123 +595,238 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ================= 3. BOUQUET WORKSPACE =================
-  const btnTabBespoke = document.getElementById('btn-tab-bespoke');
-  const btnTabReadymade = document.getElementById('btn-tab-readymade');
-  const bespokeView = document.getElementById('bouquet-bespoke-view');
-  const readymadeView = document.getElementById('bouquet-readymade-view');
+  // ================= 3. BOUQUET WORKSPACE (DIGIBOUQUET BARE-STEM) =================
+  const bStepBtns = document.querySelectorAll('.b-step-btn');
+  const bqPanels = {
+    stems: document.getElementById('bq-panel-stems'),
+    arrange: document.getElementById('bq-panel-arrange'),
+    greenery: document.getElementById('bq-panel-greenery'),
+    note: document.getElementById('bq-panel-note')
+  };
+  const bqStemCountEl = document.getElementById('bq-stem-count');
   const bloomCards = document.querySelectorAll('.bloom-card');
+  const btnReshuffleStems = document.getElementById('btn-reshuffle-stems');
+  const btnClearStems = document.getElementById('btn-clear-stems');
+  const greeneryCards = document.querySelectorAll('.greenery-card');
+  const greeneryLayer = document.getElementById('greenery-layer');
   const stemsBloomCluster = document.getElementById('stems-bloom-cluster');
-  const bouquetWrapFrame = document.getElementById('bouquet-wrap-frame');
-  const bouquetRibbonNode = document.getElementById('bouquet-ribbon-node');
-  const wrapSwatchBtns = document.querySelectorAll('.wrap-swatch-btn');
-  const ribbonSwatchBtns = document.querySelectorAll('.ribbon-swatch-btn');
-  const readymadeGrid = document.getElementById('readymade-sets-grid');
+  const stemTieBand = document.getElementById('stem-tie-band');
+  const tuckedMiniNote = document.getElementById('tucked-mini-note');
+  const miniNotePreviewText = document.getElementById('mini-note-preview-text');
+  const noteThemeChips = document.querySelectorAll('.note-theme-chip');
+  const bouquetNoteEditor = document.getElementById('bouquet-note-card-editor');
+  const bouquetToInput = document.getElementById('bouquet-to-input');
+  const bouquetFromInput = document.getElementById('bouquet-from-input');
+  const bouquetNoteBody = document.getElementById('bouquet-note-body');
+  const unfoldedOverlay = document.getElementById('bouquet-unfolded-note-overlay');
+  const unfoldedCard = document.getElementById('unfolded-note-card');
+  const btnCloseUnfoldedNote = document.getElementById('btn-close-unfolded-note');
+  const unfoldedTo = document.getElementById('unfolded-to');
+  const unfoldedFrom = document.getElementById('unfolded-from');
+  const unfoldedNoteBodyText = document.getElementById('unfolded-note-body-text');
 
-  // Mode Toggles
-  if (btnTabBespoke && btnTabReadymade) {
-    btnTabBespoke.addEventListener('click', () => {
-      btnTabBespoke.classList.add('active');
-      btnTabReadymade.classList.remove('active');
-      bespokeView.style.display = 'block';
-      readymadeView.style.display = 'none';
-      state.bouquet.mode = 'bespoke';
-    });
-
-    btnTabReadymade.addEventListener('click', () => {
-      btnTabReadymade.classList.add('active');
-      btnTabBespoke.classList.remove('active');
-      bespokeView.style.display = 'none';
-      readymadeView.style.display = 'block';
-      state.bouquet.mode = 'readymade';
+  // Step Switcher
+  function setBouquetStep(stepKey) {
+    if (!bqPanels[stepKey]) return;
+    state.bouquet.step = stepKey;
+    bStepBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.step === stepKey));
+    Object.keys(bqPanels).forEach(key => {
+      if (bqPanels[key]) {
+        bqPanels[key].style.display = key === stepKey ? 'block' : 'none';
+      }
     });
   }
 
-  // 15 Blooms Selection
-  const flowerEmojis = {
-    'Dahlia': '🌺', 'Tulip': '🌷', 'Gardenia': '🌼', 'Peony': '🌸', 'Lily': '🪷',
-    'Orchid': '💮', 'Rose': '🌹', 'Sunflower': '🌻', 'Lilac': '🪻', "Baby's Breath": '🌾',
-    'Hydrangea': '💐', 'Snapdragon': '🌿', 'Japanese Anemones': '🥀',
-    'Persian Buttercup': '🏵️', 'Foxglove': '🌱'
-  };
+  bStepBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setBouquetStep(btn.dataset.step);
+    });
+  });
 
+  // Next / Back Navigation buttons
+  document.querySelectorAll('.bq-next-btn, .bq-back-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      if (target) setBouquetStep(target);
+    });
+  });
+
+  const bqBtnDoneNote = document.getElementById('bq-btn-done-note');
+  if (bqBtnDoneNote) {
+    bqBtnDoneNote.addEventListener('click', () => {
+      const btnVesselSelect = document.getElementById('btn-vessel-select');
+      if (btnVesselSelect) {
+        btnVesselSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+
+  // Step 1: Flower Selection (Max 9 stems)
   bloomCards.forEach(card => {
     card.addEventListener('click', () => {
-      card.classList.toggle('selected');
-      const flower = card.dataset.flower;
-      const idx = state.bouquet.flowers.indexOf(flower);
-      if (idx > -1) {
-        state.bouquet.flowers.splice(idx, 1);
+      const flowerName = card.dataset.flower;
+      const flowerFile = card.dataset.file;
+      const existingIdx = state.bouquet.flowers.findIndex(f => f.flower === flowerName);
+
+      if (existingIdx > -1) {
+        state.bouquet.flowers.splice(existingIdx, 1);
+        card.classList.remove('selected');
       } else {
-        state.bouquet.flowers.push(flower);
+        if (state.bouquet.flowers.length >= 9) {
+          alert('A bouquet holds up to 9 botanical stems. Unselect one to add a new flower.');
+          return;
+        }
+        state.bouquet.flowers.push({ flower: flowerName, file: flowerFile });
+        card.classList.add('selected');
+      }
+      updateStemCountDisplay();
+      renderBouquetPreview();
+    });
+  });
+
+  function updateStemCountDisplay() {
+    if (bqStemCountEl) {
+      bqStemCountEl.textContent = `${state.bouquet.flowers.length} / 9 stems`;
+    }
+  }
+
+  // Step 2: Arrange & Reshuffle Composition
+  if (btnReshuffleStems) {
+    btnReshuffleStems.addEventListener('click', () => {
+      state.bouquet.shuffleSeed += 1;
+      for (let i = state.bouquet.flowers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [state.bouquet.flowers[i], state.bouquet.flowers[j]] = [state.bouquet.flowers[j], state.bouquet.flowers[i]];
+      }
+      renderBouquetPreview(true);
+    });
+  }
+
+  if (btnClearStems) {
+    btnClearStems.addEventListener('click', () => {
+      state.bouquet.shuffleSeed = 1;
+      renderBouquetPreview();
+    });
+  }
+
+  // Step 3: Greenery Selector
+  greeneryCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const foliage = card.dataset.greenery;
+      const idx = state.bouquet.greenery.indexOf(foliage);
+      if (idx > -1) {
+        state.bouquet.greenery.splice(idx, 1);
+        card.classList.remove('selected');
+      } else {
+        state.bouquet.greenery.push(foliage);
+        card.classList.add('selected');
       }
       renderBouquetPreview();
     });
   });
 
-  function renderBouquetPreview() {
-    if (!stemsBloomCluster) return;
-    stemsBloomCluster.innerHTML = '';
-    state.bouquet.flowers.forEach(f => {
-      const span = document.createElement('span');
-      span.className = 'cluster-flower';
-      span.innerText = flowerEmojis[f] || '🌸';
-      stemsBloomCluster.appendChild(span);
+  // Step 4: Card Themes & Note
+  noteThemeChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      noteThemeChips.forEach(c => c.classList.toggle('active', c === chip));
+      const theme = chip.dataset.theme;
+      state.bouquet.noteTheme = theme;
+      if (bouquetNoteEditor) bouquetNoteEditor.setAttribute('data-theme', theme);
+      if (unfoldedCard) unfoldedCard.setAttribute('data-theme', theme);
+    });
+  });
+
+  function syncNoteDetails() {
+    if (bouquetToInput) state.bouquet.noteTo = bouquetToInput.value;
+    if (bouquetFromInput) state.bouquet.noteFrom = bouquetFromInput.value;
+    if (bouquetNoteBody) state.bouquet.noteBody = bouquetNoteBody.value;
+
+    if (unfoldedTo) unfoldedTo.textContent = `To: ${state.bouquet.noteTo || 'Kabir'}`;
+    if (unfoldedFrom) unfoldedFrom.textContent = `From: ${state.bouquet.noteFrom || 'Saanvi'}`;
+    if (unfoldedNoteBodyText) unfoldedNoteBodyText.textContent = state.bouquet.noteBody || 'A little botanical bouquet handpicked just for you.';
+
+    if (miniNotePreviewText) {
+      miniNotePreviewText.textContent = state.bouquet.noteTo ? `For ${state.bouquet.noteTo}` : 'A little note';
+    }
+  }
+
+  if (bouquetToInput) bouquetToInput.addEventListener('input', syncNoteDetails);
+  if (bouquetFromInput) bouquetFromInput.addEventListener('input', syncNoteDetails);
+  if (bouquetNoteBody) bouquetNoteBody.addEventListener('input', syncNoteDetails);
+
+  // Unfolded Note Modal Actions
+  function openUnfoldedNote() {
+    syncNoteDetails();
+    if (unfoldedCard) unfoldedCard.setAttribute('data-theme', state.bouquet.noteTheme || 'cream');
+    if (unfoldedOverlay) unfoldedOverlay.style.display = 'flex';
+  }
+
+  function closeUnfoldedNote() {
+    if (unfoldedOverlay) unfoldedOverlay.style.display = 'none';
+  }
+
+  if (tuckedMiniNote) {
+    tuckedMiniNote.addEventListener('click', openUnfoldedNote);
+  }
+  if (btnCloseUnfoldedNote) {
+    btnCloseUnfoldedNote.addEventListener('click', closeUnfoldedNote);
+  }
+  if (unfoldedOverlay) {
+    unfoldedOverlay.addEventListener('click', (e) => {
+      if (e.target === unfoldedOverlay) closeUnfoldedNote();
     });
   }
 
-  // 8 Readymade Combinations (6 flower types, 8-9 flowers each)
-  const readymadeSetsData = [
-    { name: 'Dawn Meadow', flowers: ['Dahlia', 'Peony', 'Lily', "Baby's Breath", 'Lilac', 'Gardenia'] },
-    { name: 'Warm Terracotta', flowers: ['Sunflower', 'Rose', 'Persian Buttercup', 'Foxglove', 'Snapdragon', 'Dahlia'] },
-    { name: 'Quiet Solace', flowers: ['Lily', 'Orchid', 'Gardenia', "Baby's Breath", 'Tulip', 'Hydrangea'] },
-    { name: 'Nostalgic Tea', flowers: ['Peony', 'Lilac', 'Japanese Anemones', 'Rose', 'Lily', "Baby's Breath"] },
-    { name: 'Linen & Moss', flowers: ['Snapdragon', 'Foxglove', 'Hydrangea', 'Gardenia', 'Tulip', 'Lily'] },
-    { name: 'Midnight Bloom', flowers: ['Japanese Anemones', 'Dahlia', 'Rose', 'Orchid', 'Persian Buttercup', 'Lilac'] },
-    { name: 'Spring Gentle', flowers: ['Tulip', 'Peony', 'Gardenia', 'Hydrangea', "Baby's Breath", 'Sunflower'] },
-    { name: 'Archival Flora', flowers: ['Foxglove', 'Dahlia', 'Lilac', 'Rose', 'Snapdragon', 'Persian Buttercup'] }
-  ];
-
-  if (readymadeGrid) {
-    readymadeGrid.innerHTML = '';
-    readymadeSetsData.forEach((set, i) => {
-      const card = document.createElement('div');
-      card.className = 'set-card';
-      card.innerHTML = `
-        <h5>0${i+1}. ${set.name}</h5>
-        <p>${set.flowers.slice(0, 4).join(', ')} & more</p>
-      `;
-      card.addEventListener('click', () => {
-        state.bouquet.flowers = [...set.flowers];
-        bloomCards.forEach(c => {
-          c.classList.toggle('selected', set.flowers.includes(c.dataset.flower));
-        });
-        renderBouquetPreview();
-        btnTabBespoke.click(); // Switch back to view preview
+  // Bare-Stem Bouquet Rendering Engine
+  function renderBouquetPreview(animated = false) {
+    // 1. Greenery Layer
+    if (greeneryLayer) {
+      greeneryLayer.innerHTML = '';
+      state.bouquet.greenery.forEach(foliage => {
+        const item = document.createElement('div');
+        item.className = `greenery-item greenery-${foliage}`;
+        item.innerHTML = `<img src="assets/greenery/${foliage}.svg" alt="${foliage}">`;
+        greeneryLayer.appendChild(item);
       });
-      readymadeGrid.appendChild(card);
-    });
+    }
+
+    // 2. Flower Stems Cluster
+    if (stemsBloomCluster) {
+      stemsBloomCluster.innerHTML = '';
+      const total = state.bouquet.flowers.length;
+
+      if (total === 0) {
+        if (stemTieBand) stemTieBand.style.display = 'none';
+        if (tuckedMiniNote) tuckedMiniNote.style.display = 'none';
+      } else {
+        if (stemTieBand) stemTieBand.style.display = 'flex';
+        if (tuckedMiniNote) tuckedMiniNote.style.display = 'block';
+
+        state.bouquet.flowers.forEach((item, i) => {
+          let baseAngle = 0;
+          if (total > 1) {
+            baseAngle = -22 + ((44 * i) / (total - 1));
+          }
+          const seed = state.bouquet.shuffleSeed;
+          const jitterAngle = Math.sin(seed * 13 + i * 7.7) * 4;
+          const finalAngle = Math.round((baseAngle + jitterAngle) * 10) / 10;
+          const jitterY = Math.round(Math.sin(seed * 17 + i * 11.3) * 8);
+          const zIdx = 3 + (i % 2 === 0 ? i : (total - i));
+
+          const stemEl = document.createElement('div');
+          stemEl.className = 'stem-flower-item';
+          stemEl.style.transform = `rotate(${finalAngle}deg) translateY(${jitterY}px)`;
+          stemEl.style.zIndex = zIdx;
+          stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img">`;
+          stemsBloomCluster.appendChild(stemEl);
+        });
+      }
+    }
   }
 
-  // Wrapping Paper
-  wrapSwatchBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      wrapSwatchBtns.forEach(b => b.classList.toggle('active', b === btn));
-      const wrapClass = btn.dataset.wrap;
-      state.bouquet.wrap = wrapClass;
-      bouquetWrapFrame.className = `bouquet-wrap-frame ${wrapClass}`;
-    });
-  });
-
-  // Ribbon Tie
-  ribbonSwatchBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      ribbonSwatchBtns.forEach(b => b.classList.toggle('active', b === btn));
-      const ribClass = btn.dataset.ribbon;
-      state.bouquet.ribbon = ribClass;
-      bouquetRibbonNode.className = `bouquet-ribbon-node ${ribClass}`;
-    });
-  });
+  // Initial call to render default bouquet
+  renderBouquetPreview();
+  syncNoteDetails();
 
   // ================= 4. GREETING CARD WORKSPACE =================
   const greetingCardEl = document.getElementById('greeting-card-element');
@@ -999,10 +1122,25 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
     } else if (state.activeMedium === 'bouquet') {
+      const stemCount = state.bouquet.flowers.length;
+      const flowerNames = state.bouquet.flowers.map(f => f.flower).join(' • ');
       html = `
-        <div style="background:#F7F4EE; border:1px solid #DCD7CE; padding:12px; border-radius:4px;">
-          <h4 style="font-family:'Playfair Display', serif; font-size:14px;">Botanical Bouquet</h4>
-          <p style="font-size:12px; color:#736B63; margin-top:4px;">${state.bouquet.flowers.join(' • ')}</p>
+        <div class="revealed-bouquet-presentation" style="background: radial-gradient(circle at 50% 68%, #FFFDFB 0%, #F9ECEF 100%); border: 1px solid var(--paper-border); border-radius: 8px; padding: 14px 10px 10px; text-align: center;">
+          <div style="font-family: var(--font-editorial); font-size: 15px; font-weight: 600; color: var(--ink-maroon); margin-bottom: 2px;">Botanical Bare-Stem Bouquet</div>
+          <p style="font-size: 11px; color: var(--ink-muted); margin-bottom: 8px;">Hand-tied with natural jute twine • ${stemCount} stems</p>
+          <div class="bare-stem-stage" id="modal-revealed-bouquet-stage" style="height: 220px; background: transparent; border: none; margin-bottom: 8px;">
+            <div class="greenery-layer">${document.getElementById('greenery-layer')?.innerHTML || ''}</div>
+            <div class="stems-bloom-cluster">${document.getElementById('stems-bloom-cluster')?.innerHTML || ''}</div>
+            <div class="stem-tie-band"></div>
+            <div class="tucked-mini-note" id="modal-tucked-mini-note" style="cursor:pointer;" title="Tap to unfold note">
+              <div class="mini-note-inner">
+                <span class="mini-note-stamp">💌</span>
+                <span class="mini-note-text">${state.bouquet.noteTo ? 'For ' + state.bouquet.noteTo : 'A note for you'}</span>
+              </div>
+              <div class="mini-note-pulse">Tap to read</div>
+            </div>
+          </div>
+          <div style="font-size: 10px; color: var(--ink-muted); font-style: italic;">Tap the note tucked in the stems to read the full dedication</div>
         </div>
       `;
     } else {
@@ -1016,15 +1154,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     modalRevealedContent.innerHTML = html;
 
+    // Attach click to modal mini note
+    const modalMiniNote = document.getElementById('modal-tucked-mini-note');
+    if (modalMiniNote) {
+      modalMiniNote.addEventListener('click', openUnfoldedNote);
+    }
+
     // Prepend to Keepsake Shelf
     if (shelfItemsGrid) {
       const card = document.createElement('div');
       card.className = 'shelf-item-card';
       const vesselNames = { envelope: '✉️ Envelope', box: '🎁 Keepsake Box', truck: '🚚 Delivery Truck' };
+      const itemTitle = state.activeMedium === 'bouquet' ? `BOTANICAL BOUQUET (${state.bouquet.flowers.length} STEMS)` : state.activeMedium.toUpperCase();
+      const snippet = state.activeMedium === 'bouquet' ? `Hand-tied with ${state.bouquet.flowers.map(f => f.flower).slice(0, 3).join(', ')}...` : "Preserved freshly from today's atelier.";
       card.innerHTML = `
         <div class="item-tag-vessel">${vesselNames[state.vessel]}</div>
-        <h4>${state.activeMedium.toUpperCase()}</h4>
-        <p class="item-snippet">Preserved freshly from today's atelier.</p>
+        <h4>${itemTitle}</h4>
+        <p class="item-snippet">${snippet}</p>
         <div class="item-footer"><span>From: ${fromVal}</span><span>Just now</span></div>
       `;
       shelfItemsGrid.prepend(card);

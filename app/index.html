@@ -515,82 +515,192 @@
           </div>
         </div>
 
-        <!-- ---------------- 3. BOUQUET WORKSPACE ---------------- -->
+        <!-- ---------------- 3. BOUQUET WORKSPACE (DIGIBOUQUET BARE-STEM) ---------------- -->
         <div class="canvas-workspace" id="canvas-bouquet" style="display:none;">
-          <!-- Mode Tabs: Bespoke vs Curated Readymade Sets -->
-          <div class="bouquet-tab-bar">
-            <button class="b-tab active" id="btn-tab-bespoke">Bespoke Bouquet</button>
-            <button class="b-tab" id="btn-tab-readymade">8 Readymade Sets</button>
+          <!-- DigiBouquet 4-Step Navigation -->
+          <div class="bouquet-stepper-bar">
+            <button class="b-step-btn active" data-step="stems">1. Pick Flowers</button>
+            <button class="b-step-btn" data-step="arrange">2. Arrange & Shuffle</button>
+            <button class="b-step-btn" data-step="greenery">3. Add Greenery</button>
+            <button class="b-step-btn" data-step="note">4. Note Card</button>
           </div>
 
-          <!-- Bespoke Flower Selection -->
-          <div id="bouquet-bespoke-view">
-            <!-- 15 Illustrated Blooms with small names -->
-            <div class="illustrated-blooms-grid" id="illustrated-blooms-grid">
-              <!-- 15 flowers -->
-              <button class="bloom-card selected" data-flower="Dahlia"><span class="fl-art">🌺</span><small>Dahlia</small></button>
-              <button class="bloom-card" data-flower="Tulip"><span class="fl-art">🌷</span><small>Tulip</small></button>
-              <button class="bloom-card" data-flower="Gardenia"><span class="fl-art">🌼</span><small>Gardenia</small></button>
-              <button class="bloom-card selected" data-flower="Peony"><span class="fl-art">🌸</span><small>Peony</small></button>
-              <button class="bloom-card" data-flower="Lily"><span class="fl-art">🪷</span><small>Lily</small></button>
-              <button class="bloom-card" data-flower="Orchid"><span class="fl-art">💮</span><small>Orchid</small></button>
-              <button class="bloom-card" data-flower="Rose"><span class="fl-art">🌹</span><small>Rose</small></button>
-              <button class="bloom-card" data-flower="Sunflower"><span class="fl-art">🌻</span><small>Sunflower</small></button>
-              <button class="bloom-card" data-flower="Lilac"><span class="fl-art">🪻</span><small>Lilac</small></button>
-              <button class="bloom-card selected" data-flower="Baby's Breath"><span class="fl-art">🌾</span><small>Baby's Breath</small></button>
-              <button class="bloom-card" data-flower="Hydrangea"><span class="fl-art">💐</span><small>Hydrangea</small></button>
-              <button class="bloom-card" data-flower="Snapdragon"><span class="fl-art">🌿</span><small>Snapdragon</small></button>
-              <button class="bloom-card" data-flower="Japanese Anemones"><span class="fl-art">🥀</span><small>J. Anemones</small></button>
-              <button class="bloom-card" data-flower="Persian Buttercup"><span class="fl-art">🏵️</span><small>Buttercup</small></button>
-              <button class="bloom-card" data-flower="Foxglove"><span class="fl-art">🌱</span><small>Foxglove</small></button>
-            </div>
-          </div>
-
-          <!-- 8 Readymade Sets View (Interactive) -->
-          <div id="bouquet-readymade-view" style="display:none;">
-            <div class="readymade-sets-grid" id="readymade-sets-grid">
-              <!-- Dynamically rendered or static 8 combinations -->
-            </div>
-          </div>
-
-          <!-- Immediate Live Preview of the Bouquet -->
-          <div class="bouquet-assembled-preview" id="bouquet-assembled-preview">
-            <div class="bouquet-wrap-frame wrap-kraft" id="bouquet-wrap-frame">
-              <div class="stems-bloom-cluster" id="stems-bloom-cluster">
-                <!-- Stems render here -->
-                <span class="cluster-flower">🌺</span>
-                <span class="cluster-flower">🌸</span>
-                <span class="cluster-flower">🌾</span>
+          <!-- Live Bare-Stem Assembled Bouquet Stage (Always Visible) -->
+          <div class="bare-stem-bouquet-container" id="bouquet-assembled-preview">
+            <div class="bare-stem-stage" id="bare-stem-stage">
+              <!-- Background Greenery Sprigs -->
+              <div class="greenery-layer" id="greenery-layer"></div>
+              <!-- Botanical Flower Stems Layer -->
+              <div class="stems-bloom-cluster" id="stems-bloom-cluster"></div>
+              <!-- Natural Jute Tie Band -->
+              <div class="stem-tie-band" id="stem-tie-band"></div>
+              <!-- Tucked Miniature Note -->
+              <div class="tucked-mini-note" id="tucked-mini-note" title="Click to unfold note">
+                <div class="mini-note-inner">
+                  <span class="mini-note-stamp">💌</span>
+                  <span class="mini-note-text" id="mini-note-preview-text">A little note</span>
+                </div>
+                <div class="mini-note-pulse">Tap to unfold</div>
               </div>
-              <div class="bouquet-ribbon-node ribbon-silk" id="bouquet-ribbon-node"></div>
             </div>
           </div>
 
-          <!-- Wrapping Paper Visuals (Clicking immediately updates preview) -->
-          <div class="wrap-visual-selector">
-            <span class="swatch-label">Wrap:</span>
-            <button class="wrap-swatch-btn active" data-wrap="wrap-kraft" title="Natural Kraft"><span class="sw-kraft"></span></button>
-            <button class="wrap-swatch-btn" data-wrap="wrap-vellum" title="Frosted Vellum"><span class="sw-vellum"></span></button>
-            <button class="wrap-swatch-btn" data-wrap="wrap-linen" title="Pleated Linen"><span class="sw-linen"></span></button>
-            <button class="wrap-swatch-btn" data-wrap="wrap-news" title="Vintage Newsprint"><span class="sw-news"></span></button>
-          </div>
-
-          <!-- Ribbon Tie Visuals (Visuals only, no names) -->
-          <div class="ribbon-visual-selector">
-            <span class="swatch-label">Ribbon:</span>
-            <button class="ribbon-swatch-btn active" data-ribbon="ribbon-silk" title="Silk"><span class="rb-swatch rb-silk"></span></button>
-            <button class="ribbon-swatch-btn" data-ribbon="ribbon-grosgrain" title="Grosgrain"><span class="rb-swatch rb-grosgrain"></span></button>
-            <button class="ribbon-swatch-btn" data-ribbon="ribbon-velvet" title="Velvet"><span class="rb-swatch rb-velvet"></span></button>
-            <button class="ribbon-swatch-btn" data-ribbon="ribbon-jute" title="Jute Twine"><span class="rb-swatch rb-jute"></span></button>
-          </div>
-
-          <!-- Attached Florist Letter (no word limit) -->
-          <div class="bouquet-attached-note">
-            <div class="attached-note-header">
-              <span>To: <input type="text" value="Kabir" id="bouquet-to-input"></span>
-              <span>From: <input type="text" value="Saanvi" id="bouquet-from-input"></span>
+          <!-- Step 1: 15 Illustrated Stems Picker -->
+          <div class="bq-step-panel" id="bq-panel-stems">
+            <div class="bq-step-header">
+              <span class="bq-step-title">Select flowers for your bouquet</span>
+              <span class="bq-stem-count" id="bq-stem-count">3 / 9 stems</span>
             </div>
-            <textarea class="bouquet-note-body" placeholder="Write your letter here..."></textarea>
+            <div class="illustrated-blooms-grid" id="illustrated-blooms-grid">
+              <button class="bloom-card selected" data-flower="Rose" data-file="rose.jpg">
+                <img src="assets/flowers/rose.jpg" alt="Rose" class="bloom-thumb-img">
+                <small>Rose</small>
+              </button>
+              <button class="bloom-card selected" data-flower="Peony" data-file="peony.jpg">
+                <img src="assets/flowers/peony.jpg" alt="Peony" class="bloom-thumb-img">
+                <small>Peony</small>
+              </button>
+              <button class="bloom-card selected" data-flower="Baby's Breath" data-file="babys_breath.jpg">
+                <img src="assets/flowers/babys_breath.jpg" alt="Baby's Breath" class="bloom-thumb-img">
+                <small>Baby's Breath</small>
+              </button>
+              <button class="bloom-card" data-flower="Sunflower" data-file="sunflower.jpg">
+                <img src="assets/flowers/sunflower.jpg" alt="Sunflower" class="bloom-thumb-img">
+                <small>Sunflower</small>
+              </button>
+              <button class="bloom-card" data-flower="Tulip" data-file="tulip.jpg">
+                <img src="assets/flowers/tulip.jpg" alt="Tulip" class="bloom-thumb-img">
+                <small>Tulip</small>
+              </button>
+              <button class="bloom-card" data-flower="Hydrangea" data-file="hydrangea.jpg">
+                <img src="assets/flowers/hydrangea.jpg" alt="Hydrangea" class="bloom-thumb-img">
+                <small>Hydrangea</small>
+              </button>
+              <button class="bloom-card" data-flower="Lavender" data-file="lavender.jpg">
+                <img src="assets/flowers/lavender.jpg" alt="Lavender" class="bloom-thumb-img">
+                <small>Lavender</small>
+              </button>
+              <button class="bloom-card" data-flower="Snapdragon" data-file="snapdragon.jpg">
+                <img src="assets/flowers/snapdragon.jpg" alt="Snapdragon" class="bloom-thumb-img">
+                <small>Snapdragon</small>
+              </button>
+              <button class="bloom-card" data-flower="Lily" data-file="lily.jpg">
+                <img src="assets/flowers/lily.jpg" alt="Lily" class="bloom-thumb-img">
+                <small>Lily</small>
+              </button>
+              <button class="bloom-card" data-flower="Buttercup" data-file="buttercup.jpg">
+                <img src="assets/flowers/buttercup.jpg" alt="Buttercup" class="bloom-thumb-img">
+                <small>Buttercup</small>
+              </button>
+              <button class="bloom-card" data-flower="Anemones" data-file="anemones.jpg">
+                <img src="assets/flowers/anemones.jpg" alt="Anemones" class="bloom-thumb-img">
+                <small>Anemones</small>
+              </button>
+              <button class="bloom-card" data-flower="Gardenia" data-file="gardenia.jpg">
+                <img src="assets/flowers/gardenia.jpg" alt="Gardenia" class="bloom-thumb-img">
+                <small>Gardenia</small>
+              </button>
+              <button class="bloom-card" data-flower="Dahlia" data-file="dahlia.jpg">
+                <img src="assets/flowers/dahlia.jpg" alt="Dahlia" class="bloom-thumb-img">
+                <small>Dahlia</small>
+              </button>
+              <button class="bloom-card" data-flower="Orchid" data-file="orchid.jpg">
+                <img src="assets/flowers/orchid.jpg" alt="Orchid" class="bloom-thumb-img">
+                <small>Orchid</small>
+              </button>
+              <button class="bloom-card" data-flower="Foxglove" data-file="foxglove.jpg">
+                <img src="assets/flowers/foxglove.jpg" alt="Foxglove" class="bloom-thumb-img">
+                <small>Foxglove</small>
+              </button>
+            </div>
+            <div class="bq-step-nav-bar">
+              <button class="bq-next-btn" data-target="arrange">Next: Arrange Stems →</button>
+            </div>
+          </div>
+
+          <!-- Step 2: Arrange & Reshuffle Controls -->
+          <div class="bq-step-panel" id="bq-panel-arrange" style="display:none;">
+            <div class="bq-arrange-bar">
+              <button class="btn-reshuffle" id="btn-reshuffle-stems">
+                <span>🔀</span> Reshuffle Composition
+              </button>
+              <button class="btn-clear-stems" id="btn-clear-stems">
+                Reset
+              </button>
+            </div>
+            <p class="bq-arrange-hint">Stems fall naturally into an organic fan. Tap reshuffle to explore different layering and heights.</p>
+            <div class="bq-step-nav-bar dual">
+              <button class="bq-back-btn" data-target="stems">← Back to Flowers</button>
+              <button class="bq-next-btn" data-target="greenery">Next: Add Greenery →</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Greenery & Botanical Foliage -->
+          <div class="bq-step-panel" id="bq-panel-greenery" style="display:none;">
+            <div class="bq-step-header">
+              <span class="bq-step-title">Choose botanical greenery & fillers</span>
+            </div>
+            <div class="greenery-selector-grid" id="greenery-selector-grid">
+              <button class="greenery-card selected" data-greenery="eucalyptus" data-file="eucalyptus.svg">
+                <img src="assets/greenery/eucalyptus.svg" alt="Eucalyptus" class="greenery-thumb-img">
+                <small>Eucalyptus</small>
+              </button>
+              <button class="greenery-card" data-greenery="ruscus" data-file="ruscus.svg">
+                <img src="assets/greenery/ruscus.svg" alt="Ruscus" class="greenery-thumb-img">
+                <small>Italian Ruscus</small>
+              </button>
+              <button class="greenery-card" data-greenery="fern" data-file="fern.svg">
+                <img src="assets/greenery/fern.svg" alt="Fern" class="greenery-thumb-img">
+                <small>Fern Frond</small>
+              </button>
+              <button class="greenery-card selected" data-greenery="olive" data-file="olive.svg">
+                <img src="assets/greenery/olive.svg" alt="Olive" class="greenery-thumb-img">
+                <small>Olive Leaf</small>
+              </button>
+            </div>
+            <div class="bq-step-nav-bar dual">
+              <button class="bq-back-btn" data-target="arrange">← Back to Arrange</button>
+              <button class="bq-next-btn" data-target="note">Next: Write Note Card →</button>
+            </div>
+          </div>
+
+          <!-- Step 4: Thematic Note Card & Letter -->
+          <div class="bq-step-panel" id="bq-panel-note" style="display:none;">
+            <div class="bq-step-header">
+              <span class="bq-step-title">Select a card theme & write your note</span>
+            </div>
+            <div class="note-theme-selector" id="note-theme-selector">
+              <button class="note-theme-chip active" data-theme="cream">Archival Cream</button>
+              <button class="note-theme-chip" data-theme="gold">Gold Hairline</button>
+              <button class="note-theme-chip" data-theme="botanical">Botanical Border</button>
+              <button class="note-theme-chip" data-theme="kraft">Natural Kraft</button>
+            </div>
+            <div class="bouquet-attached-note" id="bouquet-note-card-editor" data-theme="cream">
+              <div class="attached-note-header">
+                <span>To: <input type="text" value="Kabir" id="bouquet-to-input"></span>
+                <span>From: <input type="text" value="Saanvi" id="bouquet-from-input"></span>
+              </div>
+              <textarea class="bouquet-note-body" id="bouquet-note-body" placeholder="Write your heartfelt note here...">A little botanical bouquet handpicked just for you.</textarea>
+            </div>
+            <div class="bq-step-nav-bar dual">
+              <button class="bq-back-btn" data-target="greenery">← Back to Greenery</button>
+              <button class="bq-done-btn" id="bq-btn-done-note">✓ Bouquet Complete</button>
+            </div>
+          </div>
+
+          <!-- Unfolded Full Note Overlay Modal -->
+          <div class="unfolded-note-overlay" id="bouquet-unfolded-note-overlay" style="display:none;">
+            <div class="unfolded-note-card" id="unfolded-note-card" data-theme="cream">
+              <button class="btn-close-note" id="btn-close-unfolded-note">✕</button>
+              <div class="unfolded-note-head">
+                <span id="unfolded-to">To: Kabir</span>
+                <span id="unfolded-from">From: Saanvi</span>
+              </div>
+              <div class="unfolded-note-body-text" id="unfolded-note-body-text">
+                A little botanical bouquet handpicked just for you.
+              </div>
+              <small class="unfolded-note-seal">Tucked in your Botanical Bouquet</small>
+            </div>
           </div>
         </div>
 
