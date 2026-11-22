@@ -1329,20 +1329,69 @@ body {
   border-color: var(--ink-maroon);
   background: #FFF7F8;
 }
-.bloom-card.selected::after {
-  content: '✓';
+.bloom-badge-qty {
   position: absolute;
   top: 2px;
   right: 2px;
-  width: 12px;
-  height: 12px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
   background: var(--ink-maroon);
   color: #FFFFFF;
   font-size: 8px;
-  line-height: 12px;
+  font-weight: 700;
+  line-height: 15px;
   text-align: center;
-  border-radius: 50%;
-  font-weight: bold;
+  border-radius: 8px;
+  display: none;
+  z-index: 2;
+}
+.bloom-card.selected .bloom-badge-qty {
+  display: block;
+}
+
+/* Mini tactile stepper control on selected cards */
+.bloom-card-stepper {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 3px;
+  width: 100%;
+}
+.bloom-card.selected .bloom-card-stepper {
+  display: flex;
+}
+.btn-stem-step {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--paper-border);
+  background: #FFFFFF;
+  border-radius: 3px;
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--ink-maroon);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.btn-stem-step:hover {
+  background: var(--ink-maroon);
+  color: #FFFFFF;
+  border-color: var(--ink-maroon);
+}
+.stem-step-val {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--ink-maroon);
+  min-width: 12px;
+  text-align: center;
+  user-select: none;
 }
 .bloom-thumb-img {
   width: 42px;

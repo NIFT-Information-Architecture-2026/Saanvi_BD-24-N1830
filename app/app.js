@@ -24,10 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
       step: 'stems',
       flowers: [
         { flower: 'Rose', file: 'rose.jpg' },
+        { flower: 'Rose', file: 'rose.jpg' },
         { flower: 'Peony', file: 'peony.jpg' },
         { flower: "Baby's Breath", file: 'babys_breath.jpg' },
-        { flower: 'Dahlia', file: 'dahlia.jpg' },
-        { flower: 'Tulip', file: 'tulip.jpg' }
+        { flower: 'Dahlia', file: 'dahlia.jpg' }
       ],
       greenery: ['eucalyptus', 'olive'],
       noteTheme: 'cream',
@@ -667,27 +667,66 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Step 1: Flower Selection (5 to 8 stems only)
-  bloomCards.forEach(card => {
-    card.addEventListener('click', () => {
+  // Step 1: Flower Selection (5 to 8 stems total, allows duplicate stems)
+  function updateStemCardsUI() {
+    bloomCards.forEach(card => {
       const flowerName = card.dataset.flower;
-      const flowerFile = card.dataset.file;
-      const existingIdx = state.bouquet.flowers.findIndex(f => f.flower === flowerName);
-
-      if (existingIdx > -1) {
-        state.bouquet.flowers.splice(existingIdx, 1);
-        card.classList.remove('selected');
-      } else {
-        if (state.bouquet.flowers.length >= 8) {
-          alert('A bouquet holds up to 8 botanical stems. Unselect one to add a different flower.');
-          return;
-        }
-        state.bouquet.flowers.push({ flower: flowerName, file: flowerFile });
-        card.classList.add('selected');
-      }
-      updateStemCountDisplay();
-      renderBouquetPreview();
+      const count = state.bouquet.flowers.filter(f => f.flower === flowerName).length;
+      card.classList.toggle('selected', count > 0);
+      const badge = card.querySelector('.bloom-badge-qty');
+      const val = card.querySelector('.stem-step-val');
+      if (badge) badge.textContent = `×${count}`;
+      if (val) val.textContent = count;
     });
+    updateStemCountDisplay();
+  }
+
+  function addStem(flowerName, flowerFile) {
+    if (state.bouquet.flowers.length >= 8) {
+      alert('A bouquet holds up to 8 botanical stems in total. Use − on a flower to remove a stem first.');
+      return;
+    }
+    state.bouquet.flowers.push({ flower: flowerName, file: flowerFile });
+    updateStemCardsUI();
+    renderBouquetPreview();
+  }
+
+  function removeStem(flowerName) {
+    const idx = state.bouquet.flowers.map(f => f.flower).lastIndexOf(flowerName);
+    if (idx > -1) {
+      state.bouquet.flowers.splice(idx, 1);
+      updateStemCardsUI();
+      renderBouquetPreview();
+    }
+  }
+
+  bloomCards.forEach(card => {
+    const flowerName = card.dataset.flower;
+    const flowerFile = card.dataset.file;
+
+    // Tapping on card body/image adds a stem
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-step-sub') || e.target.closest('.btn-step-add')) {
+        return;
+      }
+      addStem(flowerName, flowerFile);
+    });
+
+    const subBtn = card.querySelector('.btn-step-sub');
+    if (subBtn) {
+      subBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeStem(flowerName);
+      });
+    }
+
+    const addBtn = card.querySelector('.btn-step-add');
+    if (addBtn) {
+      addBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        addStem(flowerName, flowerFile);
+      });
+    }
   });
 
   function updateStemCountDisplay() {
@@ -840,6 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial call to render default bouquet
   renderBouquetPreview();
+  updateStemCardsUI();
   syncNoteDetails();
 
   // ================= 4. GREETING CARD WORKSPACE =================
