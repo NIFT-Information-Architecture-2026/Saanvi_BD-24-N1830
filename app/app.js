@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
     bouquet: {
       step: 'stems',
       flowers: [
-        { flower: 'Rose', file: 'rose.jpg' },
-        { flower: 'Rose', file: 'rose.jpg' },
-        { flower: 'Peony', file: 'peony.jpg' },
-        { flower: "Baby's Breath", file: 'babys_breath.jpg' },
-        { flower: 'Dahlia', file: 'dahlia.jpg' }
+        { flower: 'Rose', file: 'rose.png' },
+        { flower: 'Rose', file: 'rose.png' },
+        { flower: 'Peony', file: 'peony.png' },
+        { flower: "Baby's Breath", file: 'babys_breath.png' },
+        { flower: 'Dahlia', file: 'dahlia.png' }
       ],
       greenery: ['eucalyptus', 'olive'],
       noteTheme: 'cream',
@@ -830,50 +830,81 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Bare-Stem Bouquet Rendering Engine
+  // Bare-Stem Bouquet Rendering Engine (Side-by-Side with Interleaved Greenery)
   function renderBouquetPreview(animated = false) {
-    // 1. Greenery Layer
+    const total = state.bouquet.flowers.length;
+
+    // Toggle tie band and mini note based on stem count
+    if (stemTieBand) stemTieBand.style.display = total === 0 ? 'none' : 'flex';
+    if (tuckedMiniNote) tuckedMiniNote.style.display = total === 0 ? 'none' : 'block';
+
+    if (total === 0) {
+      if (greeneryLayer) greeneryLayer.innerHTML = '';
+      if (stemsBloomCluster) stemsBloomCluster.innerHTML = '';
+      return;
+    }
+
+    const seed = state.bouquet.shuffleSeed;
+
+    // 1. Interleaved Greenery (Positioned in intermediate niches BETWEEN flowers)
     if (greeneryLayer) {
       greeneryLayer.innerHTML = '';
+
+      const greenerySlots = {
+        eucalyptus: { slotRatio: 0.18, angle: -18, yOffset: -18, zIdx: 5 },
+        fern:       { slotRatio: 0.38, angle: -8,  yOffset: -24, zIdx: 6 },
+        olive:      { slotRatio: 0.62, angle: +8,  yOffset: -22, zIdx: 6 },
+        ruscus:     { slotRatio: 0.82, angle: +18, yOffset: -18, zIdx: 5 }
+      };
+
       state.bouquet.greenery.forEach(foliage => {
+        const config = greenerySlots[foliage] || { slotRatio: 0.5, angle: 0, yOffset: -20, zIdx: 5 };
+        const slotX = -115 + (230 * config.slotRatio);
+        const jitterX = Math.sin(seed * 9 + config.slotRatio * 17) * 4;
+        const finalSlotX = Math.round(slotX + jitterX);
+        const finalAngle = Math.round(config.angle + Math.sin(seed * 7 + config.slotRatio * 13) * 3);
+        const finalY = Math.round(config.yOffset + Math.sin(seed * 13 + config.slotRatio * 19) * 4);
+
         const item = document.createElement('div');
         item.className = `greenery-item greenery-${foliage}`;
+        item.style.left = `calc(50% + ${finalSlotX}px)`;
+        item.style.transform = `rotate(${finalAngle}deg) translateY(${finalY}px)`;
+        item.style.zIndex = config.zIdx;
         item.innerHTML = `<img src="assets/greenery/${foliage}.svg" alt="${foliage}">`;
         greeneryLayer.appendChild(item);
       });
     }
 
-    // 2. Flower Stems Cluster
+    // 2. Flower Stems Cluster (Positioned BESIDE one another, staggered heights)
     if (stemsBloomCluster) {
       stemsBloomCluster.innerHTML = '';
-      const total = state.bouquet.flowers.length;
 
-      if (total === 0) {
-        if (stemTieBand) stemTieBand.style.display = 'none';
-        if (tuckedMiniNote) tuckedMiniNote.style.display = 'none';
-      } else {
-        if (stemTieBand) stemTieBand.style.display = 'flex';
-        if (tuckedMiniNote) tuckedMiniNote.style.display = 'block';
+      state.bouquet.flowers.forEach((item, i) => {
+        const t = total > 1 ? (i / (total - 1)) : 0.5;
+        const centerOffset = total > 1 ? -110 + (220 * t) : 0;
+        const baseAngle = total > 1 ? -16 + (32 * t) : 0;
 
-        state.bouquet.flowers.forEach((item, i) => {
-          let baseAngle = 0;
-          if (total > 1) {
-            baseAngle = -22 + ((44 * i) / (total - 1));
-          }
-          const seed = state.bouquet.shuffleSeed;
-          const jitterAngle = Math.sin(seed * 13 + i * 7.7) * 4;
-          const finalAngle = Math.round((baseAngle + jitterAngle) * 10) / 10;
-          const jitterY = Math.round(Math.sin(seed * 17 + i * 11.3) * 8);
-          const zIdx = 3 + (i % 2 === 0 ? i : (total - i));
+        const arch = total > 1 ? Math.sin(t * Math.PI) * 16 : 0;
+        const tier = (i % 2 === 0 ? 8 : -10);
+        const staggerY = -arch + tier;
 
-          const stemEl = document.createElement('div');
-          stemEl.className = 'stem-flower-item';
-          stemEl.style.transform = `rotate(${finalAngle}deg) translateY(${jitterY}px)`;
-          stemEl.style.zIndex = zIdx;
-          stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img">`;
-          stemsBloomCluster.appendChild(stemEl);
-        });
-      }
+        const jitterX = Math.sin(seed * 11 + i * 5.3) * 4;
+        const jitterAngle = Math.sin(seed * 7 + i * 4.1) * 2.5;
+        const jitterY = Math.sin(seed * 17 + i * 7.1) * 4;
+
+        const finalX = Math.round(centerOffset + jitterX);
+        const finalAngle = (baseAngle + jitterAngle).toFixed(1);
+        const finalY = Math.round(staggerY + jitterY);
+        const zIdx = (i % 2 === 0 ? 4 : 7);
+
+        const stemEl = document.createElement('div');
+        stemEl.className = 'stem-flower-item';
+        stemEl.style.left = `calc(50% + ${finalX}px)`;
+        stemEl.style.transform = `rotate(${finalAngle}deg) translateY(${finalY}px)`;
+        stemEl.style.zIndex = zIdx;
+        stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img">`;
+        stemsBloomCluster.appendChild(stemEl);
+      });
     }
   }
 
