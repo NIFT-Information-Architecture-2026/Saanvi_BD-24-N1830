@@ -25,7 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
       flowers: [
         { flower: 'Rose', file: 'rose.jpg' },
         { flower: 'Peony', file: 'peony.jpg' },
-        { flower: "Baby's Breath", file: 'babys_breath.jpg' }
+        { flower: "Baby's Breath", file: 'babys_breath.jpg' },
+        { flower: 'Dahlia', file: 'dahlia.jpg' },
+        { flower: 'Tulip', file: 'tulip.jpg' }
       ],
       greenery: ['eucalyptus', 'olive'],
       noteTheme: 'cream',
@@ -647,6 +649,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.bq-next-btn, .bq-back-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.dataset.target;
+      if (target === 'arrange' && state.bouquet.flowers.length < 5) {
+        alert('Please select at least 5 flowers (up to 8 stems) to create a full botanical bouquet.');
+        return;
+      }
       if (target) setBouquetStep(target);
     });
   });
@@ -661,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Step 1: Flower Selection (Max 9 stems)
+  // Step 1: Flower Selection (5 to 8 stems only)
   bloomCards.forEach(card => {
     card.addEventListener('click', () => {
       const flowerName = card.dataset.flower;
@@ -672,8 +678,8 @@ document.addEventListener('DOMContentLoaded', () => {
         state.bouquet.flowers.splice(existingIdx, 1);
         card.classList.remove('selected');
       } else {
-        if (state.bouquet.flowers.length >= 9) {
-          alert('A bouquet holds up to 9 botanical stems. Unselect one to add a new flower.');
+        if (state.bouquet.flowers.length >= 8) {
+          alert('A bouquet holds up to 8 botanical stems. Unselect one to add a different flower.');
           return;
         }
         state.bouquet.flowers.push({ flower: flowerName, file: flowerFile });
@@ -686,7 +692,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateStemCountDisplay() {
     if (bqStemCountEl) {
-      bqStemCountEl.textContent = `${state.bouquet.flowers.length} / 9 stems`;
+      const count = state.bouquet.flowers.length;
+      bqStemCountEl.textContent = `${count} / 8 stems`;
+      if (count < 5) {
+        bqStemCountEl.style.color = 'var(--ink-muted)';
+        bqStemCountEl.title = 'Select 5–8 stems for a balanced bouquet';
+      } else {
+        bqStemCountEl.style.color = 'var(--ink-maroon)';
+        bqStemCountEl.title = 'Perfect arrangement';
+      }
     }
   }
 
