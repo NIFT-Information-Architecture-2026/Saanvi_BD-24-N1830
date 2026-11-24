@@ -24,9 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
       step: 'stems',
       flowers: [
         { flower: 'Rose', file: 'rose.png' },
-        { flower: 'Rose', file: 'rose.png' },
         { flower: 'Peony', file: 'peony.png' },
         { flower: "Baby's Breath", file: 'babys_breath.png' },
+        { flower: 'Tulip', file: 'tulip.png' },
         { flower: 'Dahlia', file: 'dahlia.png' }
       ],
       greenery: ['eucalyptus', 'olive'],
@@ -876,8 +876,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (dragHasMoved && bareStemStage) {
         const stageRect = bareStemStage.getBoundingClientRect();
         const stageCenterX = stageRect.left + (stageRect.width / 2);
-        const relX = e.clientX - stageCenterX; // relative px offset from center (-90 to +90)
-        const fanHalfWidth = 85;
+        const relX = e.clientX - stageCenterX; // relative px offset from center (-130 to +130)
+        const fanHalfWidth = 130;
         const normalized = Math.max(0, Math.min(1, (relX + fanHalfWidth) / (fanHalfWidth * 2)));
         let targetIndex = Math.round(normalized * (total - 1));
         targetIndex = Math.max(0, Math.min(total - 1, targetIndex));
@@ -938,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Bare-Stem Bouquet Rendering Engine (Gathered at Base Twine, Fan Arc with Interleaved Greenery)
+  // Bare-Stem Bouquet Rendering Engine (Gathered at Base, Open Airy Fan with Breathing Room)
   function renderBouquetPreview(animated = false) {
     const total = state.bouquet.flowers.length;
 
@@ -954,19 +954,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const seed = state.bouquet.shuffleSeed;
 
-    // 1. Interleaved Greenery (Gathered at central base, fanning out in intermediate niches)
+    // 1. Interleaved Greenery (Soft airy botanical accents, spread wider to frame blooms)
     if (greeneryLayer) {
       greeneryLayer.innerHTML = '';
 
       const greenerySlots = {
-        eucalyptus: { angle: -30, yOffset: -10, zIdx: 6, shiftX: -5 },
-        fern:       { angle: -12, yOffset: -18, zIdx: 8, shiftX: -2 },
-        olive:      { angle: +12, yOffset: -16, zIdx: 8, shiftX: +2 },
-        ruscus:     { angle: +30, yOffset: -10, zIdx: 6, shiftX: +5 }
+        eucalyptus: { angle: -50, yOffset: -4,  zIdx: 4, shiftX: -6 },
+        fern:       { angle: -18, yOffset: -26, zIdx: 6, shiftX: -2 },
+        olive:      { angle: +18, yOffset: -24, zIdx: 6, shiftX: +2 },
+        ruscus:     { angle: +50, yOffset: -4,  zIdx: 4, shiftX: +6 }
       };
 
       state.bouquet.greenery.forEach(foliage => {
-        const config = greenerySlots[foliage] || { angle: 0, yOffset: -14, zIdx: 7, shiftX: 0 };
+        const config = greenerySlots[foliage] || { angle: 0, yOffset: -16, zIdx: 6, shiftX: 0 };
         const finalAngle = Math.round(config.angle + Math.sin(seed * 7) * 2);
         const finalY = Math.round(config.yOffset + Math.sin(seed * 13) * 3);
 
@@ -980,31 +980,30 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 2. Flower Stems Cluster (Gathered together at jute band base, fanned side-by-side at top)
+    // 2. Flower Stems Cluster (Gathered at base, gracefully fanned open with generous breathing space)
     if (stemsBloomCluster) {
       stemsBloomCluster.innerHTML = '';
 
       state.bouquet.flowers.forEach((item, i) => {
         const t = total > 1 ? (i / (total - 1)) : 0.5;
 
-        // Fanning angles: -28deg on far left to +28deg on far right
-        const maxAngle = total > 1 ? Math.min(28, 18 + total * 1.4) : 0;
+        // Fanning angles: wider spread (approx -38deg to +38deg for 5 stems, up to +-48deg for 8 stems)
+        const maxAngle = total > 1 ? Math.min(48, 38 + (total - 5) * 3) : 0;
         const baseAngle = total > 1 ? -maxAngle + (2 * maxAngle * t) : 0;
 
-        // Natural dome arch: center stems stand slightly higher
-        const domeArch = total > 1 ? Math.sin(t * Math.PI) * 16 : 0;
-        // Alternating tier offset ensures adjacent bloom heads sit beside each other without burying each other
-        const tierY = (i % 2 === 0 ? 0 : 8);
+        // Pronounced dome curve: center stems lift gracefully higher
+        const domeArch = total > 1 ? Math.sin(t * Math.PI) * 28 : 0;
+        // Alternating tier offset ensures adjacent bloom heads have generous vertical and horizontal breathing space
+        const tierY = (i % 2 === 0 ? -10 : 18);
         const finalY = Math.round(-domeArch + tierY);
 
-        // All stem bottoms are gathered together inside the 46px tie band at the center base
-        // baseShiftX gives a tiny, natural 8-12px bundle spread so stems pack snugly inside the band
-        const bundleSpread = Math.min(12, total * 1.8);
+        // All stem bottoms are gathered together inside the tie band at the center base
+        const bundleSpread = Math.min(8, total * 1.2);
         const baseShiftX = Math.round((t - 0.5) * bundleSpread);
 
         // Jitter for organic botanical naturalness
-        const jitterAngle = Number((Math.sin(seed * 7 + i * 4.1) * 1.5).toFixed(1));
-        const jitterY = Math.round(Math.sin(seed * 17 + i * 7.1) * 3);
+        const jitterAngle = Number((Math.sin(seed * 7 + i * 4.1) * 1.0).toFixed(1));
+        const jitterY = Math.round(Math.sin(seed * 17 + i * 7.1) * 2);
 
         const finalAngle = (baseAngle + jitterAngle).toFixed(1);
         const totalY = finalY + jitterY;
