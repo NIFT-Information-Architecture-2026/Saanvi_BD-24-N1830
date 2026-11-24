@@ -23,11 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
     bouquet: {
       step: 'stems',
       flowers: [
+        { flower: 'Snapdragon', file: 'snapdragon.png' },
+        { flower: 'Lily', file: 'lily.png' },
+        { flower: 'Foxglove', file: 'foxglove.png' },
         { flower: "Baby's Breath", file: 'babys_breath.png' },
+        { flower: 'Anemones', file: 'anemones.png' },
+        { flower: 'Buttercup', file: 'buttercup.png' },
         { flower: 'Peony', file: 'peony.png' },
-        { flower: 'Rose', file: 'rose.png' },
-        { flower: 'Tulip', file: 'tulip.png' },
-        { flower: 'Dahlia', file: 'dahlia.png' }
+        { flower: 'Gardenia', file: 'gardenia.png' }
       ],
       greenery: [],
       noteTheme: 'cream',
@@ -947,31 +950,124 @@ document.addEventListener('DOMContentLoaded', () => {
   // stemX, stemY: exact pixel coordinates of the drawn stem tip in the image
   // naturalAngle: botanical lean of the drawn flower from vertical (degrees)
   // scale: balanced bloom sizing so blooms sit beside each other without overlapping
+  // Precise Flower Stem Tip and Bloom Calibration
   const FLOWER_CALIBRATION = {
-    anemones:     { stemX: 300, stemY: 961, naturalAngle: 0.6,  scale: 0.76, W: 682,  H: 1024 },
-    babys_breath: { stemX: 404, stemY: 991, naturalAngle: -3.3, scale: 0.76, W: 682,  H: 1024 },
-    buttercup:    { stemX: 352, stemY: 983, naturalAngle: -1.7, scale: 0.76, W: 682,  H: 1024 },
-    dahlia:       { stemX: 262, stemY: 987, naturalAngle: 18.8, scale: 0.60, W: 828,  H: 1024 },
-    foxglove:     { stemX: 350, stemY: 1007,naturalAngle: 0.4,  scale: 0.82, W: 682,  H: 1024 },
-    gardenia:     { stemX: 308, stemY: 983, naturalAngle: 15.1, scale: 0.64, W: 828,  H: 1024 },
-    hydrangea:    { stemX: 432, stemY: 515, naturalAngle: 5.8,  scale: 1.05, W: 1024, H: 712  },
-    lavender:     { stemX: 232, stemY: 993, naturalAngle: 16.9, scale: 0.78, W: 682,  H: 1024 },
-    lily:         { stemX: 518, stemY: 666, naturalAngle: -0.4, scale: 0.82, W: 1024, H: 711  },
-    orchid:       { stemX: 182, stemY: 1023,naturalAngle: 16.8, scale: 0.65, W: 828,  H: 1024 },
-    peony:        { stemX: 354, stemY: 959, naturalAngle: 7.9,  scale: 0.70, W: 768,  H: 1024 },
-    rose:         { stemX: 354, stemY: 1023,naturalAngle: 3.9,  scale: 0.72, W: 768,  H: 1024 },
-    snapdragon:   { stemX: 340, stemY: 993, naturalAngle: 2.6,  scale: 0.82, W: 682,  H: 1024 },
-    sunflower:    { stemX: 352, stemY: 1001,naturalAngle: 12.1, scale: 0.65, W: 819,  H: 1024 },
-    tulip:        { stemX: 378, stemY: 907, naturalAngle: -1.9, scale: 0.88, W: 692,  H: 1024 }
+    anemones:     { stemX: 300, stemY: 961, naturalAngle: 0.6,  scale: 0.85, W: 682,  H: 1024, isSpire: false },
+    babys_breath: { stemX: 404, stemY: 991, naturalAngle: -3.3, scale: 0.80, W: 682,  H: 1024, isSpire: true  },
+    buttercup:    { stemX: 352, stemY: 983, naturalAngle: -1.7, scale: 0.80, W: 682,  H: 1024, isSpire: false },
+    dahlia:       { stemX: 262, stemY: 987, naturalAngle: 18.8, scale: 0.64, W: 828,  H: 1024, isSpire: false },
+    foxglove:     { stemX: 350, stemY: 1007,naturalAngle: 0.4,  scale: 0.90, W: 682,  H: 1024, isSpire: true  },
+    gardenia:     { stemX: 308, stemY: 983, naturalAngle: 15.1, scale: 0.74, W: 828,  H: 1024, isSpire: false },
+    hydrangea:    { stemX: 432, stemY: 515, naturalAngle: 5.8,  scale: 1.10, W: 1024, H: 712,  isSpire: false },
+    lavender:     { stemX: 232, stemY: 993, naturalAngle: 16.9, scale: 0.84, W: 682,  H: 1024, isSpire: true  },
+    lily:         { stemX: 518, stemY: 666, naturalAngle: -0.4, scale: 0.85, W: 1024, H: 711,  isSpire: true  },
+    orchid:       { stemX: 182, stemY: 1023,naturalAngle: 16.8, scale: 0.72, W: 828,  H: 1024, isSpire: false },
+    peony:        { stemX: 354, stemY: 959, naturalAngle: 7.9,  scale: 0.80, W: 768,  H: 1024, isSpire: false },
+    rose:         { stemX: 354, stemY: 1023,naturalAngle: 3.9,  scale: 0.78, W: 768,  H: 1024, isSpire: false },
+    snapdragon:   { stemX: 340, stemY: 993, naturalAngle: 2.6,  scale: 0.92, W: 682,  H: 1024, isSpire: true  },
+    sunflower:    { stemX: 352, stemY: 1001,naturalAngle: 12.1, scale: 0.72, W: 819,  H: 1024, isSpire: false },
+    tulip:        { stemX: 378, stemY: 907, naturalAngle: -1.9, scale: 0.92, W: 692,  H: 1024, isSpire: true  }
   };
 
-  // Bare-Stem Bouquet Rendering Engine (Aligned Stem Tips at Base, Blooms Strictly Beside Each Other in a Single Layer)
+  // Tiered Floristry Slot Presets (Matches user's reference bouquet composition)
+  const BOUQUET_SLOT_PRESETS = {
+    8: [
+      // Back Tier (4 tall stems)
+      { angle: -20, height: 300, zIdx: 10, shiftX: -8, scaleMul: 1.05 },
+      { angle: -2,  height: 270, zIdx: 11, shiftX: -2, scaleMul: 0.92 },
+      { angle: +18, height: 305, zIdx: 12, shiftX: +7, scaleMul: 1.05 },
+      { angle: +35, height: 270, zIdx: 13, shiftX: +14,scaleMul: 0.95 },
+      // Front Tier (4 focal stems)
+      { angle: -38, height: 215, zIdx: 20, shiftX: -14, scaleMul: 1.0 },
+      { angle: -25, height: 175, zIdx: 21, shiftX: -10, scaleMul: 0.92 },
+      { angle: -7,  height: 185, zIdx: 25, shiftX: -3,  scaleMul: 1.05 },
+      { angle: +15, height: 175, zIdx: 23, shiftX: +6,  scaleMul: 0.96 }
+    ],
+    7: [
+      // Back Tier (4 tall stems)
+      { angle: -22, height: 295, zIdx: 10, shiftX: -8, scaleMul: 1.0 },
+      { angle: -4,  height: 275, zIdx: 11, shiftX: -2, scaleMul: 0.95 },
+      { angle: +14, height: 295, zIdx: 12, shiftX: +6, scaleMul: 1.0 },
+      { angle: +32, height: 265, zIdx: 13, shiftX: +12,scaleMul: 0.95 },
+      // Front Tier (3 focal stems)
+      { angle: -34, height: 200, zIdx: 20, shiftX: -12, scaleMul: 0.95 },
+      { angle: -4,  height: 185, zIdx: 25, shiftX: 0,   scaleMul: 1.05 },
+      { angle: +20, height: 175, zIdx: 22, shiftX: +8,  scaleMul: 0.95 }
+    ],
+    6: [
+      // Back Tier (3 tall stems)
+      { angle: -20, height: 295, zIdx: 10, shiftX: -8, scaleMul: 1.0 },
+      { angle: 0,   height: 280, zIdx: 11, shiftX: 0,  scaleMul: 0.98 },
+      { angle: +24, height: 295, zIdx: 12, shiftX: +8, scaleMul: 1.0 },
+      // Front Tier (3 focal stems)
+      { angle: -34, height: 200, zIdx: 20, shiftX: -12, scaleMul: 0.95 },
+      { angle: -3,  height: 185, zIdx: 25, shiftX: 0,   scaleMul: 1.05 },
+      { angle: +18, height: 180, zIdx: 22, shiftX: +8,  scaleMul: 0.96 }
+    ],
+    5: [
+      // Back Tier (2 tall stems)
+      { angle: -16, height: 295, zIdx: 10, shiftX: -7, scaleMul: 1.0 },
+      { angle: +20, height: 295, zIdx: 11, shiftX: +7, scaleMul: 1.0 },
+      // Front Tier (3 focal stems)
+      { angle: -34, height: 200, zIdx: 20, shiftX: -12, scaleMul: 0.96 },
+      { angle: 0,   height: 185, zIdx: 25, shiftX: 0,   scaleMul: 1.05 },
+      { angle: +24, height: 185, zIdx: 22, shiftX: +9,  scaleMul: 0.96 }
+    ]
+  };
+
+  // SVGs for lower stems and lavender ribbon bow
+  function getBouquetRibbonSVG() {
+    return `
+      <svg viewBox="0 0 140 95" width="140" height="95" style="overflow:visible; filter: drop-shadow(0 3px 6px rgba(82, 19, 25, 0.15));">
+        <path d="M 65 30 C 55 45 40 65 32 88 C 30 92 38 90 42 85 C 50 68 62 48 68 32 Z" fill="#C9B6E4" opacity="0.95"/>
+        <path d="M 64 30 C 56 45 42 65 35 86" stroke="#B39DD4" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <path d="M 75 30 C 85 45 100 65 108 88 C 110 92 102 90 98 85 C 90 68 78 48 72 32 Z" fill="#C9B6E4" opacity="0.95"/>
+        <path d="M 76 30 C 84 45 98 65 105 86" stroke="#B39DD4" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <path d="M 68 25 C 45 10 20 18 25 32 C 30 46 55 35 68 28 Z" fill="#D6C5EE" stroke="#B8A2DA" stroke-width="1.2"/>
+        <path d="M 32 26 C 38 22 52 24 64 27" stroke="#FFF" stroke-width="2" stroke-linecap="round" opacity="0.5" fill="none"/>
+        <path d="M 72 25 C 95 10 120 18 115 32 C 110 46 85 35 72 28 Z" fill="#D6C5EE" stroke="#B8A2DA" stroke-width="1.2"/>
+        <path d="M 108 26 C 102 22 88 24 76 27" stroke="#FFF" stroke-width="2" stroke-linecap="round" opacity="0.5" fill="none"/>
+        <ellipse cx="70" cy="27" rx="9" ry="8" fill="#B39DD4" stroke="#947CB5" stroke-width="1.5"/>
+        <ellipse cx="68" cy="25" rx="5" ry="4" fill="#E2D4F5" opacity="0.6"/>
+      </svg>
+    `;
+  }
+
+  function getBouquetLowerStemsSVG() {
+    return `
+      <svg viewBox="0 0 60 75" width="60" height="75" style="overflow:visible;">
+        <line x1="24" y1="5" x2="16" y2="68" stroke="#4a6b32" stroke-width="4.5" stroke-linecap="round"/>
+        <line x1="28" y1="5" x2="22" y2="72" stroke="#3d5828" stroke-width="4.5" stroke-linecap="round"/>
+        <line x1="30" y1="5" x2="30" y2="74" stroke="#527838" stroke-width="4.5" stroke-linecap="round"/>
+        <line x1="32" y1="5" x2="38" y2="72" stroke="#44632c" stroke-width="4.5" stroke-linecap="round"/>
+        <line x1="36" y1="5" x2="46" y2="66" stroke="#4a6b32" stroke-width="4.5" stroke-linecap="round"/>
+      </svg>
+    `;
+  }
+
+  // Tiered Floristry Bouquet Engine
   function renderBouquetPreview(animated = false) {
     const total = state.bouquet.flowers.length;
 
-    // Toggle tie band and mini note based on stem count
-    if (stemTieBand) stemTieBand.style.display = total === 0 ? 'none' : 'flex';
+    // Toggle ribbon bow and mini note based on stem count
+    if (stemTieBand) {
+      stemTieBand.style.display = total === 0 ? 'none' : 'flex';
+      stemTieBand.innerHTML = total === 0 ? '' : getBouquetRibbonSVG();
+    }
     if (tuckedMiniNote) tuckedMiniNote.style.display = total === 0 ? 'none' : 'block';
+
+    // Ensure lower stems handle container exists
+    let lowerStemsEl = document.getElementById('lower-stems-container');
+    if (!lowerStemsEl && bareStemStage) {
+      lowerStemsEl = document.createElement('div');
+      lowerStemsEl.id = 'lower-stems-container';
+      lowerStemsEl.className = 'lower-stems-container';
+      bareStemStage.appendChild(lowerStemsEl);
+    }
+    if (lowerStemsEl) {
+      lowerStemsEl.style.display = total === 0 ? 'none' : 'block';
+      lowerStemsEl.innerHTML = total === 0 ? '' : getBouquetLowerStemsSVG();
+    }
 
     if (total === 0) {
       if (greeneryLayer) greeneryLayer.innerHTML = '';
@@ -979,19 +1075,19 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // 1. Interleaved Greenery (Framed neatly behind flowers)
+    // 1. Interleaved Greenery (Framed behind bouquet flowers)
     if (greeneryLayer) {
       greeneryLayer.innerHTML = '';
 
       const greenerySlots = {
-        eucalyptus: { angle: -36, yOffset: -6,  zIdx: 4, shiftX: -3 },
-        fern:       { angle: -14, yOffset: -12, zIdx: 4, shiftX: -1 },
-        olive:      { angle: +14, yOffset: -12, zIdx: 4, shiftX: +1 },
-        ruscus:     { angle: +36, yOffset: -6,  zIdx: 4, shiftX: +3 }
+        eucalyptus: { angle: -36, yOffset: 10, zIdx: 6, shiftX: -3 },
+        fern:       { angle: -14, yOffset: 0,  zIdx: 6, shiftX: -1 },
+        olive:      { angle: +14, yOffset: 0,  zIdx: 6, shiftX: +1 },
+        ruscus:     { angle: +36, yOffset: 10, zIdx: 6, shiftX: +3 }
       };
 
       state.bouquet.greenery.forEach(foliage => {
-        const config = greenerySlots[foliage] || { angle: 0, yOffset: -10, zIdx: 4, shiftX: 0 };
+        const config = greenerySlots[foliage] || { angle: 0, yOffset: 0, zIdx: 6, shiftX: 0 };
         const finalAngle = Math.round(config.angle);
         const finalY = Math.round(config.yOffset);
 
@@ -1005,57 +1101,76 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 2. Flower Stems Cluster (Stems converge at base tips; blooms fan out strictly beside each other in a SINGLE FLAT LAYER)
+    // 2. Flower Stems Cluster (Tiered composition with spires in back and blooms in front)
     if (stemsBloomCluster) {
       stemsBloomCluster.innerHTML = '';
 
-      // Calibrated single-layer fan bouquet geometry:
-      // Linear angle spread ensures blooms sit cleanly beside each other with wide air gaps:
-      // 5 stems: 50deg max (25deg step, ~95px horizontal separation between bloom centers)
-      // 8 stems: 56deg max (16deg step, ~65px horizontal separation)
-      const maxTargetAngle = total > 1 ? Math.min(56, 48 + (total - 5) * 2.6) : 0;
-      const targetHeight = 250;
-      const scaleMultiplier = total > 5 ? 0.90 : 0.98;
+      const presets = BOUQUET_SLOT_PRESETS[total] || BOUQUET_SLOT_PRESETS[5];
+      const backCount = total === 8 ? 4 : (total === 7 ? 4 : (total === 6 ? 3 : 2));
 
-      state.bouquet.flowers.forEach((item, i) => {
+      // Separate into spires (for back tier) and lush focal blooms (for front tier)
+      const spires = [];
+      const blooms = [];
+      state.bouquet.flowers.forEach((f, origIdx) => {
+        const key = f.file.replace(/\.(png|jpg|svg)$/i, '');
+        const cal = FLOWER_CALIBRATION[key] || { isSpire: false };
+        if (cal.isSpire) {
+          spires.push({ ...f, origIdx });
+        } else {
+          blooms.push({ ...f, origIdx });
+        }
+      });
+
+      // Fill back slots first with spires, then remaining with blooms
+      const arranged = new Array(total);
+      const backItems = [];
+      while (backItems.length < backCount && spires.length > 0) {
+        backItems.push(spires.shift());
+      }
+      while (backItems.length < backCount && blooms.length > 0) {
+        backItems.push(blooms.shift());
+      }
+      const frontItems = [...spires, ...blooms];
+
+      for (let i = 0; i < backCount; i++) {
+        arranged[i] = backItems[i];
+      }
+      for (let i = backCount; i < total; i++) {
+        arranged[i] = frontItems[i - backCount];
+      }
+
+      arranged.forEach((item, slotIdx) => {
+        if (!item) return;
         const fileKey = item.file.replace(/\.(png|jpg|svg)$/i, '');
-        const cal = FLOWER_CALIBRATION[fileKey] || { stemX: 350, stemY: 980, naturalAngle: 0, scale: 0.75, W: 768, H: 1024 };
+        const cal = FLOWER_CALIBRATION[fileKey] || { stemX: 350, stemY: 980, naturalAngle: 0, scale: 0.8, W: 768, H: 1024 };
+        const slot = presets[slotIdx] || presets[0];
 
-        const t = total > 1 ? (i / (total - 1)) : 0.5;
-        const targetAngle = total > 1 ? (-maxTargetAngle + (2 * maxTargetAngle * t)) : 0;
-
-        // Compensate for the flower's botanical drawing angle so the bloom aims true along the corridor
-        const appliedRotation = targetAngle - cal.naturalAngle;
-
-        // Gentle crown arch so center bloom stands tall and flanking blooms cascade gracefully beside it in a single layer
-        const domeArch = total > 1 ? Math.round(Math.sin(t * Math.PI) * 15) : 0;
-        const totalY = -domeArch;
-
-        // Z-Index: clean single layer
-        const zIdx = 10 + i;
+        // Compensate for botanical drawing angle
+        const appliedRotation = slot.angle - cal.naturalAngle;
 
         // Exact Stem Tip Pinning to Container Origin (50%, 100%)
         const stemXPct = (cal.stemX / cal.W * 100).toFixed(2);
         const stemYFromBottomPct = ((1 - cal.stemY / cal.H) * 100).toFixed(2);
-        const finalScale = (cal.scale * scaleMultiplier).toFixed(3);
-
-        // Stems converge inside the 46px jute tie band at the base
-        const baseOffsetX = total > 1 ? (-7 + (14 * t)).toFixed(1) : 0;
+        const finalScale = (cal.scale * slot.scaleMul).toFixed(3);
 
         const stemEl = document.createElement('div');
         stemEl.className = 'stem-flower-item';
-        stemEl.dataset.stemIndex = i;
+        stemEl.dataset.stemIndex = item.origIdx;
         stemEl.dataset.flower = item.flower;
-        stemEl.title = `${item.flower} (Stem ${i + 1} of ${total} - Drag in Step 2 to rearrange)`;
-        stemEl.style.left = `calc(50% + ${baseOffsetX}px)`;
-        stemEl.style.transform = `rotate(${appliedRotation.toFixed(1)}deg) translateY(${totalY}px)`;
-        stemEl.style.zIndex = zIdx;
+        stemEl.title = `${item.flower} (Stem ${item.origIdx + 1} of ${total} - Drag in Step 2 to rearrange)`;
+        stemEl.style.bottom = '95px'; // anchored at ribbon knot
+        stemEl.style.left = `calc(50% + ${slot.shiftX}px)`;
+        stemEl.style.width = '2px';
+        stemEl.style.height = `${slot.height}px`;
+        stemEl.style.transformOrigin = '50% 100%';
+        stemEl.style.transform = `rotate(${appliedRotation.toFixed(1)}deg)`;
+        stemEl.style.zIndex = slot.zIdx;
 
-        stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img" draggable="false" style="position: absolute; bottom: 0; left: 0; height: ${targetHeight}px; width: auto; max-width: none; transform-origin: ${stemXPct}% ${cal.stemY / cal.H * 100}%; transform: translate(-${stemXPct}%, ${stemYFromBottomPct}%) scale(${finalScale});">`;
+        stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img" draggable="false" style="position: absolute; bottom: 0; left: 0; height: ${slot.height}px; width: auto; max-width: none; transform-origin: ${stemXPct}% ${cal.stemY / cal.H * 100}%; transform: translate(-${stemXPct}%, ${stemYFromBottomPct}%) scale(${finalScale});">`;
 
         // Attach Step 2 Hand Tool drag handlers
-        const baseTransform = `rotate(${appliedRotation.toFixed(1)}deg) translateY(${totalY}px)`;
-        attachStemDragHandlers(stemEl, i, baseTransform, total);
+        const baseTransform = `rotate(${appliedRotation.toFixed(1)}deg)`;
+        attachStemDragHandlers(stemEl, item.origIdx, baseTransform, total);
 
         stemsBloomCluster.appendChild(stemEl);
       });
@@ -1365,12 +1480,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const flowerNames = state.bouquet.flowers.map(f => f.flower).join(' • ');
       html = `
         <div class="revealed-bouquet-presentation" style="background: radial-gradient(circle at 50% 68%, #FFFDFB 0%, #F9ECEF 100%); border: 1px solid var(--paper-border); border-radius: 8px; padding: 14px 10px 10px; text-align: center;">
-          <div style="font-family: var(--font-editorial); font-size: 15px; font-weight: 600; color: var(--ink-maroon); margin-bottom: 2px;">Botanical Bare-Stem Bouquet</div>
-          <p style="font-size: 11px; color: var(--ink-muted); margin-bottom: 8px;">Hand-tied with natural jute twine • ${stemCount} stems</p>
-          <div class="bare-stem-stage" id="modal-revealed-bouquet-stage" style="height: 220px; background: transparent; border: none; margin-bottom: 8px;">
+          <div style="font-family: var(--font-editorial); font-size: 15px; font-weight: 600; color: var(--ink-maroon); margin-bottom: 2px;">Hand-Tied Botanical Bouquet</div>
+          <p style="font-size: 11px; color: var(--ink-muted); margin-bottom: 8px;">Tied with lavender satin ribbon • ${stemCount} stems</p>
+          <div class="bare-stem-stage" id="modal-revealed-bouquet-stage" style="height: 380px; background: transparent; border: none; margin-bottom: 8px;">
+            <div class="lower-stems-container">${document.getElementById('lower-stems-container')?.innerHTML || ''}</div>
             <div class="greenery-layer">${document.getElementById('greenery-layer')?.innerHTML || ''}</div>
             <div class="stems-bloom-cluster">${document.getElementById('stems-bloom-cluster')?.innerHTML || ''}</div>
-            <div class="stem-tie-band"></div>
+            <div class="stem-tie-band">${document.getElementById('stem-tie-band')?.innerHTML || ''}</div>
             <div class="tucked-mini-note" id="modal-tucked-mini-note" style="cursor:pointer;" title="Tap to unfold note">
               <div class="mini-note-inner">
                 <span class="mini-note-stamp">💌</span>
