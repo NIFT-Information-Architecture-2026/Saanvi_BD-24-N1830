@@ -1089,7 +1089,7 @@ body {
 .bare-stem-stage {
   position: relative;
   width: 100%;
-  height: 310px;
+  height: 330px;
   background: radial-gradient(circle at 50% 68%, #FFFDFB 0%, #F9ECEF 100%);
   border: 1px solid var(--paper-border);
   border-radius: var(--radius-md);
@@ -1181,22 +1181,38 @@ body {
 }
 .stem-flower-item {
   position: absolute;
-  bottom: 14px;
+  bottom: 18px;
   left: 50%;
-  width: 110px;
-  height: 225px;
-  margin-left: -55px;
-  transform-origin: 50% 94%;
+  width: 2px;
+  height: 250px;
+  margin-left: -1px;
+  transform-origin: 50% 100%;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+  overflow: visible;
+}
+.bare-stem-stage.step-arrange-active .stem-flower-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -32px;
+  width: 64px;
+  height: 100%;
+  pointer-events: auto;
+  cursor: grab;
+}
+.bare-stem-stage.step-arrange-active .stem-flower-item.is-dragging::after {
+  cursor: grabbing !important;
 }
 .stem-flower-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: bottom center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 250px;
+  width: auto;
+  max-width: none;
   pointer-events: none;
   -webkit-user-drag: none;
 }
@@ -1207,7 +1223,7 @@ body {
   bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
-  width: 42px;
+  width: 46px;
   height: 16px;
   background: #C4A47C;
   border-radius: 3px;

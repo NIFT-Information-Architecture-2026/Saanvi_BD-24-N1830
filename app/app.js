@@ -23,13 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
     bouquet: {
       step: 'stems',
       flowers: [
-        { flower: 'Rose', file: 'rose.png' },
-        { flower: 'Peony', file: 'peony.png' },
         { flower: "Baby's Breath", file: 'babys_breath.png' },
+        { flower: 'Peony', file: 'peony.png' },
+        { flower: 'Rose', file: 'rose.png' },
         { flower: 'Tulip', file: 'tulip.png' },
         { flower: 'Dahlia', file: 'dahlia.png' }
       ],
-      greenery: ['eucalyptus', 'olive'],
+      greenery: [],
       noteTheme: 'cream',
       noteTo: 'Kabir',
       noteFrom: 'Saanvi',
@@ -882,7 +882,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const stageRect = bareStemStage.getBoundingClientRect();
         const stageCenterX = stageRect.left + (stageRect.width / 2);
         const relX = e.clientX - stageCenterX; // relative px offset from center (-95 to +95)
-        const fanHalfWidth = 115;
+        const fanHalfWidth = 160;
         const normalized = Math.max(0, Math.min(1, (relX + fanHalfWidth) / (fanHalfWidth * 2)));
         let targetIndex = Math.round(normalized * (total - 1));
         targetIndex = Math.max(0, Math.min(total - 1, targetIndex));
@@ -943,26 +943,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Flower Stem Tip Normalization (Ensures drawn stem tips of all flower illustrations align precisely at base tie band)
-  const FLOWER_STEM_SCALE = {
-    rose: 1.0,
-    peony: 1.07,
-    babys_breath: 1.03,
-    tulip: 1.13,
-    dahlia: 1.04,
-    anemones: 1.07,
-    buttercup: 1.04,
-    foxglove: 1.02,
-    hydrangea: 1.52,
-    lily: 1.15,
-    orchid: 1.0,
-    sunflower: 1.02,
-    snapdragon: 1.03,
-    lavender: 1.03,
-    gardenia: 1.04
+  // Precise Flower Stem Tip and Bloom Calibration
+  // stemX, stemY: exact pixel coordinates of the drawn stem tip in the image
+  // naturalAngle: botanical lean of the drawn flower from vertical (degrees)
+  // scale: balanced bloom sizing so blooms sit beside each other without overlapping
+  const FLOWER_CALIBRATION = {
+    anemones:     { stemX: 300, stemY: 961, naturalAngle: 0.6,  scale: 0.76, W: 682,  H: 1024 },
+    babys_breath: { stemX: 404, stemY: 991, naturalAngle: -3.3, scale: 0.76, W: 682,  H: 1024 },
+    buttercup:    { stemX: 352, stemY: 983, naturalAngle: -1.7, scale: 0.76, W: 682,  H: 1024 },
+    dahlia:       { stemX: 262, stemY: 987, naturalAngle: 18.8, scale: 0.60, W: 828,  H: 1024 },
+    foxglove:     { stemX: 350, stemY: 1007,naturalAngle: 0.4,  scale: 0.82, W: 682,  H: 1024 },
+    gardenia:     { stemX: 308, stemY: 983, naturalAngle: 15.1, scale: 0.64, W: 828,  H: 1024 },
+    hydrangea:    { stemX: 432, stemY: 515, naturalAngle: 5.8,  scale: 1.05, W: 1024, H: 712  },
+    lavender:     { stemX: 232, stemY: 993, naturalAngle: 16.9, scale: 0.78, W: 682,  H: 1024 },
+    lily:         { stemX: 518, stemY: 666, naturalAngle: -0.4, scale: 0.82, W: 1024, H: 711  },
+    orchid:       { stemX: 182, stemY: 1023,naturalAngle: 16.8, scale: 0.65, W: 828,  H: 1024 },
+    peony:        { stemX: 354, stemY: 959, naturalAngle: 7.9,  scale: 0.70, W: 768,  H: 1024 },
+    rose:         { stemX: 354, stemY: 1023,naturalAngle: 3.9,  scale: 0.72, W: 768,  H: 1024 },
+    snapdragon:   { stemX: 340, stemY: 993, naturalAngle: 2.6,  scale: 0.82, W: 682,  H: 1024 },
+    sunflower:    { stemX: 352, stemY: 1001,naturalAngle: 12.1, scale: 0.65, W: 819,  H: 1024 },
+    tulip:        { stemX: 378, stemY: 907, naturalAngle: -1.9, scale: 0.88, W: 692,  H: 1024 }
   };
 
-  // Bare-Stem Bouquet Rendering Engine (Aligned Stem Tips at Base, Blooms Strictly Beside Each Other)
+  // Bare-Stem Bouquet Rendering Engine (Aligned Stem Tips at Base, Blooms Strictly Beside Each Other in a Single Layer)
   function renderBouquetPreview(animated = false) {
     const total = state.bouquet.flowers.length;
 
@@ -975,8 +978,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (stemsBloomCluster) stemsBloomCluster.innerHTML = '';
       return;
     }
-
-    const seed = state.bouquet.shuffleSeed;
 
     // 1. Interleaved Greenery (Framed neatly behind flowers)
     if (greeneryLayer) {
@@ -1004,40 +1005,56 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 2. Flower Stems Cluster (Stems converge at base tips; blooms fan out strictly beside each other)
+    // 2. Flower Stems Cluster (Stems converge at base tips; blooms fan out strictly beside each other in a SINGLE FLAT LAYER)
     if (stemsBloomCluster) {
       stemsBloomCluster.innerHTML = '';
 
+      // Calibrated single-layer fan bouquet geometry:
+      // Linear angle spread ensures blooms sit cleanly beside each other with wide air gaps:
+      // 5 stems: 50deg max (25deg step, ~95px horizontal separation between bloom centers)
+      // 8 stems: 56deg max (16deg step, ~65px horizontal separation)
+      const maxTargetAngle = total > 1 ? Math.min(56, 48 + (total - 5) * 2.6) : 0;
+      const targetHeight = 250;
+      const scaleMultiplier = total > 5 ? 0.90 : 0.98;
+
       state.bouquet.flowers.forEach((item, i) => {
+        const fileKey = item.file.replace(/\.(png|jpg|svg)$/i, '');
+        const cal = FLOWER_CALIBRATION[fileKey] || { stemX: 350, stemY: 980, naturalAngle: 0, scale: 0.75, W: 768, H: 1024 };
+
         const t = total > 1 ? (i / (total - 1)) : 0.5;
+        const targetAngle = total > 1 ? (-maxTargetAngle + (2 * maxTargetAngle * t)) : 0;
 
-        // Fanning angles: calibrated so blooms sit side-by-side with zero vertical stacking
-        // 5 stems: -36deg to +36deg (18deg step, ~54px horizontal separation)
-        // 8 stems: -45deg to +45deg (~40px horizontal separation)
-        const maxAngle = total > 1 ? Math.min(45, 36 + (total - 5) * 3.0) : 0;
-        const baseAngle = total > 1 ? (-maxAngle + (2 * maxAngle * t)) : 0;
-        const finalAngle = baseAngle.toFixed(1);
+        // Compensate for the flower's botanical drawing angle so the bloom aims true along the corridor
+        const appliedRotation = targetAngle - cal.naturalAngle;
 
-        // Z-Index: clean left-to-right layering so each flower sits beside the other without blocking
+        // Gentle crown arch so center bloom stands tall and flanking blooms cascade gracefully beside it in a single layer
+        const domeArch = total > 1 ? Math.round(Math.sin(t * Math.PI) * 15) : 0;
+        const totalY = -domeArch;
+
+        // Z-Index: clean single layer
         const zIdx = 10 + i;
 
-        // Normalized flower scale to align stem tips at base tie band
-        const fileKey = item.file.replace(/\.(png|jpg|svg)$/i, '');
-        const imgScale = FLOWER_STEM_SCALE[fileKey] || 1.0;
+        // Exact Stem Tip Pinning to Container Origin (50%, 100%)
+        const stemXPct = (cal.stemX / cal.W * 100).toFixed(2);
+        const stemYFromBottomPct = ((1 - cal.stemY / cal.H) * 100).toFixed(2);
+        const finalScale = (cal.scale * scaleMultiplier).toFixed(3);
+
+        // Stems converge inside the 46px jute tie band at the base
+        const baseOffsetX = total > 1 ? (-7 + (14 * t)).toFixed(1) : 0;
 
         const stemEl = document.createElement('div');
         stemEl.className = 'stem-flower-item';
         stemEl.dataset.stemIndex = i;
         stemEl.dataset.flower = item.flower;
         stemEl.title = `${item.flower} (Stem ${i + 1} of ${total} - Drag in Step 2 to rearrange)`;
-        // All stems converge at exact center base (50%) inside the tie band
-        stemEl.style.left = '50%';
-        stemEl.style.transform = `rotate(${finalAngle}deg)`;
+        stemEl.style.left = `calc(50% + ${baseOffsetX}px)`;
+        stemEl.style.transform = `rotate(${appliedRotation.toFixed(1)}deg) translateY(${totalY}px)`;
         stemEl.style.zIndex = zIdx;
-        stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img" draggable="false" style="transform-origin: bottom center; transform: scale(${imgScale});">`;
+
+        stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img" draggable="false" style="position: absolute; bottom: 0; left: 0; height: ${targetHeight}px; width: auto; max-width: none; transform-origin: ${stemXPct}% ${cal.stemY / cal.H * 100}%; transform: translate(-${stemXPct}%, ${stemYFromBottomPct}%) scale(${finalScale});">`;
 
         // Attach Step 2 Hand Tool drag handlers
-        const baseTransform = `rotate(${finalAngle}deg)`;
+        const baseTransform = `rotate(${appliedRotation.toFixed(1)}deg) translateY(${totalY}px)`;
         attachStemDragHandlers(stemEl, i, baseTransform, total);
 
         stemsBloomCluster.appendChild(stemEl);
