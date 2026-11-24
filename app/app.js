@@ -876,8 +876,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (dragHasMoved && bareStemStage) {
         const stageRect = bareStemStage.getBoundingClientRect();
         const stageCenterX = stageRect.left + (stageRect.width / 2);
-        const relX = e.clientX - stageCenterX; // relative px offset from center (-130 to +130)
-        const fanHalfWidth = 130;
+        const relX = e.clientX - stageCenterX; // relative px offset from center (-95 to +95)
+        const fanHalfWidth = 95;
         const normalized = Math.max(0, Math.min(1, (relX + fanHalfWidth) / (fanHalfWidth * 2)));
         let targetIndex = Math.round(normalized * (total - 1));
         targetIndex = Math.max(0, Math.min(total - 1, targetIndex));
@@ -938,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Bare-Stem Bouquet Rendering Engine (Gathered at Base, Open Airy Fan with Breathing Room)
+  // Bare-Stem Bouquet Rendering Engine (Gathered at Base, Cohesive Fan with Delicate Edge Overlaps)
   function renderBouquetPreview(animated = false) {
     const total = state.bouquet.flowers.length;
 
@@ -954,19 +954,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const seed = state.bouquet.shuffleSeed;
 
-    // 1. Interleaved Greenery (Soft airy botanical accents, spread wider to frame blooms)
+    // 1. Interleaved Greenery (Nestled cohesively behind and between flowers)
     if (greeneryLayer) {
       greeneryLayer.innerHTML = '';
 
       const greenerySlots = {
-        eucalyptus: { angle: -50, yOffset: -4,  zIdx: 4, shiftX: -6 },
-        fern:       { angle: -18, yOffset: -26, zIdx: 6, shiftX: -2 },
-        olive:      { angle: +18, yOffset: -24, zIdx: 6, shiftX: +2 },
-        ruscus:     { angle: +50, yOffset: -4,  zIdx: 4, shiftX: +6 }
+        eucalyptus: { angle: -32, yOffset: -8,  zIdx: 5, shiftX: -4 },
+        fern:       { angle: -12, yOffset: -16, zIdx: 6, shiftX: -2 },
+        olive:      { angle: +12, yOffset: -14, zIdx: 6, shiftX: +2 },
+        ruscus:     { angle: +32, yOffset: -8,  zIdx: 5, shiftX: +4 }
       };
 
       state.bouquet.greenery.forEach(foliage => {
-        const config = greenerySlots[foliage] || { angle: 0, yOffset: -16, zIdx: 6, shiftX: 0 };
+        const config = greenerySlots[foliage] || { angle: 0, yOffset: -12, zIdx: 6, shiftX: 0 };
         const finalAngle = Math.round(config.angle + Math.sin(seed * 7) * 2);
         const finalY = Math.round(config.yOffset + Math.sin(seed * 13) * 3);
 
@@ -980,29 +980,29 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 2. Flower Stems Cluster (Gathered at base, gracefully fanned open with generous breathing space)
+    // 2. Flower Stems Cluster (Cohesive hand-tied bouquet, subtle edge overlaps)
     if (stemsBloomCluster) {
       stemsBloomCluster.innerHTML = '';
 
       state.bouquet.flowers.forEach((item, i) => {
         const t = total > 1 ? (i / (total - 1)) : 0.5;
 
-        // Fanning angles: wider spread (approx -38deg to +38deg for 5 stems, up to +-48deg for 8 stems)
-        const maxAngle = total > 1 ? Math.min(48, 38 + (total - 5) * 3) : 0;
+        // Fanning angles: cohesive curve (approx -24deg to +24deg for 5 stems, up to +-32deg for 8 stems)
+        const maxAngle = total > 1 ? Math.min(32, 24 + (total - 5) * 2.2) : 0;
         const baseAngle = total > 1 ? -maxAngle + (2 * maxAngle * t) : 0;
 
-        // Pronounced dome curve: center stems lift gracefully higher
-        const domeArch = total > 1 ? Math.sin(t * Math.PI) * 28 : 0;
-        // Alternating tier offset ensures adjacent bloom heads have generous vertical and horizontal breathing space
-        const tierY = (i % 2 === 0 ? -10 : 18);
+        // Gentle dome curve creating a lush, unified rounded floral head
+        const domeArch = total > 1 ? Math.sin(t * Math.PI) * 12 : 0;
+        // Subtle tier offset gives depth with only gentle petal-edge overlaps
+        const tierY = (i % 2 === 0 ? 0 : 7);
         const finalY = Math.round(-domeArch + tierY);
 
         // All stem bottoms are gathered together inside the tie band at the center base
-        const bundleSpread = Math.min(8, total * 1.2);
+        const bundleSpread = Math.min(10, total * 1.5);
         const baseShiftX = Math.round((t - 0.5) * bundleSpread);
 
         // Jitter for organic botanical naturalness
-        const jitterAngle = Number((Math.sin(seed * 7 + i * 4.1) * 1.0).toFixed(1));
+        const jitterAngle = Number((Math.sin(seed * 7 + i * 4.1) * 0.8).toFixed(1));
         const jitterY = Math.round(Math.sin(seed * 17 + i * 7.1) * 2);
 
         const finalAngle = (baseAngle + jitterAngle).toFixed(1);

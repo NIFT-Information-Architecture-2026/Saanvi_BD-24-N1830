@@ -1089,7 +1089,7 @@ body {
 .bare-stem-stage {
   position: relative;
   width: 100%;
-  height: 340px;
+  height: 290px;
   background: radial-gradient(circle at 50% 68%, #FFFDFB 0%, #F9ECEF 100%);
   border: 1px solid var(--paper-border);
   border-radius: var(--radius-md);
@@ -1122,7 +1122,7 @@ body {
   transition: none !important;
 }
 
-/* Greenery Layer (Gathered at central base, softly framing with breathing room) */
+/* Greenery Layer (Gathered at central base, nestling cohesively between stems) */
 .greenery-layer {
   position: absolute;
   top: 0;
@@ -1134,32 +1134,32 @@ body {
 }
 .greenery-item {
   position: absolute;
-  bottom: 12px;
+  bottom: 16px;
   left: 50%;
-  transform-origin: 50% 92%;
+  transform-origin: 50% 90%;
   pointer-events: none;
-  opacity: 0.68;
+  opacity: 0.82;
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .greenery-eucalyptus {
-  width: 66px;
-  height: 180px;
-  margin-left: -33px;
+  width: 78px;
+  height: 185px;
+  margin-left: -39px;
 }
 .greenery-ruscus {
-  width: 62px;
-  height: 175px;
-  margin-left: -31px;
+  width: 74px;
+  height: 180px;
+  margin-left: -37px;
 }
 .greenery-fern {
-  width: 70px;
-  height: 185px;
-  margin-left: -35px;
+  width: 82px;
+  height: 190px;
+  margin-left: -41px;
 }
 .greenery-olive {
-  width: 66px;
-  height: 175px;
-  margin-left: -33px;
+  width: 78px;
+  height: 180px;
+  margin-left: -39px;
 }
 .greenery-item img {
   width: 100%;
@@ -1169,7 +1169,7 @@ body {
   -webkit-user-drag: none;
 }
 
-/* Stems Blooms Cluster Layer (Gathered at base, airy open fanned arc) */
+/* Stems Blooms Cluster Layer (Gathered at base, cohesive bouquet with subtle edge overlaps) */
 .stems-bloom-cluster {
   position: absolute;
   top: 0;
@@ -1180,12 +1180,12 @@ body {
 }
 .stem-flower-item {
   position: absolute;
-  bottom: 12px;
+  bottom: 16px;
   left: 50%;
-  width: 78px;
-  height: 230px;
-  margin-left: -39px;
-  transform-origin: 50% 92%;
+  width: 96px;
+  height: 205px;
+  margin-left: -48px;
+  transform-origin: 50% 90%;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
@@ -1205,8 +1205,8 @@ body {
   bottom: 22px;
   left: 50%;
   transform: translateX(-50%);
-  width: 38px;
-  height: 15px;
+  width: 44px;
+  height: 16px;
   background: #C4A47C;
   border-radius: 3px;
   border: 1px solid #9C7A53;
@@ -1236,21 +1236,21 @@ body {
 /* Tucked Miniature Note (Tucked at twine band without blocking petals) */
 .tucked-mini-note {
   position: absolute;
-  bottom: 14px;
-  left: calc(50% + 14px);
-  transform: rotate(10deg);
+  bottom: 22px;
+  left: calc(50% + 10px);
+  transform: rotate(8deg);
   z-index: 26;
   cursor: pointer;
   background: #FFFDF8;
   border: 1px solid #D8C29C;
   border-radius: 3px;
-  padding: 4px 7px;
+  padding: 4px 8px;
   max-width: 95px;
   user-select: none;
   transition: transform 0.22s ease, border-color 0.22s ease;
 }
 .tucked-mini-note:hover {
-  transform: rotate(10deg) translateY(-2px) scale(1.05);
+  transform: rotate(8deg) translateY(-2px) scale(1.05);
   border-color: var(--ink-maroon);
 }
 .mini-note-inner {
