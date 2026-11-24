@@ -1089,7 +1089,7 @@ body {
 .bare-stem-stage {
   position: relative;
   width: 100%;
-  height: 290px;
+  height: 310px;
   background: radial-gradient(circle at 50% 68%, #FFFDFB 0%, #F9ECEF 100%);
   border: 1px solid var(--paper-border);
   border-radius: var(--radius-md);
@@ -1122,7 +1122,7 @@ body {
   transition: none !important;
 }
 
-/* Greenery Layer (Gathered at central base, nestling cohesively between stems) */
+/* Greenery Layer (Gathered at central base, framed behind flowers) */
 .greenery-layer {
   position: absolute;
   top: 0;
@@ -1130,46 +1130,47 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 5;
+  z-index: 4;
 }
 .greenery-item {
   position: absolute;
-  bottom: 16px;
+  bottom: 14px;
   left: 50%;
-  transform-origin: 50% 90%;
+  transform-origin: 50% 93%;
   pointer-events: none;
-  opacity: 0.82;
+  opacity: 0.85;
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .greenery-eucalyptus {
   width: 78px;
-  height: 185px;
+  height: 190px;
   margin-left: -39px;
 }
 .greenery-ruscus {
-  width: 74px;
-  height: 180px;
-  margin-left: -37px;
+  width: 72px;
+  height: 185px;
+  margin-left: -36px;
 }
 .greenery-fern {
-  width: 82px;
-  height: 190px;
-  margin-left: -41px;
+  width: 80px;
+  height: 195px;
+  margin-left: -40px;
 }
 .greenery-olive {
-  width: 78px;
-  height: 180px;
-  margin-left: -39px;
+  width: 76px;
+  height: 185px;
+  margin-left: -38px;
 }
 .greenery-item img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: bottom center;
   pointer-events: none;
   -webkit-user-drag: none;
 }
 
-/* Stems Blooms Cluster Layer (Gathered at base, cohesive bouquet with subtle edge overlaps) */
+/* Stems Blooms Cluster Layer (Aligned stem tips at base, strictly side-by-side blooms) */
 .stems-bloom-cluster {
   position: absolute;
   top: 0;
@@ -1180,12 +1181,12 @@ body {
 }
 .stem-flower-item {
   position: absolute;
-  bottom: 16px;
+  bottom: 14px;
   left: 50%;
-  width: 96px;
-  height: 205px;
-  margin-left: -48px;
-  transform-origin: 50% 90%;
+  width: 110px;
+  height: 225px;
+  margin-left: -55px;
+  transform-origin: 50% 94%;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
@@ -1195,17 +1196,18 @@ body {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: bottom center;
   pointer-events: none;
   -webkit-user-drag: none;
 }
 
-/* Stem Tie Band (Natural Jute Twine - wraps firmly over all stem sticks) */
+/* Stem Tie Band (Natural Jute Twine - wraps firmly over all stem tips at base) */
 .stem-tie-band {
   position: absolute;
-  bottom: 22px;
+  bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
-  width: 44px;
+  width: 42px;
   height: 16px;
   background: #C4A47C;
   border-radius: 3px;

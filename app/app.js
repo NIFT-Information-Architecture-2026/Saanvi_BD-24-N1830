@@ -693,7 +693,12 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('A bouquet holds up to 8 botanical stems in total. Use − on a flower to remove a stem first.');
       return;
     }
-    state.bouquet.flowers.push({ flower: flowerName, file: flowerFile });
+    // When a new flower is selected, add it beside existing flowers (alternating right and left)
+    if (state.bouquet.flowers.length % 2 === 0) {
+      state.bouquet.flowers.push({ flower: flowerName, file: flowerFile });
+    } else {
+      state.bouquet.flowers.unshift({ flower: flowerName, file: flowerFile });
+    }
     updateStemCardsUI();
     renderBouquetPreview();
     if (state.bouquet.step === 'arrange') renderStemOrderStrip();
@@ -877,7 +882,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const stageRect = bareStemStage.getBoundingClientRect();
         const stageCenterX = stageRect.left + (stageRect.width / 2);
         const relX = e.clientX - stageCenterX; // relative px offset from center (-95 to +95)
-        const fanHalfWidth = 95;
+        const fanHalfWidth = 115;
         const normalized = Math.max(0, Math.min(1, (relX + fanHalfWidth) / (fanHalfWidth * 2)));
         let targetIndex = Math.round(normalized * (total - 1));
         targetIndex = Math.max(0, Math.min(total - 1, targetIndex));
@@ -938,7 +943,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Bare-Stem Bouquet Rendering Engine (Gathered at Base, Cohesive Fan with Delicate Edge Overlaps)
+  // Flower Stem Tip Normalization (Ensures drawn stem tips of all flower illustrations align precisely at base tie band)
+  const FLOWER_STEM_SCALE = {
+    rose: 1.0,
+    peony: 1.07,
+    babys_breath: 1.03,
+    tulip: 1.13,
+    dahlia: 1.04,
+    anemones: 1.07,
+    buttercup: 1.04,
+    foxglove: 1.02,
+    hydrangea: 1.52,
+    lily: 1.15,
+    orchid: 1.0,
+    sunflower: 1.02,
+    snapdragon: 1.03,
+    lavender: 1.03,
+    gardenia: 1.04
+  };
+
+  // Bare-Stem Bouquet Rendering Engine (Aligned Stem Tips at Base, Blooms Strictly Beside Each Other)
   function renderBouquetPreview(animated = false) {
     const total = state.bouquet.flowers.length;
 
@@ -954,21 +978,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const seed = state.bouquet.shuffleSeed;
 
-    // 1. Interleaved Greenery (Nestled cohesively behind and between flowers)
+    // 1. Interleaved Greenery (Framed neatly behind flowers)
     if (greeneryLayer) {
       greeneryLayer.innerHTML = '';
 
       const greenerySlots = {
-        eucalyptus: { angle: -32, yOffset: -8,  zIdx: 5, shiftX: -4 },
-        fern:       { angle: -12, yOffset: -16, zIdx: 6, shiftX: -2 },
-        olive:      { angle: +12, yOffset: -14, zIdx: 6, shiftX: +2 },
-        ruscus:     { angle: +32, yOffset: -8,  zIdx: 5, shiftX: +4 }
+        eucalyptus: { angle: -36, yOffset: -6,  zIdx: 4, shiftX: -3 },
+        fern:       { angle: -14, yOffset: -12, zIdx: 4, shiftX: -1 },
+        olive:      { angle: +14, yOffset: -12, zIdx: 4, shiftX: +1 },
+        ruscus:     { angle: +36, yOffset: -6,  zIdx: 4, shiftX: +3 }
       };
 
       state.bouquet.greenery.forEach(foliage => {
-        const config = greenerySlots[foliage] || { angle: 0, yOffset: -12, zIdx: 6, shiftX: 0 };
-        const finalAngle = Math.round(config.angle + Math.sin(seed * 7) * 2);
-        const finalY = Math.round(config.yOffset + Math.sin(seed * 13) * 3);
+        const config = greenerySlots[foliage] || { angle: 0, yOffset: -10, zIdx: 4, shiftX: 0 };
+        const finalAngle = Math.round(config.angle);
+        const finalY = Math.round(config.yOffset);
 
         const item = document.createElement('div');
         item.className = `greenery-item greenery-${foliage}`;
@@ -980,49 +1004,40 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 2. Flower Stems Cluster (Cohesive hand-tied bouquet, subtle edge overlaps)
+    // 2. Flower Stems Cluster (Stems converge at base tips; blooms fan out strictly beside each other)
     if (stemsBloomCluster) {
       stemsBloomCluster.innerHTML = '';
 
       state.bouquet.flowers.forEach((item, i) => {
         const t = total > 1 ? (i / (total - 1)) : 0.5;
 
-        // Fanning angles: cohesive curve (approx -24deg to +24deg for 5 stems, up to +-32deg for 8 stems)
-        const maxAngle = total > 1 ? Math.min(32, 24 + (total - 5) * 2.2) : 0;
-        const baseAngle = total > 1 ? -maxAngle + (2 * maxAngle * t) : 0;
+        // Fanning angles: calibrated so blooms sit side-by-side with zero vertical stacking
+        // 5 stems: -36deg to +36deg (18deg step, ~54px horizontal separation)
+        // 8 stems: -45deg to +45deg (~40px horizontal separation)
+        const maxAngle = total > 1 ? Math.min(45, 36 + (total - 5) * 3.0) : 0;
+        const baseAngle = total > 1 ? (-maxAngle + (2 * maxAngle * t)) : 0;
+        const finalAngle = baseAngle.toFixed(1);
 
-        // Gentle dome curve creating a lush, unified rounded floral head
-        const domeArch = total > 1 ? Math.sin(t * Math.PI) * 12 : 0;
-        // Subtle tier offset gives depth with only gentle petal-edge overlaps
-        const tierY = (i % 2 === 0 ? 0 : 7);
-        const finalY = Math.round(-domeArch + tierY);
+        // Z-Index: clean left-to-right layering so each flower sits beside the other without blocking
+        const zIdx = 10 + i;
 
-        // All stem bottoms are gathered together inside the tie band at the center base
-        const bundleSpread = Math.min(10, total * 1.5);
-        const baseShiftX = Math.round((t - 0.5) * bundleSpread);
-
-        // Jitter for organic botanical naturalness
-        const jitterAngle = Number((Math.sin(seed * 7 + i * 4.1) * 0.8).toFixed(1));
-        const jitterY = Math.round(Math.sin(seed * 17 + i * 7.1) * 2);
-
-        const finalAngle = (baseAngle + jitterAngle).toFixed(1);
-        const totalY = finalY + jitterY;
-
-        // Z-Index: outer stems layer behind, center stems layer forward, all under tie band (z-index 25)
-        const zIdx = 10 + Math.round(Math.sin(t * Math.PI) * 5) + (i % 2 === 0 ? 1 : 2);
+        // Normalized flower scale to align stem tips at base tie band
+        const fileKey = item.file.replace(/\.(png|jpg|svg)$/i, '');
+        const imgScale = FLOWER_STEM_SCALE[fileKey] || 1.0;
 
         const stemEl = document.createElement('div');
         stemEl.className = 'stem-flower-item';
         stemEl.dataset.stemIndex = i;
         stemEl.dataset.flower = item.flower;
         stemEl.title = `${item.flower} (Stem ${i + 1} of ${total} - Drag in Step 2 to rearrange)`;
-        stemEl.style.left = `calc(50% + ${baseShiftX}px)`;
-        stemEl.style.transform = `rotate(${finalAngle}deg) translateY(${totalY}px)`;
+        // All stems converge at exact center base (50%) inside the tie band
+        stemEl.style.left = '50%';
+        stemEl.style.transform = `rotate(${finalAngle}deg)`;
         stemEl.style.zIndex = zIdx;
-        stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img" draggable="false">`;
+        stemEl.innerHTML = `<img src="assets/flowers/${item.file}" alt="${item.flower}" class="stem-flower-img" draggable="false" style="transform-origin: bottom center; transform: scale(${imgScale});">`;
 
         // Attach Step 2 Hand Tool drag handlers
-        const baseTransform = `rotate(${finalAngle}deg) translateY(${totalY}px)`;
+        const baseTransform = `rotate(${finalAngle}deg)`;
         attachStemDragHandlers(stemEl, i, baseTransform, total);
 
         stemsBloomCluster.appendChild(stemEl);
