@@ -109,11 +109,19 @@ document.addEventListener('DOMContentLoaded', () => {
         view.style.display = isMatch ? 'flex' : 'none';
         view.classList.toggle('active', isMatch);
       });
+      if (room === 'studio') {
+        returnToStudioHub();
+      }
     });
   });
 
-  // ================= STUDIO MEDIUM SELECTOR =================
-  const mediumCards = document.querySelectorAll('.medium-card');
+  // ================= STUDIO 2x2 HUB & WORKSPACE NAVIGATION =================
+  const studioHub = document.getElementById('studio-hub');
+  const studioEditorArea = document.getElementById('studio-editor-area');
+  const studioGridCards = document.querySelectorAll('.studio-grid-card');
+  const btnBackHub = document.getElementById('btn-back-hub');
+  const editorMediumTitle = document.getElementById('editor-medium-title');
+
   const canvasPostcard = document.getElementById('canvas-postcard');
   const canvasLetter = document.getElementById('canvas-letter');
   const canvasBouquet = document.getElementById('canvas-bouquet');
@@ -126,19 +134,59 @@ document.addEventListener('DOMContentLoaded', () => {
     'greeting-card': canvasCard
   };
 
-  mediumCards.forEach(card => {
+  function selectMedium(med) {
+    if (med === 'card') med = 'greeting-card';
+    state.activeMedium = med;
+
+    if (studioHub) studioHub.style.display = 'none';
+    if (studioEditorArea) studioEditorArea.style.display = 'block';
+
+    const titleMap = {
+      'postcard': 'Postcard',
+      'letter': 'Letter',
+      'bouquet': 'Bouquet',
+      'greeting-card': 'Card'
+    };
+    if (editorMediumTitle) {
+      editorMediumTitle.textContent = titleMap[med] || med;
+    }
+
+    Object.keys(canvases).forEach(key => {
+      if (canvases[key]) {
+        canvases[key].style.display = key === med ? 'block' : 'none';
+      }
+    });
+
+    window.dispatchEvent(new Event('resize'));
+    if (med === 'bouquet' && typeof renderBouquet === 'function') {
+      renderBouquet();
+    }
+  }
+
+  function returnToStudioHub() {
+    state.activeMedium = null;
+    if (studioEditorArea) studioEditorArea.style.display = 'none';
+    if (studioHub) studioHub.style.display = 'flex';
+    Object.keys(canvases).forEach(key => {
+      if (canvases[key]) canvases[key].style.display = 'none';
+    });
+  }
+
+  studioGridCards.forEach(card => {
     card.addEventListener('click', () => {
       const med = card.dataset.medium;
-      state.activeMedium = med;
-
-      mediumCards.forEach(c => c.classList.toggle('active', c === card));
-      Object.keys(canvases).forEach(key => {
-        if (canvases[key]) {
-          canvases[key].style.display = key === med ? 'block' : 'none';
-        }
-      });
+      selectMedium(med);
     });
   });
+
+  if (btnBackHub) {
+    btnBackHub.addEventListener('click', () => {
+      returnToStudioHub();
+    });
+  }
+
+  // Initially show only the 2x2 studio hub
+  returnToStudioHub();
 
   // ================= 1. POSTCARD WORKSPACE =================
   const postcardCard = document.getElementById('postcard-card');
@@ -1571,12 +1619,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (appBottomNav) appBottomNav.style.display = 'flex';
     }
     const paramMedium = urlParams.get('medium') || (window.location.href.includes('medium=bouquet') ? 'bouquet' : null);
-    if (paramMedium && canvases[paramMedium]) {
-      state.activeMedium = paramMedium;
-      mediumCards.forEach(c => c.classList.toggle('active', c.dataset.medium === paramMedium));
-      Object.keys(canvases).forEach(key => {
-        if (canvases[key]) canvases[key].style.display = key === paramMedium ? 'block' : 'none';
-      });
+    if (paramMedium && typeof selectMedium === 'function') {
+      selectMedium(paramMedium);
     }
     const paramStep = urlParams.get('step') || (window.location.href.includes('step=arrange') ? 'arrange' : null);
     if (paramStep && typeof setBouquetStep === 'function') {

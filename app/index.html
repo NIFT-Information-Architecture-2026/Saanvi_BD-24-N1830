@@ -32,34 +32,9 @@
         <h1 class="header-title" id="space-title" contenteditable="true" title="Tap to rename">Between Us</h1>
       </div>
       <div class="header-right">
-        <!-- Tiny Cute Envelope Visual (Open envelope with blank note, pink bow, red heart & stars) -->
+        <!-- Illustrated Envelope Logo -->
         <div class="tiny-envelope-visual" title="a little something">
-          <svg width="55" height="50" viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Open back flap -->
-            <path d="M 12 40 C 26 22, 40 8, 50 8 C 60 8, 74 22, 88 40" fill="#FAF5EC" stroke="#D3C7B5" stroke-width="1.8" stroke-linejoin="round"/>
-            <!-- Note card peeking out with pink bow -->
-            <rect x="18" y="16" width="64" height="46" rx="3" fill="#FFF8F5" stroke="#E6DDD0" stroke-width="1.2"/>
-            <!-- Tied pink bow on card -->
-            <path d="M 50 25 C 44 19, 36 21, 42 27 C 46 31, 50 26, 50 26 C 50 26, 54 31, 58 27 C 64 21, 56 19, 50 25 Z" fill="none" stroke="#F495B3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="50" cy="26" r="1.4" fill="#F495B3"/>
-            <path d="M 48 27 C 45 31, 38 33, 37 34" fill="none" stroke="#F495B3" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M 52 27 C 55 31, 62 33, 63 34" fill="none" stroke="#F495B3" stroke-width="1.5" stroke-linecap="round"/>
-            <!-- Envelope body -->
-            <path d="M 10 40 L 90 40 L 90 78 C 90 81, 87 84, 84 84 L 16 84 C 13 84, 10 81, 10 78 Z" fill="#FBF7EF" stroke="#D3C7B5" stroke-width="1.8"/>
-            <path d="M 10 40 L 50 64 L 90 40" fill="none" stroke="#D3C7B5" stroke-width="1.3"/>
-            <path d="M 10 82 L 42 59" fill="none" stroke="#D3C7B5" stroke-width="1.3"/>
-            <path d="M 90 82 L 58 59" fill="none" stroke="#D3C7B5" stroke-width="1.3"/>
-            <!-- Red heart seal at fold center -->
-            <path d="M 50 68 C 50 68, 41 62, 41 55 C 41 50, 46 48, 50 53 C 54 48, 59 50, 59 55 C 59 62, 50 68, 50 68 Z" fill="#D32F3D" stroke="#A61F2A" stroke-width="1.2"/>
-            <!-- Silver stars -->
-            <polygon points="20,58 21.2,61.2 24.5,61.5 22,63.5 22.8,66.8 20,65 17.2,66.8 18,63.5 15.5,61.5 18.8,61.2" fill="#9DA8B0"/>
-            <polygon points="80,58 81.2,61.2 84.5,61.5 82,63.5 82.8,66.8 80,65 77.2,66.8 78,63.5 75.5,61.5 78.8,61.2" fill="#9DA8B0"/>
-            <polygon points="50,71 50.9,73.4 53.4,73.6 51.5,75.1 52.1,77.6 50,76.2 47.9,77.6 48.5,75.1 46.6,73.6 49.1,73.4" fill="#9DA8B0"/>
-            <!-- Cute red hearts -->
-            <path d="M 18 76 C 18 76, 14 73, 14 69.5 C 14 66.5, 17 65.5, 18 68 C 19 65.5, 22 66.5, 22 69.5 C 22 73, 18 76, 18 76 Z" fill="#D32F3D"/>
-            <path d="M 24 72 C 24 72, 21 69.5, 21 66.8 C 21 64.5, 23.2 63.8, 24 65.8 C 24.8 63.8, 27 64.5, 27 66.8 C 27 69.5, 24 72, 24 72 Z" fill="#D32F3D"/>
-            <path d="M 84 52 C 84 52, 81.5 50, 81.5 47.8 C 81.5 45.8, 83.2 45.2, 84 47 C 84.8 45.2, 86.5 45.8, 86.5 47.8 C 86.5 50, 84 52, 84 52 Z" fill="#D32F3D"/>
-          </svg>
+          <img src="assets/header_logo.png" alt="a little something" class="header-envelope-logo">
         </div>
         <!-- Minimal Save Symbol with Pop-up -->
         <button class="save-icon-btn" id="btn-save-popover" title="Save options">
@@ -87,13 +62,58 @@
       
       <!-- ================= ROOM 1: THE STUDIO ================= -->
       <section class="room-view active" id="room-studio">
-        <!-- Clean minimal prompt -->
-        <div class="studio-clean-prompt">
-          <h2>What would you like to make today?</h2>
+        <!-- ================= 2x2 STUDIO HUB GRID ================= -->
+        <div class="studio-hub" id="studio-hub">
+          <div class="studio-clean-prompt">
+            <h2>What would you like to make today?</h2>
+          </div>
+
+          <div class="studio-grid-2x2">
+            <button class="studio-grid-card" data-medium="postcard" title="Make a Postcard">
+              <div class="grid-card-art">
+                <img src="assets/medium_postcard.png" alt="Postcard" class="grid-art-img">
+              </div>
+              <span class="grid-card-title">Postcard</span>
+            </button>
+
+            <button class="studio-grid-card" data-medium="letter" title="Write a Letter">
+              <div class="grid-card-art">
+                <img src="assets/medium_letter.png" alt="Letter" class="grid-art-img">
+              </div>
+              <span class="grid-card-title">Letter</span>
+            </button>
+
+            <button class="studio-grid-card" data-medium="bouquet" title="Arrange a Bouquet">
+              <div class="grid-card-art">
+                <img src="assets/medium_bouquet.png" alt="Bouquet" class="grid-art-img">
+              </div>
+              <span class="grid-card-title">Bouquet</span>
+            </button>
+
+            <button class="studio-grid-card" data-medium="greeting-card" title="Design a Card">
+              <div class="grid-card-art">
+                <img src="assets/medium_card.png" alt="Card" class="grid-art-img">
+              </div>
+              <span class="grid-card-title">Card</span>
+            </button>
+          </div>
         </div>
 
+        <!-- ================= ACTIVE CREATION WORKSPACE ================= -->
+        <div class="studio-editor-area" id="studio-editor-area" style="display:none;">
+          <div class="editor-header-bar">
+            <button class="btn-back-hub" id="btn-back-hub" title="Back to Studio">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span>Back</span>
+            </button>
+            <span class="editor-current-title" id="editor-medium-title">Bouquet</span>
+            <div class="editor-header-spacer"></div>
+          </div>
+
         <!-- 4 Minimal Clean Medium Buttons -->
-        <div class="studio-medium-selector">
+        <div class="studio-medium-selector" style="display:none;">
           <button class="medium-card active" data-medium="postcard" title="Postcard">
             <svg class="med-svg med-svg-postcard" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="1" y="1" width="30" height="22" rx="1.5" fill="#FFFFFF" stroke="#E8D5CE" stroke-width="0.8"/>
@@ -974,7 +994,7 @@
           <div class="dispatch-row">
             <button class="btn-dispatch" id="btn-dispatch-action">Dispatch</button>
           </div>
-        </section>
+        </div>
       </section>
 
       <!-- ================= ROOM 2: KEEPSAKES ================= -->

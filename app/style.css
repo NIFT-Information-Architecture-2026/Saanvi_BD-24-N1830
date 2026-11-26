@@ -63,7 +63,7 @@ body {
   width: 100%;
   max-width: 440px;
   min-height: 820px;
-  background-color: var(--paper-cloud);
+  background-color: #FEF6F4;
   border: 1.5px solid var(--paper-border);
   border-radius: var(--radius-lg);
   display: flex;
@@ -98,7 +98,7 @@ body {
   justify-content: center;
   width: 100%;
   max-width: 400px;
-  gap: 16px;
+  gap: 6px;
   transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
 }
 
@@ -115,7 +115,7 @@ body {
 
 .splash-illustration {
   width: 100%;
-  max-width: 375px;
+  max-width: 315px;
   height: auto;
   display: block;
   border-radius: 12px;
@@ -128,7 +128,7 @@ body {
   align-items: center;
   gap: 2px;
   text-align: center;
-  margin-top: 4px;
+  margin-top: -2px;
 }
 
 .splash-caption {
@@ -152,13 +152,14 @@ body {
 
 /* ================= APP HEADER ================= */
 .app-header {
-  padding: 16px 18px 14px;
-  border-bottom: 1px solid var(--paper-border-soft);
-  background-color: #FFFFFF;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid #F1D4DB;
+  background-color: #FFF6F7;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+  z-index: 10;
 }
 
 .header-left {
@@ -166,34 +167,35 @@ body {
   flex-direction: column;
 }
 
-/* "a little something, from me to you" made bigger, elegant, deep maroon */
+/* "a little something, from me to you" made elegant Cormorant Garamond */
 .header-pretitle {
   display: block;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
   font-size: 19px;
   font-weight: 500;
-  color: var(--ink-maroon);
+  color: #5C1928;
   letter-spacing: 0.02em;
   line-height: 1.2;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
-/* "Between Us" made a bit smaller, delicate, subtle uppercase */
+/* "Between Us" delicate uppercase */
 .header-title {
-  font-family: var(--font-serif);
-  font-size: 14.5px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
   font-weight: 500;
-  color: var(--ink-muted);
+  color: #8F5260;
   outline: none;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  margin: 0;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .tiny-envelope-visual {
@@ -201,26 +203,32 @@ body {
   align-items: center;
   justify-content: center;
   cursor: default;
-  transition: transform 0.2s ease;
 }
-.tiny-envelope-visual:hover {
-  transform: translateY(-1px) scale(1.02);
+
+.header-envelope-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .save-icon-btn {
-  background: var(--paper-babypink);
-  border: 1px solid var(--paper-border);
-  border-radius: var(--radius-sm);
-  padding: 6px;
+  background: transparent;
+  border: 1px solid #E2BDC6;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   cursor: pointer;
-  color: var(--ink-maroon);
+  color: #5C1928;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s ease;
+  transition: all 0.2s ease;
 }
 .save-icon-btn:hover {
-  background-color: var(--paper-pink-soft);
+  background-color: #FFE8EE;
+  border-color: #DDA3B1;
 }
 
 .save-popover {
@@ -263,23 +271,142 @@ body {
 .room-view {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
-/* Studio Prompt */
+/* ================= 2x2 STUDIO HUB ================= */
+.studio-hub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 24px;
+}
+
+.studio-clean-prompt {
+  margin: 18px 8px 22px;
+  text-align: center;
+}
+
 .studio-clean-prompt h2 {
-  font-family: var(--font-serif);
-  font-size: 18px;
-  font-weight: 400;
-  color: var(--ink-maroon);
+  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  font-size: 27px;
+  font-weight: 500;
+  color: #4A121F;
   letter-spacing: -0.01em;
+  line-height: 1.25;
 }
 
-/* 4 Minimal Medium Cards */
-.studio-medium-selector {
+.studio-grid-2x2 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.studio-grid-card {
+  background-color: #FDF2F0;
+  border: 1.2px solid #F4CACF;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 10px 18px;
+  aspect-ratio: 1 / 1.05;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.22s cubic-bezier(0.34, 1.3, 0.64, 1), 
+              border-color 0.2s ease, 
+              background-color 0.2s ease;
+}
+
+.studio-grid-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: #E6A2B3;
+  background-color: #FAEBEE;
+}
+
+.studio-grid-card:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.grid-card-art {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  pointer-events: none;
+}
+
+.grid-art-img {
+  max-height: 96px;
+  max-width: 90%;
+  object-fit: contain;
+  display: block;
+}
+
+.grid-card-title {
+  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  font-size: 19px;
+  font-weight: 500;
+  color: #4A121F;
+  letter-spacing: 0.01em;
+  margin-top: 10px;
+  pointer-events: none;
+}
+
+/* ================= EDITOR HEADER BAR ================= */
+.studio-editor-area {
+  width: 100%;
+}
+
+.editor-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #F1D4DB;
+  background-color: #FFF9FA;
+  margin: -10px -16px 14px -16px;
+}
+
+.btn-back-hub {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #E6BDC6;
+  border-radius: 16px;
+  padding: 5px 12px 5px 8px;
+  color: #6C1E30;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-back-hub:hover {
+  background: #FFE8EE;
+  border-color: #D898A8;
+}
+
+.editor-current-title {
+  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: #4A121F;
+}
+
+.editor-header-spacer {
+  width: 50px;
+}
+
+/* 4 Minimal Medium Cards (legacy fallback) */
+.studio-medium-selector {
+  display: none;
 }
 
 .medium-card {
@@ -2200,12 +2327,14 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 56px;
-  background: var(--paper-white);
-  border-top: 1px solid var(--paper-border);
+  height: 62px;
+  background: #FFF6F7;
+  border-top: 1px solid #F1D4DB;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  z-index: 100;
+  padding: 4px 0 6px;
 }
 .nav-tab {
   background: transparent;
@@ -2213,18 +2342,21 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
   cursor: pointer;
-  color: var(--ink-light);
-  font-size: 10px;
+  color: #8F5260;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  transition: color 0.15s ease;
 }
 .nav-tab.active {
-  color: var(--ink-red);
+  color: #B3263E;
   font-weight: 600;
 }
 .nav-svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 
 /* ================= UNWRAPPING MODAL ================= */
