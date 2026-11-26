@@ -548,9 +548,9 @@
               </button>
               <button class="vessel-btn" data-vessel="box" style="padding-top: 10px;">
                 <div style="width: 44px; height: 44px; margin: 0 auto 6px auto; display: flex; align-items: center; justify-content: center;">
-                  <img src="assets/keepsake_box.jpg" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" />
+                  <img src="assets/boxes/box1.jpg" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" alt="Gift Box" />
                 </div>
-                <span class="vessel-label">Keepsake Box</span>
+                <span class="vessel-label">Gift Box</span>
               </button>
               <button class="vessel-btn" data-vessel="truck">
                 <span class="vessel-icon">🚚</span>
@@ -558,7 +558,7 @@
               </button>
             </div>
 
-            <!-- Envelope Options (Hidden by default, shown when Envelope is selected) -->
+            <!-- Envelope Options (Shown when Envelope is selected) -->
             <div id="envelope-selector-container" style="display: none; margin-bottom: 12px; margin-top: 12px;">
               <label style="font-family: 'Playfair Display', Georgia, serif; font-size: 0.95rem; color: #521319; display: block; margin-bottom: 8px; text-align: center;">Select Envelope Design:</label>
               <div style="display: flex; gap: 12px; justify-content: center; align-items: center;">
@@ -576,6 +576,22 @@
                 </button>
                 <button class="env-thumb-btn" data-index="5" style="flex-shrink: 0; width: 48px; height: 48px; border: 2px solid transparent; border-radius: 8px; background: #fff; cursor: pointer; padding: 0; overflow: hidden; position: relative;">
                   <img src="assets/envelopes/env5.jpg" style="width: 100%; height: 100%; object-fit: contain; clip-path: polygon(18% 44%, 50% 21%, 82% 44%, 82% 87%, 18% 87%); image-rendering: -webkit-optimize-contrast; image-rendering: high-quality;" />
+                </button>
+              </div>
+            </div>
+
+            <!-- Gift Box Options (Shown when Gift Box is selected) -->
+            <div id="box-selector-container" style="display: none; margin-bottom: 12px; margin-top: 12px;">
+              <label style="font-family: 'Playfair Display', Georgia, serif; font-size: 0.95rem; color: #521319; display: block; margin-bottom: 8px; text-align: center;">Select Gift Box Design:</label>
+              <div style="display: flex; gap: 14px; justify-content: center; align-items: center;">
+                <button class="box-thumb-btn active" data-index="1" title="Kraft Ribbon Box" style="flex-shrink: 0; width: 56px; height: 56px; border: 2px solid #521319; border-radius: 10px; background: #fff; cursor: pointer; padding: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
+                  <img src="assets/boxes/box1.jpg" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" alt="Kraft Box" />
+                </button>
+                <button class="box-thumb-btn" data-index="2" title="Dusty Blue Ribbon Box" style="flex-shrink: 0; width: 56px; height: 56px; border: 2px solid transparent; border-radius: 10px; background: #fff; cursor: pointer; padding: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
+                  <img src="assets/boxes/box2.jpg" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" alt="Blue Box" />
+                </button>
+                <button class="box-thumb-btn" data-index="3" title="Pink Floral Toile Box" style="flex-shrink: 0; width: 56px; height: 56px; border: 2px solid transparent; border-radius: 10px; background: #fff; cursor: pointer; padding: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
+                  <img src="assets/boxes/box3.jpg" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" alt="Floral Pink Box" />
                 </button>
               </div>
             </div>

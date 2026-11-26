@@ -2665,8 +2665,8 @@ body {
   gap: 8px;
 }
 .vessel-btn {
-  background: var(--paper-cloud);
-  border: 1px solid var(--paper-border-soft);
+  background: #FFF9FA;
+  border: 1px solid #F1CAD3;
   border-radius: var(--radius-sm);
   padding: 10px 4px;
   cursor: pointer;
@@ -2674,17 +2674,39 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  transition: all 0.2s ease;
 }
 .vessel-btn.active {
-  border-color: var(--ink-black);
-  background: var(--paper-white);
+  border-color: #521319;
+  background: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(82, 19, 25, 0.12);
 }
 .vessel-icon {
   font-size: 20px;
 }
 .vessel-label {
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #521319;
+}
+
+.box-thumb-btn {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.box-thumb-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(82, 19, 25, 0.15);
+}
+.box-thumb-btn.active {
+  border-color: #521319 !important;
+  box-shadow: 0 2px 8px rgba(82, 19, 25, 0.25);
+}
+
+.env-thumb-btn {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.env-thumb-btn:hover {
+  transform: translateY(-2px);
 }
 
 /* Live Vessel Preview Box */

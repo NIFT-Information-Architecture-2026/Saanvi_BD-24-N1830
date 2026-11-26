@@ -1543,8 +1543,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const vesselPreviewRender = document.getElementById('vessel-preview-render');
   const envSelectorContainer = document.getElementById('envelope-selector-container');
   const envThumbBtns = document.querySelectorAll('.env-thumb-btn');
+  const boxSelectorContainer = document.getElementById('box-selector-container');
+  const boxThumbBtns = document.querySelectorAll('.box-thumb-btn');
+
+  const boxImages = {
+    '1': 'assets/boxes/box1.jpg',
+    '2': 'assets/boxes/box2.jpg',
+    '3': 'assets/boxes/box3.jpg'
+  };
 
   state.envelopeIndex = 0;
+  state.boxIndex = '1';
 
   const getEnvelopeSVG = () => `
     <svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -1590,11 +1599,14 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   };
 
-  const getBoxImage = (size = "120px") => `
-    <div style="width: ${size}; height: ${size}; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-      <img src="assets/keepsake_box.jpg" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" />
-    </div>
-  `;
+  const getBoxImage = (size = "130px") => {
+    const boxSrc = boxImages[state.boxIndex || '1'] || 'assets/boxes/box1.jpg';
+    return `
+      <div style="width: ${size}; height: ${size}; position: relative; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+        <img src="${boxSrc}" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply;" alt="Gift Box" />
+      </div>
+    `;
+  };
 
   vesselBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1602,9 +1614,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const v = btn.dataset.vessel;
       state.vessel = v;
       if (v === 'envelope') {
-        envSelectorContainer.style.display = 'block';
+        if (envSelectorContainer) envSelectorContainer.style.display = 'block';
+        if (boxSelectorContainer) boxSelectorContainer.style.display = 'none';
+      } else if (v === 'box') {
+        if (envSelectorContainer) envSelectorContainer.style.display = 'none';
+        if (boxSelectorContainer) boxSelectorContainer.style.display = 'block';
       } else {
-        envSelectorContainer.style.display = 'none';
+        if (envSelectorContainer) envSelectorContainer.style.display = 'none';
+        if (boxSelectorContainer) boxSelectorContainer.style.display = 'none';
       }
       updateVesselLivePreview();
     });
@@ -1614,7 +1631,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       envThumbBtns.forEach(b => {
         b.classList.toggle('active', b === btn);
-        b.style.borderColor = b === btn ? '#D4A373' : 'transparent';
+        b.style.borderColor = b === btn ? '#521319' : 'transparent';
       });
       state.envelopeIndex = btn.dataset.index;
       updateVesselLivePreview();
@@ -1627,12 +1644,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  boxThumbBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      boxThumbBtns.forEach(b => {
+        const isActive = b === btn;
+        b.classList.toggle('active', isActive);
+        b.style.borderColor = isActive ? '#521319' : 'transparent';
+      });
+      state.boxIndex = btn.dataset.index;
+      updateVesselLivePreview();
+
+      // Update the main Gift Box button icon to reflect the selected box
+      const mainBoxBtn = document.querySelector('.vessel-btn[data-vessel="box"] div');
+      if (mainBoxBtn) {
+        mainBoxBtn.innerHTML = getBoxImage("44px");
+      }
+    });
+  });
+
   function updateVesselLivePreview() {
     if (!vesselPreviewRender) return;
     if (state.vessel === 'envelope') {
       vesselPreviewRender.innerHTML = getEnvelopeImage();
     } else if (state.vessel === 'box') {
-      vesselPreviewRender.innerHTML = getBoxImage();
+      vesselPreviewRender.innerHTML = getBoxImage('140px');
     } else {
       vesselPreviewRender.innerHTML = `
         <span class="preview-big-icon">🚚</span>
@@ -1663,7 +1698,8 @@ document.addEventListener('DOMContentLoaded', () => {
         hugeVesselIcon.innerText = '✉️';
         modalVesselHint.innerText = 'Slide wax seal to open';
       } else if (state.vessel === 'box') {
-        hugeVesselIcon.innerText = '🎁';
+        const boxSrc = boxImages[state.boxIndex || '1'] || 'assets/boxes/box1.jpg';
+        hugeVesselIcon.innerHTML = `<img src="${boxSrc}" style="width: 80px; height: 80px; object-fit: contain; mix-blend-mode: multiply;" />`;
         modalVesselHint.innerText = 'Untie ribbon to open';
       } else {
         hugeVesselIcon.innerText = '🚚';
