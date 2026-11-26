@@ -602,10 +602,15 @@ body {
   border-radius: 50%;
   background: #F5CED5;
   display: inline-block;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .postcard-step-dots .step-dot.active {
+  background: #521319;
+}
+
+.postcard-step-dots .step-dot.completed {
   background: #521319;
 }
 
@@ -614,6 +619,11 @@ body {
   height: 1.5px;
   background: #F5CED5;
   display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.postcard-step-dots .step-line.active {
+  background: #521319;
 }
 
 .postcard-subbar-spacer {
@@ -624,7 +634,7 @@ body {
 .postcard-switch-row {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 22px; /* enhanced breathing room between front/back and themes */
 }
 
 .pill-toggle-frontback {
@@ -640,15 +650,15 @@ body {
   background: transparent;
   border: none;
   border-radius: 20px;
-  padding: 6px 26px;
+  padding: 7px 28px;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 500;
   color: #521319;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   transition: all 0.2s ease;
 }
 
@@ -794,7 +804,7 @@ body {
 .postcard-wrapper {
   perspective: 1000px;
   width: 100%;
-  margin: 0 auto;
+  margin: 0 auto 18px auto; /* clean spacing below postcard */
   transition: height 0.3s ease, max-width 0.3s ease;
 }
 
@@ -1119,11 +1129,11 @@ body {
 
 /* Back Controls (Stamps + Fonts) */
 .postcard-back-controls {
-  margin-top: 10px;
+  margin-top: 18px; /* space between postcard and stamps */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   width: 100%;
 }
 
@@ -1238,12 +1248,14 @@ body {
   color: #521319;
 }
 
-/* Flip Action Button */
+/* Flip & Proceed Action Row */
 .postcard-flip-action-row {
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 12px;
-  margin-bottom: 6px;
+  gap: 12px;
+  margin-top: 18px;
+  margin-bottom: 10px;
 }
 
 .btn-flip-card-pill {
@@ -1254,7 +1266,7 @@ body {
   background: #FFF0F3;
   border: 1px solid #F5CED5;
   border-radius: 25px;
-  padding: 9px 34px;
+  padding: 9px 30px;
   color: #521319;
   font-family: var(--font-sans);
   font-size: 14px;
@@ -1267,6 +1279,88 @@ body {
   background: #FCE1E8;
   transform: translateY(-1px);
 }
+
+.btn-step-tick {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #521319;
+  color: #FFFFFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(82, 19, 25, 0.22);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-step-tick:hover {
+  background: #6F1C25;
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(82, 19, 25, 0.32);
+}
+
+.btn-step-tick:active {
+  transform: scale(0.96);
+}
+
+/* ================= STEP 2: CHOOSE HOW IT ARRIVES ================= */
+.step2-delivery-container {
+  padding: 10px 16px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.step2-title {
+  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  font-size: 21px;
+  font-weight: 500;
+  color: #521319;
+  text-align: center;
+  margin: 6px 0 16px;
+  letter-spacing: 0.2px;
+}
+
+.step2-actions-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  align-items: center;
+}
+
+.btn-step2-back {
+  flex: 1;
+  background: #FFF0F3;
+  color: #521319;
+  border: 1px solid #F1CAD3;
+  border-radius: var(--radius-sm);
+  padding: 11px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-step2-back:hover {
+  background: #FCE1E8;
+}
+
+.step2-actions-row .btn-dispatch {
+  flex: 1.4;
+  padding: 11px;
+  background: #521319;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.step2-actions-row .btn-dispatch:hover {
+  background: #6F1C25;
+}
+
 
 /* ================= 2. LETTER WORKSPACE ================= */
 .paper-circles-row {

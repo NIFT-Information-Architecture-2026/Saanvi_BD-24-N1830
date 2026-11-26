@@ -163,6 +163,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.dispatchEvent(new Event('resize'));
+    if (med === 'postcard' && typeof setPostcardStep === 'function') {
+      setPostcardStep(1);
+    }
     if (med === 'bouquet' && typeof renderBouquet === 'function') {
       renderBouquet();
     }
@@ -197,9 +200,56 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const btnPostcardBackToHub = document.getElementById('btn-postcard-back-to-hub');
+  let currentPostcardStep = 1;
+
+  function setPostcardStep(stepNum) {
+    currentPostcardStep = stepNum;
+    const postcardStep1Pane = document.getElementById('postcard-step1-pane');
+    const postcardStep2Pane = document.getElementById('postcard-step2-pane');
+    const postcardDot1 = document.getElementById('postcard-dot-1');
+    const postcardDot2 = document.getElementById('postcard-dot-2');
+    const postcardDot3 = document.getElementById('postcard-dot-3');
+    const postcardLine1 = document.getElementById('postcard-line-1');
+    const postcardLine2 = document.getElementById('postcard-line-2');
+
+    if (stepNum === 1) {
+      if (postcardStep1Pane) postcardStep1Pane.style.display = 'block';
+      if (postcardStep2Pane) postcardStep2Pane.style.display = 'none';
+      if (postcardDot1) {
+        postcardDot1.classList.add('active');
+        postcardDot1.classList.remove('completed');
+      }
+      if (postcardLine1) postcardLine1.classList.remove('active');
+      if (postcardDot2) postcardDot2.classList.remove('active', 'completed');
+      if (postcardLine2) postcardLine2.classList.remove('active');
+      if (postcardDot3) postcardDot3.classList.remove('active');
+    } else if (stepNum === 2) {
+      if (postcardStep1Pane) postcardStep1Pane.style.display = 'none';
+      if (postcardStep2Pane) postcardStep2Pane.style.display = 'block';
+      if (postcardDot1) {
+        postcardDot1.classList.remove('active');
+        postcardDot1.classList.add('completed');
+      }
+      if (postcardLine1) postcardLine1.classList.add('active');
+      if (postcardDot2) {
+        postcardDot2.classList.add('active');
+        postcardDot2.classList.remove('completed');
+      }
+      if (postcardLine2) postcardLine2.classList.remove('active');
+      if (postcardDot3) postcardDot3.classList.remove('active');
+      if (typeof updateVesselLivePreview === 'function') {
+        updateVesselLivePreview();
+      }
+    }
+  }
+
   if (btnPostcardBackToHub) {
     btnPostcardBackToHub.addEventListener('click', () => {
-      returnToStudioHub();
+      if (currentPostcardStep === 2) {
+        setPostcardStep(1);
+      } else {
+        returnToStudioHub();
+      }
     });
   }
 
@@ -209,6 +259,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ================= 1. POSTCARD WORKSPACE =================
   const postcardCard = document.getElementById('postcard-card');
   const btnFlipPostcard = document.getElementById('btn-flip-postcard');
+  const btnPostcardNextStep = document.getElementById('btn-postcard-next-step');
+  const btnPostcardBackToStep1 = document.getElementById('btn-postcard-back-to-step1');
+  const postcardDot1 = document.getElementById('postcard-dot-1');
+  const postcardDot2 = document.getElementById('postcard-dot-2');
   const postcardWrapper = document.getElementById('postcard-container');
   const btnOrientPort = document.getElementById('btn-postcard-orient-port');
   const btnOrientLand = document.getElementById('btn-postcard-orient-land');
@@ -225,13 +279,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const photoUploadHint = document.getElementById('photo-upload-hint');
   const btnToggleFront = document.getElementById('btn-toggle-front');
   const btnToggleBack = document.getElementById('btn-toggle-back');
-  const btnFrontTick = document.getElementById('btn-front-tick');
-  const btnBackTick = document.getElementById('btn-back-tick');
-  const pillTickFront = document.getElementById('pill-tick-front');
-  const pillTickBack = document.getElementById('pill-tick-back');
   const postcardTitleInput = document.getElementById('postcard-title-input');
   const postcardToInput = document.getElementById('postcard-to-input');
   const postcardFromInput = document.getElementById('postcard-from-input');
+
+  // Step 2 & Step 1 Navigation wiring
+  if (btnPostcardNextStep) {
+    btnPostcardNextStep.addEventListener('click', () => {
+      setPostcardStep(2);
+    });
+  }
+  if (btnPostcardBackToStep1) {
+    btnPostcardBackToStep1.addEventListener('click', () => {
+      setPostcardStep(1);
+    });
+  }
+  if (postcardDot1) {
+    postcardDot1.addEventListener('click', () => setPostcardStep(1));
+  }
+  if (postcardDot2) {
+    postcardDot2.addEventListener('click', () => setPostcardStep(2));
+  }
 
   // Flip Postcard & Sync Front/Back Toggle
   function setPostcardFace(face) {
@@ -258,58 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
       setPostcardFace(state.postcard.flipped ? 'front' : 'back');
     });
   }
-
-  // Completion Ticks Logic
-  let isFrontDone = true;
-  let isBackDone = true;
-
-  function updateTicksUI() {
-    if (btnFrontTick) btnFrontTick.classList.toggle('done', isFrontDone);
-    if (btnBackTick) btnBackTick.classList.toggle('done', isBackDone);
-    if (pillTickFront) pillTickFront.style.opacity = isFrontDone ? '1' : '0.4';
-    if (pillTickBack) pillTickBack.style.opacity = isBackDone ? '1' : '0.4';
-  }
-
-  if (btnFrontTick) {
-    btnFrontTick.addEventListener('click', (e) => {
-      e.stopPropagation();
-      isFrontDone = !isFrontDone;
-      updateTicksUI();
-    });
-  }
-  if (btnBackTick) {
-    btnBackTick.addEventListener('click', (e) => {
-      e.stopPropagation();
-      isBackDone = !isBackDone;
-      updateTicksUI();
-    });
-  }
-
-  if (postcardTitleInput) {
-    postcardTitleInput.addEventListener('input', () => {
-      isFrontDone = true;
-      updateTicksUI();
-    });
-  }
-  if (postcardBackMessage) {
-    postcardBackMessage.addEventListener('input', () => {
-      isBackDone = true;
-      updateTicksUI();
-    });
-  }
-  if (postcardToInput) {
-    postcardToInput.addEventListener('input', () => {
-      isBackDone = true;
-      updateTicksUI();
-    });
-  }
-  if (postcardFromInput) {
-    postcardFromInput.addEventListener('input', () => {
-      isBackDone = true;
-      updateTicksUI();
-    });
-  }
-  updateTicksUI();
 
   // Handle Font Change & Size
   let currentFontSize = 16;
@@ -430,8 +446,6 @@ document.addEventListener('DOMContentLoaded', () => {
           if (photoUploadHint) photoUploadHint.style.display = 'none';
           imgState = { scale: 1, tx: 0, ty: 0 };
           updateImgTransform();
-          isFrontDone = true;
-          updateTicksUI();
         };
         reader.readAsDataURL(file);
       }
