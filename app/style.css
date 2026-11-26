@@ -283,17 +283,18 @@ body {
 }
 
 .studio-clean-prompt {
-  margin: 18px 8px 22px;
+  margin: 22px 10px 20px;
   text-align: center;
 }
 
 .studio-clean-prompt h2 {
   font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  font-size: 27px;
+  font-size: 24.5px;
   font-weight: 500;
   color: #4A121F;
   letter-spacing: -0.01em;
   line-height: 1.25;
+  white-space: nowrap;
 }
 
 .studio-grid-2x2 {
@@ -341,15 +342,15 @@ body {
 }
 
 .grid-art-img {
-  max-height: 96px;
+  max-height: 100px;
   max-width: 90%;
   object-fit: contain;
   display: block;
 }
 
 .grid-card-title {
-  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  font-size: 19px;
+  font-family: 'Outfit', 'Plus Jakarta Sans', var(--font-sans);
+  font-size: 17.5px;
   font-weight: 500;
   color: #4A121F;
   letter-spacing: 0.01em;
