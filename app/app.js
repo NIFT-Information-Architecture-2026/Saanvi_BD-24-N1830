@@ -55,17 +55,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const appStage = document.getElementById('app-stage');
   const appBottomNav = document.getElementById('app-bottom-nav');
 
+  function openApp() {
+    if (!splashScreen || splashScreen.dataset.opened === 'true') return;
+    splashScreen.dataset.opened = 'true';
+    splashScreen.style.opacity = '0';
+    splashScreen.style.transform = 'scale(1.02)';
+    setTimeout(() => {
+      splashScreen.style.display = 'none';
+      if (appHeader) appHeader.style.display = 'flex';
+      if (appStage) appStage.style.display = 'block';
+      if (appBottomNav) appBottomNav.style.display = 'flex';
+      window.dispatchEvent(new Event('resize'));
+    }, 420);
+  }
+
+  if (splashScreen) {
+    splashScreen.addEventListener('click', openApp);
+  }
   if (splashEnvelope) {
-    splashEnvelope.addEventListener('click', () => {
-      splashScreen.style.opacity = '0';
-      splashScreen.style.transition = 'opacity 0.4s ease';
-      setTimeout(() => {
-        splashScreen.style.display = 'none';
-        appHeader.style.display = 'flex';
-        appStage.style.display = 'block';
-        appBottomNav.style.display = 'flex';
-      }, 400);
-    });
+    splashEnvelope.addEventListener('click', openApp);
   }
 
   // ================= HEADER SAVE POPOVER =================
@@ -1556,7 +1564,7 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     const rawQuery = window.location.search || (window.location.href.includes('?') ? window.location.href.slice(window.location.href.indexOf('?')) : '');
     const urlParams = new URLSearchParams(rawQuery);
-    if (urlParams.has('nosplash') || urlParams.has('medium') || window.location.href.includes('nosplash')) {
+    if (urlParams.has('nosplash') || window.location.href.includes('nosplash')) {
       if (splashScreen) splashScreen.style.display = 'none';
       if (appHeader) appHeader.style.display = 'flex';
       if (appStage) appStage.style.display = 'block';
