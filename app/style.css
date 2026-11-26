@@ -126,38 +126,28 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
   text-align: center;
+  margin-top: 4px;
 }
 
 .splash-caption {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   color: #7A2B3D;
+  line-height: 1.25;
 }
 
-.splash-tap-hint {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: #AA6B79;
+.splash-subcaption {
+  font-family: 'Dancing Script', cursive;
+  font-size: 22px;
   font-weight: 500;
-  animation: pulseTapHint 2.4s infinite ease-in-out;
-}
-
-@keyframes pulseTapHint {
-  0%, 100% {
-    opacity: 0.55;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(-1px);
-  }
+  letter-spacing: 0.02em;
+  color: #964457;
+  line-height: 1.25;
 }
 
 /* ================= APP HEADER ================= */
