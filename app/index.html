@@ -552,8 +552,10 @@
                 </div>
                 <span class="vessel-label">Gift Box</span>
               </button>
-              <button class="vessel-btn" data-vessel="truck">
-                <span class="vessel-icon">🚚</span>
+              <button class="vessel-btn" data-vessel="truck" style="padding-top: 10px;">
+                <div style="width: 44px; height: 44px; margin: 0 auto 6px auto; display: flex; align-items: center; justify-content: center;">
+                  <img src="assets/truck.png" style="width: 100%; height: 100%; object-fit: contain;" alt="Delivery Truck" />
+                </div>
                 <span class="vessel-label">Delivery Truck</span>
               </button>
             </div>
@@ -606,7 +608,80 @@
             <!-- Step 2 Actions -->
             <div class="step2-actions-row">
               <button class="btn-step2-back" id="btn-postcard-back-to-step1">‹ Back to Design</button>
-              <button class="btn-dispatch" id="btn-dispatch-action">Dispatch</button>
+              <button class="btn-dispatch" id="btn-dispatch-action">Proceed to Preview →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= STEP 3: PREVIEW & DISPATCH ================= -->
+        <div id="postcard-step3-pane" class="postcard-step-pane" style="display:none;">
+          <div class="step3-preview-container">
+            <div class="step3-card">
+              <h3 class="step3-title">Your postcard is ready!</h3>
+              <p class="step3-subtitle">Here’s a preview of how it will arrive.</p>
+
+              <!-- Vessel & Postcard Preview Zone -->
+              <div class="step3-stage-zone">
+                <!-- Closed Vessel Presentation View -->
+                <div class="step3-vessel-display" id="step3-vessel-display">
+                  <div class="step3-vessel-wrapper" id="step3-vessel-wrapper">
+                    <!-- Injected via renderStep3Preview() -->
+                  </div>
+                </div>
+
+                <!-- Postcard Revealed View (Hidden until "Click to Open ♡" is tapped) -->
+                <div class="step3-postcard-reveal" id="step3-postcard-reveal" style="display:none;">
+                  <div class="step3-reveal-card-wrap">
+                    <div class="step3-reveal-card" id="step3-reveal-card">
+                      <!-- Rendered live from Step 1 state -->
+                    </div>
+                  </div>
+                  <div class="step3-reveal-flip-row">
+                    <button class="btn-step3-flip" id="btn-step3-flip" title="Flip Postcard">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                      </svg>
+                      <span>Flip</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- "Click to Open ♡" Pill Button -->
+                <div class="step3-open-btn-row">
+                  <button class="btn-click-to-open" id="btn-step3-toggle-open">
+                    <span id="btn-step3-open-text">Click to Open ♡</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Ribbon Bow Divider -->
+              <div class="ribbon-bow-divider">
+                <span class="ribbon-line"></span>
+                <svg class="ribbon-bow-svg" width="38" height="22" viewBox="0 0 38 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M 19 11 C 15 5, 8 4, 3 8 C -1 11, 2 17, 8 16 C 13 15, 17 12, 19 11 Z" fill="#FCE8EC" stroke="#C97384" stroke-width="1.2" stroke-linejoin="round"/>
+                  <path d="M 19 11 C 23 5, 30 4, 35 8 C 39 11, 36 17, 30 16 C 25 15, 21 12, 19 11 Z" fill="#FCE8EC" stroke="#C97384" stroke-width="1.2" stroke-linejoin="round"/>
+                  <circle cx="19" cy="11" r="3" fill="#B34B62" stroke="#87293E" stroke-width="0.8"/>
+                  <path d="M 18 13 C 16 17, 13 20, 11 21 M 20 13 C 22 17, 25 20, 27 21" stroke="#C97384" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+                <span class="ribbon-line"></span>
+              </div>
+
+              <!-- Step 3 Action Buttons -->
+              <div class="step3-actions-row">
+                <button class="btn-step3-save-vault" id="btn-step3-save-vault">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  <span>Save to Vault</span>
+                </button>
+                <button class="btn-step3-dispatch" id="btn-step3-dispatch">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                  <span>Dispatch</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1146,11 +1221,14 @@
 
       <!-- ================= ROOM 3: MY VAULT ================= -->
       <section class="room-view" id="room-vault" style="display:none;">
-        <div class="vault-folder">
-          <h4>Unsent Drafts (2)</h4>
-        </div>
-        <div class="vault-folder">
-          <h4>Tag: "For Him" (4 notes)</h4>
+        <div class="vault-container">
+          <div class="vault-header">
+            <h3 class="vault-title">Keepsake Vault</h3>
+            <p class="vault-subtitle">All your completed creations are safely preserved here</p>
+          </div>
+          <div class="vault-items-grid" id="vault-items-grid">
+            <!-- Dynamically populated from localStorage -->
+          </div>
         </div>
       </section>
 
@@ -1201,6 +1279,126 @@
         <div class="unwrap-stage" id="modal-revealed-stage" style="display:none;">
           <div id="modal-revealed-content"></div>
           <div class="modal-saved-note">✓ Preserved on your Keepsake Shelf</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= DISPATCH SHARE MODAL ================= -->
+    <div class="dispatch-modal-backdrop" id="dispatch-modal" style="display:none;">
+      <div class="dispatch-modal-dialog">
+        <button class="btn-modal-close" id="btn-close-dispatch-modal" title="Close">✕</button>
+        <div class="dispatch-modal-header">
+          <div class="dispatch-badge-icon">💌</div>
+          <h3 class="dispatch-modal-title">Dispatch Your Postcard</h3>
+          <p class="dispatch-modal-subtitle">Share your thoughtful gift with someone special.</p>
+        </div>
+        
+        <div class="dispatch-modal-body">
+          <div class="dispatch-options-list">
+            <button class="dispatch-opt-card" id="btn-dispatch-copy-url">
+              <div class="dispatch-opt-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#521319" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+              </div>
+              <div class="dispatch-opt-text">
+                <strong>Copy URL</strong>
+                <span>Anyone with this link can view and flip your postcard</span>
+              </div>
+            </button>
+
+            <button class="dispatch-opt-card" id="btn-dispatch-send-friends">
+              <div class="dispatch-opt-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#521319" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="18" cy="5" r="3"></circle>
+                  <circle cx="6" cy="12" r="3"></circle>
+                  <circle cx="18" cy="19" r="3"></circle>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+              </div>
+              <div class="dispatch-opt-text">
+                <strong>Send to Friends</strong>
+                <span>Share via WhatsApp, Messages, or Email</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="dispatch-input-row">
+            <input type="text" class="dispatch-url-input" id="dispatch-url-input" readonly>
+            <button class="btn-copy-small" id="btn-copy-small">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atelier Toast Notification -->
+    <div class="atelier-toast" id="atelier-toast" style="display:none;">
+      <span id="atelier-toast-msg">Link copied to clipboard!</span>
+    </div>
+
+    <!-- ================= PUBLIC RECIPIENT EXPERIENCE ================= -->
+    <div class="recipient-stage-view" id="recipient-stage" style="display:none;">
+      <div class="recipient-container">
+        <!-- Brand Header -->
+        <div class="recipient-header">
+          <div class="recipient-logo">
+            <img src="assets/header_logo.png" alt="Between Us Logo" style="height: 38px; object-fit: contain;">
+          </div>
+          <p class="recipient-brand-title">a little something, from me to you</p>
+          <span class="recipient-brand-sub">BETWEEN US</span>
+        </div>
+
+        <!-- Vessel & Postcard Card -->
+        <div class="recipient-card">
+          <div class="recipient-dedication-box">
+            <h2 class="recipient-greeting" id="recipient-dedication-heading">A little something for you</h2>
+            <p class="recipient-from-to" id="recipient-from-to-text">From Saanvi to Kabir</p>
+          </div>
+
+          <!-- Vessel Wrapper -->
+          <div class="recipient-vessel-stage" id="recipient-vessel-stage">
+            <div id="recipient-vessel-art"></div>
+            <div class="recipient-open-row">
+              <button class="btn-recipient-open" id="btn-recipient-open">
+                <span>Click to Open ♡</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Postcard View (Revealed after clicking open) -->
+          <div class="recipient-postcard-wrap" id="recipient-postcard-wrap" style="display:none;">
+            <div class="recipient-card-inner" id="recipient-card-inner">
+              <div class="recipient-face-front" id="recipient-face-front"></div>
+              <div class="recipient-face-back" id="recipient-face-back" style="display:none;"></div>
+            </div>
+
+            <div class="recipient-actions-row">
+              <button class="btn-recipient-flip" id="btn-recipient-flip">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                </svg>
+                <span>Flip Postcard</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="ribbon-bow-divider">
+            <span class="ribbon-line"></span>
+            <svg class="ribbon-bow-svg" width="38" height="22" viewBox="0 0 38 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 19 11 C 15 5, 8 4, 3 8 C -1 11, 2 17, 8 16 C 13 15, 17 12, 19 11 Z" fill="#FCE8EC" stroke="#C97384" stroke-width="1.2" stroke-linejoin="round"/>
+              <path d="M 19 11 C 23 5, 30 4, 35 8 C 39 11, 36 17, 30 16 C 25 15, 21 12, 19 11 Z" fill="#FCE8EC" stroke="#C97384" stroke-width="1.2" stroke-linejoin="round"/>
+              <circle cx="19" cy="11" r="3" fill="#B34B62" stroke="#87293E" stroke-width="0.8"/>
+            </svg>
+            <span class="ribbon-line"></span>
+          </div>
+
+          <!-- Recipient Footer actions -->
+          <div class="recipient-footer-actions">
+            <button class="btn-recipient-save-vault" id="btn-recipient-save-vault">🔖 Save to My Keepsakes</button>
+            <button class="btn-recipient-create" id="btn-recipient-create">✨ Make Your Own Postcard</button>
+          </div>
         </div>
       </div>
     </div>

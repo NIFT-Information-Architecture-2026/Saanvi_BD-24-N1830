@@ -199,6 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  window.selectMedium = selectMedium;
+  window.setPostcardStep = setPostcardStep;
+  window.renderRecipientExperience = renderRecipientExperience;
+
   const btnPostcardBackToHub = document.getElementById('btn-postcard-back-to-hub');
   let currentPostcardStep = 1;
 
@@ -206,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentPostcardStep = stepNum;
     const postcardStep1Pane = document.getElementById('postcard-step1-pane');
     const postcardStep2Pane = document.getElementById('postcard-step2-pane');
+    const postcardStep3Pane = document.getElementById('postcard-step3-pane');
     const postcardDot1 = document.getElementById('postcard-dot-1');
     const postcardDot2 = document.getElementById('postcard-dot-2');
     const postcardDot3 = document.getElementById('postcard-dot-3');
@@ -215,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (stepNum === 1) {
       if (postcardStep1Pane) postcardStep1Pane.style.display = 'block';
       if (postcardStep2Pane) postcardStep2Pane.style.display = 'none';
+      if (postcardStep3Pane) postcardStep3Pane.style.display = 'none';
       if (postcardDot1) {
         postcardDot1.classList.add('active');
         postcardDot1.classList.remove('completed');
@@ -222,10 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (postcardLine1) postcardLine1.classList.remove('active');
       if (postcardDot2) postcardDot2.classList.remove('active', 'completed');
       if (postcardLine2) postcardLine2.classList.remove('active');
-      if (postcardDot3) postcardDot3.classList.remove('active');
+      if (postcardDot3) postcardDot3.classList.remove('active', 'completed');
     } else if (stepNum === 2) {
       if (postcardStep1Pane) postcardStep1Pane.style.display = 'none';
       if (postcardStep2Pane) postcardStep2Pane.style.display = 'block';
+      if (postcardStep3Pane) postcardStep3Pane.style.display = 'none';
       if (postcardDot1) {
         postcardDot1.classList.remove('active');
         postcardDot1.classList.add('completed');
@@ -236,16 +243,42 @@ document.addEventListener('DOMContentLoaded', () => {
         postcardDot2.classList.remove('completed');
       }
       if (postcardLine2) postcardLine2.classList.remove('active');
-      if (postcardDot3) postcardDot3.classList.remove('active');
+      if (postcardDot3) postcardDot3.classList.remove('active', 'completed');
       if (typeof updateVesselLivePreview === 'function') {
         updateVesselLivePreview();
+      }
+    } else if (stepNum === 3) {
+      if (postcardStep1Pane) postcardStep1Pane.style.display = 'none';
+      if (postcardStep2Pane) postcardStep2Pane.style.display = 'none';
+      if (postcardStep3Pane) postcardStep3Pane.style.display = 'block';
+      if (postcardDot1) {
+        postcardDot1.classList.remove('active');
+        postcardDot1.classList.add('completed');
+      }
+      if (postcardLine1) postcardLine1.classList.add('active');
+      if (postcardDot2) {
+        postcardDot2.classList.remove('active');
+        postcardDot2.classList.add('completed');
+      }
+      if (postcardLine2) postcardLine2.classList.add('active');
+      if (postcardDot3) {
+        postcardDot3.classList.add('active');
+        postcardDot3.classList.remove('completed');
+      }
+      if (typeof renderStep3Preview === 'function') {
+        renderStep3Preview();
+      }
+      if (typeof autoSaveToVault === 'function') {
+        autoSaveToVault();
       }
     }
   }
 
   if (btnPostcardBackToHub) {
     btnPostcardBackToHub.addEventListener('click', () => {
-      if (currentPostcardStep === 2) {
+      if (currentPostcardStep === 3) {
+        setPostcardStep(2);
+      } else if (currentPostcardStep === 2) {
         setPostcardStep(1);
       } else {
         returnToStudioHub();
@@ -261,8 +294,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnFlipPostcard = document.getElementById('btn-flip-postcard');
   const btnPostcardNextStep = document.getElementById('btn-postcard-next-step');
   const btnPostcardBackToStep1 = document.getElementById('btn-postcard-back-to-step1');
-  const postcardDot1 = document.getElementById('postcard-dot-1');
-  const postcardDot2 = document.getElementById('postcard-dot-2');
   const postcardWrapper = document.getElementById('postcard-container');
   const btnOrientPort = document.getElementById('btn-postcard-orient-port');
   const btnOrientLand = document.getElementById('btn-postcard-orient-land');
@@ -283,6 +314,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const postcardToInput = document.getElementById('postcard-to-input');
   const postcardFromInput = document.getElementById('postcard-from-input');
 
+  const postcardDot1 = document.getElementById('postcard-dot-1');
+  const postcardDot2 = document.getElementById('postcard-dot-2');
+  const postcardDot3 = document.getElementById('postcard-dot-3');
+
   // Step 2 & Step 1 Navigation wiring
   if (btnPostcardNextStep) {
     btnPostcardNextStep.addEventListener('click', () => {
@@ -299,6 +334,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if (postcardDot2) {
     postcardDot2.addEventListener('click', () => setPostcardStep(2));
+  }
+  if (postcardDot3) {
+    postcardDot3.addEventListener('click', () => setPostcardStep(3));
   }
 
   // Flip Postcard & Sync Front/Back Toggle
@@ -1670,8 +1708,10 @@ document.addEventListener('DOMContentLoaded', () => {
       vesselPreviewRender.innerHTML = getBoxImage('140px');
     } else {
       vesselPreviewRender.innerHTML = `
-        <span class="preview-big-icon">🚚</span>
-        <p class="preview-vessel-name">Delivery Truck</p>
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 10px 0;">
+          <img src="assets/truck.png" style="width: 210px; max-width: 90%; height: auto; object-fit: contain; filter: drop-shadow(0 6px 14px rgba(82, 19, 25, 0.12));" alt="Delivery Truck" />
+          <p class="preview-vessel-name" style="margin-top: 8px; font-family:'Playfair Display', Georgia, serif; color:#521319; font-size:14px; font-weight:600;">Special Delivery Truck</p>
+        </div>
       `;
     }
   }
@@ -1691,22 +1731,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnDispatchAction) {
     btnDispatchAction.addEventListener('click', () => {
-      modalVesselStage.style.display = 'block';
-      modalRevealedStage.style.display = 'none';
-
-      if (state.vessel === 'envelope') {
-        hugeVesselIcon.innerText = '✉️';
-        modalVesselHint.innerText = 'Slide wax seal to open';
-      } else if (state.vessel === 'box') {
-        const boxSrc = boxImages[state.boxIndex || '1'] || 'assets/boxes/box1.jpg';
-        hugeVesselIcon.innerHTML = `<img src="${boxSrc}" style="width: 80px; height: 80px; object-fit: contain; mix-blend-mode: multiply;" />`;
-        modalVesselHint.innerText = 'Untie ribbon to open';
-      } else {
-        hugeVesselIcon.innerText = '🚚';
-        modalVesselHint.innerText = 'Tap truck door to reveal';
-      }
-
-      unwrapModal.style.display = 'flex';
+      setPostcardStep(3);
     });
   }
 
@@ -1794,6 +1819,585 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnInstantOpen) btnInstantOpen.addEventListener('click', revealGiftModal);
   if (btnCloseModal) btnCloseModal.addEventListener('click', () => { unwrapModal.style.display = 'none'; });
 
+  // ================= STEP 3: PREVIEW & DISPATCH =================
+  let step3PostcardRevealed = false;
+  let step3PostcardFlipped = false;
+
+  const step3VesselDisplay = document.getElementById('step3-vessel-display');
+  const step3VesselWrapper = document.getElementById('step3-vessel-wrapper');
+  const step3PostcardReveal = document.getElementById('step3-postcard-reveal');
+  const step3RevealCard = document.getElementById('step3-reveal-card');
+  const btnStep3ToggleOpen = document.getElementById('btn-step3-toggle-open');
+  const btnStep3OpenText = document.getElementById('btn-step3-open-text');
+  const btnStep3Flip = document.getElementById('btn-step3-flip');
+  const btnStep3SaveVault = document.getElementById('btn-step3-save-vault');
+  const btnStep3Dispatch = document.getElementById('btn-step3-dispatch');
+
+  // Dispatch Share Modal Elements
+  const dispatchModal = document.getElementById('dispatch-modal');
+  const btnCloseDispatchModal = document.getElementById('btn-close-dispatch-modal');
+  const btnDispatchCopyUrl = document.getElementById('btn-dispatch-copy-url');
+  const btnDispatchSendFriends = document.getElementById('btn-dispatch-send-friends');
+  const dispatchUrlInput = document.getElementById('dispatch-url-input');
+  const btnCopySmall = document.getElementById('btn-copy-small');
+
+  function renderStep3Preview() {
+    step3PostcardRevealed = false;
+    step3PostcardFlipped = false;
+
+    if (step3PostcardReveal) step3PostcardReveal.style.display = 'none';
+    if (step3VesselDisplay) step3VesselDisplay.style.display = 'flex';
+    if (btnStep3OpenText) btnStep3OpenText.textContent = 'Click to Open ♡';
+
+    if (!step3VesselWrapper) return;
+
+    if (state.vessel === 'envelope') {
+      const envIndex = state.envelopeIndex || '1';
+      step3VesselWrapper.innerHTML = `
+        <div style="position: relative; width: 210px; height: 145px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+          <img src="assets/flowers/peony.png" style="position: absolute; left: -34px; top: 16px; width: 68px; height: 68px; object-fit: contain; transform: rotate(-24deg); opacity: 0.95; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.06)); pointer-events: none;" />
+          <img src="assets/flowers/rose.png" style="position: absolute; right: -32px; top: 20px; width: 65px; height: 65px; object-fit: contain; transform: rotate(18deg); opacity: 0.95; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.06)); pointer-events: none;" />
+          <svg style="position: absolute; top: -14px; left: 16px; width: 34px; height: 26px;" viewBox="0 0 34 26" fill="none">
+            <line x1="8" y1="20" x2="2" y2="10" stroke="#F4A5B5" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="16" y1="18" x2="16" y2="5" stroke="#F4A5B5" stroke-width="2.2" stroke-linecap="round"/>
+            <line x1="24" y1="20" x2="30" y2="10" stroke="#F4A5B5" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+          <img src="assets/envelopes/env${envIndex}.jpg" style="width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2; filter: drop-shadow(0 8px 20px rgba(82, 19, 25, 0.12));" alt="Envelope" />
+        </div>
+      `;
+    } else if (state.vessel === 'box') {
+      const boxSrc = boxImages[state.boxIndex || '1'] || 'assets/boxes/box1.jpg';
+      step3VesselWrapper.innerHTML = `
+        <div style="position: relative; width: 175px; height: 175px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+          <img src="assets/flowers/peony.png" style="position: absolute; right: -24px; bottom: 10px; width: 62px; height: 62px; object-fit: contain; transform: rotate(16deg); opacity: 0.9; pointer-events: none;" />
+          <img src="${boxSrc}" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 8px 18px rgba(82, 19, 25, 0.14));" alt="Keepsake Box" />
+        </div>
+      `;
+    } else {
+      step3VesselWrapper.innerHTML = `
+        <div style="position: relative; width: 230px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+          <img src="assets/truck.png" style="width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 8px 20px rgba(82, 19, 25, 0.15));" alt="Delivery Truck" />
+        </div>
+      `;
+    }
+  }
+
+  function renderRevealedPostcardFace() {
+    if (!step3RevealCard) return;
+    const payload = getPostcardStatePayload();
+    step3RevealCard.innerHTML = getPostcardFaceHtml(payload, step3PostcardFlipped);
+  }
+
+  function getPostcardFaceHtml(data, isBack) {
+    const isLand = data.o === 'landscape';
+    const cardWidth = isLand ? '340px' : '260px';
+    const cardHeight = isLand ? '220px' : '330px';
+
+    // Theme border styling
+    let themeBorder = 'border: 8px solid #FDFBF7; box-shadow: 0 4px 16px rgba(82, 19, 25, 0.1);';
+    if (data.t === 'candy') {
+      themeBorder = 'border: 8px solid transparent; border-image: repeating-linear-gradient(45deg, #EE3A4C 0, #EE3A4C 8px, #FFFFFF 8px, #FFFFFF 12px, #F8A5B7 12px, #F8A5B7 20px, #FFFFFF 20px, #FFFFFF 24px) 8; box-shadow: 0 4px 16px rgba(82, 19, 25, 0.1);';
+    } else if (data.t === 'kraft') {
+      themeBorder = 'border: 8px solid #D2B48C; background: #FDF9F3; box-shadow: 0 4px 16px rgba(82, 19, 25, 0.1);';
+    } else if (data.t === 'blue-ribbon') {
+      themeBorder = 'border: 8px solid #9BB7D4; background: #F8FAFD; box-shadow: 0 4px 16px rgba(82, 19, 25, 0.1);';
+    } else if (data.t === 'hearts') {
+      themeBorder = 'border: 8px solid #FCE8EC; background: #FFF9FA; box-shadow: 0 4px 16px rgba(82, 19, 25, 0.1);';
+    }
+
+    if (!isBack) {
+      // FRONT FACE
+      let photoHtml = '';
+      if (data.img) {
+        photoHtml = `<div style="flex:1; width:100%; overflow:hidden; border-radius:4px; display:flex; align-items:center; justify-content:center; background:#F5EBE6;"><img src="${data.img}" style="width:100%; height:100%; object-fit:cover;" /></div>`;
+      } else {
+        photoHtml = `
+          <div style="flex:1; width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,245,246,0.6); border:1px dashed #E8A8B4; border-radius:6px; padding:12px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C97384" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span style="font-family:'Cormorant Garamond', serif; font-style:italic; font-size:12px; color:#8E4A56; margin-top:4px;">A Little Something</span>
+          </div>
+        `;
+      }
+
+      let titleHtml = '';
+      if (data.title) {
+        titleHtml = `<div style="text-align:center; font-family:'Playfair Display', Georgia, serif; font-size:16px; font-weight:600; color:#521319; margin-top:8px; border-bottom:1px solid #E8A8B4; padding-bottom:3px;">${escapeHtml(data.title)}</div>`;
+      }
+
+      return `
+        <div style="width:${cardWidth}; height:${cardHeight}; margin:0 auto; background:#FFFDF9; border-radius:8px; padding:12px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:space-between; ${themeBorder}">
+          ${photoHtml}
+          ${titleHtml}
+        </div>
+      `;
+    } else {
+      // BACK FACE
+      const stampHtml = getStampHtmlByKey(data.sk, data.t);
+      return `
+        <div style="width:${cardWidth}; height:${cardHeight}; margin:0 auto; background:#FFFDF9; border-radius:8px; padding:12px; box-sizing:border-box; display:flex; gap:10px; ${themeBorder}">
+          <!-- Left side: note -->
+          <div style="flex:1.1; display:flex; flex-direction:column; justify-content:space-between; text-align:left; overflow:hidden;">
+            <div style="font-family:${data.f}; font-size:15px; color:#3A2024; line-height:1.35; white-space:pre-wrap; word-break:break-word; max-height:100%; overflow-y:auto;">
+              ${escapeHtml(data.msg || 'Write your note here...')}
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div style="width:1px; background:#E8D8D8; margin:2px 0;"></div>
+
+          <!-- Right side: date, stamp, To/From -->
+          <div style="flex:0.9; display:flex; flex-direction:column; justify-content:space-between; text-align:right;">
+            <div>
+              <div style="font-family:${data.f}; font-size:12px; color:#521319; margin-bottom:6px;">${escapeHtml(data.d)}</div>
+              <div style="width:46px; height:46px; margin-left:auto;">
+                ${stampHtml}
+              </div>
+            </div>
+            <div style="text-align:left; font-family:${data.f}; font-size:13px; color:#521319; margin-top:10px;">
+              <div style="border-bottom:1px solid #E8D0D6; padding-bottom:2px; margin-bottom:4px;">
+                <span style="font-size:10px; font-weight:700; color:#8E4A56;">TO:</span> ${escapeHtml(data.to)}
+              </div>
+              <div style="border-bottom:1px solid #E8D0D6; padding-bottom:2px;">
+                <span style="font-size:10px; font-weight:700; color:#8E4A56;">FROM:</span> ${escapeHtml(data.from)}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function getStampHtmlByKey(key, theme) {
+    if (theme === 'kraft') {
+      if (key === 'stamp_kraft_butterfly') return makeKraftStampCroppedImg('assets/stamps/stamp_kraft_butterfly.png');
+      if (key === 'stamp_kraft_flower') return makeKraftStampCroppedImg('assets/stamps/stamp_kraft_flower.png');
+      if (key === 'stamp_kraft_stars') return makeKraftComplexSvg(complexStarsSvg);
+      if (key === 'stamp_kraft_heart') return makeKraftComplexSvg(complexHeartSvg);
+      return makeKraftComplexSvg(complexMedallionSvg);
+    }
+    if (theme === 'blue-ribbon') {
+      if (key === 'stamp_blue_bunny') return makeBlueStampCustomImg('assets/stamps/stamp_blue_bunny.png');
+      if (key === 'stamp_blue_cherries') return makeBlueStampCustomImg('assets/stamps/stamp_blue_cherries.png');
+      if (key === 'stamp_blue_card') return makeBlueStampCustomImg('assets/stamps/stamp_blue_card.png');
+      if (key === 'stamp_blue_tickets') return makeBlueStampCustomImg('assets/stamps/stamp_blue_tickets.png');
+      return makeBlueStampCustomImg('assets/stamps/stamp_blue_heart.png');
+    }
+    // Hearts / Candy default
+    if (key === 'stamp_cupid') return stampCupidBow;
+    if (key === 'stamp_lace_heart') return stampLaceHeart;
+    if (key === 'stamp_modern_heart') return stampModernHeart;
+    if (key === 'stamp_flower_sprig') return stampFlowerSprig;
+    return stampSendingYouLove;
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // Toggle "Click to Open ♡" in Step 3
+  if (btnStep3ToggleOpen) {
+    btnStep3ToggleOpen.addEventListener('click', () => {
+      step3PostcardRevealed = !step3PostcardRevealed;
+      if (step3PostcardRevealed) {
+        if (step3PostcardReveal) step3PostcardReveal.style.display = 'flex';
+        if (step3VesselDisplay) step3VesselDisplay.style.display = 'none';
+        if (btnStep3OpenText) btnStep3OpenText.textContent = 'Fold Postcard ♡';
+        renderRevealedPostcardFace();
+      } else {
+        if (step3PostcardReveal) step3PostcardReveal.style.display = 'none';
+        if (step3VesselDisplay) step3VesselDisplay.style.display = 'flex';
+        if (btnStep3OpenText) btnStep3OpenText.textContent = 'Click to Open ♡';
+      }
+    });
+  }
+
+  // Flip Postcard in Step 3
+  if (btnStep3Flip) {
+    btnStep3Flip.addEventListener('click', () => {
+      step3PostcardFlipped = !step3PostcardFlipped;
+      renderRevealedPostcardFace();
+    });
+  }
+
+  // ================= VAULT STORAGE & TOAST =================
+  function showToast(msg) {
+    const toast = document.getElementById('atelier-toast');
+    const toastMsg = document.getElementById('atelier-toast-msg');
+    if (!toast) return;
+    if (toastMsg) toastMsg.textContent = msg;
+    toast.style.display = 'block';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => {
+      toast.style.display = 'none';
+    }, 2800);
+  }
+
+  function getPostcardStatePayload() {
+    const fromVal = document.getElementById('postcard-from-input')?.value || 'Saanvi';
+    const toVal = document.getElementById('postcard-to-input')?.value || 'Kabir';
+    const noteVal = document.getElementById('postcard-back-message')?.value || '';
+    const dateVal = document.getElementById('postcard-date-display')?.textContent || 'October 6, 2026';
+    const titleVal = document.getElementById('postcard-title-input')?.value || '';
+    const fontVal = document.getElementById('postcard-font-select')?.value || "'Caveat', cursive";
+    const themeVal = document.getElementById('postcard-container')?.dataset.theme || 'candy';
+    const orientVal = state.postcard.orientation || 'landscape';
+    const vesselVal = state.vessel || 'envelope';
+    const envIndex = state.envelopeIndex || '1';
+    const boxIndex = state.boxIndex || '1';
+    const stampKey = state.postcard.stamp || 'stamp_sending';
+
+    let photoSrc = '';
+    const imgEl = document.getElementById('postcard-image-preview');
+    if (imgEl && imgEl.style.display !== 'none' && imgEl.src && !imgEl.src.startsWith('data:image/svg')) {
+      if (imgEl.src.length < 90000) {
+        photoSrc = imgEl.src;
+      }
+    }
+
+    return {
+      t: themeVal,
+      o: orientVal,
+      v: vesselVal,
+      ei: envIndex,
+      bi: boxIndex,
+      sk: stampKey,
+      f: fontVal,
+      to: toVal,
+      from: fromVal,
+      msg: noteVal,
+      d: dateVal,
+      title: titleVal,
+      img: photoSrc
+    };
+  }
+
+  function saveCurrentPostcardToVault(isManual = false) {
+    try {
+      const vaultItems = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
+      const postcardData = getPostcardStatePayload();
+      postcardData.id = 'pc_' + Date.now();
+      postcardData.savedAt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+      // Deduplicate recent identical saves within 10 seconds
+      if (vaultItems.length > 0 && (Date.now() - parseInt(vaultItems[0].id.replace('pc_', ''))) < 10000) {
+        vaultItems[0] = postcardData;
+      } else {
+        vaultItems.unshift(postcardData);
+      }
+
+      if (vaultItems.length > 30) vaultItems.pop();
+      localStorage.setItem('between_us_vault_items', JSON.stringify(vaultItems));
+
+      if (isManual) {
+        showToast('Saved to Vault ✓');
+        if (btnStep3SaveVault) {
+          const origHtml = btnStep3SaveVault.innerHTML;
+          btnStep3SaveVault.innerHTML = `
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Saved to Vault ✓</span>
+          `;
+          setTimeout(() => {
+            btnStep3SaveVault.innerHTML = origHtml;
+          }, 2400);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to save to vault:', e);
+    }
+  }
+
+  function autoSaveToVault() {
+    saveCurrentPostcardToVault(false);
+  }
+
+  if (btnStep3SaveVault) {
+    btnStep3SaveVault.addEventListener('click', () => {
+      saveCurrentPostcardToVault(true);
+    });
+  }
+
+  // ================= DISPATCH SHARING MODAL =================
+  function generateShareableUrl() {
+    const payload = getPostcardStatePayload();
+    const jsonStr = JSON.stringify(payload);
+    const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(jsonStr))));
+    const baseUrl = window.location.origin + window.location.pathname;
+    return `${baseUrl}?card=${encoded}`;
+  }
+
+  if (btnStep3Dispatch) {
+    btnStep3Dispatch.addEventListener('click', () => {
+      const shareUrl = generateShareableUrl();
+      if (dispatchUrlInput) dispatchUrlInput.value = shareUrl;
+      if (dispatchModal) dispatchModal.style.display = 'flex';
+      autoSaveToVault();
+    });
+  }
+
+  if (btnCloseDispatchModal) {
+    btnCloseDispatchModal.addEventListener('click', () => {
+      if (dispatchModal) dispatchModal.style.display = 'none';
+    });
+  }
+
+  if (dispatchModal) {
+    dispatchModal.addEventListener('click', (e) => {
+      if (e.target === dispatchModal) {
+        dispatchModal.style.display = 'none';
+      }
+    });
+  }
+
+  function copyShareUrlToClipboard() {
+    const shareUrl = dispatchUrlInput?.value || generateShareableUrl();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        showToast('Link copied to clipboard! ✓');
+      }).catch(() => {
+        fallbackCopyText(shareUrl);
+      });
+    } else {
+      fallbackCopyText(shareUrl);
+    }
+  }
+
+  function fallbackCopyText(text) {
+    if (dispatchUrlInput) {
+      dispatchUrlInput.select();
+      document.execCommand('copy');
+      showToast('Link copied to clipboard! ✓');
+    }
+  }
+
+  if (btnDispatchCopyUrl) {
+    btnDispatchCopyUrl.addEventListener('click', copyShareUrlToClipboard);
+  }
+  if (btnCopySmall) {
+    btnCopySmall.addEventListener('click', copyShareUrlToClipboard);
+  }
+
+  if (btnDispatchSendFriends) {
+    btnDispatchSendFriends.addEventListener('click', () => {
+      const shareUrl = dispatchUrlInput?.value || generateShareableUrl();
+      if (navigator.share) {
+        navigator.share({
+          title: 'A Little Something, from Me to You',
+          text: 'I made a special handwritten postcard for you on Between Us ♡',
+          url: shareUrl
+        }).catch(err => {
+          if (err.name !== 'AbortError') {
+            openFallbackShare(shareUrl);
+          }
+        });
+      } else {
+        openFallbackShare(shareUrl);
+      }
+    });
+  }
+
+  function openFallbackShare(url) {
+    const text = encodeURIComponent('I made a special handwritten postcard for you on Between Us ♡ ' + url);
+    const waUrl = `https://api.whatsapp.com/send?text=${text}`;
+    window.open(waUrl, '_blank');
+  }
+
+  // ================= RECIPIENT PUBLIC EXPERIENCE =================
+  let recipientPostcardFlipped = false;
+
+  function checkUrlRecipientView() {
+    try {
+      let rawQuery = window.location.search;
+      if (!rawQuery && window.location.hash) {
+        rawQuery = '?' + window.location.hash.replace(/^[#?]+/, '');
+      }
+      if (!rawQuery && window.location.href.includes('?')) {
+        rawQuery = window.location.href.slice(window.location.href.indexOf('?'));
+      }
+      const urlParams = new URLSearchParams(rawQuery);
+      const cardParam = urlParams.get('card');
+      if (!cardParam) return;
+
+      const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(cardParam))));
+      const cardData = JSON.parse(jsonStr);
+      renderRecipientExperience(cardData);
+    } catch (err) {
+      console.warn('No valid recipient card param found or decode error:', err);
+    }
+  }
+
+  function renderRecipientExperience(data) {
+    window.renderRecipientExperience = renderRecipientExperience;
+    // Hide standard app stages
+    if (splashScreen) splashScreen.style.display = 'none';
+    if (appHeader) appHeader.style.display = 'none';
+    if (appStage) appStage.style.display = 'none';
+    if (appBottomNav) appBottomNav.style.display = 'none';
+
+    const recipientStage = document.getElementById('recipient-stage');
+    if (!recipientStage) return;
+    recipientStage.style.display = 'flex';
+
+    // Populate Dedication
+    const recipientFromToText = document.getElementById('recipient-from-to-text');
+    if (recipientFromToText) {
+      recipientFromToText.textContent = `From ${data.from || 'Someone Special'} to ${data.to || 'You'}`;
+    }
+
+    // Render Recipient Vessel
+    const recipientVesselArt = document.getElementById('recipient-vessel-art');
+    if (recipientVesselArt) {
+      if (data.v === 'envelope') {
+        const envIndex = data.ei || '1';
+        recipientVesselArt.innerHTML = `
+          <div style="position: relative; width: 220px; height: 150px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+            <img src="assets/flowers/peony.png" style="position: absolute; left: -34px; top: 16px; width: 70px; height: 70px; object-fit: contain; transform: rotate(-24deg); opacity: 0.95; pointer-events: none;" />
+            <img src="assets/flowers/rose.png" style="position: absolute; right: -32px; top: 20px; width: 68px; height: 68px; object-fit: contain; transform: rotate(18deg); opacity: 0.95; pointer-events: none;" />
+            <img src="assets/envelopes/env${envIndex}.jpg" style="width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2; filter: drop-shadow(0 8px 20px rgba(82, 19, 25, 0.14));" alt="Envelope" />
+          </div>
+        `;
+      } else if (data.v === 'box') {
+        const boxSrc = boxImages[data.bi || '1'] || 'assets/boxes/box1.jpg';
+        recipientVesselArt.innerHTML = `
+          <div style="position: relative; width: 180px; height: 180px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+            <img src="assets/flowers/peony.png" style="position: absolute; right: -24px; bottom: 10px; width: 64px; height: 64px; object-fit: contain; transform: rotate(16deg); opacity: 0.9; pointer-events: none;" />
+            <img src="${boxSrc}" style="width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 8px 18px rgba(82, 19, 25, 0.14));" alt="Gift Box" />
+          </div>
+        `;
+      } else {
+        recipientVesselArt.innerHTML = `
+          <div style="position: relative; width: 240px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+            <img src="assets/truck.png" style="width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 8px 20px rgba(82, 19, 25, 0.15));" alt="Delivery Truck" />
+          </div>
+        `;
+      }
+    }
+
+    // Interactive Open
+    const btnRecipientOpen = document.getElementById('btn-recipient-open');
+    const recipientVesselStage = document.getElementById('recipient-vessel-stage');
+    const recipientPostcardWrap = document.getElementById('recipient-postcard-wrap');
+    const recipientCardInner = document.getElementById('recipient-card-inner');
+    const btnRecipientFlip = document.getElementById('btn-recipient-flip');
+
+    recipientPostcardFlipped = false;
+
+    function renderRecipientCardFace() {
+      if (!recipientCardInner) return;
+      recipientCardInner.innerHTML = getPostcardFaceHtml(data, recipientPostcardFlipped);
+    }
+
+    if (btnRecipientOpen) {
+      btnRecipientOpen.addEventListener('click', () => {
+        if (recipientVesselStage) recipientVesselStage.style.display = 'none';
+        if (recipientPostcardWrap) recipientPostcardWrap.style.display = 'block';
+        renderRecipientCardFace();
+      });
+    }
+
+    if (btnRecipientFlip) {
+      btnRecipientFlip.addEventListener('click', () => {
+        recipientPostcardFlipped = !recipientPostcardFlipped;
+        renderRecipientCardFace();
+      });
+    }
+
+    // Recipient Footer Actions
+    const btnRecipientSaveVault = document.getElementById('btn-recipient-save-vault');
+    if (btnRecipientSaveVault) {
+      btnRecipientSaveVault.addEventListener('click', () => {
+        try {
+          const vaultItems = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
+          data.id = 'pc_' + Date.now();
+          data.savedAt = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          vaultItems.unshift(data);
+          localStorage.setItem('between_us_vault_items', JSON.stringify(vaultItems));
+          showToast('Saved to your Keepsakes! ✓');
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    }
+
+    const btnRecipientCreate = document.getElementById('btn-recipient-create');
+    if (btnRecipientCreate) {
+      btnRecipientCreate.addEventListener('click', () => {
+        // Clear card param and reload into studio hub
+        window.location.href = window.location.pathname;
+      });
+    }
+  }
+
+  // ================= VAULT ROOM DYNAMIC LIST =================
+  function renderVaultItems() {
+    const vaultGrid = document.getElementById('vault-items-grid');
+    if (!vaultGrid) return;
+
+    const vaultItems = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
+    if (vaultItems.length === 0) {
+      vaultGrid.innerHTML = `
+        <div class="vault-empty-state">
+          <div class="vault-empty-icon">🔖</div>
+          <h4 style="font-family:'Playfair Display', Georgia, serif; font-size:18px; color:#521319; margin:0 0 6px 0;">Your vault is waiting</h4>
+          <p style="font-family:'Cormorant Garamond', Georgia, serif; font-size:14px; font-style:italic; color:#8E4A56; margin:0;">
+            Any postcard you design will be automatically preserved here.
+          </p>
+        </div>
+      `;
+      return;
+    }
+
+    vaultGrid.innerHTML = vaultItems.map((item, idx) => {
+      let iconHtml = '💌';
+      if (item.v === 'truck') {
+        iconHtml = `<img src="assets/truck.png" style="width:100%; height:100%; object-fit:contain;" alt="Truck" />`;
+      } else if (item.v === 'box') {
+        const boxSrc = boxImages[item.bi || '1'] || 'assets/boxes/box1.jpg';
+        iconHtml = `<img src="${boxSrc}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply;" alt="Box" />`;
+      } else {
+        const envIndex = item.ei || '1';
+        iconHtml = `<img src="assets/envelopes/env${envIndex}.jpg" style="width:100%; height:100%; object-fit:contain;" alt="Envelope" />`;
+      }
+
+      return `
+        <div class="vault-item-card">
+          <div class="vault-item-icon">
+            ${iconHtml}
+          </div>
+          <div class="vault-item-info">
+            <h5 class="vault-item-title">${escapeHtml(item.title || 'Handwritten Postcard')}</h5>
+            <p class="vault-item-dedication">To: ${escapeHtml(item.to || 'Someone Special')} • From: ${escapeHtml(item.from || 'Me')}</p>
+            <p class="vault-item-date">Saved on ${item.savedAt || 'Recently'}</p>
+          </div>
+          <button class="btn-vault-view" data-vault-idx="${idx}">View</button>
+        </div>
+      `;
+    }).join('');
+
+    // Attach click events to vault view buttons
+    vaultGrid.querySelectorAll('.btn-vault-view').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.vaultIdx);
+        const item = vaultItems[idx];
+        if (item) {
+          // Open recipient preview for this card
+          renderRecipientExperience(item);
+        }
+      });
+    });
+  }
+
+  // Hook Vault Room Rendering into navigation tabs
+  const vaultNavTab = document.querySelector('.nav-tab[data-room="vault"]');
+  if (vaultNavTab) {
+    vaultNavTab.addEventListener('click', renderVaultItems);
+  }
+
+  // Check Recipient URL param on load
+  checkUrlRecipientView();
+
   // ================= 7. KEEPSAKES TABS =================
   const segBtns = document.querySelectorAll('.seg-btn');
   const subtabs = document.querySelectorAll('.keepsakes-subtab');
@@ -1812,7 +2416,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // URL Param direct deep-linking (e.g. ?nosplash=1&medium=bouquet&step=arrange)
   try {
-    const rawQuery = window.location.search || (window.location.href.includes('?') ? window.location.href.slice(window.location.href.indexOf('?')) : '');
+    let rawQuery = window.location.search;
+    if (!rawQuery && window.location.hash) {
+      rawQuery = '?' + window.location.hash.replace(/^[#?]+/, '');
+    } else if (!rawQuery && window.location.href.includes('?')) {
+      rawQuery = window.location.href.slice(window.location.href.indexOf('?'));
+    }
     const urlParams = new URLSearchParams(rawQuery);
     if (urlParams.has('nosplash') || window.location.href.includes('nosplash')) {
       if (splashScreen) splashScreen.style.display = 'none';
@@ -1820,13 +2429,39 @@ document.addEventListener('DOMContentLoaded', () => {
       if (appStage) appStage.style.display = 'block';
       if (appBottomNav) appBottomNav.style.display = 'flex';
     }
-    const paramMedium = urlParams.get('medium') || (window.location.href.includes('medium=bouquet') ? 'bouquet' : null);
+    const paramMedium = urlParams.get('medium') || (window.location.href.includes('medium=bouquet') ? 'bouquet' : (window.location.href.includes('medium=postcard') ? 'postcard' : null));
     if (paramMedium && typeof selectMedium === 'function') {
       selectMedium(paramMedium);
     }
-    const paramStep = urlParams.get('step') || (window.location.href.includes('step=arrange') ? 'arrange' : null);
-    if (paramStep && typeof setBouquetStep === 'function') {
+    const paramStep = urlParams.get('step') || urlParams.get('pstep');
+    if (paramMedium === 'bouquet' && paramStep && typeof setBouquetStep === 'function') {
       setBouquetStep(paramStep);
+    }
+    if (paramMedium === 'postcard' && paramStep && typeof setPostcardStep === 'function') {
+      const stepNum = parseInt(paramStep, 10);
+      setPostcardStep(stepNum);
+    }
+    const paramVessel = urlParams.get('vessel');
+    if (paramVessel) {
+      state.vessel = paramVessel;
+      document.querySelectorAll('.vessel-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.vessel === paramVessel);
+      });
+      if (typeof updateVesselLivePreview === 'function') updateVesselLivePreview();
+      if (typeof renderStep3Preview === 'function') renderStep3Preview();
+    }
+    if (urlParams.has('revealed')) {
+      const vesselDisplay = document.getElementById('step3-vessel-display');
+      const revealSection = document.getElementById('step3-postcard-reveal');
+      const toggleBtn = document.getElementById('btn-step3-toggle-open');
+      if (vesselDisplay) vesselDisplay.style.display = 'none';
+      if (revealSection) revealSection.style.display = 'block';
+      if (toggleBtn) toggleBtn.textContent = 'Package Up ♡';
+      if (typeof renderRevealedPostcardFace === 'function') renderRevealedPostcardFace();
+    }
+    if (urlParams.has('dispatch')) {
+      const modal = document.getElementById('dispatch-modal');
+      if (modal) modal.style.display = 'flex';
     }
   } catch (err) {}
 
