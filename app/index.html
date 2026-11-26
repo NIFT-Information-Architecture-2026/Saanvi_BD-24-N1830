@@ -685,6 +685,7 @@
             </div>
           </div>
         </div>
+      </div>
 
         <!-- ---------------- 2. LETTER WORKSPACE ---------------- -->
         <div class="canvas-workspace" id="canvas-letter" style="display:none;">
@@ -791,12 +792,28 @@
 
         <!-- ---------------- 3. BOUQUET WORKSPACE (DIGIBOUQUET BARE-STEM) ---------------- -->
         <div class="canvas-workspace" id="canvas-bouquet" style="display:none;">
-          <!-- DigiBouquet 4-Step Navigation -->
-          <div class="bouquet-stepper-bar">
-            <button class="b-step-btn active" data-step="stems">1. Pick Flowers</button>
-            <button class="b-step-btn" data-step="arrange">2. Arrange & Shuffle</button>
-            <button class="b-step-btn" data-step="greenery">3. Add Greenery</button>
-            <button class="b-step-btn" data-step="note">4. Note Card</button>
+          <!-- Bouquet 5-Step Subheader: Back chevron, Bouquet Title, 5-Step Indicator -->
+          <div class="bouquet-subbar">
+            <button class="btn-bouquet-back" id="btn-bouquet-back-to-hub" title="Back to Studio">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <div class="bouquet-header-center">
+              <h2 class="bouquet-nav-title">Bouquet</h2>
+              <div class="bouquet-step-dots" id="bouquet-step-dots" title="Step 1 of 5: Pick Flowers">
+                <span class="step-dot active" data-step="1" id="bouquet-dot-1" title="Step 1: Pick Flowers"></span>
+                <span class="step-line" id="bouquet-line-1"></span>
+                <span class="step-dot" data-step="2" id="bouquet-dot-2" title="Step 2: Add Greenery"></span>
+                <span class="step-line" id="bouquet-line-2"></span>
+                <span class="step-dot" data-step="3" id="bouquet-dot-3" title="Step 3: Arrange & Shuffle"></span>
+                <span class="step-line" id="bouquet-line-3"></span>
+                <span class="step-dot" data-step="4" id="bouquet-dot-4" title="Step 4: Note Card"></span>
+                <span class="step-line" id="bouquet-line-4"></span>
+                <span class="step-dot" data-step="5" id="bouquet-dot-5" title="Step 5: Preview & Send"></span>
+              </div>
+            </div>
+            <div class="bouquet-subbar-spacer"></div>
           </div>
 
           <!-- Live Bare-Stem Assembled Bouquet Stage (Always Visible) -->
@@ -978,32 +995,11 @@
               </div>
             </div>
             <div class="bq-step-nav-bar">
-              <button class="bq-next-btn" data-target="arrange">Next: Arrange Stems →</button>
-            </div>
-          </div>
-
-          <!-- Step 2: Arrange & Reshuffle Controls -->
-          <div class="bq-step-panel" id="bq-panel-arrange" style="display:none;">
-            <div class="bq-arrange-bar">
-              <button class="btn-reshuffle" id="btn-reshuffle-stems">
-                <span>🔀</span> Reshuffle Composition
-              </button>
-              <button class="btn-clear-stems" id="btn-clear-stems">
-                Reset
-              </button>
-            </div>
-            <p class="bq-arrange-hint" id="bq-arrange-hint">🖐️ <strong>Hand Tool Active:</strong> Hover over any flower stem to grab and drag to rearrange, or use the stem order controls below.</p>
-            <div class="stem-reorder-strip-container">
-              <span class="stem-reorder-label">Stem Order (Left to Right):</span>
-              <div class="stem-reorder-strip" id="stem-reorder-strip"></div>
-            </div>
-            <div class="bq-step-nav-bar dual">
-              <button class="bq-back-btn" data-target="stems">← Back to Flowers</button>
               <button class="bq-next-btn" data-target="greenery">Next: Add Greenery →</button>
             </div>
           </div>
 
-          <!-- Step 3: Greenery & Botanical Foliage -->
+          <!-- Step 2: Greenery & Botanical Foliage -->
           <div class="bq-step-panel" id="bq-panel-greenery" style="display:none;">
             <div class="bq-step-header">
               <span class="bq-step-title">Choose botanical greenery & fillers</span>
@@ -1027,7 +1023,28 @@
               </button>
             </div>
             <div class="bq-step-nav-bar dual">
-              <button class="bq-back-btn" data-target="arrange">← Back to Arrange</button>
+              <button class="bq-back-btn" data-target="stems">← Back to Flowers</button>
+              <button class="bq-next-btn" data-target="arrange">Next: Arrange & Shuffle →</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Arrange & Reshuffle Controls -->
+          <div class="bq-step-panel" id="bq-panel-arrange" style="display:none;">
+            <div class="bq-arrange-bar">
+              <button class="btn-reshuffle" id="btn-reshuffle-stems">
+                <span>🔀</span> Reshuffle Composition
+              </button>
+              <button class="btn-clear-stems" id="btn-clear-stems">
+                Reset
+              </button>
+            </div>
+            <p class="bq-arrange-hint" id="bq-arrange-hint">🖐️ <strong>Hand Tool Active:</strong> Hover over any flower stem to grab and drag to rearrange, or use the stem order controls below.</p>
+            <div class="stem-reorder-strip-container">
+              <span class="stem-reorder-label">Stem Order (Left to Right):</span>
+              <div class="stem-reorder-strip" id="stem-reorder-strip"></div>
+            </div>
+            <div class="bq-step-nav-bar dual">
+              <button class="bq-back-btn" data-target="greenery">← Back to Greenery</button>
               <button class="bq-next-btn" data-target="note">Next: Write Note Card →</button>
             </div>
           </div>
@@ -1051,8 +1068,58 @@
               <textarea class="bouquet-note-body" id="bouquet-note-body" placeholder="Write your heartfelt note here...">A little botanical bouquet handpicked just for you.</textarea>
             </div>
             <div class="bq-step-nav-bar dual">
-              <button class="bq-back-btn" data-target="greenery">← Back to Greenery</button>
-              <button class="bq-done-btn" id="bq-btn-done-note">✓ Bouquet Complete</button>
+              <button class="bq-back-btn" data-target="arrange">← Back to Arrange</button>
+              <button class="bq-next-btn" id="bq-btn-done-note" data-target="preview">Proceed to Preview →</button>
+            </div>
+          </div>
+
+          <!-- Step 5: Preview with Send -->
+          <div class="bq-step-panel" id="bq-panel-preview" style="display:none;">
+            <div class="step3-card bouquet-step5-card">
+              <h3 class="step3-title">Your bouquet is ready!</h3>
+              <p class="step3-subtitle">A handpicked botanical arrangement with your personal note.</p>
+
+              <!-- Slot for Assembled Bouquet Stage -->
+              <div class="bouquet-step5-hero-slot" id="bouquet-step5-hero-slot"></div>
+
+              <!-- Dedicated pill button to unfold note -->
+              <div class="step3-open-row">
+                <button class="btn-click-to-open" id="btn-bouquet-toggle-note">
+                  <span>Read Attached Note ♡</span>
+                </button>
+              </div>
+
+              <!-- Ribbon Bow Divider -->
+              <div class="ribbon-bow-divider">
+                <span class="ribbon-line"></span>
+                <svg class="ribbon-bow-svg" width="38" height="22" viewBox="0 0 38 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M 19 11 C 15 5, 8 4, 3 8 C -1 11, 2 17, 8 16 C 13 15, 17 12, 19 11 Z" fill="#FCE8EC" stroke="#C97384" stroke-width="1.2" stroke-linejoin="round"/>
+                  <path d="M 19 11 C 23 5, 30 4, 35 8 C 39 11, 36 17, 30 16 C 25 15, 21 12, 19 11 Z" fill="#FCE8EC" stroke="#C97384" stroke-width="1.2" stroke-linejoin="round"/>
+                  <circle cx="19" cy="11" r="3" fill="#B34B62" stroke="#87293E" stroke-width="0.8"/>
+                </svg>
+                <span class="ribbon-line"></span>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="step3-actions-row">
+                <button class="btn-step3-save-vault" id="btn-bouquet-save-vault" title="Save Bouquet to Vault">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                  <span>Save to Vault</span>
+                </button>
+                <button class="btn-step3-dispatch" id="btn-bouquet-send" title="Send Bouquet">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                  <span>Send Bouquet</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="bq-step-nav-bar" style="margin-top: 14px;">
+              <button class="bq-back-btn" data-target="note">← Back to Note Card</button>
             </div>
           </div>
 
@@ -1164,8 +1231,8 @@
             <button class="btn-flip" id="btn-flip-greeting">Flip to inside</button>
           </div>
         </div>
-
-
+      </div>
+    </section>
 
       <!-- ================= ROOM 2: KEEPSAKES ================= -->
       <section class="room-view" id="room-keepsakes" style="display:none;">
@@ -1288,9 +1355,9 @@
       <div class="dispatch-modal-dialog">
         <button class="btn-modal-close" id="btn-close-dispatch-modal" title="Close">✕</button>
         <div class="dispatch-modal-header">
-          <div class="dispatch-badge-icon">💌</div>
-          <h3 class="dispatch-modal-title">Dispatch Your Postcard</h3>
-          <p class="dispatch-modal-subtitle">Share your thoughtful gift with someone special.</p>
+          <div class="dispatch-badge-icon" id="dispatch-badge-icon">💌</div>
+          <h3 class="dispatch-modal-title" id="dispatch-modal-title">Dispatch Your Postcard</h3>
+          <p class="dispatch-modal-subtitle" id="dispatch-modal-sub">Share your thoughtful gift with someone special.</p>
         </div>
         
         <div class="dispatch-modal-body">
@@ -1304,7 +1371,7 @@
               </div>
               <div class="dispatch-opt-text">
                 <strong>Copy URL</strong>
-                <span>Anyone with this link can view and flip your postcard</span>
+                <span id="dispatch-copy-desc">Anyone with this link can view and flip your postcard</span>
               </div>
             </button>
 
@@ -1380,6 +1447,16 @@
                   <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
                 </svg>
                 <span>Flip Postcard</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Bouquet View (For shared botanical bouquets) -->
+          <div class="recipient-bouquet-wrap" id="recipient-bouquet-wrap" style="display:none;">
+            <div class="recipient-bouquet-display" id="recipient-bouquet-display"></div>
+            <div class="recipient-open-row" style="margin-top: 14px;">
+              <button class="btn-recipient-open" id="btn-recipient-open-bouquet-note">
+                <span>Read Attached Note ♡</span>
               </button>
             </div>
           </div>

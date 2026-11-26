@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const editorHeaderBar = document.querySelector('.editor-header-bar');
     if (editorHeaderBar) {
-      editorHeaderBar.style.display = med === 'postcard' ? 'none' : 'flex';
+      editorHeaderBar.style.display = (med === 'postcard' || med === 'bouquet') ? 'none' : 'flex';
     }
 
     const titleMap = {
@@ -166,8 +166,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (med === 'postcard' && typeof setPostcardStep === 'function') {
       setPostcardStep(1);
     }
-    if (med === 'bouquet' && typeof renderBouquet === 'function') {
-      renderBouquet();
+    if (med === 'bouquet') {
+      if (typeof setBouquetStep === 'function') {
+        setBouquetStep(1);
+      }
+      if (typeof renderBouquetPreview === 'function') {
+        renderBouquetPreview();
+      }
     }
   }
 
@@ -201,7 +206,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.selectMedium = selectMedium;
   window.setPostcardStep = setPostcardStep;
+  window.setBouquetStep = setBouquetStep;
   window.renderRecipientExperience = renderRecipientExperience;
+  window.renderRecipientBouquetExperience = renderRecipientBouquetExperience;
+
+  const btnBouquetBackToHub = document.getElementById('btn-bouquet-back-to-hub');
+  if (btnBouquetBackToHub) {
+    btnBouquetBackToHub.addEventListener('click', returnToStudioHub);
+  }
 
   const btnPostcardBackToHub = document.getElementById('btn-postcard-back-to-hub');
   let currentPostcardStep = 1;
@@ -861,13 +873,33 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ================= 3. BOUQUET WORKSPACE (DIGIBOUQUET BARE-STEM) =================
-  const bStepBtns = document.querySelectorAll('.b-step-btn');
+  // ================= 3. BOUQUET WORKSPACE (DIGIBOUQUET BARE-STEM) =================
+  const bouquetDots = [1, 2, 3, 4, 5].map(i => document.getElementById(`bouquet-dot-${i}`));
+  const bouquetLines = [1, 2, 3, 4].map(i => document.getElementById(`bouquet-line-${i}`));
   const bqPanels = {
     stems: document.getElementById('bq-panel-stems'),
-    arrange: document.getElementById('bq-panel-arrange'),
     greenery: document.getElementById('bq-panel-greenery'),
-    note: document.getElementById('bq-panel-note')
+    arrange: document.getElementById('bq-panel-arrange'),
+    note: document.getElementById('bq-panel-note'),
+    preview: document.getElementById('bq-panel-preview')
   };
+
+  const stepKeyMap = {
+    1: 'stems',
+    2: 'greenery',
+    3: 'arrange',
+    4: 'note',
+    5: 'preview'
+  };
+
+  const keyToStepNum = {
+    'stems': 1,
+    'greenery': 2,
+    'arrange': 3,
+    'note': 4,
+    'preview': 5
+  };
+
   const bqStemCountEl = document.getElementById('bq-stem-count');
   const bloomCards = document.querySelectorAll('.bloom-card');
   const btnReshuffleStems = document.getElementById('btn-reshuffle-stems');
@@ -891,50 +923,223 @@ document.addEventListener('DOMContentLoaded', () => {
   const unfoldedNoteBodyText = document.getElementById('unfolded-note-body-text');
   const bareStemStage = document.getElementById('bare-stem-stage');
 
-  // Step Switcher
-  function setBouquetStep(stepKey) {
-    if (!bqPanels[stepKey]) return;
+  let currentBouquetStep = 1;
+
+  // 5-Step Switcher
+  function setBouquetStep(stepInput) {
+    let stepNum = typeof stepInput === 'number' ? stepInput : keyToStepNum[stepInput];
+    if (!stepNum || stepNum < 1) stepNum = 1;
+    if (stepNum > 5) stepNum = 5;
+    const stepKey = stepKeyMap[stepNum];
+
+    // Validation: Require at least 5 flowers when trying to proceed past step 1
+    if (stepNum > 1 && state.bouquet.flowers.length < 5) {
+      alert('Please select at least 5 flowers (up to 8 stems) to create a full botanical bouquet.');
+      return;
+    }
+
+    currentBouquetStep = stepNum;
     state.bouquet.step = stepKey;
-    bStepBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.step === stepKey));
+
+    // Update 5-dot step indicator
+    bouquetDots.forEach((dot, idx) => {
+      if (!dot) return;
+      const dotNum = idx + 1;
+      if (dotNum < stepNum) {
+        dot.classList.remove('active');
+        dot.classList.add('completed');
+      } else if (dotNum === stepNum) {
+        dot.classList.add('active');
+        dot.classList.remove('completed');
+      } else {
+        dot.classList.remove('active', 'completed');
+      }
+    });
+
+    bouquetLines.forEach((line, idx) => {
+      if (!line) return;
+      line.classList.toggle('active', (idx + 1) < stepNum);
+    });
+
+    // Toggle panels
     Object.keys(bqPanels).forEach(key => {
       if (bqPanels[key]) {
         bqPanels[key].style.display = key === stepKey ? 'block' : 'none';
       }
     });
-    if (bareStemStage) {
-      bareStemStage.classList.toggle('step-arrange-active', stepKey === 'arrange');
+
+    // Stage placement:
+    // When in Step 5: sits inside .bouquet-step5-hero-slot
+    // When in Steps 1-4: sits above #bq-panel-stems
+    const assembledContainer = document.getElementById('bouquet-assembled-preview');
+    const heroSlot = document.getElementById('bouquet-step5-hero-slot');
+    const canvasBouquet = document.getElementById('canvas-bouquet');
+    const panelStems = document.getElementById('bq-panel-stems');
+
+    if (assembledContainer) {
+      if (stepNum === 5 && heroSlot) {
+        heroSlot.appendChild(assembledContainer);
+      } else if (canvasBouquet && panelStems && assembledContainer.parentElement !== canvasBouquet) {
+        canvasBouquet.insertBefore(assembledContainer, panelStems);
+      }
     }
-    if (stepKey === 'arrange') {
+
+    if (bareStemStage) {
+      bareStemStage.classList.toggle('step-arrange-active', stepNum === 3);
+    }
+    if (stepNum === 3) {
       renderStemOrderStrip();
+    }
+    if (stepNum === 5) {
+      autoSaveBouquetToVault();
     }
   }
 
-  bStepBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      setBouquetStep(btn.dataset.step);
-    });
+  // Wire Dots Click
+  bouquetDots.forEach((dot, idx) => {
+    if (dot) {
+      dot.addEventListener('click', () => {
+        setBouquetStep(idx + 1);
+      });
+    }
   });
 
   // Next / Back Navigation buttons
-  document.querySelectorAll('.bq-next-btn, .bq-back-btn').forEach(btn => {
+  document.querySelectorAll('#canvas-bouquet .bq-next-btn, #canvas-bouquet .bq-back-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.dataset.target;
-      if (target === 'arrange' && state.bouquet.flowers.length < 5) {
-        alert('Please select at least 5 flowers (up to 8 stems) to create a full botanical bouquet.');
-        return;
-      }
       if (target) setBouquetStep(target);
     });
   });
 
-  const bqBtnDoneNote = document.getElementById('bq-btn-done-note');
-  if (bqBtnDoneNote) {
-    bqBtnDoneNote.addEventListener('click', () => {
-      const btnVesselSelect = document.getElementById('btn-vessel-select');
-      if (btnVesselSelect) {
-        btnVesselSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+  // Step 5: Read Attached Note ♡ pill button
+  const btnBouquetToggleNote = document.getElementById('btn-bouquet-toggle-note');
+  if (btnBouquetToggleNote) {
+    btnBouquetToggleNote.addEventListener('click', openBouquetUnfoldedNote);
+  }
+
+  // Step 5: Save to Vault button
+  const btnBouquetSaveVault = document.getElementById('btn-bouquet-save-vault');
+  if (btnBouquetSaveVault) {
+    btnBouquetSaveVault.addEventListener('click', () => {
+      saveCurrentBouquetToVault(true);
+      btnBouquetSaveVault.innerHTML = `
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>Saved to Vault ✓</span>
+      `;
+      setTimeout(() => {
+        btnBouquetSaveVault.innerHTML = `
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span>Save to Vault</span>
+        `;
+      }, 2200);
     });
+  }
+
+  // Step 5: Send Bouquet button
+  const btnBouquetSend = document.getElementById('btn-bouquet-send');
+  if (btnBouquetSend) {
+    btnBouquetSend.addEventListener('click', () => {
+      openBouquetDispatchModal();
+    });
+  }
+
+  function openBouquetUnfoldedNote() {
+    if (!unfoldedOverlay) return;
+    const toVal = bouquetToInput ? bouquetToInput.value : state.bouquet.noteTo;
+    const fromVal = bouquetFromInput ? bouquetFromInput.value : state.bouquet.noteFrom;
+    const bodyVal = bouquetNoteBody ? bouquetNoteBody.value : state.bouquet.noteBody;
+    if (unfoldedTo) unfoldedTo.textContent = `To: ${toVal}`;
+    if (unfoldedFrom) unfoldedFrom.textContent = `From: ${fromVal}`;
+    if (unfoldedNoteBodyText) unfoldedNoteBodyText.textContent = bodyVal;
+    if (unfoldedCard) unfoldedCard.dataset.theme = state.bouquet.noteTheme || 'cream';
+    unfoldedOverlay.style.display = 'flex';
+  }
+
+  function autoSaveBouquetToVault() {
+    saveCurrentBouquetToVault(false);
+  }
+
+  function saveCurrentBouquetToVault(isManual = false) {
+    try {
+      const vaultData = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
+      const toVal = bouquetToInput ? bouquetToInput.value : state.bouquet.noteTo;
+      const fromVal = bouquetFromInput ? bouquetFromInput.value : state.bouquet.noteFrom;
+      const bodyVal = bouquetNoteBody ? bouquetNoteBody.value : state.bouquet.noteBody;
+
+      const item = {
+        type: 'bouquet',
+        title: 'Botanical Bouquet',
+        flowers: [...state.bouquet.flowers],
+        greenery: [...state.bouquet.greenery],
+        shuffleSeed: state.bouquet.shuffleSeed,
+        theme: state.bouquet.noteTheme || 'cream',
+        to: toVal,
+        from: fromVal,
+        body: bodyVal,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        savedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      };
+
+      const isDuplicate = vaultData.some(v => v.type === 'bouquet' && v.to === item.to && v.from === item.from && v.body === item.body && v.flowers && v.flowers.length === item.flowers.length);
+      if (!isDuplicate) {
+        vaultData.unshift(item);
+        localStorage.setItem('between_us_vault_items', JSON.stringify(vaultData));
+        if (isManual) {
+          showAtelierToast('Bouquet saved to your Vault ♡');
+        }
+      } else if (isManual) {
+        showAtelierToast('Already saved in your Vault ♡');
+      }
+    } catch (err) {
+      console.warn('Vault bouquet save error:', err);
+    }
+  }
+
+  function generateShareableBouquetUrl() {
+    const toVal = bouquetToInput ? bouquetToInput.value : state.bouquet.noteTo;
+    const fromVal = bouquetFromInput ? bouquetFromInput.value : state.bouquet.noteFrom;
+    const bodyVal = bouquetNoteBody ? bouquetNoteBody.value : state.bouquet.noteBody;
+
+    const payload = {
+      type: 'bouquet',
+      fl: state.bouquet.flowers.map(f => ({ f: f.flower, file: f.file })),
+      gr: state.bouquet.greenery,
+      sd: state.bouquet.shuffleSeed,
+      th: state.bouquet.noteTheme || 'cream',
+      to: toVal,
+      from: fromVal,
+      m: bodyVal,
+      d: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    };
+    const jsonStr = JSON.stringify(payload);
+    const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+    const base = window.location.origin + window.location.pathname;
+    return `${base}#bouquet=${encodeURIComponent(b64)}`;
+  }
+
+  function openBouquetDispatchModal() {
+    const modal = document.getElementById('dispatch-modal');
+    if (!modal) return;
+    const iconEl = document.getElementById('dispatch-badge-icon');
+    const titleEl = document.getElementById('dispatch-modal-title');
+    const subEl = document.getElementById('dispatch-modal-sub');
+    const copyDescEl = document.getElementById('dispatch-copy-desc');
+    const urlInput = document.getElementById('dispatch-url-input');
+
+    if (iconEl) iconEl.textContent = '🌸';
+    if (titleEl) titleEl.textContent = 'Send Your Botanical Bouquet';
+    if (subEl) subEl.textContent = 'Share your handpicked bouquet and personal note.';
+    if (copyDescEl) copyDescEl.textContent = 'Anyone with this link can view your bouquet and read your attached note';
+
+    const shareUrl = generateShareableBouquetUrl();
+    if (urlInput) urlInput.value = shareUrl;
+
+    modal.style.display = 'flex';
   }
 
   // Step 1: Flower Selection (5 to 8 stems total, allows duplicate stems)
@@ -2130,6 +2335,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnStep3Dispatch) {
     btnStep3Dispatch.addEventListener('click', () => {
+      const iconEl = document.getElementById('dispatch-badge-icon');
+      const titleEl = document.getElementById('dispatch-modal-title');
+      const subEl = document.getElementById('dispatch-modal-sub');
+      const copyDescEl = document.getElementById('dispatch-copy-desc');
+      if (iconEl) iconEl.textContent = '💌';
+      if (titleEl) titleEl.textContent = 'Dispatch Your Postcard';
+      if (subEl) subEl.textContent = 'Share your thoughtful gift with someone special.';
+      if (copyDescEl) copyDescEl.textContent = 'Anyone with this link can view and flip your postcard';
       const shareUrl = generateShareableUrl();
       if (dispatchUrlInput) dispatchUrlInput.value = shareUrl;
       if (dispatchModal) dispatchModal.style.display = 'flex';
@@ -2218,13 +2431,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const urlParams = new URLSearchParams(rawQuery);
       const cardParam = urlParams.get('card');
-      if (!cardParam) return;
-
-      const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(cardParam))));
-      const cardData = JSON.parse(jsonStr);
-      renderRecipientExperience(cardData);
+      const bouquetParam = urlParams.get('bouquet');
+      if (cardParam) {
+        const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(cardParam))));
+        const cardData = JSON.parse(jsonStr);
+        renderRecipientExperience(cardData);
+      } else if (bouquetParam) {
+        const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(bouquetParam))));
+        const bqData = JSON.parse(jsonStr);
+        renderRecipientBouquetExperience(bqData);
+      }
     } catch (err) {
-      console.warn('No valid recipient card param found or decode error:', err);
+      console.warn('No valid recipient param found or decode error:', err);
     }
   }
 
@@ -2241,12 +2459,21 @@ document.addEventListener('DOMContentLoaded', () => {
     recipientStage.style.display = 'flex';
 
     // Populate Dedication
+    const recipientGreeting = document.getElementById('recipient-dedication-heading');
     const recipientFromToText = document.getElementById('recipient-from-to-text');
+    if (recipientGreeting) recipientGreeting.textContent = 'A little something for you';
     if (recipientFromToText) {
       recipientFromToText.textContent = `From ${data.from || 'Someone Special'} to ${data.to || 'You'}`;
     }
 
+    // Hide bouquet section if previously open
+    const bouquetWrap = document.getElementById('recipient-bouquet-wrap');
+    if (bouquetWrap) bouquetWrap.style.display = 'none';
+
     // Render Recipient Vessel
+    const recipientVesselStage = document.getElementById('recipient-vessel-stage');
+    if (recipientVesselStage) recipientVesselStage.style.display = 'block';
+
     const recipientVesselArt = document.getElementById('recipient-vessel-art');
     if (recipientVesselArt) {
       if (data.v === 'envelope') {
@@ -2277,7 +2504,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Interactive Open
     const btnRecipientOpen = document.getElementById('btn-recipient-open');
-    const recipientVesselStage = document.getElementById('recipient-vessel-stage');
     const recipientPostcardWrap = document.getElementById('recipient-postcard-wrap');
     const recipientCardInner = document.getElementById('recipient-card-inner');
     const btnRecipientFlip = document.getElementById('btn-recipient-flip');
@@ -2323,10 +2549,135 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const btnRecipientCreate = document.getElementById('btn-recipient-create');
     if (btnRecipientCreate) {
+      btnRecipientCreate.textContent = '✨ Make Your Own Postcard';
       btnRecipientCreate.addEventListener('click', () => {
-        // Clear card param and reload into studio hub
         window.location.href = window.location.pathname;
       });
+    }
+  }
+
+  function renderRecipientBouquetExperience(data) {
+    window.renderRecipientBouquetExperience = renderRecipientBouquetExperience;
+    if (splashScreen) splashScreen.style.display = 'none';
+    if (appHeader) appHeader.style.display = 'none';
+    if (appStage) appStage.style.display = 'none';
+    if (appBottomNav) appBottomNav.style.display = 'none';
+
+    const recipientStage = document.getElementById('recipient-stage');
+    if (!recipientStage) return;
+    recipientStage.style.display = 'flex';
+
+    // Populate Dedication
+    const recipientGreeting = document.getElementById('recipient-dedication-heading');
+    const recipientFromToText = document.getElementById('recipient-from-to-text');
+    if (recipientGreeting) recipientGreeting.textContent = 'A little something for you';
+    if (recipientFromToText) {
+      recipientFromToText.textContent = `From ${data.from || 'Someone Special'} to ${data.to || 'You'}`;
+    }
+
+    // Hide vessel and postcard sections
+    const vesselStage = document.getElementById('recipient-vessel-stage');
+    const postcardWrap = document.getElementById('recipient-postcard-wrap');
+    if (vesselStage) vesselStage.style.display = 'none';
+    if (postcardWrap) postcardWrap.style.display = 'none';
+
+    // Show bouquet section
+    const bouquetWrap = document.getElementById('recipient-bouquet-wrap');
+    const bouquetDisplay = document.getElementById('recipient-bouquet-display');
+    if (bouquetWrap) bouquetWrap.style.display = 'flex';
+
+    if (bouquetDisplay) {
+      const rawFlowers = data.fl || data.flowers || [
+        { f: 'Rose', file: 'rose.png' },
+        { f: 'Peony', file: 'peony.png' },
+        { f: "Baby's Breath", file: 'babys_breath.png' },
+        { f: 'Lily', file: 'lily.png' },
+        { f: 'Sunflower', file: 'sunflower.png' }
+      ];
+      const greenery = data.gr || data.greenery || ['eucalyptus', 'olive'];
+      const total = rawFlowers.length;
+
+      // Render Greenery Sprigs
+      let grHtml = '';
+      greenery.forEach((type, idx) => {
+        const rot = idx % 2 === 0 ? -(22 + idx * 8) : (20 + idx * 9);
+        const lft = idx % 2 === 0 ? 15 + idx * 10 : 55 - idx * 8;
+        grHtml += `<img src="assets/greenery/${type}.svg" style="position: absolute; bottom: 80px; left: ${lft}%; transform: translateX(-50%) rotate(${rot}deg); width: 140px; height: 180px; object-fit: contain; opacity: 0.85; pointer-events: none;" />`;
+      });
+
+      // Render Stems Cluster
+      let stemsHtml = '';
+      rawFlowers.forEach((item, idx) => {
+        const fFile = item.file || (item.f ? item.f.toLowerCase().replace(/[^a-z0-9]/g, '_') + '.png' : 'rose.png');
+        const fName = item.f || item.flower || 'Flower';
+        const offsetPercent = total > 1 ? (idx / (total - 1)) * 100 : 50;
+        const xPos = 20 + (offsetPercent * 0.6);
+        const rot = -18 + (offsetPercent * 0.36);
+        stemsHtml += `
+          <div style="position: absolute; bottom: 30px; left: ${xPos}%; transform: translateX(-50%) rotate(${rot}deg); width: 85px; height: 230px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;">
+            <img src="assets/flowers/${fFile}" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.06));" alt="${fName}" />
+          </div>
+        `;
+      });
+
+      bouquetDisplay.innerHTML = `
+        <div style="position: relative; width: 100%; height: 100%; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
+          <div style="position: absolute; inset: 0; pointer-events: none;">${grHtml}</div>
+          <div style="position: relative; width: 100%; height: 100%;">${stemsHtml}</div>
+          <div style="position: absolute; bottom: 42px; width: 56px; height: 16px; background: #C8AD8D; border-radius: 4px; border: 1px solid #A88D6D; z-index: 50; display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 10px; color: #5B4125; letter-spacing: 0.5px;">୨୧</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Wire unwrap note button
+    const btnOpenNote = document.getElementById('btn-recipient-open-bouquet-note');
+    if (btnOpenNote) {
+      btnOpenNote.onclick = () => {
+        if (!unfoldedOverlay) return;
+        if (unfoldedTo) unfoldedTo.textContent = `To: ${data.to || 'You'}`;
+        if (unfoldedFrom) unfoldedFrom.textContent = `From: ${data.from || 'Someone Special'}`;
+        if (unfoldedNoteBodyText) unfoldedNoteBodyText.textContent = data.m || data.body || 'A little botanical bouquet handpicked just for you.';
+        if (unfoldedCard) unfoldedCard.dataset.theme = data.th || data.theme || 'cream';
+        unfoldedOverlay.style.display = 'flex';
+      };
+    }
+
+    // Footer actions
+    const btnSaveVault = document.getElementById('btn-recipient-save-vault');
+    if (btnSaveVault) {
+      btnSaveVault.onclick = () => {
+        try {
+          const vault = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
+          vault.unshift({
+            type: 'bouquet',
+            title: 'Botanical Bouquet',
+            flowers: data.fl || data.flowers,
+            greenery: data.gr || data.greenery,
+            theme: data.th || data.theme || 'cream',
+            to: data.to,
+            from: data.from,
+            body: data.m || data.body,
+            date: data.d || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            savedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+          });
+          localStorage.setItem('between_us_vault_items', JSON.stringify(vault));
+          btnSaveVault.textContent = 'Saved to Keepsakes ✓';
+        } catch (e) {}
+      };
+    }
+
+    const btnMakeOwn = document.getElementById('btn-recipient-create');
+    if (btnMakeOwn) {
+      btnMakeOwn.textContent = '✨ Make Your Own Bouquet';
+      btnMakeOwn.onclick = () => {
+        recipientStage.style.display = 'none';
+        if (appHeader) appHeader.style.display = 'flex';
+        if (appStage) appStage.style.display = 'block';
+        if (appBottomNav) appBottomNav.style.display = 'flex';
+        selectMedium('bouquet');
+      };
     }
   }
 
@@ -2351,7 +2702,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     vaultGrid.innerHTML = vaultItems.map((item, idx) => {
       let iconHtml = '💌';
-      if (item.v === 'truck') {
+      if (item.type === 'bouquet') {
+        iconHtml = `<img src="assets/medium_bouquet.png" style="width:100%; height:100%; object-fit:contain;" alt="Bouquet" />`;
+      } else if (item.v === 'truck') {
         iconHtml = `<img src="assets/truck.png" style="width:100%; height:100%; object-fit:contain;" alt="Truck" />`;
       } else if (item.v === 'box') {
         const boxSrc = boxImages[item.bi || '1'] || 'assets/boxes/box1.jpg';
@@ -2367,9 +2720,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ${iconHtml}
           </div>
           <div class="vault-item-info">
-            <h5 class="vault-item-title">${escapeHtml(item.title || 'Handwritten Postcard')}</h5>
+            <h5 class="vault-item-title">${escapeHtml(item.title || (item.type === 'bouquet' ? 'Botanical Bouquet' : 'Handwritten Postcard'))}</h5>
             <p class="vault-item-dedication">To: ${escapeHtml(item.to || 'Someone Special')} • From: ${escapeHtml(item.from || 'Me')}</p>
-            <p class="vault-item-date">Saved on ${item.savedAt || 'Recently'}</p>
+            <p class="vault-item-date">Saved on ${item.savedAt || item.date || 'Recently'}</p>
           </div>
           <button class="btn-vault-view" data-vault-idx="${idx}">View</button>
         </div>
@@ -2382,8 +2735,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const idx = parseInt(btn.dataset.vaultIdx);
         const item = vaultItems[idx];
         if (item) {
-          // Open recipient preview for this card
-          renderRecipientExperience(item);
+          if (item.type === 'bouquet') {
+            renderRecipientBouquetExperience(item);
+          } else {
+            renderRecipientExperience(item);
+          }
         }
       });
     });
