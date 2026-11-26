@@ -542,19 +542,270 @@ body {
 }
 .btn-flip-icon:hover {
   transform: scale(1.05);
-  background: #F8B4C8;
 }
 
 /* ================= 1. POSTCARD WORKSPACE ================= */
+.postcard-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px 8px;
+  position: relative;
+}
+
+.btn-postcard-back {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #521319;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.btn-postcard-back:hover {
+  background: #FFE8EE;
+}
+
+.postcard-header-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.postcard-nav-title {
+  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  font-size: 23px;
+  font-weight: 500;
+  color: #521319;
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: 0.3px;
+}
+
+/* 3-Step Dots Indicator */
+.postcard-step-dots {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 2px;
+}
+
+.postcard-step-dots .step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F5CED5;
+  display: inline-block;
+  transition: background 0.2s;
+}
+
+.postcard-step-dots .step-dot.active {
+  background: #521319;
+}
+
+.postcard-step-dots .step-line {
+  width: 28px;
+  height: 1.5px;
+  background: #F5CED5;
+  display: inline-block;
+}
+
+.postcard-subbar-spacer {
+  width: 26px;
+}
+
+/* Front / Back Segmented Pill Switch */
+.postcard-switch-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.pill-toggle-frontback {
+  display: inline-flex;
+  background: #FFF9FA;
+  border: 1px solid #F1CAD3;
+  border-radius: 24px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.pill-toggle-btn {
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 26px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: #521319;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.pill-toggle-btn.active {
+  background: #521319;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.pill-tick-mark {
+  font-size: 11px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(82, 19, 25, 0.08);
+  color: #521319;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.pill-toggle-btn.active .pill-tick-mark {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+/* Theme & Layout Option Rows */
+.postcard-options-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 0 16px;
+}
+
+.postcard-opt-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.postcard-opt-label {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 16px;
+  color: #521319;
+  font-weight: 600;
+  min-width: 62px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.postcard-opt-label .opt-bar {
+  color: #F1CAD3;
+  font-weight: 300;
+}
+
+/* Theme palette dots */
+.theme-palette-dots {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-circle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, outline 0.15s ease;
+}
+
+.theme-circle-btn.active {
+  outline: 2px solid #521319;
+  outline-offset: 2px;
+}
+
+.theme-circle-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.candy-pattern {
+  background: repeating-linear-gradient(135deg, #EE3A4C 0, #EE3A4C 4px, #FCE7EB 4px, #FCE7EB 8px);
+}
+
+.kraft-pattern {
+  background: #9DA3A6;
+}
+
+.blue-pattern {
+  background: #A7C4DC;
+}
+
+.hearts-pattern {
+  background: #FFF0F3;
+  border-color: #F1CAD3;
+}
+
+/* Layout pills */
+.layout-toggle-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.layout-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 18px;
+  border: 1px solid #F1CAD3;
+  background: #FFF9FA;
+  color: #521319;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.layout-chip-btn.active {
+  background: #521319;
+  color: #FFFFFF;
+  border-color: #521319;
+  font-weight: 600;
+}
+
+/* Postcard Wrapper & 3D Flip */
 .postcard-wrapper {
   perspective: 1000px;
   width: 100%;
+  margin: 0 auto;
+  transition: height 0.3s ease, max-width 0.3s ease;
 }
-.postcard-wrapper.portrait {
-  height: 340px;
-}
+
 .postcard-wrapper.landscape {
-  height: 250px;
+  max-width: 388px;
+  height: 236px;
+}
+
+.postcard-wrapper.portrait {
+  max-width: 280px;
+  height: 350px;
 }
 
 .postcard-card {
@@ -563,31 +814,140 @@ body {
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid var(--paper-border);
-  border-radius: var(--radius-sm);
-  background-color: var(--paper-white);
+  border-radius: 12px;
+  background-color: transparent;
 }
+
 .postcard-card.flipped {
   transform: rotateY(180deg);
 }
 
 .postcard-face {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  background-color: inherit;
+  box-sizing: border-box;
 }
 
-/* Postcard Front */
+.postcard-back {
+  transform: rotateY(180deg);
+}
+
+/* Theme Frame */
+.postcard-theme-frame {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  position: relative;
+}
+
+/* Candy Theme (DEFAULT) */
+.postcard-wrapper[data-theme="candy"] .postcard-theme-frame {
+  background: repeating-linear-gradient(135deg, #EE3A4C 0, #EE3A4C 12px, #FCE7EB 12px, #FCE7EB 24px);
+  border: 1px solid #EE3A4C;
+}
+
+/* Kraft Theme */
+.postcard-wrapper[data-theme="kraft"] .postcard-theme-frame {
+  background-color: #4A3124;
+  border: 1px solid #382419;
+}
+.postcard-wrapper[data-theme="kraft"] .postcard-front-inner,
+.postcard-wrapper[data-theme="kraft"] .postcard-back-split {
+  background-color: #E6D9C8 !important;
+}
+.postcard-wrapper[data-theme="kraft"] .postcard-divider-line {
+  border-left-color: #4A3124 !important;
+}
+
+/* Blue Ribbon Theme */
+.postcard-wrapper[data-theme="blue-ribbon"] .postcard-theme-frame {
+  background: repeating-linear-gradient(90deg, #A9C2D8 0, #A9C2D8 12px, #FFFFFF 12px, #FFFFFF 24px);
+  border: 2px solid #2C4159;
+}
+.postcard-wrapper[data-theme="blue-ribbon"] .postcard-front-inner,
+.postcard-wrapper[data-theme="blue-ribbon"] .postcard-back-split {
+  border: 1px solid #2C4159;
+}
+.postcard-wrapper[data-theme="blue-ribbon"] .postcard-divider-line {
+  border-left-color: #2C4159 !important;
+}
+
+/* Hearts Theme */
+.postcard-wrapper[data-theme="hearts"] .postcard-theme-frame {
+  background-color: #FFF9F4;
+  border: 22px solid transparent;
+  border-image-source: url('assets/hearts_border.svg');
+  border-image-slice: 30;
+  border-image-repeat: round;
+  padding: 4px;
+}
+.postcard-wrapper[data-theme="hearts"] .postcard-front-inner,
+.postcard-wrapper[data-theme="hearts"] .postcard-back-split {
+  background-color: #FFF9F4 !important;
+}
+.postcard-wrapper[data-theme="hearts"] .postcard-divider-line {
+  border-left-color: #FF99A8 !important;
+}
+
+/* Inner Face Containers */
+.postcard-front-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  border-radius: 4px;
+  padding: 10px 14px 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.face-tick-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 20;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #FFF9FA;
+  border: 1.5px solid #2E7D32;
+  color: #2E7D32;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.postcard-back .face-tick-badge {
+  top: auto;
+  bottom: 8px;
+  left: 8px;
+  right: auto;
+}
+
+.face-tick-badge.done {
+  background: #2E7D32;
+  color: #FFFFFF;
+}
+
+/* Front Photo Area */
 .card-photo-area {
   flex: 1;
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px dashed var(--paper-border);
-  border-radius: var(--radius-sm);
+  border: 1.5px dashed #D4A5B0;
+  border-radius: 8px;
+  background: rgba(254, 246, 244, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -595,146 +955,69 @@ body {
   overflow: hidden;
   position: relative;
 }
+
 .card-photo-area img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   transition: transform 0.05s linear;
 }
+
 .photo-upload-hint {
-  font-size: 11px;
-  color: var(--ink-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #521319;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 500;
 }
 
-.draggable-text-block {
-  margin-top: 10px;
-  cursor: grab;
-  padding: 4px;
-  border: 1px dashed transparent;
+.photo-icon-svg {
+  color: #521319;
 }
-.draggable-text-block:hover {
-  border-color: var(--paper-border-soft);
+
+/* Front Title Row */
+.postcard-front-title-row {
+  margin-top: 8px;
+  position: relative;
+  width: 100%;
 }
+
 .card-input-title {
   width: 100%;
-  font-family: var(--font-serif);
-  font-size: 16px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 17px;
+  font-style: italic;
   border: none;
   background: transparent;
-  color: var(--ink-black);
+  color: #521319;
   outline: none;
+  padding: 2px 2px 3px;
 }
-.card-input-caption {
+
+.card-title-underline {
   width: 100%;
-  font-family: var(--font-sans);
-  font-size: 12px;
-  border: none;
-  background: transparent;
-  color: var(--ink-muted);
-  resize: none;
-  outline: none;
-  margin-top: 2px;
+  height: 1px;
+  background: #E5B8C0;
 }
 
-/* Postcard Back */
-.postcard-back {
-  transform: rotateY(180deg);
-  padding: 0;
-  overflow: hidden;
-}
-
-/* Postcard Theme Framework */
-.postcard-theme-frame {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 10px;
-  border-radius: var(--radius-sm);
-  display: flex;
-}
-
-.postcard-front-inner,
+/* Back Face Split */
 .postcard-back-split {
   display: flex;
   width: 100%;
   height: 100%;
-  border-radius: 2px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  padding: 8px 12px;
   box-sizing: border-box;
   position: relative;
+  gap: 10px;
 }
-
-.postcard-front-inner {
-  padding: 16px;
-  flex-direction: column;
-}
-
-.postcard-back-split {
-  gap: 12px;
-  padding: 12px 14px;
-}
-
-/* Candy Theme */
-.postcard-wrapper[data-theme="candy"] .postcard-theme-frame {
-  background: repeating-linear-gradient(135deg, #EE3A4C 0, #EE3A4C 14px, #FCE7EB 14px, #FCE7EB 28px);
-}
-.postcard-wrapper[data-theme="candy"] .postcard-front-inner,
-.postcard-wrapper[data-theme="candy"] .postcard-back-split {
-  background-color: #FFFFFF;
-}
-.postcard-wrapper[data-theme="candy"] .postcard-divider-line {
-  border-left: 1.5px dashed #EE3A4C;
-}
-
-/* Kraft Theme */
-.postcard-wrapper[data-theme="kraft"] .postcard-theme-frame {
-  padding: 10px;
-  background-color: #4A3124;
-}
-.postcard-wrapper[data-theme="kraft"] .postcard-front-inner,
-.postcard-wrapper[data-theme="kraft"] .postcard-back-split {
-  background-color: #E6D9C8;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
-}
-.postcard-wrapper[data-theme="kraft"] .postcard-divider-line {
-  border-left: 1.5px solid #4A3124;
-}
-
-
-/* Blue Ribbon Theme */
-.postcard-wrapper[data-theme="blue-ribbon"] .postcard-theme-frame {
-  background: repeating-linear-gradient(90deg, #A9C2D8 0, #A9C2D8 12px, #FFFFFF 12px, #FFFFFF 24px);
-  background-position: 0 0;
-}
-.postcard-wrapper[data-theme="blue-ribbon"] .postcard-front-inner,
-.postcard-wrapper[data-theme="blue-ribbon"] .postcard-back-split {
-  background-color: #FFFFFF;
-  border: 2.5px solid #2C4159;
-  border-radius: 6px;
-}
-.postcard-wrapper[data-theme="blue-ribbon"] .postcard-divider-line {
-  border-left: 1.5px solid #2C4159;
-}
-
-/* Hearts Theme */
-.postcard-wrapper[data-theme="hearts"] .postcard-theme-frame {
-  background-color: #FFF9F4;
-  border: 24px solid transparent;
-  border-image-source: url('assets/hearts_border.svg');
-  border-image-slice: 30; /* The SVG corners are 30x30 */
-  border-image-repeat: round;
-}
-.postcard-wrapper[data-theme="hearts"] .postcard-front-inner,
-.postcard-wrapper[data-theme="hearts"] .postcard-back-split {
-  background-color: #FFF9F4;
-  border-radius: 2px;
-}
-.postcard-wrapper[data-theme="hearts"] .postcard-divider-line {
-  border-left: 1.5px dashed #FF99A8;
-}
-
 
 .postcard-left-pane {
-  flex: 6.5;
+  flex: 5.6;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -743,164 +1026,246 @@ body {
 .postcard-back-message {
   width: 100%;
   height: 100%;
-  font-family: var(--font-script);
+  font-family: 'Caveat', cursive;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 1.35;
   border: none;
   background: transparent;
-  color: var(--ink-black);
+  color: #4A121F;
   outline: none;
   resize: none;
-  transition: font-size 0.2s ease, font-family 0.2s ease;
+  padding: 2px;
 }
 
-/* Center vertical line */
 .postcard-divider-line {
   width: 0;
   border-left: 1.5px dashed #EE3A4C;
   height: 94%;
   align-self: center;
-  margin: 0 4px;
 }
 
 .postcard-right-pane {
-  flex: 3.5;
+  flex: 4.4;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
   min-width: 0;
+  padding-bottom: 2px;
 }
 
-/* Postmark + stamp top row */
 .postcard-postmark-stamp-row {
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .postcard-date-top {
-  display: flex;
-  align-items: center;
-  margin-right: auto;
-  padding-left: 8px;
-}
-.postcard-date-val {
-  font-family: var(--font-script);
-  font-size: 14px;
-  color: var(--ink-muted);
+  padding-top: 4px;
 }
 
-/* Perforated Stamps */
-.stamp-display-slot {
-  margin: 0;
+.postcard-date-val {
+  font-family: 'Caveat', cursive;
+  font-size: 13.5px;
+  color: #8E4A56;
+  font-style: italic;
 }
-.perforated-stamp {
-  width: 48px;
-  height: 58px;
+
+.stamp-display-slot {
+  width: 44px;
+  height: 54px;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed #FFFFFF;
-  outline: 1.5px solid var(--paper-border);
-  color: #FFFFFF;
+  overflow: hidden;
 }
-.stamp-heart { background-color: #EE3A4C; }
-.stamp-flower { background-color: #F495B3; }
-.stamp-smiley { background-color: #F2BD44; }
 
 .postcard-right-dedication {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 4px;
+  gap: 4px;
 }
 
 .from-to-row {
   display: flex;
   align-items: center;
-  font-family: var(--font-script);
-  font-size: 16px;
-  color: var(--ink-maroon);
   border-bottom: 1px solid #E6D0D3;
-  padding-bottom: 2px;
+  padding: 1px 0 2px;
+  width: 100%;
 }
 
 .from-to-row .lbl {
-  width: 52px;
   font-family: var(--font-sans);
   font-size: 10px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-muted);
+  font-weight: 700;
+  color: #8E4A56;
+  width: 42px;
+  letter-spacing: 0.5px;
 }
 
 .from-to-row input {
-  font-family: var(--font-script);
-  font-size: 16px;
+  font-family: 'Caveat', cursive;
+  font-size: 15px;
   border: none;
   background: transparent;
   outline: none;
   flex: 1;
-  color: var(--ink-black);
+  color: #4A121F;
   min-width: 0;
+}
+
+/* Back Controls (Stamps + Fonts) */
+.postcard-back-controls {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   width: 100%;
 }
 
-.from-to-row.date-row .postcard-date-val {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  color: var(--ink-muted);
+.stamp-picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-/* Postcard Controls Row */
-.postcard-controls-row {
+.stamp-shuffle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FFE8EE;
+  border: 1px solid #F1CAD3;
+  color: #521319;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
-}
-.btn-flip {
-  background: var(--paper-white);
-  border: 1px solid var(--paper-border);
-  border-radius: var(--radius-sm);
-  padding: 6px 12px;
-  font-size: 12px;
+  justify-content: center;
   cursor: pointer;
-  color: var(--ink-maroon);
-  transition: background-color 0.15s ease;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
-.btn-flip:hover {
-  background-color: var(--paper-babypink);
+
+.stamp-shuffle-btn:hover {
+  transform: rotate(30deg);
+  background: #FBD5DE;
 }
 
 .stamp-visual-picker {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
 }
+
 .stamp-pick-btn {
-  background: transparent;
-  border: 1px solid transparent;
-  padding: 2px;
+  width: 38px;
+  height: 48px;
+  border: 1px solid #F1CAD3;
+  border-radius: 4px;
+  background: #FFF9FA;
+  padding: 1px;
   cursor: pointer;
-  border-radius: 2px;
-}
-.stamp-pick-btn.active {
-  border-color: var(--ink-maroon);
-}
-.mini-stamp {
-  width: 26px;
-  height: 32px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.stamp-pick-btn.active {
+  border: 2px solid #521319;
+  outline: 1.5px solid #521319;
+  outline-offset: 1px;
+}
+
+/* Font Controls */
+.font-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.font-size-pill {
+  display: inline-flex;
+  align-items: center;
+  background: #FFF9FA;
+  border: 1px solid #F1CAD3;
+  border-radius: 18px;
+  padding: 3px 10px;
+  gap: 6px;
+}
+
+.font-size-pill button {
+  background: transparent;
+  border: none;
+  color: #521319;
+  font-family: var(--font-sans);
   font-size: 12px;
-  border: 1px dashed #FFFFFF;
-  color: #FFFFFF;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 1px 3px;
+}
+
+.font-divider {
+  color: #F1CAD3;
+}
+
+.font-select-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.postcard-font-select {
+  appearance: none;
+  background: #FFF9FA;
+  border: 1px solid #F1CAD3;
+  border-radius: 18px;
+  padding: 4px 28px 4px 14px;
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+  color: #521319;
+  cursor: pointer;
+  outline: none;
+}
+
+.font-dropdown-chevron {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  color: #521319;
+}
+
+/* Flip Action Button */
+.postcard-flip-action-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+.btn-flip-card-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #FFF0F3;
+  border: 1px solid #F5CED5;
+  border-radius: 25px;
+  padding: 9px 34px;
+  color: #521319;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-flip-card-pill:hover {
+  background: #FCE1E8;
+  transform: translateY(-1px);
 }
 
 /* ================= 2. LETTER WORKSPACE ================= */

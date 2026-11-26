@@ -304,39 +304,113 @@
 
         <!-- ---------------- 1. POSTCARD WORKSPACE ---------------- -->
         <div class="canvas-workspace" id="canvas-postcard">
-          <div class="canvas-toolbar">
-            <div class="tool-group">
-              <button class="chip-btn active" id="btn-postcard-orient-port">Portrait</button>
-              <button class="chip-btn" id="btn-postcard-orient-land">Landscape</button>
+          <!-- Subheader Bar: Back chevron, Postcard Title, 3-Step Indicator -->
+          <div class="postcard-subbar">
+            <button class="btn-postcard-back" id="btn-postcard-back-to-hub" title="Back to Studio">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <div class="postcard-header-center">
+              <h2 class="postcard-nav-title">Postcard</h2>
+              <div class="postcard-step-dots" title="Step 1 of 3: Designing Postcard">
+                <span class="step-dot active"></span>
+                <span class="step-line"></span>
+                <span class="step-dot"></span>
+                <span class="step-line"></span>
+                <span class="step-dot"></span>
+              </div>
             </div>
-            <div class="tool-group">
-              <!-- Postcard Themes -->
-              <div class="theme-palette" id="postcard-theme-palette">
-                <button class="theme-dot active" data-theme="candy" title="Candy Airmail" style="background: repeating-linear-gradient(135deg, #EE3A4C 0, #EE3A4C 4px, #FCE7EB 4px, #FCE7EB 8px);"></button>
-                <button class="theme-dot" data-theme="kraft" title="Handmade Kraft" style="background:#A3A3A3;"></button>
-                <button class="theme-dot" data-theme="blue-ribbon" title="Blue Ribbon" style="background:#A9C2D8;"></button>
-                <button class="theme-dot" data-theme="hearts" title="Love Hearts" style="background:#FFF0F2; border: 2px solid #EE3A4C;"></button>
+            <div class="postcard-subbar-spacer"></div>
+          </div>
+
+          <!-- Front / Back Pill Switch with Completion Ticks -->
+          <div class="postcard-switch-row">
+            <div class="pill-toggle-frontback">
+              <button class="pill-toggle-btn active" id="btn-toggle-front" data-face="front">
+                <span>Front</span>
+                <span class="pill-tick-mark active" id="pill-tick-front" title="Front complete">✓</span>
+              </button>
+              <button class="pill-toggle-btn" id="btn-toggle-back" data-face="back">
+                <span>Back</span>
+                <span class="pill-tick-mark active" id="pill-tick-back" title="Back complete">✓</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Theme & Layout Options -->
+          <div class="postcard-options-bar">
+            <!-- Theme Row -->
+            <div class="postcard-opt-row">
+              <span class="postcard-opt-label">Theme <span class="opt-bar">|</span></span>
+              <div class="theme-palette-dots" id="postcard-theme-palette">
+                <!-- 1. Candy Stripes (DEFAULT) -->
+                <button class="theme-circle-btn active" data-theme="candy" title="Candy Airmail">
+                  <span class="theme-circle-fill candy-pattern"></span>
+                </button>
+                <!-- 2. Kraft -->
+                <button class="theme-circle-btn" data-theme="kraft" title="Handmade Kraft">
+                  <span class="theme-circle-fill kraft-pattern"></span>
+                </button>
+                <!-- 3. Blue Ribbon -->
+                <button class="theme-circle-btn" data-theme="blue-ribbon" title="Blue Ribbon">
+                  <span class="theme-circle-fill blue-pattern"></span>
+                </button>
+                <!-- 4. Hearts -->
+                <button class="theme-circle-btn" data-theme="hearts" title="Love Hearts">
+                  <span class="theme-circle-fill hearts-pattern">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="#D8263B">
+                      <path d="M 8 15 C 8 15, 3.5 11, 3.5 8 C 3.5 6 5 4.8 6.5 4.8 C 7.8 4.8 8.6 5.6 9 6.2 C 9.4 5.6 10.2 4.8 11.5 4.8 C 13 4.8 14.5 6 14.5 8 C 14.5 11 10 15 10 15 Z"/>
+                      <path d="M 15 11 C 15 11, 12 8 12 6 C 12 4.5 13 3.6 14.2 3.6 C 15.1 3.6 15.6 4.1 16 4.6 C 16.4 4.1 16.9 3.6 17.8 3.6 C 19 3.6 20 4.5 20 6 C 20 8 17 11 17 11 Z" opacity="0.9"/>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Layout Row -->
+            <div class="postcard-opt-row">
+              <span class="postcard-opt-label">Layout <span class="opt-bar">|</span></span>
+              <div class="layout-toggle-pills">
+                <button class="layout-chip-btn" id="btn-postcard-orient-port">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                  <span>Portrait</span>
+                </button>
+                <button class="layout-chip-btn active" id="btn-postcard-orient-land">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="18" y1="12" x2="18.01" y2="12"></line></svg>
+                  <span>Landscape</span>
+                </button>
               </div>
             </div>
           </div>
 
           <!-- Flip Postcard Wrapper -->
-          <div class="postcard-wrapper portrait" id="postcard-container">
+          <div class="postcard-wrapper landscape" id="postcard-container" data-theme="candy">
             <div class="postcard-card" id="postcard-card">
               <!-- Front Face -->
               <div class="postcard-face postcard-front" id="postcard-front-face">
                 <div class="postcard-theme-frame">
                   <div class="postcard-front-inner">
+                    <button class="face-tick-badge" id="btn-front-tick" title="Front complete (click to toggle)">
+                      <span class="tick-char">✓</span>
+                    </button>
+                    <!-- Photo Upload Area -->
                     <div class="card-photo-area" id="postcard-photo-area">
                       <input type="file" id="postcard-file-input" accept="image/*" style="display:none;">
                       <img id="postcard-image-preview" src="" alt="" style="display:none;">
                       <div class="photo-upload-hint" id="photo-upload-hint">
-                        <span>+ Upload image (optional)</span>
+                        <svg class="photo-icon-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="3" ry="3"></rect>
+                          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                          <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <span>Upload image (optional)</span>
                       </div>
                     </div>
-                    <!-- Draggable / Repositionable Front Text Block -->
-                    <div class="draggable-text-block" id="postcard-front-text-block">
-                      <input type="text" class="card-input-title" placeholder="Add title..." value="">
+                    <!-- Draggable / Repositionable Front Text Block with Underline -->
+                    <div class="postcard-front-title-row" id="postcard-front-text-block">
+                      <input type="text" class="card-input-title" id="postcard-title-input" placeholder="Add title..." value="">
+                      <div class="card-title-underline"></div>
                     </div>
                   </div>
                 </div>
@@ -346,34 +420,35 @@
               <div class="postcard-face postcard-back" id="postcard-back-face">
                 <div class="postcard-theme-frame">
                   <div class="postcard-back-split">
+                    <button class="face-tick-badge" id="btn-back-tick" title="Back complete (click to toggle)">
+                      <span class="tick-char">✓</span>
+                    </button>
                     <!-- Left side: Handwritten message -->
                     <div class="postcard-left-pane">
                       <textarea class="postcard-back-message" id="postcard-back-message" placeholder="Write your note here..."></textarea>
                     </div>
                     <div class="postcard-divider-line"></div>
-                    <!-- Right side: Postmark, Visual Stamp, From/To Lines -->
+                    <!-- Right side: Date, Visual Stamp, From/To Lines -->
                     <div class="postcard-right-pane">
-                      <!-- Postmark with LOVE ring and wavy cancellation lines + Stamp Slot -->
+                      <!-- Date & Stamp Row -->
                       <div class="postcard-postmark-stamp-row">
                         <div class="postcard-date-top">
                           <span class="postcard-date-val" id="postcard-date-display">October 6, 2026</span>
                         </div>
                         <!-- Visual Stamp Display -->
                         <div class="stamp-display-slot" id="postcard-stamp-display">
-                          <div class="perforated-stamp stamp-heart">
-                            <svg viewBox="0 0 24 24" width="22" height="22" fill="#FFFFFF"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                          </div>
+                          <!-- Stamp injected via JS -->
                         </div>
                       </div>
 
-                      <!-- Right-side 4 Address Lines for From & To -->
+                      <!-- Dedicated To & From lines -->
                       <div class="postcard-right-dedication">
                         <div class="from-to-row">
-                          <span class="lbl">To:</span>
+                          <span class="lbl">TO:</span>
                           <input type="text" value="Kabir" id="postcard-to-input">
                         </div>
                         <div class="from-to-row">
-                          <span class="lbl">From:</span>
+                          <span class="lbl">FROM:</span>
                           <input type="text" value="Saanvi" id="postcard-from-input">
                         </div>
                       </div>
@@ -384,52 +459,57 @@
             </div>
           </div>
 
-          <!-- Flip Button & Visual Stamp Selector -->
-          <div class="postcard-controls-row" style="align-items: flex-start;">
-            <button class="btn-flip-icon" id="btn-flip-postcard" title="Flip Card" style="margin-top: 4px;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D32F3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"></path><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><path d="M7 23l-4-4 4-4"></path><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
-            </button>
-            <div class="postcard-controls-right" style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
-              <div class="stamp-visual-picker" id="postcard-stamp-picker" style="display:none;">
-                <!-- Stamp Picker dynamically updated via JS -->
-                <button class="stamp-pick-btn active" data-stamp="candy_bear" title="Bear"></button>
-                <button class="stamp-pick-btn" data-stamp="candy_heart" title="Heart"></button>
-                <button class="stamp-pick-btn" data-stamp="candy_lock" title="Heart Lock"></button>
-                <button class="stamp-pick-btn" data-stamp="candy_tulip" title="Tulip"></button>
-                <button class="stamp-pick-btn" data-stamp="candy_butterfly" title="Butterfly"></button>
-              </div>
-              
-              <!-- Font Picker for the Back -->
-              <div class="font-picker-container" id="postcard-font-picker" style="display:none; flex-direction: row; align-items: center; gap: 6px;">
-                <div style="display: flex; gap: 2px; align-items: center; background: #FFF0F2; padding: 3px 6px; border-radius: 12px; border: 1px solid #FF99A8;">
-                  <button id="btn-font-minus" title="Decrease Font Size" style="border: none; background: transparent; cursor: pointer; color: #D32F3D; font-weight: bold; font-size: 14px; padding: 0 4px; outline: none;">A-</button>
-                  <button id="btn-font-plus" title="Increase Font Size" style="border: none; background: transparent; cursor: pointer; color: #D32F3D; font-weight: bold; font-size: 14px; padding: 0 4px; outline: none;">A+</button>
-                </div>
-                
-                <select id="postcard-font-select" class="postcard-font-select" style="padding: 4px 10px; border-radius: 12px; border: 1px solid #FF99A8; background: #FFF0F2; font-family: inherit; font-size: 13px; outline: none; cursor: pointer; color: #D32F3D; font-weight: 500;">
-                  <option value="'Caveat', cursive" style="font-family: 'Caveat', cursive; font-size: 15px;">Caveat</option>
-                  <option value="'Pacifico', cursive" style="font-family: 'Pacifico', cursive; font-size: 14px;">Pacifico</option>
-                  <option value="'Dancing Script', cursive" style="font-family: 'Dancing Script', cursive; font-size: 15px;">Dancing Script</option>
-                  <option value="'Great Vibes', cursive" style="font-family: 'Great Vibes', cursive; font-size: 15px;">Great Vibes</option>
-                  <option value="'Satisfy', cursive" style="font-family: 'Satisfy', cursive; font-size: 15px;">Satisfy</option>
-                  <option value="'Shadows Into Light', cursive" style="font-family: 'Shadows Into Light', cursive; font-size: 14px;">Shadows Into Light</option>
-                  <option value="'Amatic SC', cursive" style="font-family: 'Amatic SC', cursive; font-size: 16px;">Amatic SC</option>
-                  <option value="'Patrick Hand', cursive" style="font-family: 'Patrick Hand', cursive; font-size: 14px;">Patrick Hand</option>
-                  <option value="'Indie Flower', cursive" style="font-family: 'Indie Flower', cursive; font-size: 14px;">Indie Flower</option>
-                  <option value="'Homemade Apple', cursive" style="font-family: 'Homemade Apple', cursive; font-size: 13px;">Homemade Apple</option>
-                  <option value="'Playfair Display', serif" style="font-family: 'Playfair Display', serif; font-size: 13px;">Playfair Display</option>
-                  <option value="'Merriweather', serif" style="font-family: 'Merriweather', serif; font-size: 13px;">Merriweather</option>
-                  <option value="'Lora', serif" style="font-family: 'Lora', serif; font-size: 13px;">Lora</option>
-                  <option value="'Cormorant Garamond', serif" style="font-family: 'Cormorant Garamond', serif; font-size: 14px;">Cormorant Garamond</option>
-                  <option value="'EB Garamond', serif" style="font-family: 'EB Garamond', serif; font-size: 14px;">EB Garamond</option>
-                  <option value="'Plus Jakarta Sans', sans-serif" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px;">Plus Jakarta Sans</option>
-                  <option value="'Outfit', sans-serif" style="font-family: 'Outfit', sans-serif; font-size: 13px;">Outfit</option>
-                  <option value="'Montserrat', sans-serif" style="font-family: 'Montserrat', sans-serif; font-size: 13px;">Montserrat</option>
-                  <option value="'Quicksand', sans-serif" style="font-family: 'Quicksand', sans-serif; font-size: 13px;">Quicksand</option>
-                  <option value="'Space Mono', monospace" style="font-family: 'Space Mono', monospace; font-size: 12px;">Space Mono</option>
-                </select>
+          <!-- Back View Controls (Stamps & Typography) - Visible when Back is active -->
+          <div class="postcard-back-controls" id="postcard-back-controls" style="display:none;">
+            <!-- Row 1: Stamp Selector -->
+            <div class="stamp-picker-row">
+              <button class="stamp-shuffle-btn" id="btn-stamp-shuffle" title="Shuffle / Cycle Stamps">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                </svg>
+              </button>
+              <div class="stamp-visual-picker" id="postcard-stamp-picker">
+                <!-- 5 Stamp Thumbnails -->
+                <button class="stamp-pick-btn active" data-stamp="stamp_sending" title="Sending You Love!"></button>
+                <button class="stamp-pick-btn" data-stamp="stamp_cupid" title="Cupid Bow"></button>
+                <button class="stamp-pick-btn" data-stamp="stamp_lace_heart" title="Lace Heart"></button>
+                <button class="stamp-pick-btn" data-stamp="stamp_modern_heart" title="Heart"></button>
+                <button class="stamp-pick-btn" data-stamp="stamp_flower_sprig" title="Blossom Sprig"></button>
               </div>
             </div>
+
+            <!-- Row 2: Font Controls -->
+            <div class="font-controls-row">
+              <div class="font-size-pill">
+                <button id="btn-font-minus" title="Decrease Font Size">A-</button>
+                <button id="btn-font-plus" title="Increase Font Size">A+</button>
+              </div>
+              <span class="font-divider">|</span>
+              <div class="font-select-wrapper">
+                <select id="postcard-font-select" class="postcard-font-select">
+                  <option value="'Caveat', cursive">Caveat</option>
+                  <option value="'Dancing Script', cursive">Dancing Script</option>
+                  <option value="'Pacifico', cursive">Pacifico</option>
+                  <option value="'Satisfy', cursive">Satisfy</option>
+                  <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                  <option value="'Playfair Display', serif">Playfair Display</option>
+                  <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans</option>
+                </select>
+                <svg class="font-dropdown-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flip Button Row (Visible on both Front and Back) -->
+          <div class="postcard-flip-action-row">
+            <button class="btn-flip-card-pill" id="btn-flip-postcard" title="Flip Card">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+              <span>Flip</span>
+            </button>
           </div>
         </div>
 
@@ -913,7 +993,7 @@
         </div>
 
         <!-- ---------------- DELIVERY VESSELS (3 OPTIONS ONLY) ---------------- -->
-        <section class="delivery-vessel-clean-section">
+        <section class="delivery-vessel-clean-section" style="display:none;">
           <h3>Choose how it arrives</h3>
 
           <!-- Vessel Options: Envelope, Keepsake Box, Delivery Truck -->
