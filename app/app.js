@@ -48,11 +48,35 @@ document.addEventListener('DOMContentLoaded', () => {
       shuffleSeed: 1
     },
     greetingCard: {
-      size: 'standard',
-      orientation: 'portrait',
-      template: '1',
-      inside: false,
-      pocketMode: 'polaroid'
+      step: 1,
+      theme: 'crimson-romance',
+      coverElements: [
+        {
+          id: 'cover-title-1',
+          type: 'text',
+          text: 'A Little Wish For You',
+          x: 18,
+          y: 65,
+          width: 210,
+          fontSize: 24,
+          fontFamily: "'Caveat', cursive"
+        }
+      ],
+      coverFontSize: 24,
+      coverFontFamily: "'Caveat', cursive",
+      insideKeepsakes: [],
+      insideRightStickers: [],
+      insideTo: 'Kabir',
+      insideFrom: 'Saanvi',
+      insideBody: 'Wishing you all the joy, peace, and warmth this season brings.',
+      insideFontSize: 19,
+      insideFontFamily: "'Caveat', cursive",
+      vessel: 'envelope',
+      envelope: 'dusty-blue',
+      seal: 'gold-celestial',
+      boxIndex: '1',
+      isOpened: false,
+      previewFace: 'inside'
     }
   };
 
@@ -151,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const editorHeaderBar = document.querySelector('.editor-header-bar');
     if (editorHeaderBar) {
-      editorHeaderBar.style.display = (med === 'postcard' || med === 'bouquet' || med === 'letter') ? 'none' : 'flex';
+      editorHeaderBar.style.display = (med === 'postcard' || med === 'bouquet' || med === 'letter' || med === 'greeting-card') ? 'none' : 'flex';
     }
 
     const titleMap = {
@@ -187,6 +211,11 @@ document.addEventListener('DOMContentLoaded', () => {
         setLetterStep(1);
       }
     }
+    if (med === 'greeting-card') {
+      if (typeof setCardStep === 'function') {
+        setCardStep(1);
+      }
+    }
   }
 
   function returnToStudioHub() {
@@ -197,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'postcard': document.getElementById('canvas-postcard'),
       'letter': document.getElementById('canvas-letter'),
       'bouquet': document.getElementById('canvas-bouquet'),
-      'greeting-card': document.getElementById('canvas-card')
+      'greeting-card': document.getElementById('canvas-greeting-card')
     };
     Object.keys(canvases).forEach(key => {
       if (canvases[key]) canvases[key].style.display = 'none';
@@ -220,8 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
   window.selectMedium = selectMedium;
   window.setPostcardStep = setPostcardStep;
   window.setBouquetStep = setBouquetStep;
+  window.setCardStep = setCardStep;
   window.renderRecipientExperience = renderRecipientExperience;
   window.renderRecipientBouquetExperience = renderRecipientBouquetExperience;
+  window.renderRecipientCardExperience = renderRecipientCardExperience;
 
   const btnBouquetBackToHub = document.getElementById('btn-bouquet-back-to-hub');
   if (btnBouquetBackToHub) {
@@ -2097,142 +2128,1174 @@ document.addEventListener('DOMContentLoaded', () => {
   updateStemCardsUI();
   syncNoteDetails();
 
-  // ================= 4. GREETING CARD WORKSPACE =================
-  const greetingCardEl = document.getElementById('greeting-card-element');
-  const btnCardSizeStd = document.getElementById('btn-card-size-std');
-  const btnCardSizeMini = document.getElementById('btn-card-size-mini');
-  const btnCardOrientPort = document.getElementById('btn-card-orient-port');
-  const btnCardOrientLand = document.getElementById('btn-card-orient-land');
-  const templateBtns = document.querySelectorAll('.template-thumb-btn');
-  const btnFlipGreeting = document.getElementById('btn-flip-greeting');
-  const greetingCoverView = document.getElementById('greeting-cover-view');
-  const greetingInsideView = document.getElementById('greeting-inside-view');
-  const pocketTabBtns = document.querySelectorAll('.pocket-tab-btn');
-  const pocketPolaroidZone = document.getElementById('pocket-polaroid-zone');
-  const pocketFlowerZone = document.getElementById('pocket-flower-zone');
-  const pocketVinylZone = document.getElementById('pocket-vinyl-zone');
-  const coverArtContainer = document.getElementById('cover-art-container');
-  const cardCoverUpload = document.getElementById('card-cover-upload');
-  const cardCoverPreview = document.getElementById('card-cover-preview');
-  const coverArtPlaceholder = document.getElementById('cover-art-placeholder');
-  const pocketPhotoTrigger = document.getElementById('pocket-photo-trigger');
-  const cardPocketFile = document.getElementById('card-pocket-file');
-  const pocketPhotoImg = document.getElementById('pocket-photo-img');
-  const pocketPhotoText = document.getElementById('pocket-photo-text');
+  // ================= 4. GREETING CARD 4-STEP ATELIER =================
+  const cardCanvasWorkspace = document.getElementById('canvas-greeting-card');
+  const btnCardBackToHub = document.getElementById('btn-card-back-to-hub');
+  if (btnCardBackToHub) {
+    btnCardBackToHub.addEventListener('click', returnToStudioHub);
+  }
 
-  // Card Size
-  if (btnCardSizeStd && btnCardSizeMini) {
-    btnCardSizeStd.addEventListener('click', () => {
-      btnCardSizeStd.classList.add('active');
-      btnCardSizeMini.classList.remove('active');
-      greetingCardEl.classList.remove('size-mini');
-      state.greetingCard.size = 'standard';
+  // Dots & Lines
+  const cardDot1 = document.getElementById('card-dot-1');
+  const cardDot2 = document.getElementById('card-dot-2');
+  const cardDot3 = document.getElementById('card-dot-3');
+  const cardDot4 = document.getElementById('card-dot-4');
+  const cardLine1 = document.getElementById('card-line-1');
+  const cardLine2 = document.getElementById('card-line-2');
+  const cardLine3 = document.getElementById('card-line-3');
+
+  // Step Panels
+  const cardPanelCover = document.getElementById('card-panel-cover');
+  const cardPanelInside = document.getElementById('card-panel-inside');
+  const cardPanelDelivery = document.getElementById('card-panel-delivery');
+  const cardPanelPreview = document.getElementById('card-panel-preview');
+
+  // Step 1: Cover Elements
+  const cardCoverCanvas = document.getElementById('card-cover-canvas');
+  const cardCoverElementsLayer = document.getElementById('card-cover-elements-layer');
+  const cardThemeBtns = document.querySelectorAll('.card-theme-btn');
+  const cardCoverPhotoInput = document.getElementById('card-cover-photo-input');
+  const btnCardAddCoverPhoto = document.getElementById('btn-card-add-cover-photo');
+  const btnCardAddCoverText = document.getElementById('btn-card-add-cover-text');
+  const cardFontSelect = document.getElementById('card-font-select');
+  const btnCardFontMinus = document.getElementById('btn-card-font-minus');
+  const btnCardFontPlus = document.getElementById('btn-card-font-plus');
+  const btnCardToStep2 = document.getElementById('btn-card-to-step2');
+
+  // Step 2: Inside Elements
+  const cardInsideBifold = document.getElementById('card-inside-bifold');
+  const insideKeepsakesDropzone = document.getElementById('inside-keepsakes-dropzone');
+  const insideRightStickersOverlay = document.getElementById('inside-right-stickers-overlay');
+  const cardInsideToInput = document.getElementById('card-inside-to-input');
+  const cardInsideBodyTextarea = document.getElementById('card-inside-body-textarea');
+  const cardInsideFromInput = document.getElementById('card-inside-from-input');
+  const cardInsideFontSelect = document.getElementById('card-inside-font-select');
+  const btnInsideFontMinus = document.getElementById('btn-inside-font-minus');
+  const btnInsideFontPlus = document.getElementById('btn-inside-font-plus');
+
+  const btnCardAddPolaroid = document.getElementById('btn-card-add-polaroid');
+  const btnCardAddFlower = document.getElementById('btn-card-add-flower');
+  const btnCardAddVinyl = document.getElementById('btn-card-add-vinyl');
+  const btnCardAddSticker = document.getElementById('btn-card-add-sticker');
+  const cardPolaroidFileInput = document.getElementById('card-polaroid-file-input');
+
+  const cardFlowersPopup = document.getElementById('card-flowers-popup');
+  const cardFlowersPopupGrid = document.getElementById('card-flowers-popup-grid');
+  const btnCloseFlowerPopup = document.getElementById('btn-close-flower-popup');
+
+  const cardStickersPopup = document.getElementById('card-stickers-popup');
+  const cardStickersPopupGrid = document.getElementById('card-stickers-popup-grid');
+  const btnCloseStickerPopup = document.getElementById('btn-close-sticker-popup');
+
+  const btnCardBackToStep1 = document.getElementById('btn-card-back-to-step1');
+  const btnCardToStep3 = document.getElementById('btn-card-to-step3');
+
+  // Step 3: Delivery Elements
+  const cardVesselBtns = document.querySelectorAll('#card-panel-delivery .card-vessel-btn');
+  const cardEnvelopeOptions = document.getElementById('card-envelope-options');
+  const cardBoxOptions = document.getElementById('card-box-options');
+  const cardEnvChoices = document.querySelectorAll('.card-env-choice');
+  const cardSealChoices = document.querySelectorAll('.card-seal-choice');
+  const cardBoxChoices = document.querySelectorAll('.card-box-choice');
+  const cardVesselLiveRender = document.getElementById('card-vessel-live-render');
+  const btnCardBackToStep2 = document.getElementById('btn-card-back-to-step2');
+  const btnCardToStep4 = document.getElementById('btn-card-to-step4');
+
+  // Step 4: Preview & Dispatch Elements
+  const cardPreviewVesselStage = document.getElementById('card-preview-vessel-stage');
+  const cardPreviewVesselWrap = document.getElementById('card-preview-vessel-wrap');
+  const cardPreviewRevealedStage = document.getElementById('card-preview-revealed-stage');
+  const cardRevealDisplay = document.getElementById('card-reveal-display');
+  const btnCardPreviewFlip = document.getElementById('btn-card-preview-flip');
+  const cardFlipLabel = document.getElementById('card-flip-label');
+  const btnCardToggleOpen = document.getElementById('btn-card-toggle-open');
+  const btnCardOpenText = document.getElementById('btn-card-open-text');
+  const btnCardSaveVault = document.getElementById('btn-card-save-vault');
+  const btnCardDispatch = document.getElementById('btn-card-dispatch');
+  const btnCardBackToStep3 = document.getElementById('btn-card-back-to-step3');
+
+  // 15 Flowers Catalog
+  const CARD_FLOWERS = [
+    { name: 'Rose', file: 'rose.png' },
+    { name: 'Peony', file: 'peony.png' },
+    { name: "Baby's Breath", file: 'babys_breath.png' },
+    { name: 'Sunflower', file: 'sunflower.png' },
+    { name: 'Tulip', file: 'tulip.png' },
+    { name: 'Hydrangea', file: 'hydrangea.png' },
+    { name: 'Lavender', file: 'lavender.png' },
+    { name: 'Snapdragon', file: 'snapdragon.png' },
+    { name: 'Lily', file: 'lily.png' },
+    { name: 'Buttercup', file: 'buttercup.png' },
+    { name: 'Anemones', file: 'anemones.png' },
+    { name: 'Gardenia', file: 'gardenia.png' },
+    { name: 'Dahlia', file: 'dahlia.png' },
+    { name: 'Orchid', file: 'orchid.png' },
+    { name: 'Foxglove', file: 'foxglove.png' }
+  ];
+
+  // 15 Letter Stickers Catalog
+  const CARD_STICKERS = [
+    { name: 'Pink Hearts', file: 'sticker_hearts_pink.png' },
+    { name: 'Pink Lily', file: 'sticker_lily_pink.png' },
+    { name: 'White Tulips', file: 'sticker_tulips_white.png' },
+    { name: 'Glass Star', file: 'sticker_glass_star.png' },
+    { name: 'Butterflies', file: 'sticker_butterflies.png' },
+    { name: 'Retro Star', file: 'sticker_retro_star.png' },
+    { name: 'Vinyl Disc', file: 'sticker_vinyl_record.png' },
+    { name: 'Cream Smiley', file: 'sticker_smiley_cream.png' },
+    { name: 'Scallop Heart', file: 'sticker_scallop_heart.png' },
+    { name: 'Love Bubble', file: 'sticker_love_bubble.png' },
+    { name: 'Stitched Star', file: 'sticker_stitched_star.png' },
+    { name: 'Plush Bunnies', file: 'sticker_plush_bunnies.png' },
+    { name: 'Bow Paperclip', file: 'sticker_paperclips_bow.png' },
+    { name: 'Disco Ball', file: 'sticker_disco_ball.png' },
+    { name: 'Teddy Bear', file: 'sticker_teddy_bear.png' }
+  ];
+
+  const CARD_ENVELOPE_MAP = {
+    'dusty-blue': 'assets/letter/envelopes/env_dusty_blue.jpg',
+    'blush-lace': 'assets/letter/envelopes/env_blush_lace.jpg',
+    'crimson-velvet': 'assets/letter/envelopes/env_crimson_velvet.jpg',
+    'ivory-lace': 'assets/letter/envelopes/env_ivory_lace.jpg'
+  };
+
+  const CARD_SEAL_MAP = {
+    'gold-celestial': 'assets/letter/seals/seal_gold_celestial.png',
+    'blue-love': 'assets/letter/seals/seal_blue_love.png',
+    'pink-crescent': 'assets/letter/seals/seal_pink_crescent.png',
+    'crimson-heart': 'assets/letter/seals/seal_crimson_heart.png'
+  };
+
+  // Web Audio Synth for Functional Vinyl Player
+  let vinylAudioCtx = null;
+  let vinylIsPlaying = false;
+  let vinylLoopTimer = null;
+  let vinylMelodyIdx = 0;
+
+  function initVinylAudio() {
+    if (!vinylAudioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) vinylAudioCtx = new AudioContext();
+    }
+    if (vinylAudioCtx && vinylAudioCtx.state === 'suspended') {
+      vinylAudioCtx.resume();
+    }
+  }
+
+  function playVinylTone(freq, duration = 0.55) {
+    if (!vinylAudioCtx) return;
+    try {
+      const osc = vinylAudioCtx.createOscillator();
+      const gain = vinylAudioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, vinylAudioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.001, vinylAudioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.14, vinylAudioCtx.currentTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, vinylAudioCtx.currentTime + duration);
+
+      osc.connect(gain);
+      gain.connect(vinylAudioCtx.destination);
+
+      osc.start(vinylAudioCtx.currentTime);
+      osc.stop(vinylAudioCtx.currentTime + duration);
+    } catch (e) {}
+  }
+
+  const VINYL_MELODY = [
+    { f: 261.63, d: 0.6 },
+    { f: 329.63, d: 0.6 },
+    { f: 392.00, d: 0.7 },
+    { f: 523.25, d: 0.9 },
+    { f: 493.88, d: 0.6 },
+    { f: 392.00, d: 0.6 },
+    { f: 329.63, d: 0.7 },
+    { f: 440.00, d: 1.0 },
+    { f: 349.23, d: 0.6 },
+    { f: 440.00, d: 0.6 },
+    { f: 523.25, d: 0.8 },
+    { f: 392.00, d: 1.1 }
+  ];
+
+  function startVinylAudio() {
+    initVinylAudio();
+    vinylIsPlaying = true;
+    document.querySelectorAll('.vinyl-player-widget').forEach(el => el.classList.add('is-playing'));
+    document.querySelectorAll('.vinyl-play-btn').forEach(btn => {
+      btn.innerHTML = '⏸';
+      btn.title = 'Pause Record';
     });
-    btnCardSizeMini.addEventListener('click', () => {
-      btnCardSizeMini.classList.add('active');
-      btnCardSizeStd.classList.remove('active');
-      greetingCardEl.classList.add('size-mini');
-      state.greetingCard.size = 'mini';
+
+    function loopMelody() {
+      if (!vinylIsPlaying) return;
+      const note = VINYL_MELODY[vinylMelodyIdx];
+      playVinylTone(note.f, note.d);
+      vinylMelodyIdx = (vinylMelodyIdx + 1) % VINYL_MELODY.length;
+      vinylLoopTimer = setTimeout(loopMelody, note.d * 750);
+    }
+    loopMelody();
+  }
+
+  function stopVinylAudio() {
+    vinylIsPlaying = false;
+    if (vinylLoopTimer) {
+      clearTimeout(vinylLoopTimer);
+      vinylLoopTimer = null;
+    }
+    document.querySelectorAll('.vinyl-player-widget').forEach(el => el.classList.remove('is-playing'));
+    document.querySelectorAll('.vinyl-play-btn').forEach(btn => {
+      btn.innerHTML = '▶';
+      btn.title = 'Play Record';
     });
   }
 
-  // Card Orientation
-  if (btnCardOrientPort && btnCardOrientLand) {
-    btnCardOrientPort.addEventListener('click', () => {
-      btnCardOrientPort.classList.add('active');
-      btnCardOrientLand.classList.remove('active');
-      greetingCardEl.classList.add('portrait');
-      greetingCardEl.classList.remove('landscape');
-      state.greetingCard.orientation = 'portrait';
-    });
-    btnCardOrientLand.addEventListener('click', () => {
-      btnCardOrientLand.classList.add('active');
-      btnCardOrientPort.classList.remove('active');
-      greetingCardEl.classList.remove('portrait');
-      greetingCardEl.classList.add('landscape');
-      state.greetingCard.orientation = 'landscape';
-    });
+  function toggleVinylAudio() {
+    if (vinylIsPlaying) {
+      stopVinylAudio();
+    } else {
+      startVinylAudio();
+    }
   }
 
-  // 10 Templates
-  templateBtns.forEach(btn => {
+  // Active Selected Item on Cover for Font / Style manipulation
+  let activeSelectedCoverItem = null;
+
+  // Stepper Controller
+  function setCardStep(stepNum) {
+    state.greetingCard.step = stepNum;
+
+    // Update Dots & Lines
+    if (cardDot1) cardDot1.classList.toggle('active', stepNum === 1);
+    if (cardDot2) cardDot2.classList.toggle('active', stepNum === 2);
+    if (cardDot3) cardDot3.classList.toggle('active', stepNum === 3);
+    if (cardDot4) cardDot4.classList.toggle('active', stepNum === 4);
+
+    if (cardLine1) cardLine1.style.background = stepNum >= 2 ? 'var(--brand-burgundy, #521319)' : 'rgba(82, 19, 25, 0.15)';
+    if (cardLine2) cardLine2.style.background = stepNum >= 3 ? 'var(--brand-burgundy, #521319)' : 'rgba(82, 19, 25, 0.15)';
+    if (cardLine3) cardLine3.style.background = stepNum >= 4 ? 'var(--brand-burgundy, #521319)' : 'rgba(82, 19, 25, 0.15)';
+
+    // Toggle Panels
+    if (cardPanelCover) cardPanelCover.style.display = stepNum === 1 ? 'block' : 'none';
+    if (cardPanelInside) cardPanelInside.style.display = stepNum === 2 ? 'block' : 'none';
+    if (cardPanelDelivery) cardPanelDelivery.style.display = stepNum === 3 ? 'block' : 'none';
+    if (cardPanelPreview) cardPanelPreview.style.display = stepNum === 4 ? 'block' : 'none';
+
+    if (stepNum === 1) {
+      renderCoverElements();
+    } else if (stepNum === 2) {
+      if (cardInsideBifold) {
+        cardInsideBifold.className = `card-inside-bifold theme-${state.greetingCard.theme || 'crimson-romance'}`;
+      }
+      renderInsideKeepsakes();
+      syncInsideNoteInputs();
+    } else if (stepNum === 3) {
+      updateCardVesselLivePreview();
+    } else if (stepNum === 4) {
+      renderCardStep4Preview();
+    }
+  }
+
+  [cardDot1, cardDot2, cardDot3, cardDot4].forEach((dot, idx) => {
+    if (dot) {
+      dot.addEventListener('click', () => setCardStep(idx + 1));
+    }
+  });
+
+  if (btnCardToStep2) btnCardToStep2.addEventListener('click', () => setCardStep(2));
+  if (btnCardBackToStep1) btnCardBackToStep1.addEventListener('click', () => setCardStep(1));
+  if (btnCardToStep3) btnCardToStep3.addEventListener('click', () => setCardStep(3));
+  if (btnCardBackToStep2) btnCardBackToStep2.addEventListener('click', () => setCardStep(2));
+  if (btnCardToStep4) btnCardToStep4.addEventListener('click', () => setCardStep(4));
+  if (btnCardBackToStep3) btnCardBackToStep3.addEventListener('click', () => setCardStep(3));
+
+  // --- Step 1: Design Cover Logic ---
+  cardThemeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      templateBtns.forEach(b => b.classList.toggle('active', b === btn));
-      const tmpl = btn.dataset.tmpl;
-      state.greetingCard.template = tmpl;
-      const titleInput = greetingCardEl.querySelector('.cover-editable-title');
-      if (titleInput) {
-        const sampleTitles = [
-          'A quiet wish', 'With fond thoughts', 'For dear days', 'A little joy',
-          'Across the miles', 'Gentle autumn', 'A tender note', 'Always kept',
-          'Small blessings', 'From my desk'
-        ];
-        titleInput.value = sampleTitles[(parseInt(tmpl)-1) % sampleTitles.length];
+      cardThemeBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const theme = btn.dataset.cardTheme;
+      state.greetingCard.theme = theme;
+      if (cardCoverCanvas) {
+        cardCoverCanvas.className = `card-cover-canvas theme-${theme}`;
+      }
+      if (cardInsideBifold) {
+        cardInsideBifold.className = `card-inside-bifold theme-${theme}`;
       }
     });
   });
 
-  // Flip Greeting Card Inside / Cover
-  if (btnFlipGreeting) {
-    btnFlipGreeting.addEventListener('click', () => {
-      state.greetingCard.inside = !state.greetingCard.inside;
-      greetingCoverView.style.display = state.greetingCard.inside ? 'none' : 'flex';
-      greetingInsideView.style.display = state.greetingCard.inside ? 'flex' : 'none';
-      btnFlipGreeting.innerText = state.greetingCard.inside ? 'Flip to cover' : 'Flip to inside';
-    });
-  }
-
-  // Cover image upload
-  if (coverArtContainer && cardCoverUpload) {
-    coverArtContainer.addEventListener('click', () => {
-      cardCoverUpload.click();
-    });
-    cardCoverUpload.addEventListener('change', (e) => {
+  if (btnCardAddCoverPhoto && cardCoverPhotoInput) {
+    btnCardAddCoverPhoto.addEventListener('click', () => cardCoverPhotoInput.click());
+    cardCoverPhotoInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = (event) => {
-          cardCoverPreview.src = event.target.result;
-          cardCoverPreview.style.display = 'block';
-          coverArtPlaceholder.style.display = 'none';
+        reader.onload = (evt) => {
+          state.greetingCard.coverElements.push({
+            id: 'photo_' + Date.now(),
+            type: 'photo',
+            src: evt.target.result,
+            x: 20,
+            y: 18,
+            width: 180
+          });
+          renderCoverElements();
         };
         reader.readAsDataURL(file);
       }
     });
   }
 
-  // Inside Left Pocket: Polaroid vs Pressed Flower vs Vinyl
-  pocketTabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      pocketTabBtns.forEach(b => b.classList.toggle('active', b === btn));
-      const pMode = btn.dataset.pocket;
-      state.greetingCard.pocketMode = pMode;
-      pocketPolaroidZone.style.display = pMode === 'polaroid' ? 'block' : 'none';
-      pocketFlowerZone.style.display = pMode === 'flower' ? 'block' : 'none';
-      pocketVinylZone.style.display = pMode === 'vinyl' ? 'block' : 'none';
+  if (btnCardAddCoverText) {
+    btnCardAddCoverText.addEventListener('click', () => {
+      state.greetingCard.coverElements.push({
+        id: 'text_' + Date.now(),
+        type: 'text',
+        text: 'Type your message...',
+        x: 18,
+        y: 50,
+        width: 200,
+        fontSize: state.greetingCard.coverFontSize || 24,
+        fontFamily: state.greetingCard.coverFontFamily || "'Caveat', cursive"
+      });
+      renderCoverElements();
     });
-  });
+  }
 
-  if (pocketPhotoTrigger && cardPocketFile) {
-    pocketPhotoTrigger.addEventListener('click', () => {
-      cardPocketFile.click();
+  if (cardFontSelect) {
+    cardFontSelect.addEventListener('change', () => {
+      state.greetingCard.coverFontFamily = cardFontSelect.value;
+      if (activeSelectedCoverItem && activeSelectedCoverItem.type === 'text') {
+        activeSelectedCoverItem.fontFamily = cardFontSelect.value;
+        renderCoverElements();
+      }
     });
-    cardPocketFile.addEventListener('change', (e) => {
+  }
+
+  if (btnCardFontMinus) {
+    btnCardFontMinus.addEventListener('click', () => {
+      if (activeSelectedCoverItem && activeSelectedCoverItem.type === 'text') {
+        activeSelectedCoverItem.fontSize = Math.max(12, (activeSelectedCoverItem.fontSize || 24) - 2);
+        renderCoverElements();
+      } else {
+        state.greetingCard.coverFontSize = Math.max(12, (state.greetingCard.coverFontSize || 24) - 2);
+      }
+    });
+  }
+
+  if (btnCardFontPlus) {
+    btnCardFontPlus.addEventListener('click', () => {
+      if (activeSelectedCoverItem && activeSelectedCoverItem.type === 'text') {
+        activeSelectedCoverItem.fontSize = Math.min(52, (activeSelectedCoverItem.fontSize || 24) + 2);
+        renderCoverElements();
+      } else {
+        state.greetingCard.coverFontSize = Math.min(52, (state.greetingCard.coverFontSize || 24) + 2);
+      }
+    });
+  }
+
+  function renderCoverElements() {
+    if (!cardCoverElementsLayer) return;
+    cardCoverElementsLayer.innerHTML = '';
+
+    (state.greetingCard.coverElements || []).forEach(item => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'card-placed-item';
+      if (activeSelectedCoverItem && activeSelectedCoverItem.id === item.id) {
+        itemEl.classList.add('is-selected');
+      }
+      itemEl.dataset.id = item.id;
+      itemEl.style.left = item.x + '%';
+      itemEl.style.top = item.y + '%';
+      if (item.width) {
+        itemEl.style.width = typeof item.width === 'number' ? item.width + 'px' : item.width;
+      }
+
+      if (item.type === 'photo') {
+        itemEl.innerHTML = `
+          <button class="btn-item-delete" title="Delete">×</button>
+          <img src="${item.src}" class="card-cover-photo-img" style="width:100%; height:auto; border-radius:6px; display:block; pointer-events:none;" />
+          <div class="card-resize-handle" title="Drag to resize"></div>
+        `;
+      } else {
+        itemEl.innerHTML = `
+          <button class="btn-item-delete" title="Delete">×</button>
+          <div class="card-item-content card-text-content" contenteditable="true" spellcheck="false" style="font-family:${item.fontFamily || "'Caveat', cursive"}; font-size:${item.fontSize || 24}px;">${escapeHtml(item.text)}</div>
+          <div class="card-resize-handle" title="Drag to resize"></div>
+        `;
+
+        const contentEl = itemEl.querySelector('.card-item-content');
+        if (contentEl) {
+          contentEl.addEventListener('input', () => {
+            item.text = contentEl.innerText;
+          });
+        }
+      }
+
+      attachItemInteractions(
+        itemEl,
+        item,
+        cardCoverElementsLayer,
+        () => {},
+        () => {
+          state.greetingCard.coverElements = state.greetingCard.coverElements.filter(i => i.id !== item.id);
+          if (activeSelectedCoverItem && activeSelectedCoverItem.id === item.id) {
+            activeSelectedCoverItem = null;
+          }
+          renderCoverElements();
+        }
+      );
+
+      cardCoverElementsLayer.appendChild(itemEl);
+    });
+  }
+
+  // --- Step 2: Inside Card Logic ---
+  function syncInsideNoteInputs() {
+    if (cardInsideToInput) cardInsideToInput.value = state.greetingCard.insideTo || 'Kabir';
+    if (cardInsideBodyTextarea) cardInsideBodyTextarea.value = state.greetingCard.insideBody || 'Wishing you all the joy, peace, and warmth this season brings.';
+    if (cardInsideFromInput) cardInsideFromInput.value = state.greetingCard.insideFrom || 'Saanvi';
+
+    applyInsideFont();
+  }
+
+  function applyInsideFont() {
+    const ff = state.greetingCard.insideFontFamily || "'Caveat', cursive";
+    const fs = state.greetingCard.insideFontSize || 19;
+    if (cardInsideToInput) {
+      cardInsideToInput.style.fontFamily = ff;
+      cardInsideToInput.style.fontSize = Math.max(16, fs) + 'px';
+    }
+    if (cardInsideBodyTextarea) {
+      cardInsideBodyTextarea.style.fontFamily = ff;
+      cardInsideBodyTextarea.style.fontSize = fs + 'px';
+    }
+    if (cardInsideFromInput) {
+      cardInsideFromInput.style.fontFamily = ff;
+      cardInsideFromInput.style.fontSize = Math.max(16, fs) + 'px';
+    }
+  }
+
+  if (cardInsideToInput) {
+    cardInsideToInput.addEventListener('input', () => {
+      state.greetingCard.insideTo = cardInsideToInput.value;
+      document.querySelectorAll('.vinyl-label-sub').forEach(el => {
+        el.textContent = `For ${escapeHtml(state.greetingCard.insideTo || 'Kabir')}`;
+      });
+    });
+  }
+
+  if (cardInsideBodyTextarea) {
+    cardInsideBodyTextarea.addEventListener('input', () => {
+      state.greetingCard.insideBody = cardInsideBodyTextarea.value;
+    });
+  }
+
+  if (cardInsideFromInput) {
+    cardInsideFromInput.addEventListener('input', () => {
+      state.greetingCard.insideFrom = cardInsideFromInput.value;
+    });
+  }
+
+  if (cardInsideFontSelect) {
+    cardInsideFontSelect.addEventListener('change', () => {
+      state.greetingCard.insideFontFamily = cardInsideFontSelect.value;
+      applyInsideFont();
+    });
+  }
+
+  if (btnInsideFontMinus) {
+    btnInsideFontMinus.addEventListener('click', () => {
+      state.greetingCard.insideFontSize = Math.max(14, (state.greetingCard.insideFontSize || 19) - 2);
+      applyInsideFont();
+    });
+  }
+
+  if (btnInsideFontPlus) {
+    btnInsideFontPlus.addEventListener('click', () => {
+      state.greetingCard.insideFontSize = Math.min(34, (state.greetingCard.insideFontSize || 19) + 2);
+      applyInsideFont();
+    });
+  }
+
+  // Keepsakes Tools: Polaroid, Pressed Flower, Vinyl, Sticker
+  if (btnCardAddPolaroid && cardPolaroidFileInput) {
+    btnCardAddPolaroid.addEventListener('click', () => cardPolaroidFileInput.click());
+    cardPolaroidFileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = (event) => {
-          pocketPhotoImg.src = event.target.result;
-          pocketPhotoImg.style.display = 'block';
-          pocketPhotoText.style.display = 'none';
+        reader.onload = (evt) => {
+          state.greetingCard.insideKeepsakes.push({
+            id: 'polaroid_' + Date.now(),
+            type: 'polaroid',
+            src: evt.target.result,
+            caption: 'Cherished Memory',
+            x: 12,
+            y: 14,
+            width: 140
+          });
+          renderInsideKeepsakes();
         };
         reader.readAsDataURL(file);
       }
     });
+  }
+
+  // 15 Flowers Popup
+  function populateCardFlowersPopup() {
+    if (!cardFlowersPopupGrid) return;
+    cardFlowersPopupGrid.innerHTML = '';
+    CARD_FLOWERS.forEach(fl => {
+      const btn = document.createElement('button');
+      btn.className = 'flower-popup-item';
+      btn.innerHTML = `
+        <img src="assets/flowers/${fl.file}" alt="${fl.name}" class="flower-popup-thumb" />
+        <span class="flower-popup-name">${fl.name}</span>
+      `;
+      btn.addEventListener('click', () => {
+        state.greetingCard.insideKeepsakes.push({
+          id: 'flower_' + Date.now(),
+          type: 'flower',
+          name: fl.name,
+          file: fl.file,
+          x: 24,
+          y: 20,
+          width: 95
+        });
+        if (cardFlowersPopup) cardFlowersPopup.style.display = 'none';
+        renderInsideKeepsakes();
+      });
+      cardFlowersPopupGrid.appendChild(btn);
+    });
+  }
+
+  if (btnCardAddFlower && cardFlowersPopup) {
+    btnCardAddFlower.addEventListener('click', () => {
+      populateCardFlowersPopup();
+      cardFlowersPopup.style.display = 'block';
+    });
+  }
+  if (btnCloseFlowerPopup && cardFlowersPopup) {
+    btnCloseFlowerPopup.addEventListener('click', () => {
+      cardFlowersPopup.style.display = 'none';
+    });
+  }
+
+  // 15 Stickers Popup
+  function populateCardStickersPopup() {
+    if (!cardStickersPopupGrid) return;
+    cardStickersPopupGrid.innerHTML = '';
+    CARD_STICKERS.forEach(stk => {
+      const btn = document.createElement('button');
+      btn.className = 'sticker-popup-item';
+      btn.innerHTML = `
+        <img src="assets/stickers/${stk.file}" alt="${stk.name}" class="sticker-popup-thumb" />
+      `;
+      btn.addEventListener('click', () => {
+        state.greetingCard.insideKeepsakes.push({
+          id: 'sticker_' + Date.now(),
+          type: 'sticker',
+          name: stk.name,
+          file: stk.file,
+          x: 28,
+          y: 35,
+          width: 75
+        });
+        if (cardStickersPopup) cardStickersPopup.style.display = 'none';
+        renderInsideKeepsakes();
+      });
+      cardStickersPopupGrid.appendChild(btn);
+    });
+  }
+
+  if (btnCardAddSticker && cardStickersPopup) {
+    btnCardAddSticker.addEventListener('click', () => {
+      populateCardStickersPopup();
+      cardStickersPopup.style.display = 'block';
+    });
+  }
+  if (btnCloseStickerPopup && cardStickersPopup) {
+    btnCloseStickerPopup.addEventListener('click', () => {
+      cardStickersPopup.style.display = 'none';
+    });
+  }
+
+  // Functional Vinyl Record
+  if (btnCardAddVinyl) {
+    btnCardAddVinyl.addEventListener('click', () => {
+      const hasVinyl = state.greetingCard.insideKeepsakes.some(i => i.type === 'vinyl');
+      if (hasVinyl) {
+        showAtelierToast('Vinyl record is already placed on your card ♡');
+        return;
+      }
+      state.greetingCard.insideKeepsakes.push({
+        id: 'vinyl_' + Date.now(),
+        type: 'vinyl',
+        title: 'Golden Hour (Acoustic)',
+        x: 10,
+        y: 28,
+        width: 155
+      });
+      renderInsideKeepsakes();
+    });
+  }
+
+  function renderInsideKeepsakes() {
+    if (!insideKeepsakesDropzone) return;
+    insideKeepsakesDropzone.innerHTML = '';
+
+    (state.greetingCard.insideKeepsakes || []).forEach(item => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'card-placed-item';
+      itemEl.dataset.id = item.id;
+      itemEl.style.left = item.x + '%';
+      itemEl.style.top = item.y + '%';
+      if (item.width) {
+        itemEl.style.width = typeof item.width === 'number' ? item.width + 'px' : item.width;
+      }
+
+      if (item.type === 'polaroid') {
+        itemEl.innerHTML = `
+          <button class="btn-item-delete" title="Delete">×</button>
+          <div class="placed-polaroid-frame">
+            <div class="polaroid-pin"></div>
+            <img src="${item.src}" class="polaroid-photo" alt="Memory" />
+            <div class="polaroid-caption" contenteditable="true" spellcheck="false">${escapeHtml(item.caption || 'Cherished Memory')}</div>
+          </div>
+          <div class="card-resize-handle" title="Drag to resize"></div>
+        `;
+        const capEl = itemEl.querySelector('.polaroid-caption');
+        if (capEl) {
+          capEl.addEventListener('input', () => {
+            item.caption = capEl.innerText;
+          });
+        }
+      } else if (item.type === 'flower') {
+        itemEl.innerHTML = `
+          <button class="btn-item-delete" title="Delete">×</button>
+          <img src="assets/flowers/${item.file}" class="placed-flower-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12)); pointer-events:none;" />
+          <div class="card-resize-handle" title="Drag to resize"></div>
+        `;
+      } else if (item.type === 'vinyl') {
+        itemEl.innerHTML = `
+          <button class="btn-item-delete" title="Delete">×</button>
+          <div class="vinyl-player-widget ${vinylIsPlaying ? 'is-playing' : ''}">
+            <div class="vinyl-sleeve">
+              <div class="vinyl-disc">
+                <div class="vinyl-center-label">
+                  <span class="vinyl-label-title">Side A</span>
+                  <span class="vinyl-label-sub">For ${escapeHtml(state.greetingCard.insideTo || 'Kabir')}</span>
+                </div>
+              </div>
+              <div class="vinyl-needle-arm"></div>
+            </div>
+            <div class="vinyl-player-controls">
+              <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
+              <span class="vinyl-track-info">Golden Hour (Acoustic)</span>
+            </div>
+          </div>
+          <div class="card-resize-handle" title="Drag to resize"></div>
+        `;
+      } else if (item.type === 'sticker') {
+        itemEl.innerHTML = `
+          <button class="btn-item-delete" title="Delete">×</button>
+          <img src="assets/stickers/${item.file}" class="placed-sticker-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18)); pointer-events:none;" />
+          <div class="card-resize-handle" title="Drag to resize"></div>
+        `;
+      }
+
+      attachItemInteractions(
+        itemEl,
+        item,
+        insideKeepsakesDropzone,
+        () => {},
+        () => {
+          if (item.type === 'vinyl' && vinylIsPlaying) {
+            stopVinylAudio();
+          }
+          state.greetingCard.insideKeepsakes = state.greetingCard.insideKeepsakes.filter(i => i.id !== item.id);
+          renderInsideKeepsakes();
+        }
+      );
+
+      insideKeepsakesDropzone.appendChild(itemEl);
+    });
+  }
+
+  // Generalized Interaction Engine: Dragging, Resizing & Deleting
+  function attachItemInteractions(itemEl, itemData, parentContainer, onUpdate, onDelete) {
+    const deleteBtn = itemEl.querySelector('.btn-item-delete');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        onDelete();
+      });
+    }
+
+    const vinylBtn = itemEl.querySelector('.vinyl-play-btn');
+    if (vinylBtn) {
+      vinylBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleVinylAudio();
+      });
+    }
+
+    // Selection
+    itemEl.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-item-delete') || e.target.closest('.vinyl-play-btn')) return;
+      parentContainer.querySelectorAll('.card-placed-item').forEach(el => el.classList.remove('is-selected'));
+      itemEl.classList.add('is-selected');
+      activeSelectedCoverItem = itemData;
+      if (itemData.type === 'text') {
+        if (cardFontSelect) cardFontSelect.value = itemData.fontFamily || "'Caveat', cursive";
+      }
+    });
+
+    // Resize
+    const resizeHandle = itemEl.querySelector('.card-resize-handle');
+    if (resizeHandle) {
+      let isResizing = false;
+      let startX = 0;
+      let startW = 0;
+
+      resizeHandle.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        isResizing = true;
+        startX = e.clientX;
+        startW = itemEl.offsetWidth;
+        try { resizeHandle.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+
+      resizeHandle.addEventListener('pointermove', (e) => {
+        if (!isResizing) return;
+        const deltaX = e.clientX - startX;
+        const parentW = parentContainer.offsetWidth || 300;
+        const newW = Math.max(50, Math.min(parentW * 0.95, startW + deltaX));
+        itemData.width = Math.round(newW);
+        itemEl.style.width = itemData.width + 'px';
+      });
+
+      const onResizeEnd = (e) => {
+        if (!isResizing) return;
+        isResizing = false;
+        try { resizeHandle.releasePointerCapture(e.pointerId); } catch (err) {}
+        onUpdate();
+      };
+      resizeHandle.addEventListener('pointerup', onResizeEnd);
+      resizeHandle.addEventListener('pointercancel', onResizeEnd);
+    }
+
+    // Drag
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let initialLeftPx = 0;
+    let initialTopPx = 0;
+
+    itemEl.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.btn-item-delete') || e.target.closest('.card-resize-handle') || e.target.closest('.vinyl-play-btn')) return;
+      if (e.target.getAttribute('contenteditable') === 'true') return;
+
+      e.preventDefault();
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      initialLeftPx = itemEl.offsetLeft;
+      initialTopPx = itemEl.offsetTop;
+      itemEl.classList.add('is-dragging');
+      try { itemEl.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+
+    itemEl.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const deltaX = e.clientX - dragStartX;
+      const deltaY = e.clientY - dragStartY;
+      const parentW = parentContainer.offsetWidth || 300;
+      const parentH = parentContainer.offsetHeight || 400;
+
+      const newLeftPx = Math.max(0, Math.min(parentW - 40, initialLeftPx + deltaX));
+      const newTopPx = Math.max(0, Math.min(parentH - 40, initialTopPx + deltaY));
+
+      itemData.x = parseFloat(((newLeftPx / parentW) * 100).toFixed(1));
+      itemData.y = parseFloat(((newTopPx / parentH) * 100).toFixed(1));
+
+      itemEl.style.left = itemData.x + '%';
+      itemEl.style.top = itemData.y + '%';
+    });
+
+    const onDragEnd = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      itemEl.classList.remove('is-dragging');
+      try { itemEl.releasePointerCapture(e.pointerId); } catch (err) {}
+      onUpdate();
+    };
+
+    itemEl.addEventListener('pointerup', onDragEnd);
+    itemEl.addEventListener('pointercancel', onDragEnd);
+  }
+
+  // --- Step 3: Delivery Options Logic ---
+  cardVesselBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      cardVesselBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const v = btn.dataset.vessel;
+      state.greetingCard.vessel = v;
+      if (cardEnvelopeOptions) cardEnvelopeOptions.style.display = v === 'envelope' ? 'block' : 'none';
+      if (cardBoxOptions) cardBoxOptions.style.display = v === 'box' ? 'block' : 'none';
+      updateCardVesselLivePreview();
+    });
+  });
+
+  cardEnvChoices.forEach(btn => {
+    btn.addEventListener('click', () => {
+      cardEnvChoices.forEach(b => b.classList.toggle('active', b === btn));
+      state.greetingCard.envelope = btn.dataset.env;
+      updateCardVesselLivePreview();
+    });
+  });
+
+  cardSealChoices.forEach(btn => {
+    btn.addEventListener('click', () => {
+      cardSealChoices.forEach(b => b.classList.toggle('active', b === btn));
+      state.greetingCard.seal = btn.dataset.seal;
+      updateCardVesselLivePreview();
+    });
+  });
+
+  cardBoxChoices.forEach(btn => {
+    btn.addEventListener('click', () => {
+      cardBoxChoices.forEach(b => {
+        b.classList.toggle('active', b === btn);
+        b.style.borderColor = b === btn ? '#521319' : 'transparent';
+      });
+      state.greetingCard.boxIndex = btn.dataset.index;
+      updateCardVesselLivePreview();
+    });
+  });
+
+  function updateCardVesselLivePreview() {
+    if (!cardVesselLiveRender) return;
+    const vessel = state.greetingCard.vessel || 'envelope';
+
+    if (vessel === 'envelope') {
+      const envKey = state.greetingCard.envelope || 'dusty-blue';
+      const sealKey = state.greetingCard.seal || 'gold-celestial';
+      const envSrc = CARD_ENVELOPE_MAP[envKey] || 'assets/letter/envelopes/env_dusty_blue.jpg';
+      const sealSrc = CARD_SEAL_MAP[sealKey] || 'assets/letter/seals/seal_gold_celestial.png';
+
+      cardVesselLiveRender.innerHTML = `
+        <div class="card-envelope-live-preview" style="position:relative; width:220px; height:150px; margin:0 auto; display:flex; align-items:center; justify-content:center;">
+          <img src="${envSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:10px; box-shadow:0 8px 24px rgba(82, 19, 25, 0.16); display:block;" alt="Envelope" />
+          <img src="${sealSrc}" class="preview-seal-overlay-img" style="position:absolute; left:50%; top:54%; transform:translate(-50%, -50%); width:68px; height:68px; object-fit:contain; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.32)); z-index:5;" alt="Wax Seal" />
+        </div>
+      `;
+    } else if (vessel === 'box') {
+      const boxIdx = state.greetingCard.boxIndex || '1';
+      const boxSrc = boxImages[boxIdx] || 'assets/boxes/box1.jpg';
+      cardVesselLiveRender.innerHTML = `
+        <div style="position:relative; width:140px; height:140px; margin:0 auto; display:flex; align-items:center; justify-content:center;">
+          <img src="${boxSrc}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply; filter:drop-shadow(0 6px 16px rgba(82,19,25,0.15));" alt="Gift Box" />
+        </div>
+      `;
+    } else {
+      cardVesselLiveRender.innerHTML = `
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0;">
+          <img src="assets/truck.png" style="width:210px; max-width:90%; height:auto; object-fit:contain; filter:drop-shadow(0 6px 14px rgba(82, 19, 25, 0.12));" alt="Delivery Truck" />
+          <p class="preview-vessel-name" style="margin-top:8px; font-family:'Playfair Display', Georgia, serif; color:#521319; font-size:14px; font-weight:600;">Special Delivery Truck</p>
+        </div>
+      `;
+    }
+  }
+
+  // --- Step 4: Preview & Dispatch Logic ---
+  function renderCardStep4Preview() {
+    if (!cardPreviewVesselWrap) return;
+    const vessel = state.greetingCard.vessel || 'envelope';
+
+    state.greetingCard.isOpened = false;
+    state.greetingCard.previewFace = 'inside';
+
+    const openBtnRow = document.querySelector('#card-panel-preview .step3-open-btn-row');
+    if (openBtnRow) openBtnRow.style.display = 'flex';
+    if (cardPreviewVesselStage) cardPreviewVesselStage.style.display = 'block';
+    if (cardPreviewRevealedStage) cardPreviewRevealedStage.style.display = 'none';
+    if (btnCardOpenText) btnCardOpenText.textContent = 'Click to Open ♡';
+    if (cardFlipLabel) cardFlipLabel.textContent = 'View Cover';
+
+    if (vessel === 'envelope') {
+      const envKey = state.greetingCard.envelope || 'dusty-blue';
+      const sealKey = state.greetingCard.seal || 'gold-celestial';
+      const envSrc = CARD_ENVELOPE_MAP[envKey] || 'assets/letter/envelopes/env_dusty_blue.jpg';
+      const sealSrc = CARD_SEAL_MAP[sealKey] || 'assets/letter/seals/seal_gold_celestial.png';
+
+      cardPreviewVesselWrap.innerHTML = `
+        <div class="card-envelope-arriving-package" style="position:relative; width:240px; height:160px; margin:0 auto; cursor:pointer;">
+          <img src="${envSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:10px; box-shadow:0 12px 28px rgba(82,19,25,0.18);" alt="Envelope" />
+          <img src="${sealSrc}" class="sealed-wax-seal" style="position:absolute; left:50%; top:54%; transform:translate(-50%, -50%); width:76px; height:76px; object-fit:contain; filter:drop-shadow(0 5px 12px rgba(0,0,0,0.36));" alt="Wax Seal" />
+          <div style="position:absolute; bottom:14px; left:0; width:100%; text-align:center; font-family:'Caveat', cursive; font-size:18px; color:rgba(255,255,255,0.92); text-shadow:0 1px 3px rgba(0,0,0,0.5);">For ${escapeHtml(state.greetingCard.insideTo || 'Kabir')}</div>
+        </div>
+      `;
+    } else if (vessel === 'box') {
+      const boxIdx = state.greetingCard.boxIndex || '1';
+      const boxSrc = boxImages[boxIdx] || 'assets/boxes/box1.jpg';
+      cardPreviewVesselWrap.innerHTML = `
+        <div style="position:relative; width:170px; height:170px; margin:0 auto; cursor:pointer;">
+          <img src="${boxSrc}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply; filter:drop-shadow(0 10px 22px rgba(82,19,25,0.18));" alt="Gift Box" />
+        </div>
+      `;
+    } else {
+      cardPreviewVesselWrap.innerHTML = `
+        <div style="position:relative; width:230px; margin:0 auto; cursor:pointer; display:flex; flex-direction:column; align-items:center;">
+          <img src="assets/truck.png" style="width:100%; height:auto; object-fit:contain; filter:drop-shadow(0 8px 20px rgba(82,19,25,0.15));" alt="Delivery Truck" />
+          <p style="margin-top:8px; font-family:'Playfair Display', Georgia, serif; color:#521319; font-size:14px; font-weight:600;">Special Delivery Truck</p>
+        </div>
+      `;
+    }
+  }
+
+  function openCardInPreview() {
+    state.greetingCard.isOpened = true;
+    if (cardPreviewVesselStage) cardPreviewVesselStage.style.display = 'none';
+    if (cardPreviewRevealedStage) cardPreviewRevealedStage.style.display = 'block';
+    const openBtnRow = document.querySelector('#card-panel-preview .step3-open-btn-row');
+    if (openBtnRow) openBtnRow.style.display = 'none';
+    renderCardRevealedDisplay();
+  }
+
+  function renderCardRevealedDisplay() {
+    if (!cardRevealDisplay) return;
+    const face = state.greetingCard.previewFace || 'inside';
+    const theme = state.greetingCard.theme || 'crimson-romance';
+
+    if (face === 'inside') {
+      if (cardFlipLabel) cardFlipLabel.textContent = 'View Cover';
+      let keepsakesHtml = '';
+      (state.greetingCard.insideKeepsakes || []).forEach(item => {
+        if (item.type === 'polaroid') {
+          keepsakesHtml += `
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 130}px;">
+              <div class="placed-polaroid-frame">
+                <div class="polaroid-pin"></div>
+                <img src="${item.src}" class="polaroid-photo" alt="Memory" />
+                <div class="polaroid-caption">${escapeHtml(item.caption || 'Cherished Memory')}</div>
+              </div>
+            </div>
+          `;
+        } else if (item.type === 'flower') {
+          keepsakesHtml += `
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 90}px;">
+              <img src="assets/flowers/${item.file}" class="placed-flower-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12)); pointer-events:none;" />
+            </div>
+          `;
+        } else if (item.type === 'vinyl') {
+          keepsakesHtml += `
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 150}px;">
+              <div class="vinyl-player-widget ${vinylIsPlaying ? 'is-playing' : ''}">
+                <div class="vinyl-sleeve">
+                  <div class="vinyl-disc">
+                    <div class="vinyl-center-label">
+                      <span class="vinyl-label-title">Side A</span>
+                      <span class="vinyl-label-sub">For ${escapeHtml(state.greetingCard.insideTo || 'Kabir')}</span>
+                    </div>
+                  </div>
+                  <div class="vinyl-needle-arm"></div>
+                </div>
+                <div class="vinyl-player-controls">
+                  <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
+                  <span class="vinyl-track-info">Golden Hour (Acoustic)</span>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (item.type === 'sticker') {
+          keepsakesHtml += `
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 70}px;">
+              <img src="assets/stickers/${item.file}" class="placed-sticker-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18)); pointer-events:none;" />
+            </div>
+          `;
+        }
+      });
+
+      cardRevealDisplay.innerHTML = `
+        <div class="card-inside-bifold theme-${theme}" style="margin:0 auto; box-shadow:0 12px 32px rgba(82, 19, 25, 0.18);">
+          <div class="inside-left-panel" style="position:relative;">
+            <div class="panel-watermark-label">Memories &amp; Keepsakes</div>
+            <div class="inside-keepsakes-dropzone" style="position:relative; width:100%; height:100%;">
+              ${keepsakesHtml}
+            </div>
+          </div>
+          <div class="inside-bifold-crease"></div>
+          <div class="inside-right-panel">
+            <div class="card-inside-note-header">
+              <span class="card-note-label">To:</span>
+              <span style="font-family:${state.greetingCard.insideFontFamily || "'Caveat', cursive"}; font-size:18px; color:inherit; font-weight:600;">${escapeHtml(state.greetingCard.insideTo || 'Kabir')}</span>
+            </div>
+            <div style="font-family:${state.greetingCard.insideFontFamily || "'Caveat', cursive"}; font-size:${state.greetingCard.insideFontSize || 19}px; line-height:1.65; color:inherit; white-space:pre-wrap; word-break:break-word; min-height:180px; padding:6px 0;">
+              ${escapeHtml(state.greetingCard.insideBody || 'Wishing you all the joy, peace, and warmth this season brings.')}
+            </div>
+            <div class="card-inside-note-footer">
+              <span class="card-note-label">From:</span>
+              <span style="font-family:${state.greetingCard.insideFontFamily || "'Caveat', cursive"}; font-size:18px; color:inherit; font-weight:600;">${escapeHtml(state.greetingCard.insideFrom || 'Saanvi')}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      cardRevealDisplay.querySelectorAll('.vinyl-play-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleVinylAudio();
+        });
+      });
+    } else {
+      if (cardFlipLabel) cardFlipLabel.textContent = 'View Inside';
+      let coverItemsHtml = '';
+      (state.greetingCard.coverElements || []).forEach(item => {
+        if (item.type === 'photo') {
+          coverItemsHtml += `
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '55%'};">
+              <img src="${item.src}" class="card-cover-photo-img" style="width:100%; height:auto; border-radius:6px; display:block;" />
+            </div>
+          `;
+        } else if (item.type === 'text') {
+          coverItemsHtml += `
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '60%'};">
+              <div class="card-item-content card-text-content" style="font-family:${item.fontFamily || "'Caveat', cursive"}; font-size:${item.fontSize || 24}px; text-align:center;">
+                ${escapeHtml(item.text)}
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      cardRevealDisplay.innerHTML = `
+        <div class="card-cover-canvas theme-${theme}" style="margin:0 auto; box-shadow:0 12px 32px rgba(82, 19, 25, 0.18);">
+          <div class="card-cover-elements-layer">
+            ${coverItemsHtml}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  if (cardPreviewVesselWrap) cardPreviewVesselWrap.addEventListener('click', openCardInPreview);
+  if (btnCardToggleOpen) btnCardToggleOpen.addEventListener('click', openCardInPreview);
+
+  if (btnCardPreviewFlip) {
+    btnCardPreviewFlip.addEventListener('click', () => {
+      state.greetingCard.previewFace = state.greetingCard.previewFace === 'inside' ? 'cover' : 'inside';
+      renderCardRevealedDisplay();
+    });
+  }
+
+  function saveCurrentCardToVault(isManual = false) {
+    try {
+      const vaultData = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
+      const item = {
+        type: 'card',
+        title: 'Greeting Card',
+        theme: state.greetingCard.theme || 'crimson-romance',
+        coverElements: [...(state.greetingCard.coverElements || [])],
+        insideKeepsakes: [...(state.greetingCard.insideKeepsakes || [])],
+        to: state.greetingCard.insideTo || 'Kabir',
+        from: state.greetingCard.insideFrom || 'Saanvi',
+        body: state.greetingCard.insideBody || '',
+        fontSize: state.greetingCard.insideFontSize || 19,
+        fontFamily: state.greetingCard.insideFontFamily || "'Caveat', cursive",
+        vessel: state.greetingCard.vessel || 'envelope',
+        envelope: state.greetingCard.envelope || 'dusty-blue',
+        seal: state.greetingCard.seal || 'gold-celestial',
+        boxIndex: state.greetingCard.boxIndex || '1',
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        savedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      };
+
+      const isDuplicate = vaultData.some(v => v.type === 'card' && v.to === item.to && v.from === item.from && v.body === item.body && v.theme === item.theme);
+      if (!isDuplicate) {
+        vaultData.unshift(item);
+        localStorage.setItem('between_us_vault_items', JSON.stringify(vaultData));
+        if (isManual) {
+          showAtelierToast('Greeting card saved to your Vault ♡');
+        }
+      } else if (isManual) {
+        showAtelierToast('Already saved in your Vault ♡');
+      }
+    } catch (err) {
+      console.warn('Vault card save error:', err);
+    }
+  }
+
+  if (btnCardSaveVault) {
+    btnCardSaveVault.addEventListener('click', () => {
+      saveCurrentCardToVault(true);
+      btnCardSaveVault.innerHTML = `
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>Saved to Vault ✓</span>
+      `;
+      setTimeout(() => {
+        btnCardSaveVault.innerHTML = `
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span>Save to Vault</span>
+        `;
+      }, 2200);
+    });
+  }
+
+  function generateShareableCardUrl() {
+    const payload = {
+      type: 'card',
+      th: state.greetingCard.theme,
+      cv: state.greetingCard.coverElements,
+      ks: state.greetingCard.insideKeepsakes,
+      to: state.greetingCard.insideTo,
+      from: state.greetingCard.insideFrom,
+      m: state.greetingCard.insideBody,
+      ff: state.greetingCard.insideFontFamily,
+      fs: state.greetingCard.insideFontSize,
+      v: state.greetingCard.vessel,
+      env: state.greetingCard.envelope,
+      sl: state.greetingCard.seal,
+      bi: state.greetingCard.boxIndex,
+      d: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    };
+    const jsonStr = JSON.stringify(payload);
+    const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+    const base = window.location.origin + window.location.pathname;
+    return `${base}#card=${encodeURIComponent(b64)}`;
+  }
+
+  function openCardDispatchModal() {
+    const modal = document.getElementById('dispatch-modal');
+    if (!modal) return;
+    const iconEl = document.getElementById('dispatch-badge-icon');
+    const titleEl = document.getElementById('dispatch-modal-title');
+    const subEl = document.getElementById('dispatch-modal-sub');
+    const copyDescEl = document.getElementById('dispatch-copy-desc');
+    const urlInput = document.getElementById('dispatch-url-input');
+
+    if (iconEl) iconEl.textContent = '💌';
+    if (titleEl) titleEl.textContent = 'Send Your Greeting Card';
+    if (subEl) subEl.textContent = 'Share your personalized card and keepsakes.';
+    if (copyDescEl) copyDescEl.textContent = 'Anyone with this link can unwrap and open your card';
+
+    const shareUrl = generateShareableCardUrl();
+    if (urlInput) urlInput.value = shareUrl;
+
+    modal.style.display = 'flex';
+  }
+
+  if (btnCardDispatch) {
+    btnCardDispatch.addEventListener('click', openCardDispatchModal);
   }
 
   // ================= 5. DELIVERY VESSELS (3 OPTIONS) =================
-  const vesselBtns = document.querySelectorAll('.vessel-btn');
+  const vesselBtns = document.querySelectorAll('#postcard-step2-pane .vessel-btn');
   const vesselPreviewRender = document.getElementById('vessel-preview-render');
   const envSelectorContainer = document.getElementById('envelope-selector-container');
   const envThumbBtns = document.querySelectorAll('.env-thumb-btn');
@@ -2330,7 +3393,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateVesselLivePreview();
       
       // Update the main Envelope button icon to reflect the selected envelope
-      const mainEnvBtn = document.querySelector('.vessel-btn[data-vessel="envelope"] div');
+      const mainEnvBtn = document.querySelector('#postcard-step2-pane .vessel-btn[data-vessel="envelope"] div');
       if (mainEnvBtn) {
         mainEnvBtn.innerHTML = getEnvelopeImage("44px");
       }
@@ -2348,7 +3411,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateVesselLivePreview();
 
       // Update the main Gift Box button icon to reflect the selected box
-      const mainBoxBtn = document.querySelector('.vessel-btn[data-vessel="box"] div');
+      const mainBoxBtn = document.querySelector('#postcard-step2-pane .vessel-btn[data-vessel="box"] div');
       if (mainBoxBtn) {
         mainBoxBtn.innerHTML = getBoxImage("44px");
       }
@@ -2886,7 +3949,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (cardParam) {
         const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(cardParam))));
         const cardData = JSON.parse(jsonStr);
-        renderRecipientExperience(cardData);
+        if (cardData.type === 'card' || cardData.type === 'greeting-card') {
+          renderRecipientCardExperience(cardData);
+        } else {
+          renderRecipientExperience(cardData);
+        }
       } else if (bouquetParam) {
         const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(bouquetParam))));
         const bqData = JSON.parse(jsonStr);
@@ -3276,6 +4343,274 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function renderRecipientCardExperience(data) {
+    window.renderRecipientCardExperience = renderRecipientCardExperience;
+    if (splashScreen) splashScreen.style.display = 'none';
+    if (appHeader) appHeader.style.display = 'none';
+    if (appStage) appStage.style.display = 'none';
+    if (appBottomNav) appBottomNav.style.display = 'none';
+
+    let recipientStage = document.getElementById('recipient-experience-stage');
+    if (!recipientStage) {
+      recipientStage = document.createElement('div');
+      recipientStage.id = 'recipient-experience-stage';
+      recipientStage.className = 'recipient-experience-stage';
+      document.body.appendChild(recipientStage);
+    }
+    recipientStage.style.display = 'flex';
+
+    const toVal = data.to || 'You';
+    const fromVal = data.from || 'Someone who loves you';
+    const bodyVal = data.m || data.body || '';
+    const themeVal = data.th || data.theme || 'crimson-romance';
+    const fontVal = data.ff || data.fontFamily || "'Caveat', cursive";
+    const sizeVal = data.fs || data.fontSize || 19;
+    const vesselVal = data.v || data.vessel || 'envelope';
+    const envVal = data.env || data.envelope || 'dusty-blue';
+    const sealVal = data.sl || data.seal || 'gold-celestial';
+    const boxIdx = data.bi || data.boxIndex || '1';
+    const keepsakesVal = data.ks || data.insideKeepsakes || [];
+    const coverElementsVal = data.cv || data.coverElements || [];
+
+    let vesselHtml = '';
+    if (vesselVal === 'envelope') {
+      const envSrc = CARD_ENVELOPE_MAP[envVal] || 'assets/letter/envelopes/env_dusty_blue.jpg';
+      const sealSrc = CARD_SEAL_MAP[sealVal] || 'assets/letter/seals/seal_gold_celestial.png';
+      vesselHtml = `
+        <div class="card-envelope-arriving-package" style="position:relative; width:240px; height:160px; margin:0 auto; cursor:pointer;">
+          <img src="${envSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:10px; box-shadow:0 12px 28px rgba(82,19,25,0.18);" alt="Envelope" />
+          <img src="${sealSrc}" class="sealed-wax-seal" style="position:absolute; left:50%; top:54%; transform:translate(-50%, -50%); width:76px; height:76px; object-fit:contain; filter:drop-shadow(0 5px 12px rgba(0,0,0,0.36));" alt="Wax Seal" />
+          <div style="position:absolute; bottom:14px; left:0; width:100%; text-align:center; font-family:'Caveat', cursive; font-size:18px; color:rgba(255,255,255,0.92); text-shadow:0 1px 3px rgba(0,0,0,0.5);">For ${escapeHtml(toVal)}</div>
+        </div>
+      `;
+    } else if (vesselVal === 'box') {
+      const boxSrc = boxImages[boxIdx] || 'assets/boxes/box1.jpg';
+      vesselHtml = `
+        <div style="position:relative; width:170px; height:170px; margin:0 auto; cursor:pointer;">
+          <img src="${boxSrc}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply; filter:drop-shadow(0 10px 22px rgba(82,19,25,0.18));" alt="Gift Box" />
+        </div>
+      `;
+    } else {
+      vesselHtml = `
+        <div style="position:relative; width:230px; margin:0 auto; cursor:pointer; display:flex; flex-direction:column; align-items:center;">
+          <img src="assets/truck.png" style="width:100%; height:auto; object-fit:contain; filter:drop-shadow(0 8px 20px rgba(82,19,25,0.15));" alt="Delivery Truck" />
+          <p style="margin-top:8px; font-family:'Playfair Display', Georgia, serif; color:#521319; font-size:14px; font-weight:600;">Special Delivery Truck</p>
+        </div>
+      `;
+    }
+
+    recipientStage.innerHTML = `
+      <div class="recipient-card-wrapper" style="padding: 24px 16px; text-align: center; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <div style="font-family:'Playfair Display', Georgia, serif; font-size:22px; font-weight:600; color:#521319;">
+          A card for you ♡
+        </div>
+
+        <!-- Arriving vessel view -->
+        <div id="recip-card-vessel-view" style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+          ${vesselHtml}
+          <button id="btn-recip-open-card" class="btn-click-to-open">
+            Click to Open ♡
+          </button>
+        </div>
+
+        <!-- Revealed card view -->
+        <div id="recip-card-revealed-view" style="display:none; flex-direction:column; align-items:center; gap:16px; width:100%;">
+          <div id="recip-card-content-area" style="width:100%;"></div>
+          <div style="display:flex; gap:10px; justify-content:center; width:100%; margin-top:8px;">
+            <button id="btn-recip-card-flip" class="btn-flip-card-pill">
+              <span id="recip-flip-text">View Cover</span>
+            </button>
+            <button id="btn-recip-card-save" class="letter-action-btn secondary">Save to Vault ♡</button>
+            <button id="btn-recip-card-create" class="letter-action-btn primary">Design Your Own Card →</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    let recipFace = 'inside';
+    const contentArea = document.getElementById('recip-card-content-area');
+    const flipText = document.getElementById('recip-flip-text');
+
+    function renderRecipCard() {
+      if (recipFace === 'inside') {
+        flipText.textContent = 'View Cover';
+        let ksHtml = '';
+        keepsakesVal.forEach(item => {
+          if (item.type === 'polaroid') {
+            ksHtml += `
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 130}px;">
+                <div class="placed-polaroid-frame">
+                  <div class="polaroid-pin"></div>
+                  <img src="${item.src}" class="polaroid-photo" alt="Memory" />
+                  <div class="polaroid-caption">${escapeHtml(item.caption || 'Cherished Memory')}</div>
+                </div>
+              </div>
+            `;
+          } else if (item.type === 'flower') {
+            ksHtml += `
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 90}px;">
+                <img src="assets/flowers/${item.file}" class="placed-flower-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12)); pointer-events:none;" />
+              </div>
+            `;
+          } else if (item.type === 'vinyl') {
+            ksHtml += `
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 150}px;">
+                <div class="vinyl-player-widget ${vinylIsPlaying ? 'is-playing' : ''}">
+                  <div class="vinyl-sleeve">
+                    <div class="vinyl-disc">
+                      <div class="vinyl-center-label">
+                        <span class="vinyl-label-title">Side A</span>
+                        <span class="vinyl-label-sub">For ${escapeHtml(toVal)}</span>
+                      </div>
+                    </div>
+                    <div class="vinyl-needle-arm"></div>
+                  </div>
+                  <div class="vinyl-player-controls">
+                    <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
+                    <span class="vinyl-track-info">Golden Hour (Acoustic)</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else if (item.type === 'sticker') {
+            ksHtml += `
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 70}px;">
+                <img src="assets/stickers/${item.file}" class="placed-sticker-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18)); pointer-events:none;" />
+              </div>
+            `;
+          }
+        });
+
+        contentArea.innerHTML = `
+          <div class="card-inside-bifold theme-${themeVal}" style="margin:0 auto; box-shadow:0 12px 32px rgba(82, 19, 25, 0.18);">
+            <div class="inside-left-panel" style="position:relative;">
+              <div class="panel-watermark-label">Memories &amp; Keepsakes</div>
+              <div class="inside-keepsakes-dropzone" style="position:relative; width:100%; height:100%;">
+                ${ksHtml}
+              </div>
+            </div>
+            <div class="inside-bifold-crease"></div>
+            <div class="inside-right-panel">
+              <div class="card-inside-note-header">
+                <span class="card-note-label">To:</span>
+                <span style="font-family:${fontVal}; font-size:18px; color:inherit; font-weight:600;">${escapeHtml(toVal)}</span>
+              </div>
+              <div style="font-family:${fontVal}; font-size:${sizeVal}px; line-height:1.65; color:inherit; white-space:pre-wrap; word-break:break-word; min-height:180px; padding:6px 0;">
+                ${escapeHtml(bodyVal)}
+              </div>
+              <div class="card-inside-note-footer">
+                <span class="card-note-label">From:</span>
+                <span style="font-family:${fontVal}; font-size:18px; color:inherit; font-weight:600;">${escapeHtml(fromVal)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        contentArea.querySelectorAll('.vinyl-play-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleVinylAudio();
+          });
+        });
+      } else {
+        flipText.textContent = 'View Inside';
+        let cvHtml = '';
+        coverElementsVal.forEach(item => {
+          if (item.type === 'photo') {
+            cvHtml += `
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '55%'};">
+                <img src="${item.src}" class="card-cover-photo-img" style="width:100%; height:auto; border-radius:6px; display:block;" />
+              </div>
+            `;
+          } else if (item.type === 'text') {
+            cvHtml += `
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '60%'};">
+                <div class="card-item-content card-text-content" style="font-family:${item.fontFamily || "'Caveat', cursive"}; font-size:${item.fontSize || 24}px; text-align:center;">
+                  ${escapeHtml(item.text)}
+                </div>
+              </div>
+            `;
+          }
+        });
+
+        contentArea.innerHTML = `
+          <div class="card-cover-canvas theme-${themeVal}" style="margin:0 auto; box-shadow:0 12px 32px rgba(82, 19, 25, 0.18);">
+            <div class="card-cover-elements-layer">
+              ${cvHtml}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    const btnOpen = document.getElementById('btn-recip-open-card');
+    const vesselView = document.getElementById('recip-card-vessel-view');
+    const revealedView = document.getElementById('recip-card-revealed-view');
+    if (btnOpen) {
+      btnOpen.onclick = () => {
+        vesselView.style.display = 'none';
+        revealedView.style.display = 'flex';
+        renderRecipCard();
+      };
+    }
+    const vesselWrap = vesselView ? vesselView.querySelector('.card-envelope-arriving-package, div[style*="cursor:pointer"]') : null;
+    if (vesselWrap) {
+      vesselWrap.onclick = () => {
+        vesselView.style.display = 'none';
+        revealedView.style.display = 'flex';
+        renderRecipCard();
+      };
+    }
+
+    const btnFlip = document.getElementById('btn-recip-card-flip');
+    if (btnFlip) {
+      btnFlip.onclick = () => {
+        recipFace = recipFace === 'inside' ? 'cover' : 'inside';
+        renderRecipCard();
+      };
+    }
+
+    const btnSave = document.getElementById('btn-recip-card-save');
+    if (btnSave) {
+      btnSave.onclick = () => {
+        try {
+          const vault = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
+          vault.unshift({
+            type: 'card',
+            id: 'gc_' + Date.now(),
+            title: `Card from ${fromVal}`,
+            to: toVal,
+            from: fromVal,
+            body: bodyVal,
+            theme: themeVal,
+            coverElements: coverElementsVal,
+            insideKeepsakes: keepsakesVal,
+            fontSize: sizeVal,
+            fontFamily: fontVal,
+            vessel: vesselVal,
+            envelope: envVal,
+            seal: sealVal,
+            boxIndex: boxIdx,
+            savedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+          });
+          localStorage.setItem('between_us_vault_items', JSON.stringify(vault));
+          btnSave.textContent = 'Saved to Vault ✓';
+        } catch (e) {}
+      };
+    }
+
+    const btnCreate = document.getElementById('btn-recip-card-create');
+    if (btnCreate) {
+      btnCreate.onclick = () => {
+        recipientStage.style.display = 'none';
+        if (appHeader) appHeader.style.display = 'flex';
+        if (appStage) appStage.style.display = 'block';
+        if (appBottomNav) appBottomNav.style.display = 'flex';
+        selectMedium('greeting-card');
+      };
+    }
+  }
+
   // ================= VAULT ROOM DYNAMIC LIST =================
   function renderVaultItems() {
     const vaultGrid = document.getElementById('vault-items-grid');
@@ -3288,7 +4623,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="vault-empty-icon">🔖</div>
           <h4 style="font-family:'Playfair Display', Georgia, serif; font-size:18px; color:#521319; margin:0 0 6px 0;">Your vault is waiting</h4>
           <p style="font-family:'Cormorant Garamond', Georgia, serif; font-size:14px; font-style:italic; color:#8E4A56; margin:0;">
-            Any postcard or letter you design will be automatically preserved here.
+            Any postcard, letter, or card you design will be automatically preserved here.
           </p>
         </div>
       `;
@@ -3301,6 +4636,8 @@ document.addEventListener('DOMContentLoaded', () => {
         iconHtml = `<img src="assets/medium_bouquet.png" style="width:100%; height:100%; object-fit:contain;" alt="Bouquet" />`;
       } else if (item.type === 'letter') {
         iconHtml = `<img src="assets/medium_letter.png" style="width:100%; height:100%; object-fit:contain;" alt="Letter" />`;
+      } else if (item.type === 'card' || item.type === 'greeting-card') {
+        iconHtml = `<img src="assets/medium_card.png" style="width:100%; height:100%; object-fit:contain;" alt="Card" />`;
       } else if (item.v === 'truck') {
         iconHtml = `<img src="assets/truck.png" style="width:100%; height:100%; object-fit:contain;" alt="Truck" />`;
       } else if (item.v === 'box') {
@@ -3317,7 +4654,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ${iconHtml}
           </div>
           <div class="vault-item-info">
-            <h5 class="vault-item-title">${escapeHtml(item.title || (item.type === 'bouquet' ? 'Botanical Bouquet' : (item.type === 'letter' ? 'Keepsake Letter' : 'Handwritten Postcard')))}</h5>
+            <h5 class="vault-item-title">${escapeHtml(item.title || (item.type === 'bouquet' ? 'Botanical Bouquet' : (item.type === 'letter' ? 'Keepsake Letter' : (item.type === 'card' ? 'Greeting Card' : 'Handwritten Postcard'))))}</h5>
             <p class="vault-item-dedication">To: ${escapeHtml(item.to || 'Someone Special')} • From: ${escapeHtml(item.from || 'Me')}</p>
             <p class="vault-item-date">Saved on ${item.savedAt || item.date || 'Recently'}</p>
           </div>
@@ -3336,6 +4673,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderRecipientBouquetExperience(item);
           } else if (item.type === 'letter') {
             renderRecipientLetterExperience(item);
+          } else if (item.type === 'card' || item.type === 'greeting-card') {
+            renderRecipientCardExperience(item);
           } else {
             renderRecipientExperience(item);
           }
@@ -3384,17 +4723,45 @@ document.addEventListener('DOMContentLoaded', () => {
       if (appStage) appStage.style.display = 'block';
       if (appBottomNav) appBottomNav.style.display = 'flex';
     }
-    const paramMedium = urlParams.get('medium') || (window.location.href.includes('medium=bouquet') ? 'bouquet' : (window.location.href.includes('medium=letter') ? 'letter' : (window.location.href.includes('medium=postcard') ? 'postcard' : null)));
+    const paramMedium = urlParams.get('medium') || (window.location.href.includes('medium=bouquet') ? 'bouquet' : (window.location.href.includes('medium=letter') ? 'letter' : (window.location.href.includes('medium=card') ? 'card' : (window.location.href.includes('medium=greeting-card') ? 'greeting-card' : (window.location.href.includes('medium=postcard') ? 'postcard' : null)))));
     if (paramMedium && typeof selectMedium === 'function') {
       selectMedium(paramMedium);
     }
-    const paramStep = urlParams.get('step') || urlParams.get('pstep') || urlParams.get('lstep');
+    const paramStep = urlParams.get('step') || urlParams.get('pstep') || urlParams.get('lstep') || urlParams.get('cstep');
     if (paramMedium === 'bouquet' && paramStep && typeof setBouquetStep === 'function') {
       setBouquetStep(paramStep);
     }
     if (paramMedium === 'letter' && paramStep && typeof setLetterStep === 'function') {
       const stepNum = parseInt(paramStep, 10);
       setLetterStep(stepNum);
+    }
+    if ((paramMedium === 'card' || paramMedium === 'greeting-card') && paramStep && typeof setCardStep === 'function') {
+      const stepNum = parseInt(paramStep, 10);
+      setCardStep(stepNum);
+    }
+    const paramCardTheme = urlParams.get('ctheme');
+    if (paramCardTheme && state.greetingCard) {
+      state.greetingCard.theme = paramCardTheme;
+      if (cardCoverCanvas) cardCoverCanvas.className = `card-cover-canvas theme-${paramCardTheme}`;
+      if (cardInsideBifold) cardInsideBifold.className = `card-inside-bifold theme-${paramCardTheme}`;
+      document.querySelectorAll('.card-theme-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.cardTheme === paramCardTheme);
+      });
+    }
+    if ((paramMedium === 'card' || paramMedium === 'greeting-card') && (urlParams.has('copen') || urlParams.has('revealed'))) {
+      if (typeof openCardInPreview === 'function') openCardInPreview();
+    }
+    if (urlParams.has('demo_card') && state.greetingCard) {
+      state.greetingCard.insideKeepsakes = [
+        { id: 'pol_1', type: 'polaroid', src: 'assets/medium_letter.png', caption: 'Forever & Always', x: 8, y: 12, width: 135 },
+        { id: 'fl_1', type: 'flower', name: 'Lily', file: 'lily.png', x: 45, y: 15, width: 95 },
+        { id: 'vn_1', type: 'vinyl', title: 'Golden Hour (Acoustic)', x: 10, y: 55, width: 155 },
+        { id: 'st_1', type: 'sticker', name: 'Pink Hearts', file: 'sticker_hearts_pink.png', x: 55, y: 64, width: 72 }
+      ];
+      if (typeof renderInsideKeepsakes === 'function') renderInsideKeepsakes();
+      if (state.greetingCard.step === 4 && typeof renderCardRevealedDisplay === 'function') {
+        renderCardRevealedDisplay();
+      }
     }
     const paramTheme = urlParams.get('theme');
     if (paramTheme && state.letter) {
