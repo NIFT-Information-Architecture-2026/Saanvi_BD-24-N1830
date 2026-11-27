@@ -1049,27 +1049,27 @@
             </div>
           </div>
 
-          <!-- Step 4: Thematic Note Card & Letter -->
+          <!-- Step 4: Deckle Paper Handwritten Note -->
           <div class="bq-step-panel" id="bq-panel-note" style="display:none;">
-            <div class="bq-step-header">
-              <span class="bq-step-title">Select a card theme & write your note</span>
+            <div class="bq-step-header" style="justify-content: center; margin-bottom: 12px;">
+              <span class="bq-step-title" style="font-size: 14px; letter-spacing: 0.3px;">Write your heartfelt note ♡</span>
             </div>
-            <div class="note-theme-selector" id="note-theme-selector">
-              <button class="note-theme-chip active" data-theme="cream">Archival Cream</button>
-              <button class="note-theme-chip" data-theme="gold">Gold Hairline</button>
-              <button class="note-theme-chip" data-theme="botanical">Botanical Border</button>
-              <button class="note-theme-chip" data-theme="kraft">Natural Kraft</button>
-            </div>
-            <div class="bouquet-attached-note" id="bouquet-note-card-editor" data-theme="cream">
-              <div class="attached-note-header">
-                <span>To: <input type="text" value="Kabir" id="bouquet-to-input"></span>
-                <span>From: <input type="text" value="Saanvi" id="bouquet-from-input"></span>
+            <div class="bouquet-deckle-wrapper">
+              <div class="bouquet-deckle-note-card" id="bouquet-note-card-editor">
+                <div class="deckle-note-header">
+                  <span class="deckle-label">To:</span>
+                  <input type="text" value="Kabir" id="bouquet-to-input" class="deckle-input" placeholder="Recipient" autocomplete="off" />
+                </div>
+                <textarea class="deckle-note-textarea" id="bouquet-note-body" placeholder="Write your heartfelt note here...">A little botanical bouquet handpicked just for you.</textarea>
+                <div class="deckle-note-footer">
+                  <span class="deckle-label">From:</span>
+                  <input type="text" value="Saanvi" id="bouquet-from-input" class="deckle-input" placeholder="Your name" autocomplete="off" />
+                </div>
               </div>
-              <textarea class="bouquet-note-body" id="bouquet-note-body" placeholder="Write your heartfelt note here...">A little botanical bouquet handpicked just for you.</textarea>
             </div>
             <div class="bq-step-nav-bar dual">
               <button class="bq-back-btn" data-target="arrange">← Back to Arrange</button>
-              <button class="bq-next-btn" id="bq-btn-done-note" data-target="preview">Proceed to Preview →</button>
+              <button class="bq-next-btn" id="bq-btn-done-note" data-target="preview">Preview →</button>
             </div>
           </div>
 
@@ -1081,13 +1081,6 @@
 
               <!-- Slot for Assembled Bouquet Stage -->
               <div class="bouquet-step5-hero-slot" id="bouquet-step5-hero-slot"></div>
-
-              <!-- Dedicated pill button to unfold note -->
-              <div class="step3-open-row">
-                <button class="btn-click-to-open" id="btn-bouquet-toggle-note">
-                  <span>Read Attached Note ♡</span>
-                </button>
-              </div>
 
               <!-- Ribbon Bow Divider -->
               <div class="ribbon-bow-divider">
@@ -1125,16 +1118,19 @@
 
           <!-- Unfolded Full Note Overlay Modal -->
           <div class="unfolded-note-overlay" id="bouquet-unfolded-note-overlay" style="display:none;">
-            <div class="unfolded-note-card" id="unfolded-note-card" data-theme="cream">
-              <button class="btn-close-note" id="btn-close-unfolded-note">✕</button>
-              <div class="unfolded-note-head">
-                <span id="unfolded-to">To: Kabir</span>
-                <span id="unfolded-from">From: Saanvi</span>
+            <div class="unfolded-note-card-deckle" id="unfolded-note-card">
+              <button class="btn-close-note" id="btn-close-unfolded-note" title="Close note">✕</button>
+              <div class="deckle-note-header">
+                <span class="deckle-label">To:</span>
+                <span class="deckle-display-val" id="unfolded-to">Kabir</span>
               </div>
-              <div class="unfolded-note-body-text" id="unfolded-note-body-text">
+              <div class="deckle-note-textarea-readonly" id="unfolded-note-body-text">
                 A little botanical bouquet handpicked just for you.
               </div>
-              <small class="unfolded-note-seal">Tucked in your Botanical Bouquet</small>
+              <div class="deckle-note-footer">
+                <span class="deckle-label">From:</span>
+                <span class="deckle-display-val" id="unfolded-from">Saanvi</span>
+              </div>
             </div>
           </div>
         </div>

@@ -968,19 +968,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Stage placement:
-    // When in Step 5: sits inside .bouquet-step5-hero-slot
-    // When in Steps 1-4: sits above #bq-panel-stems
+    // Stage placement & visibility:
+    // When in Step 4: bouquet disappears! (only the note is visible)
+    // When in Step 5: sits inside .bouquet-step5-hero-slot, display = 'flex'
+    // When in Steps 1-3: sits above #bq-panel-stems, display = 'flex'
     const assembledContainer = document.getElementById('bouquet-assembled-preview');
     const heroSlot = document.getElementById('bouquet-step5-hero-slot');
     const canvasBouquet = document.getElementById('canvas-bouquet');
     const panelStems = document.getElementById('bq-panel-stems');
 
     if (assembledContainer) {
-      if (stepNum === 5 && heroSlot) {
+      if (stepNum === 4) {
+        assembledContainer.style.display = 'none';
+      } else if (stepNum === 5 && heroSlot) {
+        assembledContainer.style.display = 'flex';
         heroSlot.appendChild(assembledContainer);
-      } else if (canvasBouquet && panelStems && assembledContainer.parentElement !== canvasBouquet) {
-        canvasBouquet.insertBefore(assembledContainer, panelStems);
+      } else if (canvasBouquet && panelStems) {
+        assembledContainer.style.display = 'flex';
+        if (assembledContainer.parentElement !== canvasBouquet) {
+          canvasBouquet.insertBefore(assembledContainer, panelStems);
+        }
       }
     }
 
@@ -1053,10 +1060,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const toVal = bouquetToInput ? bouquetToInput.value : state.bouquet.noteTo;
     const fromVal = bouquetFromInput ? bouquetFromInput.value : state.bouquet.noteFrom;
     const bodyVal = bouquetNoteBody ? bouquetNoteBody.value : state.bouquet.noteBody;
-    if (unfoldedTo) unfoldedTo.textContent = `To: ${toVal}`;
-    if (unfoldedFrom) unfoldedFrom.textContent = `From: ${fromVal}`;
-    if (unfoldedNoteBodyText) unfoldedNoteBodyText.textContent = bodyVal;
-    if (unfoldedCard) unfoldedCard.dataset.theme = state.bouquet.noteTheme || 'cream';
+    if (unfoldedTo) unfoldedTo.textContent = toVal || 'Kabir';
+    if (unfoldedFrom) unfoldedFrom.textContent = fromVal || 'Saanvi';
+    if (unfoldedNoteBodyText) unfoldedNoteBodyText.textContent = bodyVal || 'A little botanical bouquet handpicked just for you.';
     unfoldedOverlay.style.display = 'flex';
   }
 
@@ -1278,8 +1284,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (bouquetFromInput) state.bouquet.noteFrom = bouquetFromInput.value;
     if (bouquetNoteBody) state.bouquet.noteBody = bouquetNoteBody.value;
 
-    if (unfoldedTo) unfoldedTo.textContent = `To: ${state.bouquet.noteTo || 'Kabir'}`;
-    if (unfoldedFrom) unfoldedFrom.textContent = `From: ${state.bouquet.noteFrom || 'Saanvi'}`;
+    if (unfoldedTo) unfoldedTo.textContent = state.bouquet.noteTo || 'Kabir';
+    if (unfoldedFrom) unfoldedFrom.textContent = state.bouquet.noteFrom || 'Saanvi';
     if (unfoldedNoteBodyText) unfoldedNoteBodyText.textContent = state.bouquet.noteBody || 'A little botanical bouquet handpicked just for you.';
 
     if (miniNotePreviewText) {
@@ -1434,49 +1440,49 @@ document.addEventListener('DOMContentLoaded', () => {
     tulip:        { stemX: 378, stemY: 907, naturalAngle: -1.9, scale: 0.92, W: 692,  H: 1024, isSpire: true  }
   };
 
-  // Tiered Floristry Slot Presets (Matches user's reference bouquet composition)
+  // Tiered Floristry Slot Presets (Balanced, airy spread so all blooms are visible)
   const BOUQUET_SLOT_PRESETS = {
     8: [
-      // Back Tier (4 tall stems)
-      { angle: -20, height: 300, zIdx: 10, shiftX: -8, scaleMul: 1.05 },
-      { angle: -2,  height: 270, zIdx: 11, shiftX: -2, scaleMul: 0.92 },
-      { angle: +18, height: 305, zIdx: 12, shiftX: +7, scaleMul: 1.05 },
-      { angle: +35, height: 270, zIdx: 13, shiftX: +14,scaleMul: 0.95 },
-      // Front Tier (4 focal stems)
-      { angle: -38, height: 215, zIdx: 20, shiftX: -14, scaleMul: 1.0 },
-      { angle: -25, height: 175, zIdx: 21, shiftX: -10, scaleMul: 0.92 },
-      { angle: -7,  height: 185, zIdx: 25, shiftX: -3,  scaleMul: 1.05 },
-      { angle: +15, height: 175, zIdx: 23, shiftX: +6,  scaleMul: 0.96 }
+      // Back Tier (4 tall stems / spires framing the bouquet)
+      { angle: -28, height: 300, zIdx: 10, shiftX: -14, scaleMul: 0.94 },
+      { angle: -9,  height: 280, zIdx: 11, shiftX: -4,  scaleMul: 0.90 },
+      { angle: +9,  height: 280, zIdx: 12, shiftX: +4,  scaleMul: 0.90 },
+      { angle: +28, height: 300, zIdx: 13, shiftX: +14, scaleMul: 0.94 },
+      // Front Tier (4 focal blooms spread across left and right)
+      { angle: -38, height: 205, zIdx: 20, shiftX: -18, scaleMul: 0.92 },
+      { angle: -13, height: 175, zIdx: 21, shiftX: -6,  scaleMul: 0.88 },
+      { angle: +13, height: 175, zIdx: 22, shiftX: +6,  scaleMul: 0.88 },
+      { angle: +38, height: 205, zIdx: 25, shiftX: +18, scaleMul: 0.92 }
     ],
     7: [
       // Back Tier (4 tall stems)
-      { angle: -22, height: 295, zIdx: 10, shiftX: -8, scaleMul: 1.0 },
-      { angle: -4,  height: 275, zIdx: 11, shiftX: -2, scaleMul: 0.95 },
-      { angle: +14, height: 295, zIdx: 12, shiftX: +6, scaleMul: 1.0 },
-      { angle: +32, height: 265, zIdx: 13, shiftX: +12,scaleMul: 0.95 },
-      // Front Tier (3 focal stems)
-      { angle: -34, height: 200, zIdx: 20, shiftX: -12, scaleMul: 0.95 },
-      { angle: -4,  height: 185, zIdx: 25, shiftX: 0,   scaleMul: 1.05 },
-      { angle: +20, height: 175, zIdx: 22, shiftX: +8,  scaleMul: 0.95 }
+      { angle: -28, height: 300, zIdx: 10, shiftX: -14, scaleMul: 0.94 },
+      { angle: -9,  height: 280, zIdx: 11, shiftX: -4,  scaleMul: 0.90 },
+      { angle: +9,  height: 280, zIdx: 12, shiftX: +4,  scaleMul: 0.90 },
+      { angle: +28, height: 300, zIdx: 13, shiftX: +14, scaleMul: 0.94 },
+      // Front Tier (3 focal blooms)
+      { angle: -34, height: 195, zIdx: 20, shiftX: -16, scaleMul: 0.90 },
+      { angle: 0,   height: 175, zIdx: 25, shiftX: 0,   scaleMul: 0.92 },
+      { angle: +34, height: 195, zIdx: 22, shiftX: +16, scaleMul: 0.90 }
     ],
     6: [
       // Back Tier (3 tall stems)
-      { angle: -20, height: 295, zIdx: 10, shiftX: -8, scaleMul: 1.0 },
-      { angle: 0,   height: 280, zIdx: 11, shiftX: 0,  scaleMul: 0.98 },
-      { angle: +24, height: 295, zIdx: 12, shiftX: +8, scaleMul: 1.0 },
-      // Front Tier (3 focal stems)
-      { angle: -34, height: 200, zIdx: 20, shiftX: -12, scaleMul: 0.95 },
-      { angle: -3,  height: 185, zIdx: 25, shiftX: 0,   scaleMul: 1.05 },
-      { angle: +18, height: 180, zIdx: 22, shiftX: +8,  scaleMul: 0.96 }
+      { angle: -26, height: 300, zIdx: 10, shiftX: -13, scaleMul: 0.94 },
+      { angle: 0,   height: 285, zIdx: 11, shiftX: 0,   scaleMul: 0.90 },
+      { angle: +26, height: 300, zIdx: 12, shiftX: +13, scaleMul: 0.94 },
+      // Front Tier (3 focal blooms)
+      { angle: -34, height: 195, zIdx: 20, shiftX: -16, scaleMul: 0.90 },
+      { angle: 0,   height: 175, zIdx: 25, shiftX: 0,   scaleMul: 0.92 },
+      { angle: +34, height: 195, zIdx: 22, shiftX: +16, scaleMul: 0.90 }
     ],
     5: [
       // Back Tier (2 tall stems)
-      { angle: -16, height: 295, zIdx: 10, shiftX: -7, scaleMul: 1.0 },
-      { angle: +20, height: 295, zIdx: 11, shiftX: +7, scaleMul: 1.0 },
-      // Front Tier (3 focal stems)
-      { angle: -34, height: 200, zIdx: 20, shiftX: -12, scaleMul: 0.96 },
-      { angle: 0,   height: 185, zIdx: 25, shiftX: 0,   scaleMul: 1.05 },
-      { angle: +24, height: 185, zIdx: 22, shiftX: +9,  scaleMul: 0.96 }
+      { angle: -18, height: 300, zIdx: 10, shiftX: -10, scaleMul: 0.94 },
+      { angle: +18, height: 300, zIdx: 11, shiftX: +10, scaleMul: 0.94 },
+      // Front Tier (3 focal blooms)
+      { angle: -34, height: 195, zIdx: 20, shiftX: -16, scaleMul: 0.90 },
+      { angle: 0,   height: 175, zIdx: 25, shiftX: 0,   scaleMul: 0.92 },
+      { angle: +34, height: 195, zIdx: 22, shiftX: +16, scaleMul: 0.90 }
     ]
   };
 
@@ -1545,10 +1551,10 @@ document.addEventListener('DOMContentLoaded', () => {
       greeneryLayer.innerHTML = '';
 
       const greenerySlots = {
-        eucalyptus: { angle: -36, yOffset: 10, zIdx: 6, shiftX: -3 },
-        fern:       { angle: -14, yOffset: 0,  zIdx: 6, shiftX: -1 },
-        olive:      { angle: +14, yOffset: 0,  zIdx: 6, shiftX: +1 },
-        ruscus:     { angle: +36, yOffset: 10, zIdx: 6, shiftX: +3 }
+        eucalyptus: { angle: -42, yOffset: 12, zIdx: 6, shiftX: -6 },
+        fern:       { angle: -16, yOffset: 0,  zIdx: 6, shiftX: -2 },
+        olive:      { angle: +16, yOffset: 0,  zIdx: 6, shiftX: +2 },
+        ruscus:     { angle: +42, yOffset: 12, zIdx: 6, shiftX: +6 }
       };
 
       state.bouquet.greenery.forEach(foliage => {
@@ -2818,6 +2824,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.has('dispatch')) {
       const modal = document.getElementById('dispatch-modal');
       if (modal) modal.style.display = 'flex';
+    }
+    if (urlParams.has('unfold')) {
+      if (typeof openBouquetUnfoldedNote === 'function') openBouquetUnfoldedNote();
     }
   } catch (err) {}
 
