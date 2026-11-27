@@ -15,10 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
       flipped: false
     },
     letter: {
-      paper: 'paper-pure',
-      ink: '#1A1A1A',
+      step: 1,
+      theme: 'crimson-heart',
+      fontSize: 19,
+      fontFamily: "'Caveat', cursive",
+      to: 'Kabir',
+      from: 'Saanvi',
+      body: '',
       envelope: 'maroon-lace',
-      seal: 'gold'
+      seal: 'gold',
+      stickers: []
     },
     bouquet: {
       step: 'stems',
@@ -143,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const editorHeaderBar = document.querySelector('.editor-header-bar');
     if (editorHeaderBar) {
-      editorHeaderBar.style.display = (med === 'postcard' || med === 'bouquet') ? 'none' : 'flex';
+      editorHeaderBar.style.display = (med === 'postcard' || med === 'bouquet' || med === 'letter') ? 'none' : 'flex';
     }
 
     const titleMap = {
@@ -172,6 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (typeof renderBouquetPreview === 'function') {
         renderBouquetPreview();
+      }
+    }
+    if (med === 'letter') {
+      if (typeof setLetterStep === 'function') {
+        setLetterStep(1);
       }
     }
   }
@@ -744,133 +755,499 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize with candy theme stamps (default)
   updateStampPicker('candy');
 
-  // ================= 2. LETTER WORKSPACE =================
+  // ================= 2. LETTER WORKSPACE (3-STEP ATELIER) =================
+  const letterDots = [1, 2, 3].map(i => document.getElementById(`letter-dot-${i}`));
+  const letterLines = [1, 2].map(i => document.getElementById(`letter-line-${i}`));
+  const letterPanels = {
+    1: document.getElementById('letter-panel-compose'),
+    2: document.getElementById('letter-panel-envelope'),
+    3: document.getElementById('letter-panel-preview')
+  };
+
+  const btnLetterBackToHub = document.getElementById('btn-letter-back-to-hub');
+  if (btnLetterBackToHub) {
+    btnLetterBackToHub.addEventListener('click', returnToStudioHub);
+  }
+
   const letterSheet = document.getElementById('letter-sheet');
-  const paperCircles = document.querySelectorAll('.paper-circle');
-  const inkDots = document.querySelectorAll('.ink-dot');
   const letterTextarea = document.getElementById('letter-body-textarea');
-  const stickerIconBtns = document.querySelectorAll('.sticker-icon-btn');
+  const letterToInput = document.getElementById('letter-to-input');
+  const letterFromInput = document.getElementById('letter-from-input');
+  const letterDisplayDate = document.getElementById('letter-display-date');
   const stickersCanvasOverlay = document.getElementById('stickers-canvas-overlay');
-  const polaroidTrigger = document.getElementById('polaroid-trigger');
-  const polaroidFileInput = document.getElementById('polaroid-file-input');
-  const polaroidImg = document.getElementById('polaroid-img');
-  const polaroidEmptyText = document.getElementById('polaroid-empty-text');
+  const stickersVisualTray = document.getElementById('stickers-visual-tray');
 
-  // Paper options
-  paperCircles.forEach(circle => {
-    circle.addEventListener('click', () => {
-      paperCircles.forEach(c => c.classList.toggle('active', c === circle));
-      const paperClass = circle.dataset.paper;
-      state.letter.paper = paperClass;
-      letterSheet.className = `letter-sheet ${paperClass}`;
+  const btnLetterFontMinus = document.getElementById('btn-letter-font-minus');
+  const btnLetterFontPlus = document.getElementById('btn-letter-font-plus');
+  const letterFontSelect = document.getElementById('letter-font-select');
+  const letterThemeBtns = document.querySelectorAll('.letter-theme-circle-btn');
+
+  // Step navigation buttons
+  const btnLetterToStep2 = document.getElementById('btn-letter-to-step2');
+  const btnLetterBackToStep1 = document.getElementById('btn-letter-back-to-step1');
+  const btnLetterToStep3 = document.getElementById('btn-letter-to-step3');
+  const btnLetterBackToStep2 = document.getElementById('btn-letter-back-to-step2');
+
+  // Step 2 controls
+  const letterEnvBtns = document.querySelectorAll('#letter-panel-envelope .env-swatch-btn');
+  const letterSealBtns = document.querySelectorAll('#letter-panel-envelope .seal-swatch-btn');
+  const letterEnvPreview = document.getElementById('preview-envelope-render');
+  const letterSealPreview = document.getElementById('preview-seal-render');
+
+  // Step 3 preview controls
+  const letterPackagedStage = document.getElementById('letter-packaged-stage');
+  const letterUnfoldedView = document.getElementById('letter-unfolded-view');
+  const letterUnfoldedCard = document.getElementById('letter-unfolded-card');
+  const btnLetterOpenUnfold = document.getElementById('btn-letter-open-unfold');
+  const btnLetterRefold = document.getElementById('btn-letter-refold');
+  const btnLetterSaveVault = document.getElementById('btn-letter-save-vault');
+  const btnLetterDispatch = document.getElementById('btn-letter-dispatch');
+  const sealedEnvBody = document.getElementById('sealed-env-body');
+  const sealedWaxSeal = document.getElementById('sealed-wax-seal');
+  const sealedToName = document.getElementById('sealed-to-name');
+
+  function setLetterStep(stepNum) {
+    state.letter.step = stepNum;
+
+    // Update dots & lines
+    letterDots.forEach((dot, idx) => {
+      if (!dot) return;
+      const i = idx + 1;
+      dot.classList.toggle('active', i === stepNum);
+      dot.classList.toggle('completed', i < stepNum);
     });
-  });
-
-  // Ink options
-  inkDots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      inkDots.forEach(d => d.classList.toggle('active', d === dot));
-      const ink = dot.dataset.ink;
-      state.letter.ink = ink;
-      letterTextarea.style.color = ink;
+    letterLines.forEach((line, idx) => {
+      if (!line) return;
+      const i = idx + 1;
+      line.classList.toggle('active', i < stepNum);
     });
-  });
 
-  // Draggable Stickers implementation
-  stickerIconBtns.forEach(btn => {
+    // Toggle panels
+    Object.keys(letterPanels).forEach(key => {
+      const p = letterPanels[key];
+      if (p) p.style.display = (parseInt(key, 10) === stepNum) ? 'block' : 'none';
+    });
+
+    if (stepNum === 1) {
+      autoResizeLetterTextarea();
+    } else if (stepNum === 2) {
+      updateLetterEnvPreview();
+    } else if (stepNum === 3) {
+      renderLetterStep3();
+      autoSaveLetterToVault();
+    }
+  }
+
+  // Theme selection
+  letterThemeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const stickerGlyph = btn.dataset.sticker;
-      createDraggableSticker(stickerGlyph);
+      letterThemeBtns.forEach(b => b.classList.toggle('active', b === btn));
+      const themeKey = btn.dataset.theme;
+      state.letter.theme = themeKey;
+      if (letterSheet) {
+        letterSheet.className = `letter-sheet theme-${themeKey}`;
+      }
     });
   });
 
-  function createDraggableSticker(glyph) {
-    const el = document.createElement('div');
-    el.className = 'draggable-sticker-placed';
-    el.innerText = glyph;
-    el.style.left = '40%';
-    el.style.top = '40%';
+  // Font styling
+  function updateLetterFontStyle() {
+    if (!letterTextarea) return;
+    letterTextarea.style.fontSize = `${state.letter.fontSize}px`;
+    letterTextarea.style.fontFamily = state.letter.fontFamily;
+    autoResizeLetterTextarea();
+  }
 
+  if (btnLetterFontMinus) {
+    btnLetterFontMinus.addEventListener('click', () => {
+      if (state.letter.fontSize > 13) {
+        state.letter.fontSize -= 2;
+        updateLetterFontStyle();
+      }
+    });
+  }
+
+  if (btnLetterFontPlus) {
+    btnLetterFontPlus.addEventListener('click', () => {
+      if (state.letter.fontSize < 32) {
+        state.letter.fontSize += 2;
+        updateLetterFontStyle();
+      }
+    });
+  }
+
+  if (letterFontSelect) {
+    letterFontSelect.addEventListener('change', (e) => {
+      state.letter.fontFamily = e.target.value;
+      updateLetterFontStyle();
+    });
+  }
+
+  // Auto-extending textarea
+  function autoResizeLetterTextarea() {
+    if (!letterTextarea) return;
+    letterTextarea.style.height = 'auto';
+    const newH = Math.max(300, letterTextarea.scrollHeight);
+    letterTextarea.style.height = newH + 'px';
+  }
+
+  if (letterTextarea) {
+    letterTextarea.addEventListener('input', () => {
+      state.letter.body = letterTextarea.value;
+      autoResizeLetterTextarea();
+    });
+  }
+
+  if (letterToInput) {
+    letterToInput.addEventListener('input', () => {
+      state.letter.to = letterToInput.value;
+    });
+  }
+  if (letterFromInput) {
+    letterFromInput.addEventListener('input', () => {
+      state.letter.from = letterFromInput.value;
+    });
+  }
+
+  // Draggable Stickers (15 stickers tray)
+  const stickerCardBtns = document.querySelectorAll('.sticker-card-btn');
+  stickerCardBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const imgSrc = btn.dataset.stickerImg;
+      if (imgSrc) {
+        placeStickerOnLetter(imgSrc);
+      }
+    });
+  });
+
+  function placeStickerOnLetter(imgSrc, posX = null, posY = null) {
+    if (!stickersCanvasOverlay) return;
+
+    const stickerEl = document.createElement('div');
+    stickerEl.className = 'letter-placed-sticker';
+
+    const leftPercent = posX !== null ? posX : (40 + (Math.random() - 0.5) * 22);
+    const topPercent = posY !== null ? posY : (35 + (Math.random() - 0.5) * 28);
+
+    stickerEl.style.left = `${leftPercent}%`;
+    stickerEl.style.top = `${topPercent}%`;
+
+    const img = document.createElement('img');
+    img.src = imgSrc;
+    img.alt = 'Sticker';
+
+    const btnRemove = document.createElement('button');
+    btnRemove.className = 'btn-remove-sticker';
+    btnRemove.innerHTML = '&times;';
+    btnRemove.title = 'Remove';
+    btnRemove.addEventListener('click', (e) => {
+      e.stopPropagation();
+      stickerEl.remove();
+      syncLetterStickersState();
+    });
+
+    stickerEl.appendChild(img);
+    stickerEl.appendChild(btnRemove);
+
+    makeStickerDraggable(stickerEl);
+    stickersCanvasOverlay.appendChild(stickerEl);
+    syncLetterStickersState();
+  }
+
+  function makeStickerDraggable(el) {
     let isDragging = false;
     let startX, startY, initialLeft, initialTop;
 
-    el.addEventListener('mousedown', (e) => {
+    const onPointerDown = (e) => {
       isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
+      el.classList.add('selected');
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      startX = clientX;
+      startY = clientY;
       initialLeft = el.offsetLeft;
       initialTop = el.offsetTop;
       e.stopPropagation();
-    });
+    };
 
-    document.addEventListener('mousemove', (e) => {
+    const onPointerMove = (e) => {
+      if (!isDragging) return;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+
+      const parentW = stickersCanvasOverlay.offsetWidth;
+      const parentH = stickersCanvasOverlay.offsetHeight;
+
+      let newLeft = initialLeft + dx;
+      let newTop = initialTop + dy;
+
+      newLeft = Math.max(0, Math.min(newLeft, parentW - el.offsetWidth));
+      newTop = Math.max(0, Math.min(newTop, parentH - el.offsetHeight));
+
+      el.style.left = `${newLeft}px`;
+      el.style.top = `${newTop}px`;
+    };
+
+    const onPointerUp = () => {
       if (isDragging) {
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        el.style.left = `${initialLeft + dx}px`;
-        el.style.top = `${initialTop + dy}px`;
+        isDragging = false;
+        el.classList.remove('selected');
+        syncLetterStickersState();
       }
-    });
+    };
 
-    document.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
+    el.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('mousemove', onPointerMove);
+    document.addEventListener('mouseup', onPointerUp);
 
-    stickersCanvasOverlay.appendChild(el);
+    el.addEventListener('touchstart', onPointerDown, { passive: true });
+    document.addEventListener('touchmove', onPointerMove, { passive: true });
+    document.addEventListener('touchend', onPointerUp);
   }
 
-  // Polaroid upload from gallery
-  if (polaroidTrigger && polaroidFileInput) {
-    polaroidTrigger.addEventListener('click', () => {
-      polaroidFileInput.click();
-    });
-
-    polaroidFileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          polaroidImg.src = event.target.result;
-          polaroidImg.style.display = 'block';
-          polaroidEmptyText.style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-      }
+  function syncLetterStickersState() {
+    if (!stickersCanvasOverlay) return;
+    const placed = stickersCanvasOverlay.querySelectorAll('.letter-placed-sticker');
+    state.letter.stickers = Array.from(placed).map(el => {
+      const img = el.querySelector('img');
+      return {
+        src: img ? img.getAttribute('src') : '',
+        left: el.style.left,
+        top: el.style.top
+      };
     });
   }
 
-  // Envelope Swatches & Wax Seal
-  const envSwatchBtns = document.querySelectorAll('.env-swatch-btn');
-  const sealSwatchBtns = document.querySelectorAll('.seal-swatch-btn');
-  const previewEnvelopeRender = document.getElementById('preview-envelope-render');
-  const previewSealRender = document.getElementById('preview-seal-render');
+  // Step Navigation Buttons
+  if (btnLetterToStep2) btnLetterToStep2.addEventListener('click', () => setLetterStep(2));
+  if (btnLetterBackToStep1) btnLetterBackToStep1.addEventListener('click', () => setLetterStep(1));
+  if (btnLetterToStep3) btnLetterToStep3.addEventListener('click', () => setLetterStep(3));
+  if (btnLetterBackToStep2) btnLetterBackToStep2.addEventListener('click', () => setLetterStep(2));
 
-  const envClassMap = {
-    'manila': 'swatch-manila',
-    'vellum': 'swatch-vellum',
-    'maroon-lace': 'env-maroon-lace',
-    'charcoal': 'swatch-charcoal'
-  };
+  letterDots.forEach((dot, idx) => {
+    if (dot) {
+      dot.addEventListener('click', () => setLetterStep(idx + 1));
+    }
+  });
 
-  envSwatchBtns.forEach(btn => {
+  // Step 2: Envelope & Wax Seal Selection
+  function updateLetterEnvPreview() {
+    if (letterEnvPreview) {
+      letterEnvPreview.className = `preview-envelope env-${state.letter.envelope}`;
+    }
+    if (letterSealPreview) {
+      letterSealPreview.className = `preview-wax-seal seal-${state.letter.seal}`;
+    }
+  }
+
+  letterEnvBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      envSwatchBtns.forEach(b => b.classList.toggle('active', b === btn));
-      const envKey = btn.dataset.env;
-      state.letter.envelope = envKey;
-      previewEnvelopeRender.className = `preview-envelope env-${envKey}`;
-      updateVesselLivePreview();
+      letterEnvBtns.forEach(b => b.classList.toggle('active', b === btn));
+      state.letter.envelope = btn.dataset.env;
+      updateLetterEnvPreview();
     });
   });
 
-  sealSwatchBtns.forEach(btn => {
+  letterSealBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      sealSwatchBtns.forEach(b => b.classList.toggle('active', b === btn));
-      const sealKey = btn.dataset.seal;
-      state.letter.seal = sealKey;
-      previewSealRender.className = `preview-wax-seal seal-${sealKey}`;
-      updateVesselLivePreview();
+      letterSealBtns.forEach(b => b.classList.toggle('active', b === btn));
+      state.letter.seal = btn.dataset.seal;
+      updateLetterEnvPreview();
     });
   });
+
+  // Step 3: Preview & Dispatch
+  function renderLetterStep3() {
+    if (letterPackagedStage) letterPackagedStage.style.display = 'flex';
+    if (letterUnfoldedView) letterUnfoldedView.style.display = 'none';
+
+    if (sealedEnvBody) {
+      const envColors = {
+        'manila': '#D9C2A7',
+        'vellum': '#ECE8E1',
+        'maroon-lace': '#5C1D24',
+        'charcoal': '#333333'
+      };
+      sealedEnvBody.style.background = envColors[state.letter.envelope] || '#5C1D24';
+    }
+
+    if (sealedWaxSeal) {
+      const sealColors = {
+        'gold': '#C5A059',
+        'cream': '#EFECE6',
+        'maroon': '#6B202A'
+      };
+      sealedWaxSeal.style.background = sealColors[state.letter.seal] || '#C5A059';
+    }
+
+    if (sealedToName) {
+      sealedToName.textContent = state.letter.to || (letterToInput ? letterToInput.value : 'Kabir');
+    }
+
+    renderUnfoldedLetterCard();
+  }
+
+  function renderUnfoldedLetterCard() {
+    if (!letterUnfoldedCard) return;
+
+    const toVal = state.letter.to || (letterToInput ? letterToInput.value : 'Kabir');
+    const fromVal = state.letter.from || (letterFromInput ? letterFromInput.value : 'Saanvi');
+    const bodyVal = state.letter.body || (letterTextarea ? letterTextarea.value : 'A handwritten letter straight from the heart.');
+    const dateVal = letterDisplayDate ? letterDisplayDate.textContent : 'October 6, 2026';
+
+    const stickersHtml = state.letter.stickers.map(st => `
+      <div style="position: absolute; left: ${st.left}; top: ${st.top}; pointer-events: none;">
+        <img src="${st.src}" style="max-width: 78px; max-height: 78px; object-fit: contain; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.22));" />
+      </div>
+    `).join('');
+
+    letterUnfoldedCard.innerHTML = `
+      <div class="letter-sheet theme-${state.letter.theme}" style="margin: 0 auto; box-shadow: 0 8px 24px rgba(40,20,25,0.15);">
+        <div class="letter-inner-content">
+          <div class="letter-header-row">
+            <span class="letter-date">${escapeHtml(dateVal)}</span>
+            <div class="letter-from-to">
+              <span>To: ${escapeHtml(toVal)}</span>
+              <span>From: ${escapeHtml(fromVal)}</span>
+            </div>
+          </div>
+          <div style="font-family: ${state.letter.fontFamily}; font-size: ${state.letter.fontSize}px; line-height: 1.6; color: #2D181B; white-space: pre-wrap; word-break: break-word; min-height: 260px;">
+            ${escapeHtml(bodyVal)}
+          </div>
+        </div>
+        <div style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; border-radius:14px;">
+          ${stickersHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  if (btnLetterOpenUnfold) {
+    btnLetterOpenUnfold.addEventListener('click', () => {
+      if (letterPackagedStage) letterPackagedStage.style.display = 'none';
+      if (letterUnfoldedView) letterUnfoldedView.style.display = 'flex';
+      renderUnfoldedLetterCard();
+    });
+  }
+
+  if (btnLetterRefold) {
+    btnLetterRefold.addEventListener('click', () => {
+      if (letterUnfoldedView) letterUnfoldedView.style.display = 'none';
+      if (letterPackagedStage) letterPackagedStage.style.display = 'flex';
+    });
+  }
+
+  // Vault saving
+  function autoSaveLetterToVault() {
+    saveCurrentLetterToVault(false);
+  }
+
+  function saveCurrentLetterToVault(isManual = false) {
+    try {
+      const vaultItems = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
+      const toVal = state.letter.to || (letterToInput ? letterToInput.value : 'Kabir');
+      const fromVal = state.letter.from || (letterFromInput ? letterFromInput.value : 'Saanvi');
+      const bodyVal = state.letter.body || (letterTextarea ? letterTextarea.value : '');
+
+      const letterData = {
+        type: 'letter',
+        id: 'lt_' + Date.now(),
+        title: `Keepsake Letter`,
+        to: toVal,
+        from: fromVal,
+        body: bodyVal,
+        theme: state.letter.theme,
+        fontSize: state.letter.fontSize,
+        fontFamily: state.letter.fontFamily,
+        envelope: state.letter.envelope,
+        seal: state.letter.seal,
+        stickers: state.letter.stickers,
+        savedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      };
+
+      if (vaultItems.length > 0 && vaultItems[0].id && vaultItems[0].id.startsWith('lt_') && (Date.now() - parseInt(vaultItems[0].id.replace('lt_', ''))) < 10000) {
+        vaultItems[0] = letterData;
+      } else {
+        vaultItems.unshift(letterData);
+      }
+
+      if (vaultItems.length > 30) vaultItems.pop();
+      localStorage.setItem('between_us_vault_items', JSON.stringify(vaultItems));
+
+      if (isManual) {
+        if (typeof showToast === 'function') showToast('Saved to Vault ♡');
+        if (btnLetterSaveVault) {
+          const origHtml = btnLetterSaveVault.innerHTML;
+          btnLetterSaveVault.innerHTML = `
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Saved to Vault ♡</span>
+          `;
+          setTimeout(() => {
+            btnLetterSaveVault.innerHTML = origHtml;
+          }, 2400);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to save letter to vault:', e);
+    }
+  }
+
+  if (btnLetterSaveVault) {
+    btnLetterSaveVault.addEventListener('click', () => saveCurrentLetterToVault(true));
+  }
+
+  // Dispatch sharing
+  function generateShareableLetterUrl() {
+    const toVal = state.letter.to || (letterToInput ? letterToInput.value : 'Kabir');
+    const fromVal = state.letter.from || (letterFromInput ? letterFromInput.value : 'Saanvi');
+    const bodyVal = state.letter.body || (letterTextarea ? letterTextarea.value : '');
+
+    const payload = {
+      type: 'letter',
+      to: toVal,
+      from: fromVal,
+      body: bodyVal,
+      th: state.letter.theme,
+      fs: state.letter.fontSize,
+      ff: state.letter.fontFamily,
+      env: state.letter.envelope,
+      sl: state.letter.seal,
+      stk: state.letter.stickers
+    };
+
+    const jsonStr = JSON.stringify(payload);
+    const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(jsonStr))));
+    const baseUrl = window.location.origin + window.location.pathname;
+    return `${baseUrl}?letter=${encoded}`;
+  }
+
+  function openLetterDispatchModal() {
+    const modal = document.getElementById('dispatch-modal');
+    if (!modal) return;
+    const iconEl = document.getElementById('dispatch-badge-icon');
+    const titleEl = document.getElementById('dispatch-modal-title');
+    const subEl = document.getElementById('dispatch-modal-sub');
+    const copyDescEl = document.getElementById('dispatch-copy-desc');
+    const urlInput = document.getElementById('dispatch-url-input');
+
+    if (iconEl) iconEl.textContent = '💌';
+    if (titleEl) titleEl.textContent = 'Dispatch Your Letter';
+    if (subEl) subEl.textContent = 'Share your sealed keepsake letter with someone special.';
+    if (copyDescEl) copyDescEl.textContent = 'Anyone with this link can break the seal and read your letter';
+
+    const shareUrl = generateShareableLetterUrl();
+    if (urlInput) urlInput.value = shareUrl;
+
+    modal.style.display = 'flex';
+  }
+
+  if (btnLetterDispatch) {
+    btnLetterDispatch.addEventListener('click', openLetterDispatchModal);
+  }
 
   // ================= 3. BOUQUET WORKSPACE (DIGIBOUQUET BARE-STEM) =================
   // ================= 3. BOUQUET WORKSPACE (DIGIBOUQUET BARE-STEM) =================
@@ -2438,6 +2815,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(rawQuery);
       const cardParam = urlParams.get('card');
       const bouquetParam = urlParams.get('bouquet');
+      const letterParam = urlParams.get('letter');
       if (cardParam) {
         const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(cardParam))));
         const cardData = JSON.parse(jsonStr);
@@ -2446,6 +2824,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(bouquetParam))));
         const bqData = JSON.parse(jsonStr);
         renderRecipientBouquetExperience(bqData);
+      } else if (letterParam) {
+        const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(letterParam))));
+        const letterData = JSON.parse(jsonStr);
+        renderRecipientLetterExperience(letterData);
       }
     } catch (err) {
       console.warn('No valid recipient param found or decode error:', err);
@@ -2687,6 +3069,146 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function renderRecipientLetterExperience(data) {
+    window.renderRecipientLetterExperience = renderRecipientLetterExperience;
+    if (splashScreen) splashScreen.style.display = 'none';
+    if (appHeader) appHeader.style.display = 'none';
+    if (appStage) appStage.style.display = 'none';
+    if (appBottomNav) appBottomNav.style.display = 'none';
+
+    let recipientStage = document.getElementById('recipient-experience-stage');
+    if (!recipientStage) {
+      recipientStage = document.createElement('div');
+      recipientStage.id = 'recipient-experience-stage';
+      recipientStage.className = 'recipient-experience-stage';
+      document.body.appendChild(recipientStage);
+    }
+    recipientStage.style.display = 'flex';
+
+    const toVal = data.to || 'You';
+    const fromVal = data.from || 'Someone who loves you';
+    const bodyVal = data.body || data.m || '';
+    const themeVal = data.th || data.theme || 'crimson-heart';
+    const fontVal = data.ff || data.fontFamily || "'Caveat', cursive";
+    const sizeVal = data.fs || data.fontSize || 19;
+    const envVal = data.env || data.envelope || 'maroon-lace';
+    const sealVal = data.sl || data.seal || 'gold';
+    const stickersVal = data.stk || data.stickers || [];
+
+    const envColors = {
+      'manila': '#D9C2A7',
+      'vellum': '#ECE8E1',
+      'maroon-lace': '#5C1D24',
+      'charcoal': '#333333'
+    };
+    const sealColors = {
+      'gold': '#C5A059',
+      'cream': '#EFECE6',
+      'maroon': '#6B202A'
+    };
+
+    const stickersHtml = stickersVal.map(st => `
+      <div style="position: absolute; left: ${st.left}; top: ${st.top}; pointer-events: none;">
+        <img src="${st.src}" style="max-width: 78px; max-height: 78px; object-fit: contain; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.22));" />
+      </div>
+    `).join('');
+
+    recipientStage.innerHTML = `
+      <div class="recipient-card-wrapper" style="padding: 24px 16px; text-align: center; max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <div style="font-family:'Playfair Display', Georgia, serif; font-size:22px; font-weight:600; color:#521319;">
+          A letter for you ♡
+        </div>
+
+        <!-- Sealed envelope view -->
+        <div id="recip-letter-sealed-view" style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+          <div class="letter-sealed-envelope" style="width:240px; height:155px; box-shadow:0 10px 25px rgba(40,20,25,0.18);">
+            <div class="sealed-env-body" style="background:${envColors[envVal] || '#5C1D24'};">
+              <div class="sealed-env-flap"></div>
+              <div class="sealed-wax-seal" style="background:${sealColors[sealVal] || '#C5A059'};"></div>
+              <div class="sealed-env-to">To: <span>${escapeHtml(toVal)}</span></div>
+            </div>
+          </div>
+          <button id="btn-recip-open-letter" class="btn-letter-unfold">
+            <span class="unfold-heart">♡</span> Break the Seal &amp; Open Letter <span class="unfold-heart">♡</span>
+          </button>
+        </div>
+
+        <!-- Unfolded letter view -->
+        <div id="recip-letter-unfolded-view" style="display:none; flex-direction:column; align-items:center; gap:16px; width:100%;">
+          <div class="letter-sheet theme-${themeVal}" style="margin: 0 auto; width:100%; box-shadow: 0 8px 24px rgba(40,20,25,0.15);">
+            <div class="letter-inner-content">
+              <div class="letter-header-row">
+                <span class="letter-date">A Special Keepsake</span>
+                <div class="letter-from-to">
+                  <span>To: ${escapeHtml(toVal)}</span>
+                  <span>From: ${escapeHtml(fromVal)}</span>
+                </div>
+              </div>
+              <div style="font-family: ${fontVal}; font-size: ${sizeVal}px; line-height: 1.6; color: #2D181B; white-space: pre-wrap; word-break: break-word; min-height: 260px; text-align: left;">
+                ${escapeHtml(bodyVal)}
+              </div>
+            </div>
+            <div style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; border-radius:14px;">
+              ${stickersHtml}
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; justify-content:center; width:100%; margin-top:8px;">
+            <button id="btn-recip-letter-save" class="letter-action-btn secondary">Save to Keepsakes ♡</button>
+            <button id="btn-recip-letter-create" class="letter-action-btn primary">Write Your Own Letter →</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const btnOpen = document.getElementById('btn-recip-open-letter');
+    const sealedView = document.getElementById('recip-letter-sealed-view');
+    const unfoldedView = document.getElementById('recip-letter-unfolded-view');
+    if (btnOpen) {
+      btnOpen.onclick = () => {
+        sealedView.style.display = 'none';
+        unfoldedView.style.display = 'flex';
+      };
+    }
+
+    const btnSave = document.getElementById('btn-recip-letter-save');
+    if (btnSave) {
+      btnSave.onclick = () => {
+        try {
+          const vault = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
+          vault.unshift({
+            type: 'letter',
+            id: 'lt_' + Date.now(),
+            title: `Letter from ${fromVal}`,
+            to: toVal,
+            from: fromVal,
+            body: bodyVal,
+            theme: themeVal,
+            fontSize: sizeVal,
+            fontFamily: fontVal,
+            envelope: envVal,
+            seal: sealVal,
+            stickers: stickersVal,
+            savedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+          });
+          localStorage.setItem('between_us_vault_items', JSON.stringify(vault));
+          btnSave.textContent = 'Saved to Keepsakes ♡';
+        } catch (e) {}
+      };
+    }
+
+    const btnCreate = document.getElementById('btn-recip-letter-create');
+    if (btnCreate) {
+      btnCreate.onclick = () => {
+        recipientStage.style.display = 'none';
+        if (appHeader) appHeader.style.display = 'flex';
+        if (appStage) appStage.style.display = 'block';
+        if (appBottomNav) appBottomNav.style.display = 'flex';
+        selectMedium('letter');
+      };
+    }
+  }
+
   // ================= VAULT ROOM DYNAMIC LIST =================
   function renderVaultItems() {
     const vaultGrid = document.getElementById('vault-items-grid');
@@ -2699,7 +3221,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="vault-empty-icon">🔖</div>
           <h4 style="font-family:'Playfair Display', Georgia, serif; font-size:18px; color:#521319; margin:0 0 6px 0;">Your vault is waiting</h4>
           <p style="font-family:'Cormorant Garamond', Georgia, serif; font-size:14px; font-style:italic; color:#8E4A56; margin:0;">
-            Any postcard you design will be automatically preserved here.
+            Any postcard or letter you design will be automatically preserved here.
           </p>
         </div>
       `;
@@ -2710,6 +3232,8 @@ document.addEventListener('DOMContentLoaded', () => {
       let iconHtml = '💌';
       if (item.type === 'bouquet') {
         iconHtml = `<img src="assets/medium_bouquet.png" style="width:100%; height:100%; object-fit:contain;" alt="Bouquet" />`;
+      } else if (item.type === 'letter') {
+        iconHtml = `<img src="assets/medium_letter.png" style="width:100%; height:100%; object-fit:contain;" alt="Letter" />`;
       } else if (item.v === 'truck') {
         iconHtml = `<img src="assets/truck.png" style="width:100%; height:100%; object-fit:contain;" alt="Truck" />`;
       } else if (item.v === 'box') {
@@ -2726,7 +3250,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ${iconHtml}
           </div>
           <div class="vault-item-info">
-            <h5 class="vault-item-title">${escapeHtml(item.title || (item.type === 'bouquet' ? 'Botanical Bouquet' : 'Handwritten Postcard'))}</h5>
+            <h5 class="vault-item-title">${escapeHtml(item.title || (item.type === 'bouquet' ? 'Botanical Bouquet' : (item.type === 'letter' ? 'Keepsake Letter' : 'Handwritten Postcard')))}</h5>
             <p class="vault-item-dedication">To: ${escapeHtml(item.to || 'Someone Special')} • From: ${escapeHtml(item.from || 'Me')}</p>
             <p class="vault-item-date">Saved on ${item.savedAt || item.date || 'Recently'}</p>
           </div>
@@ -2743,6 +3267,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item) {
           if (item.type === 'bouquet') {
             renderRecipientBouquetExperience(item);
+          } else if (item.type === 'letter') {
+            renderRecipientLetterExperience(item);
           } else {
             renderRecipientExperience(item);
           }
@@ -2791,13 +3317,36 @@ document.addEventListener('DOMContentLoaded', () => {
       if (appStage) appStage.style.display = 'block';
       if (appBottomNav) appBottomNav.style.display = 'flex';
     }
-    const paramMedium = urlParams.get('medium') || (window.location.href.includes('medium=bouquet') ? 'bouquet' : (window.location.href.includes('medium=postcard') ? 'postcard' : null));
+    const paramMedium = urlParams.get('medium') || (window.location.href.includes('medium=bouquet') ? 'bouquet' : (window.location.href.includes('medium=letter') ? 'letter' : (window.location.href.includes('medium=postcard') ? 'postcard' : null)));
     if (paramMedium && typeof selectMedium === 'function') {
       selectMedium(paramMedium);
     }
-    const paramStep = urlParams.get('step') || urlParams.get('pstep');
+    const paramStep = urlParams.get('step') || urlParams.get('pstep') || urlParams.get('lstep');
     if (paramMedium === 'bouquet' && paramStep && typeof setBouquetStep === 'function') {
       setBouquetStep(paramStep);
+    }
+    if (paramMedium === 'letter' && paramStep && typeof setLetterStep === 'function') {
+      const stepNum = parseInt(paramStep, 10);
+      setLetterStep(stepNum);
+    }
+    const paramTheme = urlParams.get('theme');
+    if (paramTheme && state.letter) {
+      state.letter.theme = paramTheme;
+      if (letterSheet) letterSheet.className = `letter-sheet theme-${paramTheme}`;
+      document.querySelectorAll('.letter-theme-circle-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.theme === paramTheme);
+      });
+    }
+    const paramText = urlParams.get('text');
+    if (paramText && letterTextarea) {
+      letterTextarea.value = decodeURIComponent(paramText);
+      state.letter.body = letterTextarea.value;
+      if (typeof autoResizeLetterTextarea === 'function') autoResizeLetterTextarea();
+    }
+    if (urlParams.has('unfold') && state.letter && state.letter.step === 3) {
+      if (typeof btnLetterOpenUnfold !== 'undefined' && btnLetterOpenUnfold) {
+        btnLetterOpenUnfold.click();
+      }
     }
     if (paramMedium === 'postcard' && paramStep && typeof setPostcardStep === 'function') {
       const stepNum = parseInt(paramStep, 10);

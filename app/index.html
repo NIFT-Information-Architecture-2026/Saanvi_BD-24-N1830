@@ -689,102 +689,273 @@
 
         <!-- ---------------- 2. LETTER WORKSPACE ---------------- -->
         <div class="canvas-workspace" id="canvas-letter" style="display:none;">
-          <div class="canvas-toolbar">
-            <div class="tool-group">
-              <!-- 4 small circles with paper color options (white/cream only) -->
-              <div class="paper-circles-row">
-                <button class="paper-circle active" data-paper="paper-pure" style="background:#FFFFFF;" title="Pure White"></button>
-                <button class="paper-circle" data-paper="paper-cloud" style="background:#F0EEE9;" title="Cloud Dancer"></button>
-                <button class="paper-circle" data-paper="paper-cream" style="background:#F7F4EE;" title="Warm Cream"></button>
-                <button class="paper-circle" data-paper="paper-linen" style="background:#ECE7DE;" title="Linen Texture"></button>
+          <!-- Letter 3-Step Subbar -->
+          <div class="letter-subbar">
+            <button class="btn-letter-back" id="btn-letter-back-to-hub" title="Back to Studio">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <div class="letter-header-center">
+              <h2 class="letter-nav-title">Letter</h2>
+              <div class="letter-step-dots" id="letter-step-dots" title="Step 1 of 3: Write a Letter">
+                <span class="step-dot active" data-step="1" id="letter-dot-1" title="Step 1: Write a Letter"></span>
+                <span class="step-line" id="letter-line-1"></span>
+                <span class="step-dot" data-step="2" id="letter-dot-2" title="Step 2: Choose Envelope & Seal"></span>
+                <span class="step-line" id="letter-line-2"></span>
+                <span class="step-dot" data-step="3" id="letter-dot-3" title="Step 3: Preview & Send"></span>
               </div>
             </div>
-            <div class="tool-group">
-              <!-- Ink colors: Black, Dark Brown, Dark Blue -->
-              <div class="ink-palette">
-                <button class="ink-dot active" data-ink="#1A1A1A" style="background:#1A1A1A;" title="Black"></button>
-                <button class="ink-dot" data-ink="#382923" style="background:#382923;" title="Dark Brown"></button>
-                <button class="ink-dot" data-ink="#1B263B" style="background:#1B263B;" title="Dark Blue"></button>
-              </div>
-            </div>
+            <div class="letter-subbar-spacer"></div>
           </div>
 
-          <!-- Letter Sheet with Draggable Stickers & Polaroid -->
-          <div class="letter-sheet-container" id="letter-sheet-container">
-            <div class="letter-sheet paper-pure" id="letter-sheet">
-              <div class="letter-header-row">
-                <span class="letter-date">October 6, 2026</span>
-                <div class="letter-from-to">
-                  <span>To: <input type="text" value="Kabir" id="letter-to-input"></span>
-                  <span>From: <input type="text" value="Saanvi" id="letter-from-input"></span>
+          <!-- STEP 1: COMPOSE / WRITE A LETTER -->
+          <div class="letter-step-panel" id="letter-panel-compose">
+            <!-- Top Controls Bar: Themes on Left, Font Style on Right -->
+            <div class="letter-options-bar">
+              <!-- Left: Letter Themes Swatches -->
+              <div class="letter-theme-group">
+                <span class="letter-opt-label">Theme <span class="opt-bar">|</span></span>
+                <div class="letter-theme-swatches" id="letter-theme-swatches">
+                  <button class="letter-theme-circle-btn active" data-theme="crimson-heart" title="Crimson Heart">
+                    <span class="letter-theme-thumb thumb-crimson-heart"></span>
+                  </button>
+                  <button class="letter-theme-circle-btn" data-theme="denim-collage" title="Denim Keepsake">
+                    <span class="letter-theme-thumb thumb-denim-collage"></span>
+                  </button>
+                  <button class="letter-theme-circle-btn" data-theme="midnight-floral" title="Midnight Floral">
+                    <span class="letter-theme-thumb thumb-midnight-floral"></span>
+                  </button>
+                  <button class="letter-theme-circle-btn" data-theme="polka-stars" title="Polka &amp; Stars">
+                    <span class="letter-theme-thumb thumb-polka-stars"></span>
+                  </button>
                 </div>
               </div>
-              <textarea class="letter-textarea" id="letter-body-textarea" placeholder="Write your note here..."></textarea>
-              
-              <!-- Draggable Stickers Layer -->
-              <div class="stickers-canvas-overlay" id="stickers-canvas-overlay"></div>
 
-              <!-- Polaroid Tuck-in Slot (Uploadable from gallery) -->
-              <div class="polaroid-tuckin-card" id="polaroid-tuckin-card">
-                <input type="file" id="polaroid-file-input" accept="image/*" style="display:none;">
-                <div class="polaroid-inner" id="polaroid-trigger">
-                  <img id="polaroid-img" src="" alt="" style="display:none;">
-                  <div class="polaroid-empty" id="polaroid-empty-text">
-                    <span>+ Photo from gallery</span>
+              <!-- Right: Font Controls (Postcard style: A-/A+ pill, divider, font dropdown) -->
+              <div class="letter-font-group">
+                <div class="font-controls-row">
+                  <div class="font-size-pill">
+                    <button id="btn-letter-font-minus" title="Decrease Font Size">A-</button>
+                    <button id="btn-letter-font-plus" title="Increase Font Size">A+</button>
+                  </div>
+                  <span class="font-divider">|</span>
+                  <div class="font-select-wrapper">
+                    <select id="letter-font-select" class="postcard-font-select">
+                      <option value="'Caveat', cursive">Caveat</option>
+                      <option value="'Dancing Script', cursive">Dancing Script</option>
+                      <option value="'Pacifico', cursive">Pacifico</option>
+                      <option value="'Satisfy', cursive">Satisfy</option>
+                      <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                      <option value="'Playfair Display', serif">Playfair Display</option>
+                      <option value="'Courier Prime', monospace">Courier Prime</option>
+                      <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans</option>
+                    </select>
                   </div>
                 </div>
-                <input type="text" class="polaroid-label" placeholder="add note..." value="">
+              </div>
+            </div>
+
+            <!-- Letter Sheet Container (Auto-extending length-wise) -->
+            <div class="letter-sheet-container" id="letter-sheet-container">
+              <div class="letter-sheet theme-crimson-heart" id="letter-sheet">
+                <div class="letter-inner-content">
+                  <div class="letter-header-row">
+                    <span class="letter-date" id="letter-display-date">October 6, 2026</span>
+                    <div class="letter-from-to">
+                      <span>To: <input type="text" value="Kabir" id="letter-to-input"></span>
+                      <span>From: <input type="text" value="Saanvi" id="letter-from-input"></span>
+                    </div>
+                  </div>
+                  <textarea class="letter-textarea" id="letter-body-textarea" placeholder="Write your letter here... Type as much as you like, paper will auto-extend downwards."></textarea>
+                </div>
+                
+                <!-- Draggable Stickers Layer -->
+                <div class="stickers-canvas-overlay" id="stickers-canvas-overlay"></div>
+              </div>
+            </div>
+
+            <!-- Horizontal Scrollable Stickers Tray (15 stickers, scroll left/right, 3-4 per view) -->
+            <div class="letter-stickers-tray-container">
+              <div class="letter-stickers-tray-header">
+                <span class="letter-tray-title">Add Stickers <span class="letter-tray-hint">(scroll &amp; tap to place, drag to arrange)</span></span>
+              </div>
+              <div class="stickers-visual-tray horizontal-scroll" id="stickers-visual-tray">
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_hearts_pink.png" title="Hearts">
+                  <img src="assets/stickers/sticker_hearts_pink.png" alt="Hearts">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_lily_pink.png" title="Pink Lily">
+                  <img src="assets/stickers/sticker_lily_pink.png" alt="Pink Lily">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_tulips_white.png" title="Tulips">
+                  <img src="assets/stickers/sticker_tulips_white.png" alt="Tulips">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_glass_star.png" title="Glass Star">
+                  <img src="assets/stickers/sticker_glass_star.png" alt="Glass Star">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_butterflies.png" title="Butterflies">
+                  <img src="assets/stickers/sticker_butterflies.png" alt="Butterflies">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_retro_star.png" title="Retro Star">
+                  <img src="assets/stickers/sticker_retro_star.png" alt="Retro Star">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_vinyl_record.png" title="Vinyl Record">
+                  <img src="assets/stickers/sticker_vinyl_record.png" alt="Vinyl Record">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_smiley_cream.png" title="Smiley">
+                  <img src="assets/stickers/sticker_smiley_cream.png" alt="Smiley">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_scallop_heart.png" title="Scallop Heart">
+                  <img src="assets/stickers/sticker_scallop_heart.png" alt="Scallop Heart">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_love_bubble.png" title="Love Bubble">
+                  <img src="assets/stickers/sticker_love_bubble.png" alt="Love Bubble">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_stitched_star.png" title="Stitched Star">
+                  <img src="assets/stickers/sticker_stitched_star.png" alt="Stitched Star">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_plush_bunnies.png" title="Plush Bunnies">
+                  <img src="assets/stickers/sticker_plush_bunnies.png" alt="Plush Bunnies">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_paperclips_bow.png" title="Bow Paperclip">
+                  <img src="assets/stickers/sticker_paperclips_bow.png" alt="Bow Paperclip">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_disco_ball.png" title="Disco Ball">
+                  <img src="assets/stickers/sticker_disco_ball.png" alt="Disco Ball">
+                </button>
+                <button class="sticker-card-btn" data-sticker-img="assets/stickers/sticker_teddy_bear.png" title="Teddy Bear">
+                  <img src="assets/stickers/sticker_teddy_bear.png" alt="Teddy Bear">
+                </button>
+              </div>
+            </div>
+
+            <!-- Next Step Action -->
+            <div class="letter-bottom-actions">
+              <button class="letter-action-btn primary" id="btn-letter-to-step2">
+                <span>Select Envelope &amp; Wax Seal</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2: ENVELOPE & WAX SEAL -->
+          <div class="letter-step-panel" id="letter-panel-envelope" style="display:none;">
+            <div class="letter-envelope-config">
+              <!-- Section 1: Envelope finishes -->
+              <div class="letter-config-block">
+                <span class="letter-config-heading">Envelope Selection</span>
+                <div class="envelope-swatches-row">
+                  <button class="env-swatch-btn" data-env="manila" title="Kraft Manila">
+                    <div class="swatch-box swatch-manila"></div>
+                  </button>
+                  <button class="env-swatch-btn" data-env="vellum" title="Pleated Cream Vellum">
+                    <div class="swatch-box swatch-vellum"></div>
+                  </button>
+                  <button class="env-swatch-btn active" data-env="maroon-lace" title="Maroon with White Lace">
+                    <div class="swatch-box swatch-maroon-lace"><span class="lace-trim"></span></div>
+                  </button>
+                  <button class="env-swatch-btn" data-env="charcoal" title="Classic Charcoal">
+                    <div class="swatch-box swatch-charcoal"></div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Section 2: Wax Seals (below envelope as requested) -->
+              <div class="letter-config-block">
+                <span class="letter-config-heading">Wax Seal</span>
+                <div class="seals-swatches-row">
+                  <button class="seal-swatch-btn active" data-seal="gold" title="Gold Seal">
+                    <span class="seal-disc seal-gold"></span>
+                  </button>
+                  <button class="seal-swatch-btn" data-seal="cream" title="Cream Seal">
+                    <span class="seal-disc seal-cream"></span>
+                  </button>
+                  <button class="seal-swatch-btn" data-seal="maroon" title="Maroon Seal">
+                    <span class="seal-disc seal-maroon"></span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Preview of chosen envelope & seal -->
+              <div class="envelope-live-preview" id="envelope-live-preview">
+                <div class="preview-envelope env-maroon-lace" id="preview-envelope-render">
+                  <div class="preview-lace-border"></div>
+                  <div class="preview-wax-seal seal-gold" id="preview-seal-render"></div>
+                </div>
+              </div>
+
+              <!-- Navigation Buttons -->
+              <div class="letter-step-nav-row">
+                <button class="letter-action-btn secondary" id="btn-letter-back-to-step1">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                  <span>Back to Letter</span>
+                </button>
+                <button class="letter-action-btn primary" id="btn-letter-to-step3">
+                  <span>Proceed to Preview</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- Visual Stickers Tray (Icons Only, No text) -->
-          <div class="stickers-visual-tray" id="stickers-visual-tray">
-            <button class="sticker-icon-btn" data-sticker="🥢" title="Washi tape">🥢</button>
-            <button class="sticker-icon-btn" data-sticker="📎" title="Paperclip">📎</button>
-            <button class="sticker-icon-btn" data-sticker="⭐" title="Star">⭐</button>
-            <button class="sticker-icon-btn" data-sticker="🤎" title="Heart">🤎</button>
-            <button class="sticker-icon-btn" data-sticker="🧸" title="Bear">🧸</button>
-            <button class="sticker-icon-btn" data-sticker="🌼" title="Flower">🌼</button>
-            <button class="sticker-icon-btn" data-sticker="🙂" title="Smiley">🙂</button>
-            <button class="sticker-icon-btn" data-sticker="i love you" title="i love you"><small>i love you</small></button>
-          </div>
+          <!-- STEP 3: PREVIEW & DISPATCH -->
+          <div class="letter-step-panel" id="letter-panel-preview" style="display:none;">
+            <div class="letter-preview-wrap">
+              <!-- Closed Envelope Stage -->
+              <div class="letter-packaged-stage" id="letter-packaged-stage">
+                <div class="letter-sealed-envelope" id="letter-sealed-envelope">
+                  <div class="sealed-env-body" id="sealed-env-body">
+                    <div class="sealed-env-flap"></div>
+                    <div class="sealed-wax-seal" id="sealed-wax-seal"></div>
+                    <div class="sealed-env-to">To: <span id="sealed-to-name">Kabir</span></div>
+                  </div>
+                </div>
+                <button class="btn-letter-unfold" id="btn-letter-open-unfold">
+                  <span class="unfold-heart">♡</span> Click to Open Letter <span class="unfold-heart">♡</span>
+                </button>
+              </div>
 
-          <!-- Envelope Finishes (4 Visuals Only, No dropdown) & Wax Seal Visuals -->
-          <div class="envelope-visual-section">
-            <div class="envelope-swatches-row">
-              <button class="env-swatch-btn" data-env="manila" title="Kraft Manila">
-                <div class="swatch-box swatch-manila"></div>
-              </button>
-              <button class="env-swatch-btn" data-env="vellum" title="Pleated Cream Vellum">
-                <div class="swatch-box swatch-vellum"></div>
-              </button>
-              <button class="env-swatch-btn active" data-env="maroon-lace" title="Maroon with White Lace">
-                <div class="swatch-box swatch-maroon-lace"><span class="lace-trim"></span></div>
-              </button>
-              <button class="env-swatch-btn" data-env="charcoal" title="Classic Charcoal">
-                <div class="swatch-box swatch-charcoal"></div>
-              </button>
-            </div>
+              <!-- Unfolded Letter View (Shown on click to open) -->
+              <div class="letter-unfolded-view" id="letter-unfolded-view" style="display:none;">
+                <div class="letter-unfolded-card" id="letter-unfolded-card">
+                  <!-- dynamically updated -->
+                </div>
+                <button class="btn-letter-refold" id="btn-letter-refold">Close Letter</button>
+              </div>
 
-            <!-- Wax Seals (Visuals only, no text) -->
-            <div class="seals-swatches-row">
-              <button class="seal-swatch-btn active" data-seal="gold" title="Gold Seal">
-                <span class="seal-disc seal-gold"></span>
-              </button>
-              <button class="seal-swatch-btn" data-seal="cream" title="Cream Seal">
-                <span class="seal-disc seal-cream"></span>
-              </button>
-              <button class="seal-swatch-btn" data-seal="maroon" title="Maroon Seal">
-                <span class="seal-disc seal-maroon"></span>
-              </button>
-            </div>
+              <!-- Dispatch & Save Actions -->
+              <div class="letter-dispatch-actions">
+                <button class="letter-dispatch-btn vault-btn" id="btn-letter-save-vault">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                  </svg>
+                  <span>Save to Vault</span>
+                </button>
+                <button class="letter-dispatch-btn send-btn" id="btn-letter-dispatch">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                  <span>Dispatch Letter</span>
+                </button>
+              </div>
 
-            <!-- Live Preview of chosen envelope & seal -->
-            <div class="envelope-live-preview" id="envelope-live-preview">
-              <div class="preview-envelope env-maroon-lace" id="preview-envelope-render">
-                <div class="preview-lace-border"></div>
-                <div class="preview-wax-seal seal-gold" id="preview-seal-render"></div>
+              <!-- Back to Envelope button -->
+              <div class="letter-preview-back-wrap">
+                <button class="letter-action-btn secondary" id="btn-letter-back-to-step2">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                  <span>Back to Envelope</span>
+                </button>
               </div>
             </div>
           </div>
