@@ -22,8 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
       to: 'Kabir',
       from: 'Saanvi',
       body: '',
-      envelope: 'maroon-lace',
-      seal: 'gold',
+      envelope: 'dusty-blue',
+      seal: 'gold-celestial',
+      hasPhoto: true,
+      photo: 'assets/medium_letter.png',
       stickers: []
     },
     bouquet: {
@@ -789,22 +791,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnLetterBackToStep2 = document.getElementById('btn-letter-back-to-step2');
 
   // Step 2 controls
-  const letterEnvBtns = document.querySelectorAll('#letter-panel-envelope .env-swatch-btn');
-  const letterSealBtns = document.querySelectorAll('#letter-panel-envelope .seal-swatch-btn');
-  const letterEnvPreview = document.getElementById('preview-envelope-render');
-  const letterSealPreview = document.getElementById('preview-seal-render');
+  const letterEnvBtns = document.querySelectorAll('#letter-panel-envelope .env-card-btn');
+  const letterSealBtns = document.querySelectorAll('#letter-panel-envelope .seal-pick-btn');
+  const previewEnvBgImg = document.getElementById('preview-env-bg-img');
+  const previewSealRender = document.getElementById('preview-seal-render');
 
   // Step 3 preview controls
   const letterPackagedStage = document.getElementById('letter-packaged-stage');
+  const letterSealedEnvelope = document.getElementById('letter-sealed-envelope');
+  const sealedEnvBgImg = document.getElementById('sealed-env-bg-img');
+  const sealedWaxSeal = document.getElementById('sealed-wax-seal');
+  const sealedToName = document.getElementById('sealed-to-name');
   const letterUnfoldedView = document.getElementById('letter-unfolded-view');
   const letterUnfoldedCard = document.getElementById('letter-unfolded-card');
   const btnLetterOpenUnfold = document.getElementById('btn-letter-open-unfold');
   const btnLetterRefold = document.getElementById('btn-letter-refold');
   const btnLetterSaveVault = document.getElementById('btn-letter-save-vault');
   const btnLetterDispatch = document.getElementById('btn-letter-dispatch');
-  const sealedEnvBody = document.getElementById('sealed-env-body');
-  const sealedWaxSeal = document.getElementById('sealed-wax-seal');
-  const sealedToName = document.getElementById('sealed-to-name');
+
+  // Photo controls in Step 1
+  const letterPhotoCard = document.getElementById('letter-photo-card');
+  const btnDeleteLetterPhoto = document.getElementById('btn-delete-letter-photo');
+  const btnAddLetterPhoto = document.getElementById('btn-add-letter-photo');
+  const letterPhotoFrame = document.getElementById('letter-photo-frame');
+  const letterPhotoFileInput = document.getElementById('letter-photo-file-input');
+  const letterPhotoImg = document.getElementById('letter-photo-img');
 
   function setLetterStep(stepNum) {
     state.letter.step = stepNum;
@@ -1032,14 +1043,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Step 1: Photo Card Controls (Polaroid style with × cross mark delete)
+  if (btnDeleteLetterPhoto) {
+    btnDeleteLetterPhoto.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.letter.hasPhoto = false;
+      if (letterPhotoCard) letterPhotoCard.style.display = 'none';
+      if (btnAddLetterPhoto) btnAddLetterPhoto.classList.remove('active');
+    });
+  }
+
+  if (btnAddLetterPhoto) {
+    btnAddLetterPhoto.addEventListener('click', () => {
+      state.letter.hasPhoto = true;
+      if (letterPhotoCard) letterPhotoCard.style.display = 'block';
+      btnAddLetterPhoto.classList.add('active');
+    });
+  }
+
+  if (letterPhotoFrame && letterPhotoFileInput) {
+    letterPhotoFrame.addEventListener('click', () => {
+      letterPhotoFileInput.click();
+    });
+
+    letterPhotoFileInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (loadEvt) => {
+        state.letter.photo = loadEvt.target.result;
+        state.letter.hasPhoto = true;
+        if (letterPhotoImg) letterPhotoImg.src = loadEvt.target.result;
+        if (letterPhotoCard) letterPhotoCard.style.display = 'block';
+        if (btnAddLetterPhoto) btnAddLetterPhoto.classList.add('active');
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   // Step 2: Envelope & Wax Seal Selection
+  const envelopeAssetMap = {
+    'dusty-blue': 'assets/letter/envelopes/env_dusty_blue.jpg',
+    'blush-lace': 'assets/letter/envelopes/env_blush_lace.jpg',
+    'crimson-velvet': 'assets/letter/envelopes/env_crimson_velvet.jpg',
+    'ivory-lace': 'assets/letter/envelopes/env_ivory_lace.jpg'
+  };
+
+  const sealAssetMap = {
+    'gold-celestial': 'assets/letter/seals/seal_gold_celestial.png',
+    'blue-love': 'assets/letter/seals/seal_blue_love.png',
+    'pink-crescent': 'assets/letter/seals/seal_pink_crescent.png',
+    'crimson-heart': 'assets/letter/seals/seal_crimson_heart.png'
+  };
+
   function updateLetterEnvPreview() {
-    if (letterEnvPreview) {
-      letterEnvPreview.className = `preview-envelope env-${state.letter.envelope}`;
-    }
-    if (letterSealPreview) {
-      letterSealPreview.className = `preview-wax-seal seal-${state.letter.seal}`;
-    }
+    const envSrc = envelopeAssetMap[state.letter.envelope] || envelopeAssetMap['dusty-blue'];
+    const sealSrc = sealAssetMap[state.letter.seal] || sealAssetMap['gold-celestial'];
+
+    if (previewEnvBgImg) previewEnvBgImg.src = envSrc;
+    if (previewSealRender) previewSealRender.src = sealSrc;
   }
 
   letterEnvBtns.forEach(btn => {
@@ -1063,30 +1125,39 @@ document.addEventListener('DOMContentLoaded', () => {
     if (letterPackagedStage) letterPackagedStage.style.display = 'flex';
     if (letterUnfoldedView) letterUnfoldedView.style.display = 'none';
 
-    if (sealedEnvBody) {
-      const envColors = {
-        'manila': '#D9C2A7',
-        'vellum': '#ECE8E1',
-        'maroon-lace': '#5C1D24',
-        'charcoal': '#333333'
-      };
-      sealedEnvBody.style.background = envColors[state.letter.envelope] || '#5C1D24';
-    }
+    const envSrc = envelopeAssetMap[state.letter.envelope] || envelopeAssetMap['dusty-blue'];
+    const sealSrc = sealAssetMap[state.letter.seal] || sealAssetMap['gold-celestial'];
 
-    if (sealedWaxSeal) {
-      const sealColors = {
-        'gold': '#C5A059',
-        'cream': '#EFECE6',
-        'maroon': '#6B202A'
-      };
-      sealedWaxSeal.style.background = sealColors[state.letter.seal] || '#C5A059';
-    }
+    if (sealedEnvBgImg) sealedEnvBgImg.src = envSrc;
+    if (sealedWaxSeal) sealedWaxSeal.src = sealSrc;
 
     if (sealedToName) {
       sealedToName.textContent = state.letter.to || (letterToInput ? letterToInput.value : 'Kabir');
     }
 
     renderUnfoldedLetterCard();
+  }
+
+  function openLetterPreview() {
+    if (letterPackagedStage) letterPackagedStage.style.display = 'none';
+    if (letterUnfoldedView) letterUnfoldedView.style.display = 'flex';
+    renderUnfoldedLetterCard();
+  }
+
+  function closeLetterPreview() {
+    if (letterUnfoldedView) letterUnfoldedView.style.display = 'none';
+    if (letterPackagedStage) letterPackagedStage.style.display = 'flex';
+  }
+
+  // Both clicking on the envelope directly and clicking "Click to Open Letter" unfold the letter!
+  if (letterSealedEnvelope) {
+    letterSealedEnvelope.addEventListener('click', openLetterPreview);
+  }
+  if (btnLetterOpenUnfold) {
+    btnLetterOpenUnfold.addEventListener('click', openLetterPreview);
+  }
+  if (btnLetterRefold) {
+    btnLetterRefold.addEventListener('click', closeLetterPreview);
   }
 
   function renderUnfoldedLetterCard() {
@@ -1096,6 +1167,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const fromVal = state.letter.from || (letterFromInput ? letterFromInput.value : 'Saanvi');
     const bodyVal = state.letter.body || (letterTextarea ? letterTextarea.value : 'A handwritten letter straight from the heart.');
     const dateVal = letterDisplayDate ? letterDisplayDate.textContent : 'October 6, 2026';
+
+    const photoCardHtml = (state.letter.hasPhoto && state.letter.photo) ? `
+      <div class="letter-photo-card" style="float: right; margin: 2px 0 10px 14px; pointer-events: none; width: 104px;">
+        <div class="letter-photo-frame" style="cursor: default;">
+          <img src="${state.letter.photo}" alt="Keepsake Photo" style="width:100%; height:100%; object-fit:cover;" />
+        </div>
+      </div>
+    ` : '';
 
     const stickersHtml = state.letter.stickers.map(st => `
       <div style="position: absolute; left: ${st.left}; top: ${st.top}; pointer-events: none;">
@@ -1113,6 +1192,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <span>From: ${escapeHtml(fromVal)}</span>
             </div>
           </div>
+          ${photoCardHtml}
           <div style="font-family: ${state.letter.fontFamily}; font-size: ${state.letter.fontSize}px; line-height: 1.6; color: #2D181B; white-space: pre-wrap; word-break: break-word; min-height: 260px;">
             ${escapeHtml(bodyVal)}
           </div>
@@ -1122,21 +1202,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
     `;
-  }
-
-  if (btnLetterOpenUnfold) {
-    btnLetterOpenUnfold.addEventListener('click', () => {
-      if (letterPackagedStage) letterPackagedStage.style.display = 'none';
-      if (letterUnfoldedView) letterUnfoldedView.style.display = 'flex';
-      renderUnfoldedLetterCard();
-    });
-  }
-
-  if (btnLetterRefold) {
-    btnLetterRefold.addEventListener('click', () => {
-      if (letterUnfoldedView) letterUnfoldedView.style.display = 'none';
-      if (letterPackagedStage) letterPackagedStage.style.display = 'flex';
-    });
   }
 
   // Vault saving
@@ -1163,6 +1228,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fontFamily: state.letter.fontFamily,
         envelope: state.letter.envelope,
         seal: state.letter.seal,
+        hasPhoto: state.letter.hasPhoto,
+        photo: state.letter.photo,
         stickers: state.letter.stickers,
         savedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       };
@@ -1304,7 +1371,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 5-Step Switcher
   function setBouquetStep(stepInput) {
-    let stepNum = typeof stepInput === 'number' ? stepInput : keyToStepNum[stepInput];
+    let stepNum = typeof stepInput === 'number' ? stepInput : (parseInt(stepInput, 10) || keyToStepNum[stepInput]);
     if (!stepNum || stepNum < 1) stepNum = 1;
     if (stepNum > 5) stepNum = 5;
     const stepKey = stepKeyMap[stepNum];
@@ -3347,6 +3414,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof btnLetterOpenUnfold !== 'undefined' && btnLetterOpenUnfold) {
         btnLetterOpenUnfold.click();
       }
+    }
+    const paramEnv = urlParams.get('env');
+    if (paramEnv && state.letter) {
+      state.letter.envelope = paramEnv;
+      document.querySelectorAll('#letter-panel-envelope .env-card-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.env === paramEnv);
+      });
+      if (typeof updateLetterEnvPreview === 'function') updateLetterEnvPreview();
+    }
+    const paramSeal = urlParams.get('seal');
+    if (paramSeal && state.letter) {
+      state.letter.seal = paramSeal;
+      document.querySelectorAll('#letter-panel-envelope .seal-pick-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.seal === paramSeal);
+      });
+      if (typeof updateLetterEnvPreview === 'function') updateLetterEnvPreview();
     }
     if (paramMedium === 'postcard' && paramStep && typeof setPostcardStep === 'function') {
       const stepNum = parseInt(paramStep, 10);

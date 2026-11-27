@@ -1634,6 +1634,115 @@ body {
   align-items: center;
 }
 
+/* Letter Photo Action Button */
+.letter-photo-action-group {
+  display: flex;
+  align-items: center;
+}
+.btn-letter-add-photo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #FFF5F7;
+  border: 1px solid #F2CCD4;
+  border-radius: 16px;
+  padding: 4px 11px;
+  font-family: 'Playfair Display', serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #521319;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-letter-add-photo:hover,
+.btn-letter-add-photo.active {
+  background: #521319;
+  color: #FFF;
+  border-color: #521319;
+}
+
+/* Letter Photo Card (Polaroid Style tuck-in with cross-mark delete) */
+.letter-photo-card {
+  position: relative;
+  float: right;
+  margin: 2px 0 10px 14px;
+  width: 104px;
+  background: #FFFFFF;
+  padding: 5px 5px 14px 5px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0,0,0,0.06);
+  transform: rotate(-2deg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 10;
+}
+.letter-photo-card:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+.btn-delete-letter-photo {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #D8263B;
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 15;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.btn-delete-letter-photo:hover {
+  background: #B31B2C;
+  transform: scale(1.15);
+}
+.letter-photo-frame {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #F4EBE6;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.letter-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.letter-photo-upload-hint {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(40, 20, 25, 0.72);
+  color: #FFF;
+  font-size: 9.5px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 3px 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.letter-photo-frame:hover .letter-photo-upload-hint {
+  opacity: 1;
+}
+
 /* ================= LETTER PAPER SHEET (AUTO-EXTENDING) ================= */
 .letter-sheet-container {
   position: relative;
@@ -1936,115 +2045,142 @@ body {
 }
 .letter-config-heading {
   font-family: 'Playfair Display', serif;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   color: #521319;
+  letter-spacing: 0.2px;
 }
-.envelope-swatches-row {
+
+/* 4 Envelopes Grid */
+.envelope-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.env-card-btn {
+  background: #FFFFFF;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: all 0.2s ease;
+}
+.env-card-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.env-card-btn.active {
+  border-color: #521319;
+  box-shadow: 0 0 0 2px rgba(82, 19, 25, 0.25), 0 4px 10px rgba(82, 19, 25, 0.15);
+  transform: translateY(-2px);
+}
+.env-card-img-wrap {
+  width: 100%;
+  aspect-ratio: 1.35 / 1;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #F8F5F2;
+}
+.env-card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.env-card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #521319;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 4 Wax Seals Row */
+.seals-cards-row {
   display: flex;
   gap: 10px;
+  justify-content: center;
   margin-bottom: 2px;
 }
-.env-swatch-btn {
-  background: transparent;
+.seal-pick-btn {
+  background: #FFFFFF;
   border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 6px 8px;
   cursor: pointer;
-  padding: 2px;
-  border-radius: 6px;
-  transition: border-color 0.15s, transform 0.15s;
-}
-.env-swatch-btn.active {
-  border-color: #521319;
-  transform: scale(1.05);
-}
-.swatch-box {
-  width: 52px;
-  height: 36px;
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 4px;
-  position: relative;
-}
-.swatch-manila { background: #D9C2A7; }
-.swatch-vellum { background: #ECE8E1; border-style: dashed; }
-.swatch-maroon-lace { background: #5C1D24; }
-.swatch-maroon-lace .lace-trim {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: repeating-linear-gradient(90deg, #FFF, #FFF 2px, transparent 2px, transparent 4px);
-}
-.swatch-charcoal { background: #333333; }
-
-.seals-swatches-row {
   display: flex;
-  gap: 12px;
-  margin-bottom: 2px;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
-.seal-swatch-btn {
-  background: transparent;
-  border: 2px solid transparent;
-  cursor: pointer;
-  padding: 2px;
-  border-radius: 50%;
-  transition: border-color 0.15s, transform 0.15s;
+.seal-pick-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
-.seal-swatch-btn.active {
+.seal-pick-btn.active {
   border-color: #521319;
-  transform: scale(1.1);
+  box-shadow: 0 0 0 2px rgba(82, 19, 25, 0.25), 0 4px 10px rgba(82, 19, 25, 0.15);
+  transform: translateY(-2px);
 }
-.seal-disc {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: block;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+.seal-pick-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.22));
 }
-.seal-gold { background: #C5A059; }
-.seal-cream { background: #EFECE6; border: 1px solid var(--paper-border); }
-.seal-maroon { background: #6B202A; }
+.seal-pick-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #521319;
+  text-align: center;
+  white-space: nowrap;
+}
 
+/* Step 2 Live Preview */
 .envelope-live-preview {
   display: flex;
   justify-content: center;
   padding: 14px 0 8px;
   border-top: 1px solid var(--paper-border-soft);
 }
-.preview-envelope {
-  width: 180px;
-  height: 115px;
-  border: 1px solid var(--paper-border);
-  border-radius: 6px;
+.preview-envelope-container {
+  width: 250px;
+  height: 165px;
+  border-radius: 8px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(40, 20, 25, 0.18);
+  overflow: hidden;
 }
-.preview-envelope.env-manila { background: #D9C2A7; }
-.preview-envelope.env-vellum { background: #ECE8E1; border: 1px dashed #B8AEA5; }
-.preview-envelope.env-maroon-lace { background: #5C1D24; }
-.preview-envelope.env-charcoal { background: #333333; }
-
-.preview-lace-border {
-  position: absolute;
-  top: 0;
-  left: 0;
+.preview-env-bg-img {
   width: 100%;
-  height: 6px;
-  background: repeating-linear-gradient(90deg, #FFF, #FFF 4px, transparent 4px, transparent 8px);
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
-.preview-wax-seal {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+.preview-seal-overlay-img {
+  position: absolute;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.36));
+  z-index: 3;
 }
-.preview-wax-seal.seal-gold { background: #C5A059; }
-.preview-wax-seal.seal-cream { background: #EFECE6; }
-.preview-wax-seal.seal-maroon { background: #6B202A; }
 
 /* ================= STEP 3: PREVIEW & DISPATCH ================= */
 .letter-preview-wrap {
@@ -2062,56 +2198,71 @@ body {
   width: 100%;
 }
 .letter-sealed-envelope {
-  width: 240px;
-  height: 155px;
+  width: 280px;
+  height: 185px;
   position: relative;
-  box-shadow: 0 10px 25px rgba(40, 20, 25, 0.16);
-  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(40, 20, 25, 0.2);
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+.letter-sealed-envelope:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 36px rgba(40, 20, 25, 0.26);
 }
 .sealed-env-body {
   width: 100%;
   height: 100%;
-  border-radius: 8px;
-  background: #5C1D24;
+  border-radius: 10px;
   position: relative;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
-.sealed-env-flap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 120px solid transparent;
-  border-right: 120px solid transparent;
-  border-top: 78px solid #48141A;
+.sealed-env-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .sealed-wax-seal {
   position: absolute;
-  top: 60px;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #C5A059;
-  border: 2px solid rgba(255,255,255,0.45);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.28);
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.38));
   z-index: 3;
+  pointer-events: none;
 }
 .sealed-env-to {
   position: absolute;
-  bottom: 18px;
-  color: #FFE6EB;
+  bottom: 12px;
+  left: 16px;
   font-family: 'Caveat', cursive;
-  font-size: 18px;
-  letter-spacing: 0.5px;
+  font-size: 21px;
+  font-weight: 700;
+  color: #FFF;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+  z-index: 4;
+}
+.sealed-env-tap-hint {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  font-family: 'Playfair Display', serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(4px);
+  padding: 3px 9px;
+  border-radius: 12px;
+  z-index: 4;
+  border: 1px solid rgba(255,255,255,0.2);
 }
 .btn-letter-unfold {
   background: #FFF1F4;
@@ -2787,41 +2938,83 @@ body {
   width: 100%;
   max-width: 380px;
   aspect-ratio: 544 / 466;
-  background-image: url('assets/note_paper_deckle.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  filter: drop-shadow(0 6px 18px rgba(82, 19, 25, 0.12));
+  background: #FCF9F3;
+  border-radius: 8px;
+  border: 1px solid #E8DCce;
+  box-shadow:
+    0 4px 18px rgba(82, 19, 25, 0.09),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 0 18px rgba(224, 207, 188, 0.35);
   display: flex;
   flex-direction: column;
-  padding: 30px 32px 24px 36px;
+  padding: 24px 28px 20px 28px;
   box-sizing: border-box;
+  overflow: hidden;
 }
+
+/* Two Botanical Lilies in the Corner */
+.bouquet-note-lilies-corner {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  width: 110px;
+  height: 110px;
+  pointer-events: none;
+  z-index: 1;
+}
+.bouquet-note-lilies-corner .lily-corner-leaf {
+  position: absolute;
+  right: 26px;
+  bottom: 10px;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  transform: rotate(-28deg) scale(0.85);
+  opacity: 0.82;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+}
+.bouquet-note-lilies-corner .lily-corner-front {
+  position: absolute;
+  right: 2px;
+  bottom: 0px;
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  transform: rotate(12deg);
+  opacity: 0.95;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.12));
+}
+
+/* Clean text alignment - aligned with paper margins */
 .deckle-note-header {
   display: flex;
   align-items: baseline;
-  gap: 6px;
-  margin-left: 102px;
-  margin-bottom: 6px;
+  gap: 8px;
+  margin-left: 0;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
 }
 .deckle-note-footer {
   display: flex;
   align-items: baseline;
   justify-content: flex-end;
-  gap: 6px;
-  margin-right: 94px;
-  margin-top: 4px;
+  gap: 8px;
+  margin-right: 0;
+  margin-top: 6px;
+  position: relative;
+  z-index: 2;
 }
 .deckle-label {
-  font-family: var(--font-editorial);
-  font-size: 13.5px;
+  font-family: var(--font-editorial, 'Playfair Display', serif);
+  font-size: 14px;
   font-weight: 600;
   color: #6B2332;
   letter-spacing: 0.2px;
 }
 .deckle-input {
-  font-family: var(--font-script);
-  font-size: 19px;
+  font-family: var(--font-script, 'Caveat', cursive);
+  font-size: 21px;
   font-weight: 600;
   color: #2D1A16;
   background: transparent;
@@ -2829,7 +3022,7 @@ body {
   border-bottom: 1px dotted rgba(107, 35, 50, 0.35);
   outline: none;
   padding: 0 4px;
-  max-width: 130px;
+  max-width: 170px;
   transition: border-color 0.2s ease;
 }
 .deckle-input:focus {
@@ -2838,16 +3031,18 @@ body {
 .deckle-note-textarea {
   flex: 1;
   width: 100%;
-  font-family: var(--font-script);
-  font-size: 20px;
-  line-height: 1.4;
+  font-family: var(--font-script, 'Caveat', cursive);
+  font-size: 21px;
+  line-height: 1.5;
   color: #2D1A16;
   background: transparent;
   border: none;
   outline: none;
   resize: none;
-  padding: 4px 24px 4px 28px;
+  padding: 6px 4px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 2;
 }
 .deckle-note-textarea::placeholder {
   color: rgba(45, 26, 22, 0.4);
@@ -2916,17 +3111,20 @@ body {
 .unfolded-note-card-deckle {
   position: relative;
   width: 90%;
-  max-width: 390px;
+  max-width: 400px;
   aspect-ratio: 544 / 466;
-  background-image: url('assets/note_paper_deckle.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  filter: drop-shadow(0 12px 32px rgba(82, 19, 25, 0.25));
+  background: #FCF9F3;
+  border-radius: 8px;
+  border: 1px solid #E8DCCE;
+  box-shadow:
+    0 12px 36px rgba(82, 19, 25, 0.25),
+    0 2px 6px rgba(0, 0, 0, 0.05),
+    inset 0 0 20px rgba(224, 207, 188, 0.35);
   display: flex;
   flex-direction: column;
-  padding: 32px 32px 26px 36px;
+  padding: 28px 30px 22px 30px;
   box-sizing: border-box;
+  overflow: hidden;
   animation: noteCardPop 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 @keyframes noteCardPop {
@@ -2958,8 +3156,8 @@ body {
   transform: scale(1.08);
 }
 .deckle-display-val {
-  font-family: var(--font-script);
-  font-size: 20px;
+  font-family: var(--font-script, 'Caveat', cursive);
+  font-size: 21px;
   font-weight: 600;
   color: #2D1A16;
   padding: 0 4px;
@@ -2967,15 +3165,17 @@ body {
 .deckle-note-textarea-readonly {
   flex: 1;
   width: 100%;
-  font-family: var(--font-script);
-  font-size: 20px;
-  line-height: 1.45;
+  font-family: var(--font-script, 'Caveat', cursive);
+  font-size: 21px;
+  line-height: 1.5;
   color: #2D1A16;
-  padding: 4px 24px 4px 28px;
+  padding: 6px 4px;
   box-sizing: border-box;
   white-space: pre-wrap;
   word-break: break-word;
   overflow-y: auto;
+  position: relative;
+  z-index: 2;
 }
 
 /* ================= 4. GREETING CARD WORKSPACE ================= */

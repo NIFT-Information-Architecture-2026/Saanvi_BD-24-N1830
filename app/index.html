@@ -732,6 +732,18 @@
                 </div>
               </div>
 
+              <!-- Add Photo Action Button -->
+              <div class="letter-photo-action-group">
+                <button class="btn-letter-add-photo" id="btn-add-letter-photo" title="Add / Restore Photo Card">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  <span>+ Photo</span>
+                </button>
+              </div>
+
               <!-- Right: Font Controls (Postcard style: A-/A+ pill, divider, font dropdown) -->
               <div class="letter-font-group">
                 <div class="font-controls-row">
@@ -767,6 +779,24 @@
                       <span>From: <input type="text" value="Saanvi" id="letter-from-input"></span>
                     </div>
                   </div>
+
+                  <!-- Optional Tuck-in Keepsake Photo Card with cross mark delete button -->
+                  <div class="letter-photo-card" id="letter-photo-card">
+                    <button class="btn-delete-letter-photo" id="btn-delete-letter-photo" title="Remove Photo" type="button">×</button>
+                    <div class="letter-photo-frame" id="letter-photo-frame" title="Click to upload / change photo">
+                      <input type="file" id="letter-photo-file-input" accept="image/*" style="display:none;" />
+                      <img id="letter-photo-img" src="assets/medium_letter.png" alt="Keepsake Photo" />
+                      <div class="letter-photo-upload-hint">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="17 8 12 3 7 8"/>
+                          <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <span>Change</span>
+                      </div>
+                    </div>
+                  </div>
+
                   <textarea class="letter-textarea" id="letter-body-textarea" placeholder="Write your letter here... Type as much as you like, paper will auto-extend downwards."></textarea>
                 </div>
                 
@@ -846,43 +876,62 @@
               <!-- Section 1: Envelope finishes -->
               <div class="letter-config-block">
                 <span class="letter-config-heading">Envelope Selection</span>
-                <div class="envelope-swatches-row">
-                  <button class="env-swatch-btn" data-env="manila" title="Kraft Manila">
-                    <div class="swatch-box swatch-manila"></div>
+                <div class="envelope-cards-grid" id="envelope-cards-grid">
+                  <button class="env-card-btn active" data-env="dusty-blue" title="Dusty Blue Floral">
+                    <div class="env-card-img-wrap">
+                      <img src="assets/letter/envelopes/env_dusty_blue.jpg" alt="Dusty Blue" class="env-card-thumb" />
+                    </div>
+                    <span class="env-card-name">Dusty Blue</span>
                   </button>
-                  <button class="env-swatch-btn" data-env="vellum" title="Pleated Cream Vellum">
-                    <div class="swatch-box swatch-vellum"></div>
+                  <button class="env-card-btn" data-env="blush-lace" title="Blush Pink Lace">
+                    <div class="env-card-img-wrap">
+                      <img src="assets/letter/envelopes/env_blush_lace.jpg" alt="Blush Lace" class="env-card-thumb" />
+                    </div>
+                    <span class="env-card-name">Blush Lace</span>
                   </button>
-                  <button class="env-swatch-btn active" data-env="maroon-lace" title="Maroon with White Lace">
-                    <div class="swatch-box swatch-maroon-lace"><span class="lace-trim"></span></div>
+                  <button class="env-card-btn" data-env="crimson-velvet" title="Crimson Velvet">
+                    <div class="env-card-img-wrap">
+                      <img src="assets/letter/envelopes/env_crimson_velvet.jpg" alt="Crimson Velvet" class="env-card-thumb" />
+                    </div>
+                    <span class="env-card-name">Crimson Velvet</span>
                   </button>
-                  <button class="env-swatch-btn" data-env="charcoal" title="Classic Charcoal">
-                    <div class="swatch-box swatch-charcoal"></div>
+                  <button class="env-card-btn" data-env="ivory-lace" title="Ivory Pearl Lace">
+                    <div class="env-card-img-wrap">
+                      <img src="assets/letter/envelopes/env_ivory_lace.jpg" alt="Ivory Lace" class="env-card-thumb" />
+                    </div>
+                    <span class="env-card-name">Ivory Lace</span>
                   </button>
                 </div>
               </div>
 
               <!-- Section 2: Wax Seals (below envelope as requested) -->
               <div class="letter-config-block">
-                <span class="letter-config-heading">Wax Seal</span>
-                <div class="seals-swatches-row">
-                  <button class="seal-swatch-btn active" data-seal="gold" title="Gold Seal">
-                    <span class="seal-disc seal-gold"></span>
+                <span class="letter-config-heading">Wax Seal Selection</span>
+                <div class="seals-cards-row" id="seals-cards-row">
+                  <button class="seal-pick-btn active" data-seal="gold-celestial" title="Gold Celestial Stars">
+                    <img src="assets/letter/seals/seal_gold_celestial.png" alt="Gold Celestial" class="seal-pick-img" />
+                    <span class="seal-pick-label">Gold Stars</span>
                   </button>
-                  <button class="seal-swatch-btn" data-seal="cream" title="Cream Seal">
-                    <span class="seal-disc seal-cream"></span>
+                  <button class="seal-pick-btn" data-seal="blue-love" title="Dusty Blue Love Script">
+                    <img src="assets/letter/seals/seal_blue_love.png" alt="Blue Love" class="seal-pick-img" />
+                    <span class="seal-pick-label">Blue Love</span>
                   </button>
-                  <button class="seal-swatch-btn" data-seal="maroon" title="Maroon Seal">
-                    <span class="seal-disc seal-maroon"></span>
+                  <button class="seal-pick-btn" data-seal="pink-crescent" title="Blush Floral Crescent Heart">
+                    <img src="assets/letter/seals/seal_pink_crescent.png" alt="Blush Crescent" class="seal-pick-img" />
+                    <span class="seal-pick-label">Blush Floral</span>
+                  </button>
+                  <button class="seal-pick-btn" data-seal="crimson-heart" title="Crimson Heart">
+                    <img src="assets/letter/seals/seal_crimson_heart.png" alt="Crimson Heart" class="seal-pick-img" />
+                    <span class="seal-pick-label">Crimson Heart</span>
                   </button>
                 </div>
               </div>
 
               <!-- Live Preview of chosen envelope & seal -->
               <div class="envelope-live-preview" id="envelope-live-preview">
-                <div class="preview-envelope env-maroon-lace" id="preview-envelope-render">
-                  <div class="preview-lace-border"></div>
-                  <div class="preview-wax-seal seal-gold" id="preview-seal-render"></div>
+                <div class="preview-envelope-container" id="preview-envelope-render">
+                  <img src="assets/letter/envelopes/env_dusty_blue.jpg" class="preview-env-bg-img" id="preview-env-bg-img" alt="Envelope" />
+                  <img src="assets/letter/seals/seal_gold_celestial.png" class="preview-seal-overlay-img" id="preview-seal-render" alt="Wax Seal" />
                 </div>
               </div>
 
@@ -909,11 +958,12 @@
             <div class="letter-preview-wrap">
               <!-- Closed Envelope Stage -->
               <div class="letter-packaged-stage" id="letter-packaged-stage">
-                <div class="letter-sealed-envelope" id="letter-sealed-envelope">
+                <div class="letter-sealed-envelope" id="letter-sealed-envelope" title="Click envelope to open ♡" style="cursor: pointer;">
                   <div class="sealed-env-body" id="sealed-env-body">
-                    <div class="sealed-env-flap"></div>
-                    <div class="sealed-wax-seal" id="sealed-wax-seal"></div>
+                    <img src="assets/letter/envelopes/env_dusty_blue.jpg" class="sealed-env-bg" id="sealed-env-bg-img" alt="Sealed Envelope" />
+                    <img src="assets/letter/seals/seal_gold_celestial.png" class="sealed-wax-seal" id="sealed-wax-seal" alt="Wax Seal" />
                     <div class="sealed-env-to">To: <span id="sealed-to-name">Kabir</span></div>
+                    <div class="sealed-env-tap-hint">Tap envelope to open ♡</div>
                   </div>
                 </div>
                 <button class="btn-letter-unfold" id="btn-letter-open-unfold">
@@ -1227,6 +1277,11 @@
             </div>
             <div class="bouquet-deckle-wrapper">
               <div class="bouquet-deckle-note-card" id="bouquet-note-card-editor">
+                <!-- Two botanical lilies in the corner -->
+                <div class="bouquet-note-lilies-corner" aria-hidden="true">
+                  <img src="assets/stickers/sticker_lily_pink.png" class="lily-corner-leaf" alt="" />
+                  <img src="assets/stickers/sticker_lily_pink.png" class="lily-corner-front" alt="" />
+                </div>
                 <div class="deckle-note-header">
                   <span class="deckle-label">To:</span>
                   <input type="text" value="Kabir" id="bouquet-to-input" class="deckle-input" placeholder="Recipient" autocomplete="off" />
@@ -1291,6 +1346,11 @@
           <div class="unfolded-note-overlay" id="bouquet-unfolded-note-overlay" style="display:none;">
             <div class="unfolded-note-card-deckle" id="unfolded-note-card">
               <button class="btn-close-note" id="btn-close-unfolded-note" title="Close note">✕</button>
+              <!-- Two botanical lilies in the corner -->
+              <div class="bouquet-note-lilies-corner" aria-hidden="true">
+                <img src="assets/stickers/sticker_lily_pink.png" class="lily-corner-leaf" alt="" />
+                <img src="assets/stickers/sticker_lily_pink.png" class="lily-corner-front" alt="" />
+              </div>
               <div class="deckle-note-header">
                 <span class="deckle-label">To:</span>
                 <span class="deckle-display-val" id="unfolded-to">Kabir</span>
