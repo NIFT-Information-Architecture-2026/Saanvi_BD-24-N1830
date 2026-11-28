@@ -2181,10 +2181,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const cardFlowersPopup = document.getElementById('card-flowers-popup');
   const cardFlowersPopupGrid = document.getElementById('card-flowers-popup-grid');
   const btnCloseFlowerPopup = document.getElementById('btn-close-flower-popup');
+  const btnFlowerScrollLeft = document.getElementById('btn-flower-scroll-left');
+  const btnFlowerScrollRight = document.getElementById('btn-flower-scroll-right');
 
   const cardStickersPopup = document.getElementById('card-stickers-popup');
   const cardStickersPopupGrid = document.getElementById('card-stickers-popup-grid');
   const btnCloseStickerPopup = document.getElementById('btn-close-sticker-popup');
+  const btnStickerScrollLeft = document.getElementById('btn-sticker-scroll-left');
+  const btnStickerScrollRight = document.getElementById('btn-sticker-scroll-right');
 
   const cardVinylSongModal = document.getElementById('card-vinyl-song-modal');
   const btnCloseVinylModal = document.getElementById('btn-close-vinyl-modal');
@@ -2718,15 +2722,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 15 Flowers Popup
+  // 15 Flowers Popup (Compact Horizontal Scroll Strip with 4-5 visible at once)
   function populateCardFlowersPopup() {
     if (!cardFlowersPopupGrid) return;
     cardFlowersPopupGrid.innerHTML = '';
     CARD_FLOWERS.forEach(fl => {
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = 'flower-popup-item';
+      btn.setAttribute('title', `Add ${fl.name}`);
       btn.innerHTML = `
-        <img src="assets/flowers/${fl.file}" alt="${fl.name}" class="flower-popup-thumb" />
+        <div class="flower-popup-thumb-wrap">
+          <img src="assets/flowers/${fl.file}" alt="${fl.name}" class="flower-popup-thumb" loading="lazy" />
+        </div>
         <span class="flower-popup-name">${fl.name}</span>
       `;
       btn.addEventListener('click', () => {
@@ -2751,6 +2759,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnCardAddFlower.addEventListener('click', () => {
       populateCardFlowersPopup();
       cardFlowersPopup.style.display = 'block';
+      if (cardFlowersPopupGrid) cardFlowersPopupGrid.scrollLeft = 0;
     });
   }
   if (btnCloseFlowerPopup && cardFlowersPopup) {
@@ -2758,16 +2767,39 @@ document.addEventListener('DOMContentLoaded', () => {
       cardFlowersPopup.style.display = 'none';
     });
   }
+  if (btnFlowerScrollLeft && cardFlowersPopupGrid) {
+    btnFlowerScrollLeft.addEventListener('click', () => {
+      cardFlowersPopupGrid.scrollBy({ left: -160, behavior: 'smooth' });
+    });
+  }
+  if (btnFlowerScrollRight && cardFlowersPopupGrid) {
+    btnFlowerScrollRight.addEventListener('click', () => {
+      cardFlowersPopupGrid.scrollBy({ left: 160, behavior: 'smooth' });
+    });
+  }
+  if (cardFlowersPopupGrid) {
+    cardFlowersPopupGrid.addEventListener('wheel', (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        cardFlowersPopupGrid.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+  }
 
-  // 15 Stickers Popup
+  // 15 Stickers Popup (Compact Horizontal Scroll Strip with 4-5 visible at once)
   function populateCardStickersPopup() {
     if (!cardStickersPopupGrid) return;
     cardStickersPopupGrid.innerHTML = '';
     CARD_STICKERS.forEach(stk => {
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = 'sticker-popup-item';
+      btn.setAttribute('title', `Add ${stk.name}`);
       btn.innerHTML = `
-        <img src="assets/stickers/${stk.file}" alt="${stk.name}" class="sticker-popup-thumb" />
+        <div class="sticker-popup-thumb-wrap">
+          <img src="assets/stickers/${stk.file}" alt="${stk.name}" class="sticker-popup-thumb" loading="lazy" />
+        </div>
+        <span class="sticker-popup-name">${stk.name}</span>
       `;
       btn.addEventListener('click', () => {
         state.greetingCard.insideKeepsakes.push({
@@ -2791,12 +2823,31 @@ document.addEventListener('DOMContentLoaded', () => {
     btnCardAddSticker.addEventListener('click', () => {
       populateCardStickersPopup();
       cardStickersPopup.style.display = 'block';
+      if (cardStickersPopupGrid) cardStickersPopupGrid.scrollLeft = 0;
     });
   }
   if (btnCloseStickerPopup && cardStickersPopup) {
     btnCloseStickerPopup.addEventListener('click', () => {
       cardStickersPopup.style.display = 'none';
     });
+  }
+  if (btnStickerScrollLeft && cardStickersPopupGrid) {
+    btnStickerScrollLeft.addEventListener('click', () => {
+      cardStickersPopupGrid.scrollBy({ left: -160, behavior: 'smooth' });
+    });
+  }
+  if (btnStickerScrollRight && cardStickersPopupGrid) {
+    btnStickerScrollRight.addEventListener('click', () => {
+      cardStickersPopupGrid.scrollBy({ left: 160, behavior: 'smooth' });
+    });
+  }
+  if (cardStickersPopupGrid) {
+    cardStickersPopupGrid.addEventListener('wheel', (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        cardStickersPopupGrid.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
   }
 
   // Vinyl Song Modal & Functional Vinyl Record
@@ -5044,6 +5095,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (state.greetingCard.step === 4 && typeof renderCardRevealedDisplay === 'function') {
         renderCardRevealedDisplay();
       }
+    }
+    if (urlParams.has('open_flowers')) {
+      const btnFl = document.getElementById('btn-card-add-flower');
+      if (btnFl) btnFl.click();
+    }
+    if (urlParams.has('open_stickers')) {
+      const btnStk = document.getElementById('btn-card-add-sticker');
+      if (btnStk) btnStk.click();
     }
     const paramTheme = urlParams.get('theme');
     if (paramTheme && state.letter) {

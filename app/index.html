@@ -1562,8 +1562,15 @@
             <!-- Popup Tray: 15 Pressed Flowers -->
             <div class="card-popup-picker" id="card-flowers-popup" style="display:none;">
               <div class="popup-picker-header">
-                <span>Select a Pressed Flower</span>
-                <button class="btn-popup-close" id="btn-close-flower-popup">×</button>
+                <div class="popup-picker-title-group">
+                  <span class="popup-picker-title">Select a Pressed Flower</span>
+                  <span class="popup-picker-count">15 botanical blooms • Scroll to browse</span>
+                </div>
+                <div class="popup-picker-actions">
+                  <button type="button" class="btn-popup-scroll" id="btn-flower-scroll-left" title="Scroll left" aria-label="Scroll left">‹</button>
+                  <button type="button" class="btn-popup-scroll" id="btn-flower-scroll-right" title="Scroll right" aria-label="Scroll right">›</button>
+                  <button type="button" class="btn-popup-close" id="btn-close-flower-popup" title="Close">×</button>
+                </div>
               </div>
               <div class="flowers-popup-grid" id="card-flowers-popup-grid"></div>
             </div>
@@ -1571,8 +1578,15 @@
             <!-- Popup Tray: 15 Letter Stickers -->
             <div class="card-popup-picker" id="card-stickers-popup" style="display:none;">
               <div class="popup-picker-header">
-                <span>Select a Sticker (place anywhere, rotate &amp; resize)</span>
-                <button class="btn-popup-close" id="btn-close-sticker-popup">×</button>
+                <div class="popup-picker-title-group">
+                  <span class="popup-picker-title">Select a Sticker</span>
+                  <span class="popup-picker-count">15 cute stickers • Scroll to browse</span>
+                </div>
+                <div class="popup-picker-actions">
+                  <button type="button" class="btn-popup-scroll" id="btn-sticker-scroll-left" title="Scroll left" aria-label="Scroll left">‹</button>
+                  <button type="button" class="btn-popup-scroll" id="btn-sticker-scroll-right" title="Scroll right" aria-label="Scroll right">›</button>
+                  <button type="button" class="btn-popup-close" id="btn-close-sticker-popup" title="Close">×</button>
+                </div>
               </div>
               <div class="stickers-popup-grid" id="card-stickers-popup-grid"></div>
             </div>
