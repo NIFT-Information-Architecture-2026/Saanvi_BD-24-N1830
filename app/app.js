@@ -7153,6 +7153,1071 @@ document.addEventListener('DOMContentLoaded', () => {
     keepsakesNavTab.addEventListener('click', renderKeepsakesRoom);
   }
 
+  // ==========================================================================
+  // COMPLETE PROFILE ENGINE (My Profile, My People, Notifications, Privacy, Help)
+  // ==========================================================================
+  const PROFILE_KEYS = {
+    USER: 'between_us_auth_user',
+    CONTACTS: 'between_us_contacts',
+    NOTIFS: 'between_us_notifications',
+    NOTIF_PREFS: 'between_us_notif_prefs',
+    TICKETS: 'between_us_support_tickets',
+    LINKS: 'between_us_shared_links'
+  };
+
+  const DEFAULT_USER = {
+    name: 'Saanvi',
+    email: 'saanvi@gmail.com',
+    bio: 'Making little somethings for the people I love ♡',
+    avatar: 'S',
+    loggedIn: true
+  };
+
+  const DEFAULT_NOTIFICATIONS = [
+    {
+      id: 'notif_welcome',
+      type: 'incoming',
+      title: 'Welcome to A Little Something ♡',
+      body: 'Your creative space is all set. You can craft postcards, letters, bouquets, and greeting cards anytime.',
+      timeText: 'Just now',
+      unread: true
+    },
+    {
+      id: 'notif_people_tip',
+      type: 'reminder',
+      title: 'Add your favourite people',
+      body: 'Save names in My People to quickly dedicate creations and remember birthdays.',
+      timeText: '1 hour ago',
+      unread: true
+    }
+  ];
+
+  function getProfileUser() {
+    try {
+      const data = localStorage.getItem(PROFILE_KEYS.USER);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return { ...DEFAULT_USER };
+  }
+
+  function saveProfileUser(u) {
+    localStorage.setItem(PROFILE_KEYS.USER, JSON.stringify(u));
+    updateProfileUI();
+  }
+
+  function getContactsList() {
+    try {
+      const data = localStorage.getItem(PROFILE_KEYS.CONTACTS);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return []; // Starts empty per user requirement
+  }
+
+  function saveContactsList(list) {
+    localStorage.setItem(PROFILE_KEYS.CONTACTS, JSON.stringify(list));
+    renderMyPeople();
+  }
+
+  function getNotificationsList() {
+    try {
+      const data = localStorage.getItem(PROFILE_KEYS.NOTIFS);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return DEFAULT_NOTIFICATIONS;
+  }
+
+  function saveNotificationsList(list) {
+    localStorage.setItem(PROFILE_KEYS.NOTIFS, JSON.stringify(list));
+    updateNotifBadge();
+    renderNotifications();
+  }
+
+  function getSharedLinksList() {
+    try {
+      const data = localStorage.getItem(PROFILE_KEYS.LINKS);
+      if (data) return JSON.parse(data);
+    } catch (e) {}
+    return [
+      {
+        id: 'link_demo_1',
+        title: 'Autumn Postcard for Kabir',
+        recipient: 'Kabir',
+        date: 'Oct 6, 2026',
+        url: 'https://betweenus.love/#for-kabir',
+        revoked: false
+      }
+    ];
+  }
+
+  function saveSharedLinksList(links) {
+    localStorage.setItem(PROFILE_KEYS.LINKS, JSON.stringify(links));
+  }
+
+  // Record link in shared links when dispatching
+  function recordSharedLink(title, recipient, url) {
+    const links = getSharedLinksList();
+    links.unshift({
+      id: 'link_' + Date.now(),
+      title: title || 'A Little Something Gift',
+      recipient: recipient || 'Friend',
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      url: url,
+      revoked: false
+    });
+    saveSharedLinksList(links);
+  }
+  window.recordSharedLink = recordSharedLink;
+
+  // Update Profile Hub & Global Elements
+  function updateProfileUI() {
+    const user = getProfileUser();
+    const avatarEl = document.getElementById('profile-avatar-display');
+    const nameEl = document.getElementById('profile-name-display');
+    const emailEl = document.getElementById('profile-email-display');
+    const bioEl = document.getElementById('profile-bio-display');
+    const sessionStatusEl = document.getElementById('profile-session-status');
+    const contactNameInp = document.getElementById('contact-name');
+    const contactEmailInp = document.getElementById('contact-email');
+    const privacyEmailSub = document.getElementById('privacy-current-email-sub');
+
+    if (avatarEl) avatarEl.textContent = user.avatar || user.name.charAt(0).toUpperCase();
+    if (nameEl) nameEl.textContent = user.name || 'Saanvi';
+    if (emailEl) emailEl.textContent = user.email || 'saanvi@gmail.com';
+    if (bioEl) {
+      const cleanBio = (user.bio || '').replace(/^["']+|["']+$/g, '');
+      bioEl.textContent = cleanBio ? `"${cleanBio}"` : '';
+    }
+    if (sessionStatusEl) {
+      sessionStatusEl.textContent = user.loggedIn ? `Logged in as ${user.name}` : 'Not signed in';
+    }
+    if (contactNameInp) contactNameInp.value = user.name || '';
+    if (contactEmailInp) contactEmailInp.value = user.email || '';
+    if (privacyEmailSub) privacyEmailSub.textContent = `Current: ${user.email}`;
+
+    // Update Studio FROM inputs with active profile user name
+    const postcardFrom = document.getElementById('postcard-from-input');
+    if (postcardFrom) postcardFrom.value = user.name;
+    const letterFrom = document.getElementById('letter-from-input');
+    if (letterFrom) letterFrom.value = user.name;
+    const bouquetFrom = document.getElementById('bouquet-from-input');
+    if (bouquetFrom) bouquetFrom.value = user.name;
+    const cardInsideFrom = document.getElementById('card-inside-from-input');
+    if (cardInsideFrom) cardInsideFrom.value = user.name;
+
+    updateNotifBadge();
+  }
+
+  function updateNotifBadge() {
+    const notifs = getNotificationsList();
+    const hasUnread = notifs.some(n => n.unread);
+    const dot = document.getElementById('notifications-unread-dot');
+    if (dot) dot.style.display = hasUnread ? 'block' : 'none';
+  }
+
+  // Navigation between Profile Hub and Subpages
+  function showProfileHub() {
+    const hub = document.getElementById('profile-hub-view');
+    if (hub) hub.style.display = 'block';
+    document.querySelectorAll('.profile-subpage').forEach(sp => sp.style.display = 'none');
+  }
+
+  function showProfileSubpage(subpageKey) {
+    const hub = document.getElementById('profile-hub-view');
+    if (hub) hub.style.display = 'none';
+    document.querySelectorAll('.profile-subpage').forEach(sp => sp.style.display = 'none');
+
+    const targetSubpage = document.getElementById(`subpage-${subpageKey}`);
+    if (targetSubpage) {
+      targetSubpage.style.display = 'flex';
+      if (subpageKey === 'my-people') renderMyPeople();
+      if (subpageKey === 'notifications') renderNotifications();
+      if (subpageKey === 'privacy') updateProfileUI();
+      if (subpageKey === 'help') {
+        const firstTab = document.querySelector('.help-tab-btn[data-help-tab="faqs"]');
+        if (firstTab) firstTab.click();
+      }
+    }
+  }
+
+  // Back button in all subpages
+  document.querySelectorAll('.btn-subpage-back').forEach(btn => {
+    btn.addEventListener('click', () => {
+      showProfileHub();
+    });
+  });
+
+  // Hub Menu Card Click Listeners
+  const menuPeople = document.getElementById('menu-my-people');
+  if (menuPeople) menuPeople.addEventListener('click', () => showProfileSubpage('my-people'));
+
+  const menuNotifs = document.getElementById('menu-notifications');
+  if (menuNotifs) menuNotifs.addEventListener('click', () => showProfileSubpage('notifications'));
+
+  const menuPrivacy = document.getElementById('menu-privacy');
+  if (menuPrivacy) menuPrivacy.addEventListener('click', () => showProfileSubpage('privacy'));
+
+  const menuHelp = document.getElementById('menu-help');
+  if (menuHelp) menuHelp.addEventListener('click', () => showProfileSubpage('help'));
+
+  // Switch Account / Sign In button
+  const btnSwitchAccount = document.getElementById('btn-profile-switch-account');
+  if (btnSwitchAccount) {
+    btnSwitchAccount.addEventListener('click', () => {
+      const modal = document.getElementById('auth-modal');
+      if (modal) modal.style.display = 'flex';
+    });
+  }
+
+  // ================= 1. MY PROFILE: EDIT PROFILE MODAL =================
+  const btnOpenEditProfile = document.getElementById('btn-open-edit-profile');
+  const modalEditProfile = document.getElementById('modal-edit-profile');
+  const formEditProfile = document.getElementById('form-edit-profile');
+  let selectedAvatarVal = 'S';
+
+  if (btnOpenEditProfile && modalEditProfile) {
+    btnOpenEditProfile.addEventListener('click', () => {
+      const user = getProfileUser();
+      const nameInp = document.getElementById('edit-profile-name');
+      const emailInp = document.getElementById('edit-profile-email');
+      const bioInp = document.getElementById('edit-profile-bio');
+
+      if (nameInp) nameInp.value = user.name || '';
+      if (emailInp) emailInp.value = user.email || '';
+      if (bioInp) bioInp.value = (user.bio || '').replace(/^"|"$/g, '');
+
+      selectedAvatarVal = user.avatar || user.name.charAt(0).toUpperCase();
+      document.querySelectorAll('#edit-avatar-choices .avatar-choice-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.avatarVal === selectedAvatarVal);
+      });
+
+      modalEditProfile.style.display = 'flex';
+    });
+  }
+
+  document.querySelectorAll('#edit-avatar-choices .avatar-choice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedAvatarVal = btn.dataset.avatarVal;
+      document.querySelectorAll('#edit-avatar-choices .avatar-choice-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  if (formEditProfile) {
+    formEditProfile.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nameInp = document.getElementById('edit-profile-name');
+      const emailInp = document.getElementById('edit-profile-email');
+      const bioInp = document.getElementById('edit-profile-bio');
+
+      const user = getProfileUser();
+      user.name = (nameInp ? nameInp.value.trim() : user.name) || 'Saanvi';
+      user.email = (emailInp ? emailInp.value.trim() : user.email) || 'saanvi@gmail.com';
+      user.bio = bioInp ? bioInp.value.trim() : user.bio;
+      user.avatar = selectedAvatarVal || user.name.charAt(0).toUpperCase();
+
+      saveProfileUser(user);
+      if (modalEditProfile) modalEditProfile.style.display = 'none';
+      if (typeof showToast === 'function') showToast('Profile updated ♡');
+    });
+  }
+
+  // ================= 2. MY PEOPLE ADDRESS BOOK ENGINE =================
+  let currentPeopleFilter = 'all';
+  let currentPeopleSearch = '';
+
+  const peopleSearchInput = document.getElementById('people-search-input');
+  if (peopleSearchInput) {
+    peopleSearchInput.addEventListener('input', (e) => {
+      currentPeopleSearch = e.target.value.toLowerCase().trim();
+      renderMyPeople();
+    });
+  }
+
+  document.querySelectorAll('#people-filter-pills .people-pill-btn').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('#people-filter-pills .people-pill-btn').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      currentPeopleFilter = pill.dataset.peopleFilter;
+      renderMyPeople();
+    });
+  });
+
+  function renderMyPeople() {
+    const container = document.getElementById('people-contacts-list');
+    const emptyState = document.getElementById('people-empty-state');
+    if (!container) return;
+
+    const contacts = getContactsList();
+
+    let filtered = contacts.filter(c => {
+      if (currentPeopleFilter === 'fav' && !c.isFav) return false;
+      if (currentPeopleFilter === 'bday' && !c.birthday) return false;
+      if (currentPeopleSearch) {
+        const nMatch = (c.name || '').toLowerCase().includes(currentPeopleSearch);
+        const eMatch = (c.email || '').toLowerCase().includes(currentPeopleSearch);
+        const rMatch = (c.relationship || '').toLowerCase().includes(currentPeopleSearch);
+        if (!nMatch && !eMatch && !rMatch) return false;
+      }
+      return true;
+    });
+
+    if (contacts.length === 0 || filtered.length === 0) {
+      container.style.display = 'none';
+      if (emptyState) emptyState.style.display = 'block';
+      if (emptyState) {
+        const emptyH4 = emptyState.querySelector('h4');
+        const emptyP = emptyState.querySelector('p');
+        if (contacts.length === 0) {
+          if (emptyH4) emptyH4.textContent = 'No saved people yet';
+          if (emptyP) emptyP.textContent = 'Add someone special to quickly select them when creating cards, letters and bouquets.';
+        } else {
+          if (emptyH4) emptyH4.textContent = 'No matching contacts found';
+          if (emptyP) emptyP.textContent = 'Try clearing your search or filter pills.';
+        }
+      }
+      return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+    container.style.display = 'grid';
+    container.innerHTML = '';
+
+    filtered.forEach(person => {
+      const card = document.createElement('div');
+      card.className = 'contact-card';
+
+      const initial = person.name ? person.name.charAt(0).toUpperCase() : '?';
+      const bdayDisplay = person.birthday ? `🎂 ${formatBday(person.birthday)}` : '';
+
+      card.innerHTML = `
+        <div class="contact-main-row">
+          <div class="contact-avatar">${initial}</div>
+          <div class="contact-info">
+            <div class="contact-name-row">
+              <h4 class="contact-name">${escapeHtml(person.name)}</h4>
+              <span class="contact-rel-badge">${escapeHtml(person.relationship || 'Friend')}</span>
+            </div>
+            ${person.email ? `<p class="contact-email">${escapeHtml(person.email)}</p>` : ''}
+          </div>
+        </div>
+        ${bdayDisplay || person.notes ? `
+          <div class="contact-details-row">
+            ${bdayDisplay ? `<span class="contact-bday-pill">${bdayDisplay}</span>` : ''}
+            ${person.notes ? `<span class="contact-notes-pill">"${escapeHtml(person.notes)}"</span>` : ''}
+          </div>
+        ` : ''}
+        <div class="contact-actions-row">
+          <button type="button" class="btn-contact-action star ${person.isFav ? 'active' : ''}" data-person-id="${person.id}" title="${person.isFav ? 'Unstar' : 'Star as Favourite'}">
+            ${person.isFav ? '★' : '☆'}
+          </button>
+          <button type="button" class="btn-contact-action edit" data-person-id="${person.id}" title="Edit contact">
+            ✏️
+          </button>
+          <button type="button" class="btn-contact-action delete" data-person-id="${person.id}" title="Delete contact">
+            🗑️
+          </button>
+        </div>
+      `;
+
+      // Star toggle
+      const starBtn = card.querySelector('.btn-contact-action.star');
+      if (starBtn) {
+        starBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleFavoritePerson(person.id);
+        });
+      }
+
+      // Edit contact
+      const editBtn = card.querySelector('.btn-contact-action.edit');
+      if (editBtn) {
+        editBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openEditPersonModal(person);
+        });
+      }
+
+      // Delete contact
+      const delBtn = card.querySelector('.btn-contact-action.delete');
+      if (delBtn) {
+        delBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deletePerson(person.id);
+        });
+      }
+
+      container.appendChild(card);
+    });
+  }
+
+  function formatBday(dateStr) {
+    try {
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }
+    } catch (e) {}
+    return dateStr;
+  }
+
+  function toggleFavoritePerson(id) {
+    const list = getContactsList();
+    const target = list.find(c => c.id === id);
+    if (target) {
+      target.isFav = !target.isFav;
+      saveContactsList(list);
+    }
+  }
+
+  function deletePerson(id) {
+    let list = getContactsList();
+    list = list.filter(c => c.id !== id);
+    saveContactsList(list);
+    if (typeof showToast === 'function') showToast('Contact removed');
+  }
+
+  // Add / Edit Person Modal
+  const modalAddPerson = document.getElementById('modal-add-person');
+  const formAddPerson = document.getElementById('form-add-person');
+  const btnAddPerson = document.getElementById('btn-add-person');
+  const btnPeopleEmptyAdd = document.getElementById('btn-people-empty-add');
+  const btnDeletePerson = document.getElementById('btn-delete-person');
+
+  function openAddPersonModal() {
+    if (!modalAddPerson) return;
+    const titleEl = document.getElementById('person-modal-title');
+    const subEl = document.getElementById('person-modal-sub');
+    const idInput = document.getElementById('person-edit-id');
+    const nameInput = document.getElementById('person-name-input');
+    const emailInput = document.getElementById('person-email-input');
+    const relSelect = document.getElementById('person-rel-select');
+    const bdayInput = document.getElementById('person-bday-input');
+    const notesInput = document.getElementById('person-notes-input');
+    const favCheckbox = document.getElementById('person-fav-checkbox');
+
+    if (titleEl) titleEl.textContent = 'Add to My People';
+    if (subEl) subEl.textContent = 'Save recipient details for quick and thoughtful gifting.';
+    if (idInput) idInput.value = '';
+    if (nameInput) nameInput.value = '';
+    if (emailInput) emailInput.value = '';
+    if (relSelect) relSelect.value = 'Friend';
+    if (bdayInput) bdayInput.value = '';
+    if (notesInput) notesInput.value = '';
+    if (favCheckbox) favCheckbox.checked = false;
+    if (btnDeletePerson) btnDeletePerson.style.display = 'none';
+
+    modalAddPerson.style.display = 'flex';
+  }
+
+  function openEditPersonModal(person) {
+    if (!modalAddPerson) return;
+    const titleEl = document.getElementById('person-modal-title');
+    const subEl = document.getElementById('person-modal-sub');
+    const idInput = document.getElementById('person-edit-id');
+    const nameInput = document.getElementById('person-name-input');
+    const emailInput = document.getElementById('person-email-input');
+    const relSelect = document.getElementById('person-rel-select');
+    const bdayInput = document.getElementById('person-bday-input');
+    const notesInput = document.getElementById('person-notes-input');
+    const favCheckbox = document.getElementById('person-fav-checkbox');
+
+    if (titleEl) titleEl.textContent = 'Edit Person';
+    if (subEl) subEl.textContent = 'Update recipient details and preferences.';
+    if (idInput) idInput.value = person.id;
+    if (nameInput) nameInput.value = person.name || '';
+    if (emailInput) emailInput.value = person.email || '';
+    if (relSelect) relSelect.value = person.relationship || 'Friend';
+    if (bdayInput) bdayInput.value = person.birthday || '';
+    if (notesInput) notesInput.value = person.notes || '';
+    if (favCheckbox) favCheckbox.checked = !!person.isFav;
+    if (btnDeletePerson) btnDeletePerson.style.display = 'inline-block';
+
+    modalAddPerson.style.display = 'flex';
+  }
+
+  if (btnAddPerson) btnAddPerson.addEventListener('click', openAddPersonModal);
+  if (btnPeopleEmptyAdd) btnPeopleEmptyAdd.addEventListener('click', openAddPersonModal);
+
+  if (btnDeletePerson) {
+    btnDeletePerson.addEventListener('click', () => {
+      const idInput = document.getElementById('person-edit-id');
+      if (idInput && idInput.value) {
+        deletePerson(idInput.value);
+        if (modalAddPerson) modalAddPerson.style.display = 'none';
+      }
+    });
+  }
+
+  if (formAddPerson) {
+    formAddPerson.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const idInput = document.getElementById('person-edit-id');
+      const nameInput = document.getElementById('person-name-input');
+      const emailInput = document.getElementById('person-email-input');
+      const relSelect = document.getElementById('person-rel-select');
+      const bdayInput = document.getElementById('person-bday-input');
+      const notesInput = document.getElementById('person-notes-input');
+      const favCheckbox = document.getElementById('person-fav-checkbox');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      if (!name) return;
+
+      const editId = idInput ? idInput.value : '';
+      const list = getContactsList();
+
+      if (editId) {
+        const item = list.find(c => c.id === editId);
+        if (item) {
+          item.name = name;
+          item.email = emailInput ? emailInput.value.trim() : '';
+          item.relationship = relSelect ? relSelect.value : 'Friend';
+          item.birthday = bdayInput ? bdayInput.value : '';
+          item.notes = notesInput ? notesInput.value.trim() : '';
+          item.isFav = favCheckbox ? favCheckbox.checked : false;
+        }
+      } else {
+        list.unshift({
+          id: 'contact_' + Date.now(),
+          name: name,
+          email: emailInput ? emailInput.value.trim() : '',
+          relationship: relSelect ? relSelect.value : 'Friend',
+          birthday: bdayInput ? bdayInput.value : '',
+          notes: notesInput ? notesInput.value.trim() : '',
+          isFav: favCheckbox ? favCheckbox.checked : false,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      saveContactsList(list);
+      if (modalAddPerson) modalAddPerson.style.display = 'none';
+      if (typeof showToast === 'function') showToast(`Saved ${name} to My People ♡`);
+    });
+  }
+
+  // ================= 3. STUDIO INTEGRATION: RECIPIENT PICKER =================
+  let activeRecipientTargetId = null;
+  const modalPickerPeople = document.getElementById('modal-picker-people');
+  const pickerPeopleSearch = document.getElementById('picker-people-search');
+  const btnPickerAddNew = document.getElementById('btn-picker-add-new');
+
+  function openRecipientPicker(targetInputId) {
+    activeRecipientTargetId = targetInputId;
+    if (modalPickerPeople) {
+      if (pickerPeopleSearch) pickerPeopleSearch.value = '';
+      renderPeoplePickerList();
+      modalPickerPeople.style.display = 'flex';
+    }
+  }
+
+  function renderPeoplePickerList() {
+    const listContainer = document.getElementById('picker-people-list');
+    const emptyState = document.getElementById('picker-empty-state');
+    if (!listContainer) return;
+
+    const query = pickerPeopleSearch ? pickerPeopleSearch.value.toLowerCase().trim() : '';
+    const contacts = getContactsList();
+    const filtered = contacts.filter(c => {
+      if (!query) return true;
+      return (c.name || '').toLowerCase().includes(query) || (c.email || '').toLowerCase().includes(query);
+    });
+
+    if (contacts.length === 0 || filtered.length === 0) {
+      listContainer.style.display = 'none';
+      if (emptyState) emptyState.style.display = 'block';
+      return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+    listContainer.style.display = 'flex';
+    listContainer.innerHTML = '';
+
+    filtered.forEach(person => {
+      const row = document.createElement('div');
+      row.className = 'picker-person-row';
+      const initial = person.name ? person.name.charAt(0).toUpperCase() : '?';
+
+      row.innerHTML = `
+        <div class="picker-row-info">
+          <div class="picker-row-avatar">${initial}</div>
+          <div class="picker-row-text">
+            <div class="picker-row-name">${escapeHtml(person.name)} ${person.isFav ? '★' : ''}</div>
+            <div class="picker-row-sub">${escapeHtml(person.relationship || 'Friend')} ${person.email ? `• ${escapeHtml(person.email)}` : ''}</div>
+          </div>
+        </div>
+        <button type="button" class="btn-select-pill">Select</button>
+      `;
+
+      row.addEventListener('click', () => {
+        if (activeRecipientTargetId) {
+          const inp = document.getElementById(activeRecipientTargetId);
+          if (inp) {
+            inp.value = person.name;
+            inp.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        }
+        if (modalPickerPeople) modalPickerPeople.style.display = 'none';
+        if (typeof showToast === 'function') showToast(`Selected ${person.name} ♡`);
+      });
+
+      listContainer.appendChild(row);
+    });
+  }
+
+  if (pickerPeopleSearch) {
+    pickerPeopleSearch.addEventListener('input', renderPeoplePickerList);
+  }
+
+  if (btnPickerAddNew) {
+    btnPickerAddNew.addEventListener('click', () => {
+      if (modalPickerPeople) modalPickerPeople.style.display = 'none';
+      openAddPersonModal();
+    });
+  }
+
+  // Attach listener to all Studio picker buttons
+  document.querySelectorAll('.btn-picker-person').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.dataset.recipientTarget;
+      openRecipientPicker(targetId);
+    });
+  });
+
+  // ================= 4. NOTIFICATIONS STREAM & PREFERENCES =================
+  let currentNotifFilter = 'all';
+
+  document.querySelectorAll('#notif-filter-pills .notif-pill-btn').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('#notif-filter-pills .notif-pill-btn').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      currentNotifFilter = pill.dataset.notifFilter;
+      renderNotifications();
+    });
+  });
+
+  function renderNotifications() {
+    const stream = document.getElementById('notifications-stream');
+    if (!stream) return;
+
+    const notifs = getNotificationsList();
+    const filtered = notifs.filter(n => {
+      if (currentNotifFilter === 'all') return true;
+      return n.type === currentNotifFilter;
+    });
+
+    if (filtered.length === 0) {
+      stream.innerHTML = `
+        <div style="text-align:center; padding: 30px 14px; background: #FFFDFD; border: 1px dashed #EBDAD5; border-radius: 14px; color: #7E4D57; font-size: 13px;">
+          🌿 No notifications to display right now.
+        </div>
+      `;
+      return;
+    }
+
+    stream.innerHTML = '';
+    filtered.forEach(notif => {
+      const card = document.createElement('div');
+      card.className = `notif-card ${notif.unread ? 'unread' : ''}`;
+
+      let icon = '💌';
+      if (notif.type === 'creation') icon = '✨';
+      if (notif.type === 'reminder') icon = '🔔';
+      if (notif.type === 'incoming') icon = '🌸';
+
+      card.innerHTML = `
+        <div class="notif-icon-circle">${icon}</div>
+        <div class="notif-content">
+          <div class="notif-title-row">
+            <h5 class="notif-title">${escapeHtml(notif.title)}</h5>
+            <span class="notif-time">${escapeHtml(notif.timeText || 'Today')}</span>
+          </div>
+          <p class="notif-body">${escapeHtml(notif.body)}</p>
+        </div>
+        ${notif.unread ? '<span class="notif-unread-dot"></span>' : ''}
+      `;
+
+      card.addEventListener('click', () => {
+        if (notif.unread) {
+          notif.unread = false;
+          saveNotificationsList(notifs);
+        }
+      });
+
+      stream.appendChild(card);
+    });
+  }
+
+  const btnClearNotifs = document.getElementById('btn-clear-notifications');
+  if (btnClearNotifs) {
+    btnClearNotifs.addEventListener('click', () => {
+      saveNotificationsList([]);
+      if (typeof showToast === 'function') showToast('Notifications cleared');
+    });
+  }
+
+  // Notification Preferences toggles
+  const prefCreations = document.getElementById('pref-creations');
+  const prefIncoming = document.getElementById('pref-incoming');
+  const prefReminders = document.getElementById('pref-reminders');
+
+  try {
+    const savedPrefs = JSON.parse(localStorage.getItem(PROFILE_KEYS.NOTIF_PREFS) || '{}');
+    if (prefCreations && typeof savedPrefs.creations === 'boolean') prefCreations.checked = savedPrefs.creations;
+    if (prefIncoming && typeof savedPrefs.incoming === 'boolean') prefIncoming.checked = savedPrefs.incoming;
+    if (prefReminders && typeof savedPrefs.reminders === 'boolean') prefReminders.checked = savedPrefs.reminders;
+  } catch (e) {}
+
+  [prefCreations, prefIncoming, prefReminders].forEach(inp => {
+    if (inp) {
+      inp.addEventListener('change', () => {
+        const prefs = {
+          creations: prefCreations ? prefCreations.checked : true,
+          incoming: prefIncoming ? prefIncoming.checked : true,
+          reminders: prefReminders ? prefReminders.checked : true
+        };
+        localStorage.setItem(PROFILE_KEYS.NOTIF_PREFS, JSON.stringify(prefs));
+        if (typeof showToast === 'function') showToast('Preferences updated');
+      });
+    }
+  });
+
+  // ================= 5. PRIVACY & ACCOUNT MANAGEMENT =================
+  const btnOpenChangePwd = document.getElementById('btn-open-change-password');
+  const modalChangePwd = document.getElementById('modal-change-password');
+  const formChangePwd = document.getElementById('form-change-password');
+
+  if (btnOpenChangePwd && modalChangePwd) {
+    btnOpenChangePwd.addEventListener('click', () => {
+      if (formChangePwd) formChangePwd.reset();
+      modalChangePwd.style.display = 'flex';
+    });
+  }
+
+  if (formChangePwd) {
+    formChangePwd.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const pCurrent = document.getElementById('pwd-current').value;
+      const pNew = document.getElementById('pwd-new').value;
+      const pConfirm = document.getElementById('pwd-confirm').value;
+
+      if (!pCurrent) {
+        alert('Please enter your current password.');
+        return;
+      }
+      if (pNew.length < 6) {
+        alert('New password must be at least 6 characters long.');
+        return;
+      }
+      if (pNew !== pConfirm) {
+        alert('New passwords do not match. Please re-enter.');
+        return;
+      }
+
+      if (modalChangePwd) modalChangePwd.style.display = 'none';
+      if (typeof showToast === 'function') showToast('Password updated successfully ♡');
+    });
+  }
+
+  const btnOpenUpdateEmail = document.getElementById('btn-open-update-email');
+  const modalUpdateEmail = document.getElementById('modal-update-email');
+  const formUpdateEmail = document.getElementById('form-update-email');
+
+  if (btnOpenUpdateEmail && modalUpdateEmail) {
+    btnOpenUpdateEmail.addEventListener('click', () => {
+      const user = getProfileUser();
+      const emailInput = document.getElementById('email-new');
+      const pwdInput = document.getElementById('email-pwd-confirm');
+      if (emailInput) emailInput.value = user.email || '';
+      if (pwdInput) pwdInput.value = '';
+      modalUpdateEmail.style.display = 'flex';
+    });
+  }
+
+  if (formUpdateEmail) {
+    formUpdateEmail.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newEmail = document.getElementById('email-new').value.trim();
+      const pwdConfirm = document.getElementById('email-pwd-confirm').value;
+
+      if (!newEmail || !newEmail.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+      if (!pwdConfirm) {
+        alert('Please confirm with your current password.');
+        return;
+      }
+
+      const user = getProfileUser();
+      user.email = newEmail;
+      saveProfileUser(user);
+
+      if (modalUpdateEmail) modalUpdateEmail.style.display = 'none';
+      if (typeof showToast === 'function') showToast('Email updated to ' + newEmail);
+    });
+  }
+
+  // Manage Shared Links Modal
+  const btnManageLinks = document.getElementById('btn-manage-shared-links');
+  const modalManageLinks = document.getElementById('modal-manage-links');
+
+  function renderSharedLinks() {
+    const container = document.getElementById('shared-links-container');
+    if (!container) return;
+
+    const links = getSharedLinksList();
+    if (links.length === 0) {
+      container.innerHTML = `<p style="text-align:center; padding: 20px; color:#7E4D57;">No links created yet.</p>`;
+      return;
+    }
+
+    container.innerHTML = '';
+    links.forEach(item => {
+      const row = document.createElement('div');
+      row.className = `shared-link-row ${item.revoked ? 'revoked' : ''}`;
+      row.innerHTML = `
+        <div class="shared-link-meta">
+          <h5 class="shared-link-title">${escapeHtml(item.title)} ${item.revoked ? '<span style="color:#B32638; font-size:11px;">(Revoked)</span>' : ''}</h5>
+          <p class="shared-link-details">For: ${escapeHtml(item.recipient || 'Kabir')} • ${escapeHtml(item.date)}</p>
+          <small style="color:#925864; font-family:monospace; font-size:10px;">${escapeHtml(item.url)}</small>
+        </div>
+        ${!item.revoked ? `<button type="button" class="btn-revoke-link" data-link-id="${item.id}">Revoke</button>` : '<span style="font-size:11px; color:#9E747D;">Deactivated</span>'}
+      `;
+
+      const revBtn = row.querySelector('.btn-revoke-link');
+      if (revBtn) {
+        revBtn.addEventListener('click', () => {
+          item.revoked = true;
+          saveSharedLinksList(links);
+          renderSharedLinks();
+          if (typeof showToast === 'function') showToast('Shared link revoked');
+        });
+      }
+
+      container.appendChild(row);
+    });
+  }
+
+  if (btnManageLinks && modalManageLinks) {
+    btnManageLinks.addEventListener('click', () => {
+      renderSharedLinks();
+      modalManageLinks.style.display = 'flex';
+    });
+  }
+
+  // Log Out & Delete Account
+  const btnLogout = document.getElementById('btn-account-logout');
+  if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+      const user = getProfileUser();
+      user.loggedIn = false;
+      saveProfileUser(user);
+      if (typeof showToast === 'function') showToast('Logged out of ' + user.name);
+    });
+  }
+
+  const btnDeleteAccount = document.getElementById('btn-account-delete');
+  const modalDeleteAccount = document.getElementById('modal-delete-account');
+  const btnConfirmDelete = document.getElementById('btn-confirm-delete-account');
+
+  if (btnDeleteAccount && modalDeleteAccount) {
+    btnDeleteAccount.addEventListener('click', () => {
+      modalDeleteAccount.style.display = 'flex';
+    });
+  }
+
+  if (btnConfirmDelete) {
+    btnConfirmDelete.addEventListener('click', () => {
+      localStorage.removeItem(PROFILE_KEYS.USER);
+      localStorage.removeItem(PROFILE_KEYS.CONTACTS);
+      localStorage.removeItem(PROFILE_KEYS.NOTIFS);
+      localStorage.removeItem(PROFILE_KEYS.TICKETS);
+      localStorage.removeItem(PROFILE_KEYS.LINKS);
+      updateProfileUI();
+      renderMyPeople();
+      if (modalDeleteAccount) modalDeleteAccount.style.display = 'none';
+      showProfileHub();
+      if (typeof showToast === 'function') showToast('Account deleted. Fresh session started.');
+    });
+  }
+
+  // ================= 6. HELP & SUPPORT ENGINE (13 FAQS & CONTACT FORM) =================
+  document.querySelectorAll('#help-section-switcher .help-tab-btn').forEach(tabBtn => {
+    tabBtn.addEventListener('click', () => {
+      document.querySelectorAll('#help-section-switcher .help-tab-btn').forEach(t => t.classList.remove('active'));
+      tabBtn.classList.add('active');
+
+      const tabKey = tabBtn.dataset.helpTab;
+      document.querySelectorAll('.help-tab-pane').forEach(pane => {
+        pane.style.display = (pane.id === `pane-help-${tabKey}`) ? 'block' : 'none';
+      });
+    });
+  });
+
+  // FAQs Accordions
+  document.querySelectorAll('#faqs-accordion-list .faq-question-btn').forEach(qBtn => {
+    qBtn.addEventListener('click', () => {
+      const parentItem = qBtn.closest('.faq-item');
+      if (parentItem) {
+        parentItem.classList.toggle('active');
+      }
+    });
+  });
+
+  // Contact Support Form
+  const formContact = document.getElementById('form-contact-support');
+  if (formContact) {
+    formContact.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const subject = document.getElementById('contact-subject').value;
+      const message = document.getElementById('contact-message').value.trim();
+      const name = document.getElementById('contact-name').value;
+      const email = document.getElementById('contact-email').value;
+
+      if (!message) {
+        alert('Please write your message before sending.');
+        return;
+      }
+
+      // Generate authentic ticket reference: TICK-XXXXX
+      const ticketRef = 'TICK-' + Math.floor(10000 + Math.random() * 90000);
+
+      // Save ticket
+      try {
+        const tickets = JSON.parse(localStorage.getItem(PROFILE_KEYS.TICKETS) || '[]');
+        tickets.unshift({
+          ref: ticketRef,
+          name: name,
+          email: email,
+          subject: subject,
+          message: message,
+          date: new Date().toISOString()
+        });
+        localStorage.setItem(PROFILE_KEYS.TICKETS, JSON.stringify(tickets));
+      } catch (err) {}
+
+      // Render confirmation receipt
+      const card = formContact.closest('.contact-support-form-card');
+      if (card) {
+        card.innerHTML = `
+          <div class="contact-card-header">
+            <span style="font-size:32px;">💌</span>
+            <h4>Message Received!</h4>
+            <p>Thank you, ${escapeHtml(name)}. We have received your note and will be in touch shortly.</p>
+          </div>
+          <div class="support-ticket-receipt">
+            <small style="color:#7E4D57; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Ticket Reference</small><br>
+            <span class="ticket-number">${ticketRef}</span>
+            <p style="font-size:12px; color:#6F454E; margin:6px 0 0 0;">
+              A confirmation has been recorded for <strong>${escapeHtml(email)}</strong>. Our team typically replies within 24 hours.
+            </p>
+          </div>
+          <div style="text-align:center; margin-top:20px;">
+            <button type="button" class="btn-secondary" id="btn-reset-support-card">Send Another Message</button>
+          </div>
+        `;
+
+        const resetBtn = card.querySelector('#btn-reset-support-card');
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            showProfileSubpage('help');
+          });
+        }
+      }
+
+      if (typeof showToast === 'function') showToast(`Ticket ${ticketRef} submitted ♡`);
+    });
+  }
+
+  // ================= 7. AUTH SIGN IN / SIGN UP MODAL =================
+  const authModal = document.getElementById('auth-modal');
+  const formAuth = document.getElementById('form-auth');
+  const tabAuthSignIn = document.getElementById('tab-auth-signin');
+  const tabAuthSignUp = document.getElementById('tab-auth-signup');
+  const groupAuthName = document.getElementById('group-auth-name');
+  const authModalTitle = document.getElementById('auth-modal-title');
+  const authModalSub = document.getElementById('auth-modal-sub');
+  const btnSubmitAuth = document.getElementById('btn-submit-auth');
+  let authMode = 'signin';
+
+  if (tabAuthSignIn && tabAuthSignUp) {
+    tabAuthSignIn.addEventListener('click', () => {
+      authMode = 'signin';
+      tabAuthSignIn.classList.add('active');
+      tabAuthSignUp.classList.remove('active');
+      if (groupAuthName) groupAuthName.style.display = 'none';
+      if (authModalTitle) authModalTitle.textContent = 'Sign In';
+      if (authModalSub) authModalSub.textContent = 'Welcome back to A Little Something.';
+      if (btnSubmitAuth) btnSubmitAuth.textContent = 'Sign In ♡';
+    });
+
+    tabAuthSignUp.addEventListener('click', () => {
+      authMode = 'signup';
+      tabAuthSignUp.classList.add('active');
+      tabAuthSignIn.classList.remove('active');
+      if (groupAuthName) groupAuthName.style.display = 'block';
+      if (authModalTitle) authModalTitle.textContent = 'Create Account';
+      if (authModalSub) authModalSub.textContent = 'Join A Little Something to preserve memories.';
+      if (btnSubmitAuth) btnSubmitAuth.textContent = 'Create Account ♡';
+    });
+  }
+
+  if (formAuth) {
+    formAuth.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('auth-email-input').value.trim();
+      const pwd = document.getElementById('auth-pwd-input').value;
+      const name = document.getElementById('auth-name-input') ? document.getElementById('auth-name-input').value.trim() : '';
+
+      if (!email || !pwd) return;
+
+      const user = getProfileUser();
+      user.email = email;
+      user.loggedIn = true;
+      if (authMode === 'signup' && name) {
+        user.name = name;
+        user.avatar = name.charAt(0).toUpperCase();
+      }
+      saveProfileUser(user);
+
+      if (authModal) authModal.style.display = 'none';
+      if (typeof showToast === 'function') showToast(`Welcome, ${user.name} ♡`);
+    });
+  }
+
+  // Bind All Profile Modals Closers
+  bindModalCloser('btn-close-edit-profile', 'modal-edit-profile');
+  bindModalCloser('btn-cancel-edit-profile', 'modal-edit-profile');
+  bindModalCloser('btn-close-add-person', 'modal-add-person');
+  bindModalCloser('btn-cancel-add-person', 'modal-add-person');
+  bindModalCloser('btn-close-picker-people', 'modal-picker-people');
+  bindModalCloser('btn-close-change-pwd', 'modal-change-password');
+  bindModalCloser('btn-cancel-change-pwd', 'modal-change-password');
+  bindModalCloser('btn-close-update-email', 'modal-update-email');
+  bindModalCloser('btn-cancel-update-email', 'modal-update-email');
+  bindModalCloser('btn-close-manage-links', 'modal-manage-links');
+  bindModalCloser('btn-done-manage-links', 'modal-manage-links');
+  bindModalCloser('btn-close-delete-account', 'modal-delete-account');
+  bindModalCloser('btn-cancel-delete-account', 'modal-delete-account');
+  bindModalCloser('btn-close-auth-modal', 'auth-modal');
+  bindModalCloser('btn-cancel-auth', 'auth-modal');
+
+  // Hook Profile Navigation Tab
+  const profileNavTab = document.querySelector('.nav-tab[data-room="profile"]');
+  if (profileNavTab) {
+    profileNavTab.addEventListener('click', () => {
+      showProfileHub();
+      updateProfileUI();
+    });
+  }
+
+  // Initialize Profile UI on boot
+  updateProfileUI();
+  window.updateProfileUI = updateProfileUI;
+  window.showProfileSubpage = showProfileSubpage;
+  window.showProfileHub = showProfileHub;
+  window.renderMyPeople = renderMyPeople;
+  window.renderNotifications = renderNotifications;
 
   // URL Param direct deep-linking (e.g. ?nosplash=1&medium=bouquet&step=arrange)
   try {
@@ -7316,6 +8381,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.get('room') === 'vault' || urlParams.has('vault')) {
       const vaultTab = document.querySelector('.nav-tab[data-room="vault"]');
       if (vaultTab) vaultTab.click();
+    }
+    if (urlParams.get('room') === 'profile' || urlParams.has('profile')) {
+      const profileTab = document.querySelector('.nav-tab[data-room="profile"]');
+      if (profileTab) profileTab.click();
+      const sub = urlParams.get('profile_subpage') || urlParams.get('subpage');
+      if (sub && typeof showProfileSubpage === 'function') {
+        showProfileSubpage(sub);
+      }
     }
   } catch (err) {}
 

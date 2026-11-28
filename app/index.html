@@ -436,6 +436,7 @@
                         <div class="from-to-row">
                           <span class="lbl">TO:</span>
                           <input type="text" value="Kabir" id="postcard-to-input">
+                          <button type="button" class="btn-picker-person" data-recipient-target="postcard-to-input" title="Choose from My People">👥</button>
                         </div>
                         <div class="from-to-row">
                           <span class="lbl">FROM:</span>
@@ -775,7 +776,7 @@
                   <div class="letter-header-row">
                     <span class="letter-date" id="letter-display-date">October 6, 2026</span>
                     <div class="letter-from-to">
-                      <span>To: <input type="text" value="Kabir" id="letter-to-input"></span>
+                      <span>To: <input type="text" value="Kabir" id="letter-to-input"><button type="button" class="btn-picker-person" data-recipient-target="letter-to-input" title="Choose from My People">👥</button></span>
                       <span>From: <input type="text" value="Saanvi" id="letter-from-input"></span>
                     </div>
                   </div>
@@ -1285,6 +1286,7 @@
                 <div class="deckle-note-header">
                   <span class="deckle-label">To:</span>
                   <input type="text" value="Kabir" id="bouquet-to-input" class="deckle-input" placeholder="Recipient" autocomplete="off" />
+                  <button type="button" class="btn-picker-person" data-recipient-target="bouquet-to-input" title="Choose from My People">👥</button>
                 </div>
                 <textarea class="deckle-note-textarea" id="bouquet-note-body" placeholder="Write your heartfelt note here...">A little botanical bouquet handpicked just for you.</textarea>
                 <div class="deckle-note-footer">
@@ -1613,6 +1615,7 @@
                     <div class="card-inside-note-header">
                       <span class="card-note-label">To:</span>
                       <input type="text" value="Kabir" id="card-inside-to-input" class="card-deckle-input" />
+                      <button type="button" class="btn-picker-person" data-recipient-target="card-inside-to-input" title="Choose from My People">👥</button>
                     </div>
                     <textarea class="card-inside-textarea" id="card-inside-body-textarea" placeholder="Write your heartfelt message here...">Wishing you all the joy, peace, and warmth this season brings.</textarea>
                     <div class="card-inside-note-footer">
@@ -2141,12 +2144,531 @@
         </div>
       </section>
 
-      <!-- ================= ROOM 4: REVISIT ================= -->
-      <section class="room-view" id="room-revisit" style="display:none;">
-        <div class="revisit-box-card upcoming">
-          <small>📅 November 14, 2026</small>
-          <h4>Surprise from Kabir</h4>
-          <p>"Open when the first winter morning arrives."</p>
+      <!-- ================= ROOM 4: PROFILE ================= -->
+      <section class="room-view" id="room-profile" style="display:none;">
+        <div class="profile-container">
+          <!-- Profile Main Hub View -->
+          <div class="profile-hub-view" id="profile-hub-view">
+            <div class="profile-header-block">
+              <h2 class="profile-main-title">Your little space</h2>
+              <p class="profile-main-subtitle">Manage your account and the people you share with.</p>
+              <div class="profile-divider"><span>— ♡ —</span></div>
+            </div>
+
+            <!-- Profile User Card -->
+            <div class="profile-user-card" id="profile-user-card">
+              <div class="user-avatar-wrap">
+                <div class="user-avatar" id="profile-avatar-display">S</div>
+              </div>
+              <div class="user-details-wrap">
+                <h3 class="user-name" id="profile-name-display">Saanvi</h3>
+                <p class="user-email" id="profile-email-display">saanvi@gmail.com</p>
+                <p class="user-bio" id="profile-bio-display">"Making little somethings for the people I love ♡"</p>
+              </div>
+              <button type="button" class="btn-profile-edit" id="btn-open-edit-profile">Edit profile</button>
+            </div>
+
+            <!-- 4 Menu Cards -->
+            <div class="profile-menu-grid">
+              <div class="profile-menu-card" id="menu-my-people">
+                <div class="menu-icon-wrap">👥</div>
+                <div class="menu-text-wrap">
+                  <h4 class="menu-card-title">My People</h4>
+                  <p class="menu-card-sub">Manage saved recipients</p>
+                </div>
+                <span class="menu-chevron">›</span>
+              </div>
+
+              <div class="profile-menu-card" id="menu-notifications">
+                <div class="menu-icon-wrap">
+                  🔔
+                  <span class="menu-unread-badge" id="notifications-unread-dot" style="display:none;"></span>
+                </div>
+                <div class="menu-text-wrap">
+                  <h4 class="menu-card-title">Notifications</h4>
+                  <p class="menu-card-sub">Delivery updates, received gifts and invites</p>
+                </div>
+                <span class="menu-chevron">›</span>
+              </div>
+
+              <div class="profile-menu-card" id="menu-privacy">
+                <div class="menu-icon-wrap">🔒</div>
+                <div class="menu-text-wrap">
+                  <h4 class="menu-card-title">Privacy & Account</h4>
+                  <p class="menu-card-sub">Sharing, security and account details</p>
+                </div>
+                <span class="menu-chevron">›</span>
+              </div>
+
+              <div class="profile-menu-card" id="menu-help">
+                <div class="menu-icon-wrap">❓</div>
+                <div class="menu-text-wrap">
+                  <h4 class="menu-card-title">Help & Support</h4>
+                  <p class="menu-card-sub">FAQs, contact and app information</p>
+                </div>
+                <span class="menu-chevron">›</span>
+              </div>
+            </div>
+
+            <!-- Active Account Bar -->
+            <div class="profile-auth-status-bar">
+              <span id="profile-session-status">Logged in as Saanvi</span>
+              <button type="button" class="btn-text-link" id="btn-profile-switch-account">Switch Account / Sign In</button>
+            </div>
+          </div>
+
+          <!-- Subpage 1: My People -->
+          <div class="profile-subpage" id="subpage-my-people" style="display:none;">
+            <div class="subpage-topbar">
+              <button type="button" class="btn-subpage-back" data-back-to="hub">‹ Back</button>
+              <h3 class="subpage-title">My People</h3>
+              <button type="button" class="btn-subpage-action" id="btn-add-person">+ Add Person</button>
+            </div>
+            <p class="subpage-subtitle">Your private address book for quick and thoughtful gifting.</p>
+
+            <div class="people-toolbar">
+              <div class="people-search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="people-search-input" id="people-search-input" placeholder="Search people..." autocomplete="off">
+              </div>
+              <div class="people-filter-pills" id="people-filter-pills">
+                <button type="button" class="people-pill-btn active" data-people-filter="all">All</button>
+                <button type="button" class="people-pill-btn" data-people-filter="fav">Favourites ⭐</button>
+                <button type="button" class="people-pill-btn" data-people-filter="bday">Birthdays 🎂</button>
+              </div>
+            </div>
+
+            <div class="people-contacts-list" id="people-contacts-list">
+              <!-- Dynamically populated from localStorage['between_us_contacts'] -->
+            </div>
+
+            <div class="people-empty-state" id="people-empty-state" style="display:none;">
+              <div class="people-empty-icon">👥</div>
+              <h4>No saved people yet</h4>
+              <p>Add someone special or create a gift to quickly select them later.</p>
+              <button type="button" class="btn-primary" id="btn-people-empty-add">+ Add Your First Person</button>
+            </div>
+          </div>
+
+          <!-- Subpage 2: Notifications -->
+          <div class="profile-subpage" id="subpage-notifications" style="display:none;">
+            <div class="subpage-topbar">
+              <button type="button" class="btn-subpage-back" data-back-to="hub">‹ Back</button>
+              <h3 class="subpage-title">Notifications</h3>
+              <button type="button" class="btn-subpage-action" id="btn-clear-notifications">Clear All</button>
+            </div>
+            <p class="subpage-subtitle">Delivery updates, received gifts and reminders.</p>
+
+            <div class="notif-filter-pills" id="notif-filter-pills">
+              <button type="button" class="notif-pill-btn active" data-notif-filter="all">All</button>
+              <button type="button" class="notif-pill-btn" data-notif-filter="creation">Creations</button>
+              <button type="button" class="notif-pill-btn" data-notif-filter="incoming">Incoming</button>
+              <button type="button" class="notif-pill-btn" data-notif-filter="reminder">Reminders</button>
+            </div>
+
+            <div class="notifications-stream" id="notifications-stream">
+              <!-- Dynamically populated from localStorage['between_us_notifications'] -->
+            </div>
+
+            <div class="notif-preferences-card">
+              <h4 class="notif-pref-title">Notification Preferences</h4>
+              <div class="notif-pref-row">
+                <div>
+                  <strong>Creation & Dispatch Updates</strong>
+                  <small>When your gifts are delivered or opened</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="pref-creations" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div class="notif-pref-row">
+                <div>
+                  <strong>Incoming Gifts & Invites</strong>
+                  <small>When someone shares a card or scrapbook</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="pref-incoming" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div class="notif-pref-row">
+                <div>
+                  <strong>Special Occasion Reminders</strong>
+                  <small>7 days and 1 day before birthdays & anniversaries</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="pref-reminders" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subpage 3: Privacy & Account -->
+          <div class="profile-subpage" id="subpage-privacy" style="display:none;">
+            <div class="subpage-topbar">
+              <button type="button" class="btn-subpage-back" data-back-to="hub">‹ Back</button>
+              <h3 class="subpage-title">Privacy & Account</h3>
+              <div style="width:50px;"></div>
+            </div>
+            <p class="subpage-subtitle">Security, sharing controls, and data privacy.</p>
+
+            <div class="privacy-cards-stack">
+              <!-- Account Security -->
+              <div class="privacy-card">
+                <h4 class="privacy-card-title">Account Security</h4>
+                <div class="privacy-action-list">
+                  <button type="button" class="privacy-action-row" id="btn-open-change-password">
+                    <span class="row-icon">🔑</span>
+                    <div class="row-text">
+                      <strong>Change Password</strong>
+                      <small>Update your account access password</small>
+                    </div>
+                    <span class="row-chevron">›</span>
+                  </button>
+                  <button type="button" class="privacy-action-row" id="btn-open-update-email">
+                    <span class="row-icon">✉️</span>
+                    <div class="row-text">
+                      <strong>Update Email Address</strong>
+                      <small id="privacy-current-email-sub">Current: saanvi@gmail.com</small>
+                    </div>
+                    <span class="row-chevron">›</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Sharing & Privacy -->
+              <div class="privacy-card">
+                <h4 class="privacy-card-title">Sharing & Privacy</h4>
+                <div class="privacy-notice-box">
+                  <p>🔒 <strong>Your creations are private:</strong> Unfinished drafts and Vault items are only visible to you. Shared Keepsakes scrapbooks are accessible only to invited participants. Public links can only be viewed by someone who has the specific link.</p>
+                </div>
+                <div class="privacy-action-list">
+                  <button type="button" class="privacy-action-row" id="btn-manage-shared-links">
+                    <span class="row-icon">🔗</span>
+                    <div class="row-text">
+                      <strong>Manage Shared Links</strong>
+                      <small>View and revoke access to generated links</small>
+                    </div>
+                    <span class="row-chevron">›</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Account Management -->
+              <div class="privacy-card">
+                <h4 class="privacy-card-title">Account Management</h4>
+                <div class="privacy-action-list">
+                  <button type="button" class="privacy-action-row" id="btn-account-logout">
+                    <span class="row-icon">🚪</span>
+                    <div class="row-text">
+                      <strong>Log Out</strong>
+                      <small>Sign out of your account on this device</small>
+                    </div>
+                    <span class="row-chevron">›</span>
+                  </button>
+                  <button type="button" class="privacy-action-row danger" id="btn-account-delete">
+                    <span class="row-icon">🗑</span>
+                    <div class="row-text">
+                      <strong>Delete Account</strong>
+                      <small>Permanently delete your profile and creations</small>
+                    </div>
+                    <span class="row-chevron">›</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subpage 4: Help & Support -->
+          <div class="profile-subpage" id="subpage-help" style="display:none;">
+            <div class="subpage-topbar">
+              <button type="button" class="btn-subpage-back" data-back-to="hub">‹ Back</button>
+              <h3 class="subpage-title">Help & Support</h3>
+              <div style="width:50px;"></div>
+            </div>
+            <p class="subpage-subtitle">We're always here to help make your experience special.</p>
+
+            <div class="help-section-switcher" id="help-section-switcher">
+              <button type="button" class="help-tab-btn active" data-help-tab="faqs">FAQs</button>
+              <button type="button" class="help-tab-btn" data-help-tab="contact">Contact Us</button>
+              <button type="button" class="help-tab-btn" data-help-tab="about">About</button>
+              <button type="button" class="help-tab-btn" data-help-tab="terms">Terms</button>
+              <button type="button" class="help-tab-btn" data-help-tab="privacy">Privacy</button>
+            </div>
+
+            <!-- Help Tab 1: FAQs -->
+            <div class="help-tab-pane active" id="pane-help-faqs">
+              <div class="faqs-intro-box">
+                <h4 class="faqs-heading">Frequently Asked Questions</h4>
+                <p class="faqs-sub">Everything you need to know about A Little Something, From Me to You.</p>
+              </div>
+
+              <!-- 13 Accordions Verbatim -->
+              <div class="faqs-accordion-list" id="faqs-accordion-list">
+                <!-- Group A: Getting Started -->
+                <div class="faq-group-label">Getting Started</div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>1. What is A Little Something?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>A Little Something is a digital gifting app where you can create and send thoughtful, personalised postcards, letters, bouquets and greeting cards to people you care about.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>2. Is the app free to use?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>Yes, you can create and personalise digital gifts within the app. Some additional features or designs may be offered separately.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>3. Do I need to create an account?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>Yes, creating an account allows you to save your creations, manage your keepsakes and access your personal Vault.</p>
+                  </div>
+                </div>
+
+                <!-- Group B: Creating & Sending -->
+                <div class="faq-group-label">Creating & Sending</div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>4. What can I create on the app?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>You can create four types of digital gifts:<br>• Postcards<br>• Letters<br>• Bouquets<br>• Greeting Cards</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>5. Can I customise my creations?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>Absolutely! You can personalise themes, colours, fonts, font sizes, stamps, images and messages depending on the creation type.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>6. How can I send my creation to someone?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>Once your creation is ready, choose how it arrives and dispatch it. You can copy a shareable link or send it directly to friends.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>7. Does the recipient need the app to open my gift?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>No. Anyone with your shared link can open and view the creation through a supported web browser.</p>
+                  </div>
+                </div>
+
+                <!-- Group C: Keepsakes & Vault -->
+                <div class="faq-group-label">Keepsakes & Vault</div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>8. What is Keepsakes?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>Keepsakes is a space to preserve memories. You can create a shared scrapbook with friends or personally save creations that others have sent you.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>9. What is the Vault?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>Your Vault stores your drafts, completed creations and sent gifts. You can revisit, rename and manage your saved work.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>10. Will my creations be automatically saved?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>Yes. Completed creations are automatically saved to your Vault. You can also manually save them using the Save option.</p>
+                  </div>
+                </div>
+
+                <!-- Group D: Account & Privacy -->
+                <div class="faq-group-label">Account & Privacy</div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>11. Can I manage who sees my creations?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>You can manage your shared creations and links through the privacy settings in your Profile.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>12. Can I change my account details?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>Yes. You can update your email address and password through Privacy & Account.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button type="button" class="faq-question-btn">
+                    <span>13. What if I forget my password?</span>
+                    <span class="faq-arrow">▾</span>
+                  </button>
+                  <div class="faq-answer-content">
+                    <p>Use the Forgot Password option on the login screen to reset your password.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Help Tab 2: Contact Support -->
+            <div class="help-tab-pane" id="pane-help-contact" style="display:none;">
+              <div class="contact-support-form-card">
+                <div class="contact-card-header">
+                  <span style="font-size:26px;">💌</span>
+                  <h4>Get in Touch</h4>
+                  <p>We're always happy to hear from you.</p>
+                </div>
+                <form id="form-contact-support" onsubmit="return false;">
+                  <div class="form-group">
+                    <label for="contact-name">Your Name</label>
+                    <input type="text" id="contact-name" class="form-control" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="contact-email">Email Address</label>
+                    <input type="email" id="contact-email" class="form-control" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="contact-category">What do you need help with?</label>
+                    <select id="contact-category" class="form-control" required>
+                      <option value="Issue with creating a gift">Issue with creating a gift</option>
+                      <option value="Problem sending or opening a link">Problem sending or opening a link</option>
+                      <option value="Keepsakes or Vault issue">Keepsakes or Vault issue</option>
+                      <option value="Account or login issue">Account or login issue</option>
+                      <option value="Something else">Something else</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="contact-subject">Subject</label>
+                    <input type="text" id="contact-subject" class="form-control" placeholder="Briefly describe your issue..." required>
+                  </div>
+                  <div class="form-group">
+                    <label for="contact-message">Message</label>
+                    <textarea id="contact-message" class="form-control" rows="4" placeholder="Explain the problem in detail..." required></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>Attach Screenshot (Optional)</label>
+                    <input type="file" id="contact-screenshot" class="form-control" accept="image/*">
+                  </div>
+                  <button type="submit" class="btn-primary" id="btn-submit-support" style="width:100%; padding:12px; font-size:13px; margin-top:8px;">Send Message ♡</button>
+                </form>
+
+                <div class="contact-success-banner" id="contact-success-banner" style="display:none;">
+                  <div style="font-size:32px; margin-bottom:6px;">✨</div>
+                  <h4 style="font-family:'Playfair Display',serif; color:#521319; margin:0 0 4px;">Message Received!</h4>
+                  <p style="font-size:12px; color:#87585F; margin:0 0 8px;">We'll get back to you soon. Thank you for reaching out.</p>
+                  <p style="font-size:11px; font-weight:700; color:#521319;" id="contact-ticket-ref">Ticket ID: TICK-18301</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Help Tab 3: About the App -->
+            <div class="help-tab-pane" id="pane-help-about" style="display:none;">
+              <div class="about-text-card">
+                <h4 class="about-card-title">About the App</h4>
+                <h5>1. Our Story</h5>
+                <p>A Little Something is a digital gifting and creative expression app designed to make thoughtful gestures feel more personal. It brings the charm of handwritten letters, postcards, greeting cards and bouquets into a digital space, allowing people to create and send little expressions of affection.</p>
+                <h5>2. Our Philosophy</h5>
+                <p><em>Because sometimes, the smallest gestures mean the most.</em> The app is built around the idea that gifting doesn't always need an occasion. A small note, a personalised card or a virtual bouquet can make someone's day.</p>
+                <h5>3. What You Can Create</h5>
+                <ul>
+                  <li><strong>Postcards:</strong> Personalised postcards with photographs, stamps and handwritten-style messages.</li>
+                  <li><strong>Letters:</strong> Thoughtful digital letters with custom typography and personal touches.</li>
+                  <li><strong>Bouquets:</strong> Digital flower arrangements to send to someone special.</li>
+                  <li><strong>Greeting Cards:</strong> Customisable cards for occasions, celebrations or just because.</li>
+                </ul>
+                <h5>4. What Makes Us Special</h5>
+                <ul>
+                  <li>Personalised digital creations.</li>
+                  <li>Multiple themes, colours and typography options.</li>
+                  <li>Different ways to deliver your creations.</li>
+                  <li>A personal Vault to save drafts and sent creations.</li>
+                  <li>Shared Keepsakes to preserve memories with friends.</li>
+                </ul>
+                <h5>5. App Information</h5>
+                <p>• App name: A Little Something<br>• Tagline: From Me to You<br>• Version: 1.0<br>• Category: Digital Gifting & Creative Expression</p>
+                <h5>6. Credits & Acknowledgements</h5>
+                <p>Designed & crafted with love by <strong>Saanvi</strong> (BD-24-N1830) at National Institute of Fashion Technology (NIFT), Information Architecture 2026. Dedicated to keeping meaningful memories alive.</p>
+              </div>
+            </div>
+
+            <!-- Help Tab 4: Terms & Conditions -->
+            <div class="help-tab-pane" id="pane-help-terms" style="display:none;">
+              <div class="legal-text-card">
+                <h4>Terms & Conditions</h4>
+                <small>Last updated: November 2026</small>
+                <p>Welcome to <strong>A Little Something – From Me to You</strong>. By using our app, you agree to the following terms. Please take a moment to read them.</p>
+                <h5>1. Using the App</h5>
+                <p>A Little Something allows users to create personalised digital postcards, letters, bouquets and greeting cards. You agree to use the app responsibly and only for lawful purposes.</p>
+                <h5>2. Your Creations</h5>
+                <p>You own the personal content you create, including your messages, photographs and uploaded images. You are responsible for the content you upload and share. Do not upload content that is harmful, offensive, misleading or violates someone else's rights.</p>
+                <h5>3. Sharing Your Creations</h5>
+                <p>You can share your creations with others through a unique link. Anyone with access to a shared link may be able to view the creation. You are responsible for sharing links only with people you trust.</p>
+                <h5>4. Your Vault and Keepsakes</h5>
+                <p>Your Vault stores your drafts and completed creations. Keepsakes allows you to preserve personal memories and collaboratively collect creations with friends.</p>
+                <h5>5. Privacy</h5>
+                <p>Your personal information and account details should be handled in accordance with our Privacy Policy. We do not intend for your private creations to be publicly accessible unless you choose to share them.</p>
+                <h5>6. User Responsibilities</h5>
+                <p>You agree not to misuse the app or its features, attempt to access another user's private account, or interfere with the app's functionality.</p>
+                <h5>7. Availability and Changes</h5>
+                <p>We aim to keep the app accessible and functioning smoothly. However, certain features may occasionally be unavailable due to maintenance, technical issues or updates.</p>
+                <h5>8. Account and Content Management</h5>
+                <p>You can manage your account and saved creations through the app. If you choose to delete your account, associated content may also be deleted.</p>
+                <h5>9. Changes to These Terms</h5>
+                <p>We may update these Terms & Conditions from time to time. Any changes will be reflected on this page.</p>
+                <h5>10. Contact Us</h5>
+                <p>Have questions about these terms? Reach out to us through the Help & Support section in the app.</p>
+              </div>
+            </div>
+
+            <!-- Help Tab 5: Privacy Policy -->
+            <div class="help-tab-pane" id="pane-help-privacy" style="display:none;">
+              <div class="legal-text-card">
+                <h4>Privacy Policy</h4>
+                <small>Last updated: November 2026</small>
+                <p>At <strong>A Little Something – From Me to You</strong>, we believe that personal messages and memories deserve to be treated with care. This Privacy Policy explains how your information is collected, used and protected when you use our app.</p>
+                <h5>1. Information We Collect</h5>
+                <p>• Personal Details: Your name, email address and profile picture.<br>• Contact Details: Names, email addresses and birthdays of people you choose to save in My People.<br>• Creative Content: Postcards, letters, bouquets, greeting cards, photographs and messages you create.<br>• Account Information: Login details and account-related information.</p>
+                <h5>2. How We Use Your Information</h5>
+                <p>Your information is used to create and manage your account, save drafts and completed creations in your Vault, help you manage saved contacts, enable shared scrapbooks, and deliver notifications.</p>
+                <h5>3. Your Creations and Privacy</h5>
+                <p>Your unfinished drafts remain private to your account. Your Vault is a personal space accessible only to you. Shared Keepsakes scrapbooks are accessible to invited participants.</p>
+                <h5>4. Sharing of Information</h5>
+                <p>We do not sell your personal information. Your information may be shared only when necessary to enable features you choose to use.</p>
+                <h5>5. Data Security</h5>
+                <p>We take reasonable measures to protect your personal information and creations from unauthorised access, misuse or loss.</p>
+                <h5>6. Your Choices and Controls</h5>
+                <p>You can edit your profile information, manage saved contacts in My People, control notification preferences, and request deletion of your account.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -2165,9 +2687,9 @@
         <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         <span>Vault</span>
       </button>
-      <button class="nav-tab" data-room="revisit">
-        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span>Revisit</span>
+      <button class="nav-tab" data-room="profile">
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Profile</span>
       </button>
     </nav>
 
@@ -2635,6 +3157,252 @@
           <div class="modal-form-actions">
             <button type="button" class="btn-secondary" id="btn-cancel-vault-rename">Cancel</button>
             <button type="submit" class="btn-primary" id="btn-submit-vault-rename">Save Name ♡</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= PROFILE: EDIT PROFILE MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-edit-profile" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-edit-profile">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">🌸</span>
+          <h3>Edit Your Profile</h3>
+          <p>Personalise how you appear across A Little Something.</p>
+        </div>
+        <form id="form-edit-profile" onsubmit="return false;">
+          <div class="profile-avatar-picker-wrap">
+            <label class="form-label-sub">Choose Avatar / Icon</label>
+            <div class="avatar-choices-row" id="edit-avatar-choices">
+              <button type="button" class="avatar-choice-btn active" data-avatar-val="S">S</button>
+              <button type="button" class="avatar-choice-btn" data-avatar-val="🌸">🌸</button>
+              <button type="button" class="avatar-choice-btn" data-avatar-val="💌">💌</button>
+              <button type="button" class="avatar-choice-btn" data-avatar-val="🌿">🌿</button>
+              <button type="button" class="avatar-choice-btn" data-avatar-val="🕊️">🕊️</button>
+              <button type="button" class="avatar-choice-btn" data-avatar-val="✨">✨</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-profile-name">Full Name</label>
+            <input type="text" id="edit-profile-name" class="form-control" required placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="edit-profile-email">Email Address</label>
+            <input type="email" id="edit-profile-email" class="form-control" required placeholder="your.email@example.com">
+          </div>
+          <div class="form-group">
+            <label for="edit-profile-bio">Short Personal Message / Bio</label>
+            <textarea id="edit-profile-bio" class="form-control" rows="2" placeholder="A little note about yourself..."></textarea>
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-edit-profile">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-edit-profile">Save Changes ♡</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= PROFILE: ADD / EDIT PERSON MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-add-person" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-add-person">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge" id="person-modal-icon">👥</span>
+          <h3 id="person-modal-title">Add to My People</h3>
+          <p id="person-modal-sub">Save recipient details for quick and thoughtful gifting.</p>
+        </div>
+        <form id="form-add-person" onsubmit="return false;">
+          <input type="hidden" id="person-edit-id" value="">
+          <div class="form-group">
+            <label for="person-name-input">Full Name *</label>
+            <input type="text" id="person-name-input" class="form-control" required placeholder="e.g. Kabir, Maya, Dad">
+          </div>
+          <div class="form-group">
+            <label for="person-email-input">Email Address</label>
+            <input type="email" id="person-email-input" class="form-control" placeholder="name@example.com (optional)">
+          </div>
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label for="person-rel-select">Relationship</label>
+              <select id="person-rel-select" class="form-control">
+                <option value="Friend">Friend</option>
+                <option value="Partner">Partner ♡</option>
+                <option value="Family">Family</option>
+                <option value="Colleague">Colleague</option>
+                <option value="Someone Special">Someone Special</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="person-bday-input">Birthday 🎂</label>
+              <input type="date" id="person-bday-input" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="person-notes-input">Personal Notes / Aesthetic Preferences</label>
+            <input type="text" id="person-notes-input" class="form-control" placeholder="e.g. Loves pink peonies, classical vinyl, vintage notes">
+          </div>
+          <div class="form-group checkbox-row">
+            <label class="custom-checkbox-label">
+              <input type="checkbox" id="person-fav-checkbox">
+              <span>Mark as Favourite ⭐</span>
+            </label>
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-danger-outline" id="btn-delete-person" style="display:none; margin-right:auto;">Delete</button>
+            <button type="button" class="btn-secondary" id="btn-cancel-add-person">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-add-person">Save Person ♡</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= PROFILE: STUDIO RECIPIENT PICKER MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-picker-people" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-picker-people">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">👥</span>
+          <h3>Choose from My People</h3>
+          <p>Select a saved recipient to quickly fill in their name.</p>
+        </div>
+        <div class="picker-search-bar">
+          <input type="text" id="picker-people-search" class="form-control" placeholder="Search people..." autocomplete="off">
+        </div>
+        <div class="picker-people-list" id="picker-people-list">
+          <!-- Populated dynamically via JS -->
+        </div>
+        <div class="picker-empty-state" id="picker-empty-state" style="display:none;">
+          <p>No saved people yet.</p>
+          <button type="button" class="btn-secondary btn-sm" id="btn-picker-add-new">+ Add New Person</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= PROFILE: CHANGE PASSWORD MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-change-password" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-change-pwd">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">🔑</span>
+          <h3>Change Password</h3>
+          <p>Choose a secure password for your account.</p>
+        </div>
+        <form id="form-change-password" onsubmit="return false;">
+          <div class="form-group">
+            <label for="pwd-current">Current Password</label>
+            <input type="password" id="pwd-current" class="form-control" required placeholder="Enter current password">
+          </div>
+          <div class="form-group">
+            <label for="pwd-new">New Password</label>
+            <input type="password" id="pwd-new" class="form-control" required placeholder="At least 6 characters">
+          </div>
+          <div class="form-group">
+            <label for="pwd-confirm">Confirm New Password</label>
+            <input type="password" id="pwd-confirm" class="form-control" required placeholder="Re-enter new password">
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-change-pwd">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-change-pwd">Update Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= PROFILE: UPDATE EMAIL MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-update-email" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-update-email">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">✉️</span>
+          <h3>Update Email Address</h3>
+          <p>We'll send account and delivery notifications to this address.</p>
+        </div>
+        <form id="form-update-email" onsubmit="return false;">
+          <div class="form-group">
+            <label for="email-new">New Email Address</label>
+            <input type="email" id="email-new" class="form-control" required placeholder="new.email@example.com">
+          </div>
+          <div class="form-group">
+            <label for="email-pwd-confirm">Current Password</label>
+            <input type="password" id="email-pwd-confirm" class="form-control" required placeholder="Confirm with your password">
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-update-email">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-update-email">Update Email</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= PROFILE: MANAGE SHARED LINKS MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-manage-links" style="display:none;">
+      <div class="keepsake-form-dialog" style="max-width: 520px;">
+        <button type="button" class="btn-modal-close" id="btn-close-manage-links">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">🔗</span>
+          <h3>Manage Shared Links</h3>
+          <p>Revoking a link will deactivate it so recipients can no longer view the gift.</p>
+        </div>
+        <div class="shared-links-container" id="shared-links-container">
+          <!-- Populated via JS -->
+        </div>
+        <div class="modal-form-actions">
+          <button type="button" class="btn-secondary" id="btn-done-manage-links">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= PROFILE: DELETE ACCOUNT MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-delete-account" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-delete-account">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge" style="background:#FDE8EC; color:#B32638;">⚠️</span>
+          <h3 style="color:#B32638;">Delete Account</h3>
+          <p>This action is permanent and cannot be undone.</p>
+        </div>
+        <div class="delete-warning-box">
+          <p>Deleting your account will immediately remove all your saved drafts, vault creations, keepsakes, and private recipient information.</p>
+          <p>Are you sure you want to proceed?</p>
+        </div>
+        <div class="modal-form-actions">
+          <button type="button" class="btn-secondary" id="btn-cancel-delete-account">Keep My Account</button>
+          <button type="button" class="btn-danger" id="btn-confirm-delete-account">Yes, Delete Account</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= PROFILE: AUTH SIGN IN / SIGN UP MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="auth-modal" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-auth-modal">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">🌸</span>
+          <h3 id="auth-modal-title">Sign In</h3>
+          <p id="auth-modal-sub">Welcome back to A Little Something.</p>
+        </div>
+        <div class="auth-tabs-row">
+          <button type="button" class="auth-tab-btn active" id="tab-auth-signin">Sign In</button>
+          <button type="button" class="auth-tab-btn" id="tab-auth-signup">Create Account</button>
+        </div>
+        <form id="form-auth" onsubmit="return false;">
+          <div class="form-group" id="group-auth-name" style="display:none;">
+            <label for="auth-name-input">Your Name</label>
+            <input type="text" id="auth-name-input" class="form-control" placeholder="e.g. Saanvi">
+          </div>
+          <div class="form-group">
+            <label for="auth-email-input">Email Address</label>
+            <input type="email" id="auth-email-input" class="form-control" required placeholder="your.email@example.com">
+          </div>
+          <div class="form-group">
+            <label for="auth-pwd-input">Password</label>
+            <input type="password" id="auth-pwd-input" class="form-control" required placeholder="••••••••">
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-auth">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-auth">Sign In ♡</button>
           </div>
         </form>
       </div>
