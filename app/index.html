@@ -1973,51 +1973,98 @@
 
       <!-- ================= ROOM 2: KEEPSAKES ================= -->
       <section class="room-view" id="room-keepsakes" style="display:none;">
-        <div class="keepsakes-nav-segmented">
-          <button class="seg-btn active" data-tab="shelf">Keepsake Shelf</button>
-          <button class="seg-btn" data-tab="scrapbooks">Scrapbooks</button>
-          <button class="seg-btn" data-tab="log">Relationship Log</button>
-        </div>
+        <div class="keepsakes-container">
+          <!-- Keepsakes Title Header -->
+          <div class="keepsakes-header-block">
+            <h2 class="keepsakes-main-title">Keepsakes</h2>
+            <p class="keepsakes-main-subtitle">Your collection of shared and personal memories</p>
+            <div class="keepsakes-divider"><span>♡</span></div>
+          </div>
 
-        <div class="keepsakes-subtab active" id="tab-shelf">
-          <div class="shelf-grid" id="shelf-items-grid">
-            <div class="shelf-item-card">
-              <div class="item-tag-vessel">🚚 Delivery Truck</div>
-              <h4>Hawa Mahal Morning</h4>
-              <p class="item-snippet">"Thinking of you as the pigeons took flight over the pink walls..."</p>
-              <div class="item-footer"><span>From: Saanvi</span><span>Sep 24, 2026</span></div>
+          <!-- Two Hero Entry Cards -->
+          <div class="keepsakes-hero-grid">
+            <div class="keepsakes-hero-card active" id="hero-our-keepsakes">
+              <div class="hero-card-icon-wrap">
+                <img src="assets/medium_card.png" alt="Our Keepsakes" class="hero-card-img" />
+              </div>
+              <div class="hero-card-text">
+                <h3 class="hero-card-title">Our Keepsakes</h3>
+                <p class="hero-card-sub">A shared scrapbook with someone special</p>
+              </div>
+              <span class="hero-card-arrow">›</span>
             </div>
-            <div class="shelf-item-card">
-              <div class="item-tag-vessel">✉️ Envelope</div>
-              <h4>A Quiet Apology & Tea</h4>
-              <p class="item-snippet">"I'm sorry about yesterday. Let's sit quietly with our tea tonight."</p>
-              <div class="item-footer"><span>From: Kabir</span><span>Sep 28, 2026</span></div>
+            <div class="keepsakes-hero-card" id="hero-my-keepsakes">
+              <div class="hero-card-icon-wrap">
+                <img src="assets/medium_letter.png" alt="My Keepsakes" class="hero-card-img" />
+              </div>
+              <div class="hero-card-text">
+                <h3 class="hero-card-title">My Keepsakes</h3>
+                <p class="hero-card-sub">Your personal collection of received and saved moments</p>
+              </div>
+              <span class="hero-card-arrow">›</span>
             </div>
           </div>
-        </div>
 
-        <div class="keepsakes-subtab" id="tab-scrapbooks" style="display:none;">
-          <div class="chapters-grid">
-            <div class="chapter-card">
-              <h4>Jaipur Trip 2025</h4>
-              <small>4 kept moments • 1 pinned postcard</small>
+          <!-- Section 1: Our Keepsakes (Shared Scrapbooks) -->
+          <div class="keepsakes-section" id="section-our-keepsakes">
+            <div class="keepsakes-section-header">
+              <div class="section-title-wrap">
+                <span class="section-icon">👥</span>
+                <h3 class="section-title">Our Keepsakes</h3>
+              </div>
+              <button type="button" class="btn-keepsake-action" id="btn-create-scrapbook">
+                <span>+ Create Shared Scrapbook</span>
+              </button>
             </div>
-            <div class="chapter-card">
-              <h4>Late Night Tea & Talks</h4>
-              <small>3 kept moments</small>
+            <p class="section-subtitle">Build a collective memory space with your favourite person/people.</p>
+
+            <div class="scrapbooks-scroll-row" id="scrapbooks-container">
+              <!-- Populated dynamically with scrapbooks + New Scrapbook Card -->
             </div>
           </div>
-        </div>
 
-        <div class="keepsakes-subtab" id="tab-log" style="display:none;">
-          <div class="timeline-stream">
-            <div class="timeline-entry">
-              <span class="timeline-date">Oct 2026</span>
-              <div class="timeline-card"><strong>1 Month Special</strong></div>
+          <!-- Section 2: My Keepsakes (Personal Collections) -->
+          <div class="keepsakes-section" id="section-my-keepsakes">
+            <div class="keepsakes-section-header">
+              <div class="section-title-wrap">
+                <span class="section-icon">🔖</span>
+                <h3 class="section-title">My Keepsakes</h3>
+              </div>
+              <button type="button" class="btn-keepsake-action" id="btn-create-collection">
+                <span>+ New Collection</span>
+              </button>
             </div>
-            <div class="timeline-entry">
-              <span class="timeline-date">Sep 2026</span>
-              <div class="timeline-card"><strong>Jaipur Detour</strong></div>
+            <p class="section-subtitle">All the little somethings you've received, saved, or want to hold close.</p>
+
+            <div class="pocket-folders-scroll-row" id="collections-container">
+              <!-- Populated dynamically with pocket envelopes: Received From Others, Saved by Me, Special Occasions, Letters & Notes -->
+            </div>
+          </div>
+
+          <!-- Section 3: Quick Add to My Keepsakes -->
+          <div class="quick-add-section" id="section-quick-add">
+            <h4 class="quick-add-title">✨ Quick Add to My Keepsakes</h4>
+            <div class="quick-add-pills-row">
+              <button type="button" class="quick-add-pill" data-quick="photo">
+                <span class="quick-pill-icon">🖼</span>
+                <span>Photo</span>
+              </button>
+              <button type="button" class="quick-add-pill" data-quick="song">
+                <span class="quick-pill-icon">🎵</span>
+                <span>Song</span>
+              </button>
+              <button type="button" class="quick-add-pill" data-quick="note">
+                <span class="quick-pill-icon">📝</span>
+                <span>Note</span>
+              </button>
+              <button type="button" class="quick-add-pill" data-quick="sticker">
+                <span class="quick-pill-icon">🌸</span>
+                <span>Sticker</span>
+              </button>
+              <button type="button" class="quick-add-pill" data-quick="memory">
+                <span class="quick-pill-icon">♡</span>
+                <span>Memory</span>
+              </button>
             </div>
           </div>
         </div>
@@ -2158,6 +2205,305 @@
     <!-- Atelier Toast Notification -->
     <div class="atelier-toast" id="atelier-toast" style="display:none;">
       <span id="atelier-toast-msg">Link copied to clipboard!</span>
+    </div>
+
+    <!-- ================= KEEPSAKES: SCRAPBOOK VIEWER MODAL ================= -->
+    <div class="scrapbook-viewer-modal-backdrop" id="modal-scrapbook-viewer" style="display:none;">
+      <div class="scrapbook-viewer-dialog">
+        <!-- Top Navigation Bar -->
+        <div class="scrapbook-viewer-topbar">
+          <div class="scrapbook-topbar-info">
+            <h3 class="scrapbook-title-heading" id="scrapbook-viewer-title">Me & Kabir ♡</h3>
+            <span class="scrapbook-subtitle-text" id="scrapbook-viewer-sub">Shared with Kabir • 14 kept memories</span>
+          </div>
+          <div class="scrapbook-topbar-actions">
+            <button type="button" class="btn-scrapbook-action-pill" id="btn-scrapbook-invite">
+              <span>Invite 🔗</span>
+            </button>
+            <button type="button" class="btn-scrapbook-action-pill highlight" id="btn-scrapbook-add-memory">
+              <span>+ Add Memory</span>
+            </button>
+            <button type="button" class="btn-modal-close" id="btn-close-scrapbook-viewer" title="Close">✕</button>
+          </div>
+        </div>
+
+        <!-- Book Spread Stage -->
+        <div class="scrapbook-book-stage">
+          <div class="scrapbook-book-spread" id="scrapbook-book-spread">
+            <!-- Left Page -->
+            <div class="scrapbook-page page-left" id="scrapbook-page-left">
+              <!-- Content rendered dynamically via JS -->
+            </div>
+            <!-- Center Spine Shadow & Stitching -->
+            <div class="scrapbook-spine-crease"></div>
+            <!-- Right Page -->
+            <div class="scrapbook-page page-right" id="scrapbook-page-right">
+              <!-- Content rendered dynamically via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="scrapbook-viewer-footer">
+          <button type="button" class="btn-page-flip" id="btn-scrapbook-prev-page">‹ Previous Page</button>
+          <span class="scrapbook-page-indicator" id="scrapbook-page-indicator">Page 1 of 3</span>
+          <button type="button" class="btn-page-flip" id="btn-scrapbook-next-page">Next Page ›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= KEEPSAKES: CREATE SCRAPBOOK MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-create-scrapbook" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-create-scrapbook">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">📖</span>
+          <h3>Create Shared Scrapbook</h3>
+          <p>A collective space to gather moments with someone special.</p>
+        </div>
+        <form id="form-create-scrapbook" onsubmit="return false;">
+          <div class="form-group">
+            <label for="scrapbook-input-title">Scrapbook Title</label>
+            <input type="text" id="scrapbook-input-title" class="form-control" placeholder="e.g. Me & Kabir ♡, The Paris Trip..." required>
+          </div>
+          <div class="form-group">
+            <label for="scrapbook-input-partner">Collaborator Name or Email</label>
+            <input type="text" id="scrapbook-input-partner" class="form-control" placeholder="e.g. Kabir (kabir@example.com)">
+          </div>
+          <div class="form-group">
+            <label>Cover Theme</label>
+            <div class="cover-theme-picker" id="scrapbook-cover-picker">
+              <button type="button" class="cover-opt-btn active" data-cover-theme="gingham">
+                <span class="cover-swatch theme-gingham"></span>
+                <span class="cover-name">Pink Gingham</span>
+              </button>
+              <button type="button" class="cover-opt-btn" data-cover-theme="lemon">
+                <span class="cover-swatch theme-lemon"></span>
+                <span class="cover-name">Lemon Grove</span>
+              </button>
+              <button type="button" class="cover-opt-btn" data-cover-theme="toile">
+                <span class="cover-swatch theme-toile"></span>
+                <span class="cover-name">Vintage Toile</span>
+              </button>
+              <button type="button" class="cover-opt-btn" data-cover-theme="rose">
+                <span class="cover-swatch theme-rose"></span>
+                <span class="cover-name">Muted Rose</span>
+              </button>
+              <button type="button" class="cover-opt-btn" data-cover-theme="velvet">
+                <span class="cover-swatch theme-velvet"></span>
+                <span class="cover-name">Midnight Velvet</span>
+              </button>
+            </div>
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-create-scrapbook">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-create-scrapbook">Create Scrapbook ♡</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= KEEPSAKES: ADD SCRAPBOOK MEMORY MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-add-scrapbook-memory" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-add-memory">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">✨</span>
+          <h3>Add to Scrapbook</h3>
+          <p>Pin a new note, photo, song, or memory to this book.</p>
+        </div>
+        <form id="form-add-scrapbook-memory" onsubmit="return false;">
+          <div class="form-group">
+            <label>Memory Type</label>
+            <div class="memory-type-pills" id="memory-type-selector">
+              <button type="button" class="type-pill-btn active" data-type="note">📝 Note</button>
+              <button type="button" class="type-pill-btn" data-type="photo">🖼 Photo</button>
+              <button type="button" class="type-pill-btn" data-type="song">🎵 Song</button>
+              <button type="button" class="type-pill-btn" data-type="flower">🌸 Pressed Flower</button>
+            </div>
+          </div>
+          <div class="form-group" id="grp-memory-author">
+            <label for="memory-input-author">Who is adding this?</label>
+            <select id="memory-input-author" class="form-control">
+              <option value="Saanvi">Saanvi (You)</option>
+              <option value="Kabir">Kabir</option>
+            </select>
+          </div>
+          <div class="form-group" id="grp-memory-caption">
+            <label for="memory-input-caption">Caption or Story</label>
+            <textarea id="memory-input-caption" class="form-control" rows="3" placeholder="Write your memory or annotation..."></textarea>
+          </div>
+          <div class="form-group" id="grp-memory-song" style="display:none;">
+            <label for="memory-song-select">Choose Song (Curated 30 Tracks)</label>
+            <select id="memory-song-select" class="form-control">
+              <!-- Dynamically populated from CURATED_VINYL_TRACKS -->
+            </select>
+          </div>
+          <div class="form-group" id="grp-memory-photo" style="display:none;">
+            <label>Upload Polaroid Photo</label>
+            <input type="file" id="memory-photo-file" accept="image/*" class="form-control">
+          </div>
+          <div class="form-group" id="grp-memory-flower" style="display:none;">
+            <label>Select Pressed Flower</label>
+            <div class="flower-selection-row" id="memory-flower-picker">
+              <button type="button" class="flower-opt-btn active" data-flower="wild_rose">🌹 Wild Rose</button>
+              <button type="button" class="flower-opt-btn" data-flower="forget_me_not">💙 Forget-Me-Not</button>
+              <button type="button" class="flower-opt-btn" data-flower="pressed_daisy">🌼 Daisy</button>
+              <button type="button" class="flower-opt-btn" data-flower="lavender_sprig">🌿 Lavender</button>
+            </div>
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-add-memory">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-add-memory">Pin to Scrapbook ♡</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= KEEPSAKES: PERSONAL COLLECTION VIEWER MODAL ================= -->
+    <div class="collection-viewer-modal-backdrop" id="modal-collection-viewer" style="display:none;">
+      <div class="collection-viewer-dialog">
+        <div class="collection-viewer-header">
+          <div class="collection-header-left">
+            <div class="collection-header-icon" id="coll-viewer-icon">🔖</div>
+            <div>
+              <h3 class="collection-header-title" id="coll-viewer-title">Received From Others</h3>
+              <p class="collection-header-sub" id="coll-viewer-sub">4 saved keepsakes • Private collection</p>
+            </div>
+          </div>
+          <div class="collection-header-actions">
+            <button type="button" class="btn-scrapbook-action-pill highlight" id="btn-coll-quick-add">
+              <span>+ Add Item</span>
+            </button>
+            <button type="button" class="btn-modal-close" id="btn-close-collection-viewer" title="Close">✕</button>
+          </div>
+        </div>
+
+        <!-- Filter Sub-Tabs -->
+        <div class="collection-filter-tabs" id="coll-filter-tabs">
+          <button type="button" class="coll-filter-btn active" data-filter="all">All</button>
+          <button type="button" class="coll-filter-btn" data-filter="postcard">Postcards</button>
+          <button type="button" class="coll-filter-btn" data-filter="letter">Letters</button>
+          <button type="button" class="coll-filter-btn" data-filter="bouquet">Bouquets</button>
+          <button type="button" class="coll-filter-btn" data-filter="card">Greeting Cards</button>
+          <button type="button" class="coll-filter-btn" data-filter="quick">Photos & Notes</button>
+        </div>
+
+        <!-- Preserved Items Grid -->
+        <div class="collection-items-grid" id="coll-items-grid">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= KEEPSAKES: CREATE COLLECTION MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-create-collection" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-create-coll">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">📁</span>
+          <h3>Create Personal Collection</h3>
+          <p>Organise your keepsakes, letters, cards, and gifts into a pocket folder.</p>
+        </div>
+        <form id="form-create-collection" onsubmit="return false;">
+          <div class="form-group">
+            <label for="coll-input-title">Collection Name</label>
+            <input type="text" id="coll-input-title" class="form-control" placeholder="e.g. Birthday Letters, Summer Postcards..." required>
+          </div>
+          <div class="form-group">
+            <label>Folder Color Theme</label>
+            <div class="folder-theme-picker" id="coll-theme-picker">
+              <button type="button" class="folder-theme-opt active" data-folder-theme="blush">
+                <span class="folder-color-dot" style="background:#F7D6DC;"></span>
+                <span>Blush</span>
+              </button>
+              <button type="button" class="folder-theme-opt" data-folder-theme="sage">
+                <span class="folder-color-dot" style="background:#D8E2DC;"></span>
+                <span>Sage</span>
+              </button>
+              <button type="button" class="folder-theme-opt" data-folder-theme="cream">
+                <span class="folder-color-dot" style="background:#F5EBE0;"></span>
+                <span>Parchment</span>
+              </button>
+              <button type="button" class="folder-theme-opt" data-folder-theme="burgundy">
+                <span class="folder-color-dot" style="background:#B34B62;"></span>
+                <span>Rosewood</span>
+              </button>
+              <button type="button" class="folder-theme-opt" data-folder-theme="sky">
+                <span class="folder-color-dot" style="background:#D9E5F2;"></span>
+                <span>French Blue</span>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Icon Motif</label>
+            <div class="motif-picker" id="coll-motif-picker">
+              <button type="button" class="motif-opt-btn active" data-motif="🔖">🔖</button>
+              <button type="button" class="motif-opt-btn" data-motif="💌">💌</button>
+              <button type="button" class="motif-opt-btn" data-motif="🌸">🌸</button>
+              <button type="button" class="motif-opt-btn" data-motif="✉️">✉️</button>
+              <button type="button" class="motif-opt-btn" data-motif="🕊">🕊</button>
+              <button type="button" class="motif-opt-btn" data-motif="🗝">🗝</button>
+            </div>
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-create-coll">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-create-coll">Create Folder ♡</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= KEEPSAKES: QUICK ADD MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-quick-add" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-quick-add">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge" id="quick-add-badge-icon">✨</span>
+          <h3 id="quick-add-heading">Quick Add to My Keepsakes</h3>
+          <p id="quick-add-sub">Save a precious moment directly to your personal collection.</p>
+        </div>
+        <form id="form-quick-add" onsubmit="return false;">
+          <div class="form-group">
+            <label for="quick-add-target-coll">Save into Collection</label>
+            <select id="quick-add-target-coll" class="form-control">
+              <!-- Populated dynamically from personal collections -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="quick-add-title">Title / Name</label>
+            <input type="text" id="quick-add-title" class="form-control" placeholder="e.g. Afternoon Tea, Favourite Song..." required>
+          </div>
+          <!-- Type-specific fields -->
+          <div class="form-group" id="quick-field-note">
+            <label for="quick-add-note-text">Personal Note / Message</label>
+            <textarea id="quick-add-note-text" class="form-control" rows="3" placeholder="Write your thoughts..."></textarea>
+          </div>
+          <div class="form-group" id="quick-field-song" style="display:none;">
+            <label for="quick-add-song-select">Choose Song (Curated 30 Tracks)</label>
+            <select id="quick-add-song-select" class="form-control">
+              <!-- Populated dynamically from CURATED_VINYL_TRACKS -->
+            </select>
+          </div>
+          <div class="form-group" id="quick-field-photo" style="display:none;">
+            <label>Upload Photo</label>
+            <input type="file" id="quick-add-photo-file" accept="image/*" class="form-control">
+          </div>
+          <div class="form-group" id="quick-field-sticker" style="display:none;">
+            <label>Choose Sticker</label>
+            <div class="quick-sticker-picker" id="quick-sticker-picker">
+              <button type="button" class="sticker-choice-btn active" data-sticker="sticker_hearts_pink.png">🌸 Pink Hearts</button>
+              <button type="button" class="sticker-choice-btn" data-sticker="sticker_cherries.png">🍒 Cherries</button>
+              <button type="button" class="sticker-choice-btn" data-sticker="sticker_wax_seal_red.png">💌 Wax Seal</button>
+              <button type="button" class="sticker-choice-btn" data-sticker="sticker_stamp_rose.png">🌹 Rose Stamp</button>
+            </div>
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-quick-add">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-quick-add">Save to Keepsakes ♡</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- ================= PUBLIC RECIPIENT EXPERIENCE ================= -->

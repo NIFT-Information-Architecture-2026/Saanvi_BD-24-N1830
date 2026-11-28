@@ -5790,21 +5790,990 @@ document.addEventListener('DOMContentLoaded', () => {
   window.CURATED_VINYL_TRACKS = CURATED_VINYL_TRACKS;
   checkUrlRecipientView();
 
-  // ================= 7. KEEPSAKES TABS =================
-  const segBtns = document.querySelectorAll('.seg-btn');
-  const subtabs = document.querySelectorAll('.keepsakes-subtab');
+  // ==========================================================================
+  // COMPLETE KEEPSAKES ENGINE (Our Keepsakes & My Keepsakes)
+  // ==========================================================================
+  const KEEPSAKE_KEYS = {
+    SCRAPBOOKS: 'between_us_shared_scrapbooks',
+    COLLECTIONS: 'between_us_personal_collections',
+    ITEMS: 'between_us_personal_keepsakes'
+  };
 
-  segBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tabKey = btn.dataset.tab;
-      segBtns.forEach(b => b.classList.toggle('active', b === btn));
-      subtabs.forEach(sub => {
-        const isMatch = sub.id === `tab-${tabKey}`;
-        sub.style.display = isMatch ? 'block' : 'none';
-        sub.classList.toggle('active', isMatch);
+  const DEFAULT_SCRAPBOOKS = [
+    {
+      id: 'scrap_1',
+      title: 'Me & Kabir ♡',
+      partner: 'Kabir',
+      theme: 'gingham',
+      date: 'Oct 2026',
+      updatedText: '2 hours ago',
+      pages: [
+        {
+          pageNumber: 1,
+          left: {
+            type: 'polaroid',
+            src: 'assets/medium_card.png',
+            caption: 'Our autumn walk in the rose garden',
+            rotation: -2
+          },
+          right: {
+            type: 'note',
+            author: 'Kabir',
+            text: 'Remember when we sat on that stone bench until it got dark? You told me you wanted to freeze time. Me too.',
+            date: 'Oct 14, 2026'
+          }
+        },
+        {
+          pageNumber: 2,
+          left: {
+            type: 'vinyl',
+            songId: 'die-with-a-smile',
+            trackName: 'Die With A Smile',
+            artistName: 'Lady Gaga & Bruno Mars',
+            audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/07/6a/99/076a99ed-b946-431b-6f1f-54fa187ca5bd/mzaf_8102882277995122875.plus.aac.p.m4a',
+            artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/11/ae/f2/11aef294-f57c-bab9-c9fc-529162984e62/24UMGIM85348.rgb.jpg/100x100bb.jpg',
+            note: 'Saanvi: Still my favourite track we listened to in the car.'
+          },
+          right: {
+            type: 'photo_note',
+            src: 'assets/medium_letter.png',
+            caption: 'Coffee stain on our napkin sketch',
+            author: 'Saanvi',
+            text: 'Never threw away that receipt.',
+            date: 'Oct 18, 2026'
+          }
+        },
+        {
+          pageNumber: 3,
+          left: {
+            type: 'flower',
+            flowerName: 'Wild Rose',
+            author: 'Kabir',
+            caption: 'Picked from outside your window'
+          },
+          right: {
+            type: 'note',
+            author: 'Saanvi',
+            text: 'Fourteen little memories and counting. Let us keep adding to this book forever.',
+            date: 'Nov 2, 2026'
+          }
+        }
+      ]
+    },
+    {
+      id: 'scrap_2',
+      title: 'The Spain Trip',
+      partner: 'Kabir',
+      theme: 'lemon',
+      date: 'Aug 2026',
+      updatedText: 'Aug 28, 2026',
+      pages: [
+        {
+          pageNumber: 1,
+          left: {
+            type: 'polaroid',
+            src: 'assets/medium_card.png',
+            caption: 'Plaza Mayor in the afternoon sunshine',
+            rotation: 1
+          },
+          right: {
+            type: 'note',
+            author: 'Kabir',
+            text: 'The best churros and chocolate in the world.',
+            date: 'Aug 22, 2026'
+          }
+        }
+      ]
+    },
+    {
+      id: 'scrap_3',
+      title: 'Studio Days',
+      partner: 'Kabir',
+      theme: 'toile',
+      date: 'Sep 2026',
+      updatedText: 'Sep 19, 2026',
+      pages: [
+        {
+          pageNumber: 1,
+          left: {
+            type: 'polaroid',
+            src: 'assets/medium_letter.png',
+            caption: 'Late night desk sketches',
+            rotation: -1
+          },
+          right: {
+            type: 'note',
+            author: 'Saanvi',
+            text: 'Cups of tea going cold while we made things together.',
+            date: 'Sep 15, 2026'
+          }
+        }
+      ]
+    }
+  ];
+
+  const DEFAULT_COLLECTIONS = [
+    {
+      id: 'coll_received',
+      title: 'Received From Others',
+      subtitle: 'Gifts and cards sent to you',
+      motif: '💌',
+      theme: 'blush'
+    },
+    {
+      id: 'coll_saved',
+      title: 'Saved by Me',
+      subtitle: 'Personal favourites held close',
+      motif: '🔖',
+      theme: 'sage'
+    },
+    {
+      id: 'coll_occasions',
+      title: 'Special Occasions',
+      subtitle: 'Anniversaries, birthdays & moments',
+      motif: '🕯',
+      theme: 'burgundy'
+    },
+    {
+      id: 'coll_letters',
+      title: 'Letters & Notes',
+      subtitle: 'Words to revisit on quiet days',
+      motif: '✉️',
+      theme: 'cream'
+    }
+  ];
+
+  const DEFAULT_PERSONAL_KEEPSAKES = [
+    {
+      id: 'keep_1',
+      collectionId: 'coll_received',
+      type: 'card',
+      title: 'A Little Something For You',
+      from: 'Kabir',
+      to: 'Saanvi',
+      date: 'Nov 14, 2026',
+      badge: '💌 Greeting Card',
+      summary: 'Handmade card with pressed hydrangea and Taylor Swift vinyl'
+    },
+    {
+      id: 'keep_2',
+      collectionId: 'coll_received',
+      type: 'postcard',
+      title: 'Hawa Mahal Morning',
+      from: 'Kabir',
+      to: 'Saanvi',
+      date: 'Sep 24, 2026',
+      badge: '🖼 Postcard',
+      summary: '"Thinking of you as the pigeons took flight over the pink walls..."'
+    },
+    {
+      id: 'keep_3',
+      collectionId: 'coll_received',
+      type: 'bouquet',
+      title: 'Wildflower & Peony Bouquet',
+      from: 'Kabir',
+      to: 'Saanvi',
+      date: 'Oct 02, 2026',
+      badge: '💐 Bouquet',
+      summary: 'Blush peonies, eucalyptus, and a sealed note.'
+    },
+    {
+      id: 'keep_4',
+      collectionId: 'coll_letters',
+      type: 'letter',
+      title: 'A Quiet Apology & Tea',
+      from: 'Kabir',
+      to: 'Saanvi',
+      date: 'Sep 28, 2026',
+      badge: '✉️ Letter',
+      summary: '"I\'m sorry about yesterday. Let\'s sit quietly with our tea tonight."'
+    },
+    {
+      id: 'keep_5',
+      collectionId: 'coll_saved',
+      type: 'quick',
+      subType: 'photo',
+      title: 'First Sunset by the Lake',
+      from: 'Saanvi',
+      date: 'Aug 10, 2026',
+      badge: '🖼 Polaroid Photo',
+      summary: 'Taped photo with the orange and lavender sky.'
+    },
+    {
+      id: 'keep_6',
+      collectionId: 'coll_occasions',
+      type: 'quick',
+      subType: 'song',
+      title: 'Lover – Taylor Swift',
+      from: 'Kabir & Saanvi',
+      date: 'Oct 14, 2026',
+      badge: '🎵 Vinyl Song',
+      summary: 'Our song added during the anniversary dinner.'
+    }
+  ];
+
+  function getSharedScrapbooks() {
+    try {
+      const data = localStorage.getItem(KEEPSAKE_KEYS.SCRAPBOOKS);
+      return data ? JSON.parse(data) : DEFAULT_SCRAPBOOKS;
+    } catch (e) {
+      return DEFAULT_SCRAPBOOKS;
+    }
+  }
+
+  function saveSharedScrapbooks(scrapbooks) {
+    try {
+      localStorage.setItem(KEEPSAKE_KEYS.SCRAPBOOKS, JSON.stringify(scrapbooks));
+    } catch (e) {}
+  }
+
+  function getPersonalCollections() {
+    try {
+      const data = localStorage.getItem(KEEPSAKE_KEYS.COLLECTIONS);
+      return data ? JSON.parse(data) : DEFAULT_COLLECTIONS;
+    } catch (e) {
+      return DEFAULT_COLLECTIONS;
+    }
+  }
+
+  function savePersonalCollections(colls) {
+    try {
+      localStorage.setItem(KEEPSAKE_KEYS.COLLECTIONS, JSON.stringify(colls));
+    } catch (e) {}
+  }
+
+  function getPersonalKeepsakes() {
+    try {
+      const data = localStorage.getItem(KEEPSAKE_KEYS.ITEMS);
+      return data ? JSON.parse(data) : DEFAULT_PERSONAL_KEEPSAKES;
+    } catch (e) {
+      return DEFAULT_PERSONAL_KEEPSAKES;
+    }
+  }
+
+  function savePersonalKeepsakes(items) {
+    try {
+      localStorage.setItem(KEEPSAKE_KEYS.ITEMS, JSON.stringify(items));
+    } catch (e) {}
+  }
+
+  let activeScrapbookAudio = null;
+  let activeScrapbookDisc = null;
+
+  function stopScrapbookAudio() {
+    if (activeScrapbookAudio) {
+      activeScrapbookAudio.pause();
+      activeScrapbookAudio.currentTime = 0;
+      activeScrapbookAudio = null;
+    }
+    if (activeScrapbookDisc) {
+      activeScrapbookDisc.classList.remove('spinning');
+      activeScrapbookDisc = null;
+    }
+  }
+
+  function renderSharedScrapbooks() {
+    const container = document.getElementById('scrapbooks-container');
+    if (!container) return;
+    const scrapbooks = getSharedScrapbooks();
+
+    let html = scrapbooks.map(sb => {
+      const count = (sb.pages ? sb.pages.length * 2 : 6);
+      return `
+        <div class="scrapbook-cover-card cover-${escapeHtml(sb.theme || 'gingham')}" data-scrapbook-id="${escapeHtml(sb.id)}">
+          <div class="scrapbook-ribbon"></div>
+          <div class="scrapbook-label-plate">
+            <h4 class="scrapbook-card-title">${escapeHtml(sb.title)}</h4>
+            <span class="scrapbook-card-collab">With ${escapeHtml(sb.partner || 'Someone Special')}</span>
+          </div>
+          <div class="scrapbook-bottom-badge">
+            <span>${count} kept moments</span>
+            <span>${escapeHtml(sb.updatedText || 'Recently')}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    html += `
+      <div class="scrapbook-new-card" id="btn-card-create-scrapbook">
+        <div class="new-card-plus">+</div>
+        <span class="new-card-label">New Shared Scrapbook</span>
+      </div>
+    `;
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.scrapbook-cover-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.scrapbookId;
+        openScrapbookViewer(id);
       });
     });
+
+    const newBtn = document.getElementById('btn-card-create-scrapbook');
+    if (newBtn) {
+      newBtn.addEventListener('click', () => {
+        const modal = document.getElementById('modal-create-scrapbook');
+        if (modal) modal.style.display = 'flex';
+      });
+    }
+  }
+
+  function renderPersonalCollections() {
+    const container = document.getElementById('collections-container');
+    if (!container) return;
+    const collections = getPersonalCollections();
+    const items = getPersonalKeepsakes();
+
+    let html = collections.map(col => {
+      const count = items.filter(it => it.collectionId === col.id).length;
+      return `
+        <div class="pocket-folder-card folder-${escapeHtml(col.theme || 'blush')}" data-collection-id="${escapeHtml(col.id)}">
+          <div class="pocket-peek-slip">${escapeHtml(col.motif || '🔖')}</div>
+          <div class="pocket-folder-body">
+            <h4 class="pocket-folder-title">${escapeHtml(col.title)}</h4>
+            <p class="pocket-folder-sub">${escapeHtml(col.subtitle || '')}</p>
+            <span class="pocket-count-pill">${count} item${count === 1 ? '' : 's'}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    html += `
+      <div class="pocket-new-card" id="btn-card-create-collection">
+        <div class="new-card-plus">+</div>
+        <span class="new-card-label">New Collection</span>
+      </div>
+    `;
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.pocket-folder-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.collectionId;
+        openCollectionViewer(id);
+      });
+    });
+
+    const newBtn = document.getElementById('btn-card-create-collection');
+    if (newBtn) {
+      newBtn.addEventListener('click', () => {
+        const modal = document.getElementById('modal-create-collection');
+        if (modal) modal.style.display = 'flex';
+      });
+    }
+  }
+
+  let currentScrapbook = null;
+  let currentSpreadIdx = 0;
+
+  function openScrapbookViewer(scrapbookId) {
+    stopScrapbookAudio();
+    const scrapbooks = getSharedScrapbooks();
+    currentScrapbook = scrapbooks.find(s => s.id === scrapbookId) || scrapbooks[0];
+    currentSpreadIdx = 0;
+
+    const modal = document.getElementById('modal-scrapbook-viewer');
+    const titleEl = document.getElementById('scrapbook-viewer-title');
+    const subEl = document.getElementById('scrapbook-viewer-sub');
+
+    if (titleEl) titleEl.textContent = currentScrapbook.title;
+    if (subEl) subEl.textContent = `Shared with ${currentScrapbook.partner || 'Someone Special'} • ${(currentScrapbook.pages ? currentScrapbook.pages.length * 2 : 6)} kept memories`;
+
+    renderScrapbookSpread();
+
+    if (modal) modal.style.display = 'flex';
+  }
+
+  function renderScrapbookSpread() {
+    if (!currentScrapbook || !currentScrapbook.pages || currentScrapbook.pages.length === 0) return;
+    const pageData = currentScrapbook.pages[currentSpreadIdx] || currentScrapbook.pages[0];
+    const leftEl = document.getElementById('scrapbook-page-left');
+    const rightEl = document.getElementById('scrapbook-page-right');
+    const indicatorEl = document.getElementById('scrapbook-page-indicator');
+
+    if (indicatorEl) {
+      indicatorEl.textContent = `Page ${currentSpreadIdx + 1} of ${currentScrapbook.pages.length}`;
+    }
+
+    if (leftEl) leftEl.innerHTML = renderPageSlot(pageData.left);
+    if (rightEl) rightEl.innerHTML = renderPageSlot(pageData.right);
+
+    // Wire up vinyl click in scrapbook spread if present
+    const disc = document.querySelector('.scrapbook-vinyl-disc');
+    if (disc) {
+      disc.addEventListener('click', () => {
+        const audioSrc = disc.dataset.audioSrc;
+        if (!audioSrc) return;
+        if (activeScrapbookAudio && !activeScrapbookAudio.paused) {
+          stopScrapbookAudio();
+        } else {
+          stopScrapbookAudio();
+          activeScrapbookAudio = new Audio(audioSrc);
+          activeScrapbookDisc = disc;
+          disc.classList.add('spinning');
+          activeScrapbookAudio.play().catch(e => console.log('Audio autoplay prevented'));
+          activeScrapbookAudio.onended = () => {
+            disc.classList.remove('spinning');
+            activeScrapbookAudio = null;
+            activeScrapbookDisc = null;
+          };
+        }
+      });
+    }
+  }
+
+  function renderPageSlot(slot) {
+    if (!slot) return '<div class="scrapbook-empty-slot"></div>';
+    if (slot.type === 'polaroid') {
+      return `
+        <div class="scrapbook-polaroid" style="transform: rotate(${slot.rotation || 0}deg);">
+          <img src="${escapeHtml(slot.src || 'assets/medium_card.png')}" alt="Memory" class="scrapbook-polaroid-img" />
+          <p class="scrapbook-polaroid-caption">${escapeHtml(slot.caption || 'Captured moment')}</p>
+        </div>
+      `;
+    } else if (slot.type === 'note') {
+      return `
+        <div class="scrapbook-note-card">
+          <div class="scrapbook-note-author">
+            <span>✍️ ${escapeHtml(slot.author || 'Me')}</span>
+            <span style="font-weight:normal; color:#87585F; margin-left:auto;">${escapeHtml(slot.date || '')}</span>
+          </div>
+          <p class="scrapbook-note-text">"${escapeHtml(slot.text || '')}"</p>
+        </div>
+      `;
+    } else if (slot.type === 'vinyl') {
+      return `
+        <div class="scrapbook-vinyl-widget">
+          <div class="scrapbook-vinyl-disc" data-audio-src="${escapeHtml(slot.audioSrc || '')}" title="Click to Play / Pause Song">
+            <div class="scrapbook-vinyl-label"></div>
+          </div>
+          <div class="scrapbook-vinyl-info">
+            <p class="scrapbook-vinyl-track">🎵 ${escapeHtml(slot.trackName || 'Our Song')}</p>
+            <p class="scrapbook-vinyl-artist">${escapeHtml(slot.artistName || 'Artist')}</p>
+            <small style="color:#C97384; font-size:9.5px;">${escapeHtml(slot.note || 'Tap vinyl disc to play')}</small>
+          </div>
+        </div>
+      `;
+    } else if (slot.type === 'photo_note') {
+      return `
+        <div class="scrapbook-polaroid" style="transform: rotate(-1deg);">
+          <img src="${escapeHtml(slot.src || 'assets/medium_letter.png')}" alt="Memory" class="scrapbook-polaroid-img" style="height:110px;" />
+          <p class="scrapbook-polaroid-caption" style="font-weight:600;">${escapeHtml(slot.caption || '')}</p>
+          <p style="font-size:10.5px; color:#521319; margin:4px 0 0; font-style:italic;">"${escapeHtml(slot.text || '')}"</p>
+        </div>
+      `;
+    } else if (slot.type === 'flower') {
+      return `
+        <div class="scrapbook-note-card" style="background:#FFF9F6; border-color:#F1CAD3;">
+          <div class="scrapbook-note-author">
+            <span>🌸 Pressed ${escapeHtml(slot.flowerName || 'Flower')}</span>
+            <span style="font-weight:normal; color:#87585F; margin-left:auto;">From ${escapeHtml(slot.author || 'Someone')}</span>
+          </div>
+          <div style="font-size:28px; text-align:center; padding:10px 0;">🌺</div>
+          <p class="scrapbook-note-text" style="text-align:center;">"${escapeHtml(slot.caption || 'A flower kept forever')}"</p>
+        </div>
+      `;
+    }
+    return '';
+  }
+
+  // Invite Link
+  const btnScrapbookInvite = document.getElementById('btn-scrapbook-invite');
+  if (btnScrapbookInvite) {
+    btnScrapbookInvite.addEventListener('click', () => {
+      const inviteUrl = `https://betweenus.love/scrapbook/invite?id=${currentScrapbook ? currentScrapbook.id : 'scrap_1'}`;
+      navigator.clipboard.writeText(inviteUrl).then(() => {
+        showToast('Invite link copied! Send it to your favourite person to contribute.');
+      }).catch(() => {
+        showToast('Invite link: ' + inviteUrl);
+      });
+    });
+  }
+
+  // Prev / Next Page Spread
+  const btnPrevPage = document.getElementById('btn-scrapbook-prev-page');
+  const btnNextPage = document.getElementById('btn-scrapbook-next-page');
+  if (btnPrevPage) {
+    btnPrevPage.addEventListener('click', () => {
+      if (!currentScrapbook || !currentScrapbook.pages) return;
+      if (currentSpreadIdx > 0) {
+        currentSpreadIdx--;
+        stopScrapbookAudio();
+        renderScrapbookSpread();
+      }
+    });
+  }
+  if (btnNextPage) {
+    btnNextPage.addEventListener('click', () => {
+      if (!currentScrapbook || !currentScrapbook.pages) return;
+      if (currentSpreadIdx < currentScrapbook.pages.length - 1) {
+        currentSpreadIdx++;
+        stopScrapbookAudio();
+        renderScrapbookSpread();
+      }
+    });
+  }
+
+  // Close scrapbook viewer
+  const btnCloseScrapbook = document.getElementById('btn-close-scrapbook-viewer');
+  if (btnCloseScrapbook) {
+    btnCloseScrapbook.addEventListener('click', () => {
+      stopScrapbookAudio();
+      const modal = document.getElementById('modal-scrapbook-viewer');
+      if (modal) modal.style.display = 'none';
+    });
+  }
+
+  // Add Memory Modal Open
+  const btnAddMemory = document.getElementById('btn-scrapbook-add-memory');
+  if (btnAddMemory) {
+    btnAddMemory.addEventListener('click', () => {
+      const modal = document.getElementById('modal-add-scrapbook-memory');
+      if (!modal) return;
+      const songSelect = document.getElementById('memory-song-select');
+      if (songSelect && songSelect.children.length === 0 && window.CURATED_VINYL_TRACKS) {
+        songSelect.innerHTML = window.CURATED_VINYL_TRACKS.map(t => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.num)}. ${escapeHtml(t.trackName)} — ${escapeHtml(t.artistName)}</option>`).join('');
+      }
+      modal.style.display = 'flex';
+    });
+  }
+
+  // Form Add Memory Submit
+  const formAddMemory = document.getElementById('form-add-scrapbook-memory');
+  if (formAddMemory) {
+    formAddMemory.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!currentScrapbook) return;
+      const activeTypeBtn = document.querySelector('#memory-type-selector .type-pill-btn.active');
+      const memType = activeTypeBtn ? activeTypeBtn.dataset.type : 'note';
+      const author = document.getElementById('memory-input-author')?.value || 'Saanvi';
+      const caption = document.getElementById('memory-input-caption')?.value || 'A sweet memory';
+
+      let newSlot = null;
+      if (memType === 'note') {
+        newSlot = {
+          type: 'note',
+          author: author,
+          text: caption,
+          date: 'Just now'
+        };
+      } else if (memType === 'song') {
+        const songId = document.getElementById('memory-song-select')?.value;
+        const song = (window.CURATED_VINYL_TRACKS || []).find(s => s.id === songId) || (window.CURATED_VINYL_TRACKS || [])[0];
+        newSlot = {
+          type: 'vinyl',
+          songId: song.id,
+          trackName: song.trackName,
+          artistName: song.artistName,
+          audioSrc: song.audioSrc,
+          note: `${author}: ${caption}`
+        };
+      } else if (memType === 'photo') {
+        newSlot = {
+          type: 'polaroid',
+          src: 'assets/medium_card.png',
+          caption: caption,
+          rotation: Math.floor(Math.random() * 5) - 2
+        };
+      } else if (memType === 'flower') {
+        const activeFlBtn = document.querySelector('#memory-flower-picker .flower-opt-btn.active');
+        const flName = activeFlBtn ? activeFlBtn.textContent.trim() : 'Wild Rose';
+        newSlot = {
+          type: 'flower',
+          flowerName: flName,
+          author: author,
+          caption: caption
+        };
+      }
+
+      if (!currentScrapbook.pages) currentScrapbook.pages = [];
+      currentScrapbook.pages.push({
+        pageNumber: currentScrapbook.pages.length + 1,
+        left: newSlot,
+        right: {
+          type: 'note',
+          author: author === 'Saanvi' ? (currentScrapbook.partner || 'Kabir') : 'Saanvi',
+          text: 'Pinned to our scrapbook ♡',
+          date: 'Today'
+        }
+      });
+
+      const scrapbooks = getSharedScrapbooks();
+      const idx = scrapbooks.findIndex(s => s.id === currentScrapbook.id);
+      if (idx !== -1) scrapbooks[idx] = currentScrapbook;
+      saveSharedScrapbooks(scrapbooks);
+
+      currentSpreadIdx = currentScrapbook.pages.length - 1;
+      renderScrapbookSpread();
+      renderSharedScrapbooks();
+
+      document.getElementById('modal-add-scrapbook-memory').style.display = 'none';
+      showToast('Memory pinned to your shared scrapbook! ♡');
+    });
+  }
+
+  // Form Create Scrapbook Submit
+  const formCreateScrapbook = document.getElementById('form-create-scrapbook');
+  if (formCreateScrapbook) {
+    formCreateScrapbook.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('scrapbook-input-title')?.value.trim();
+      const partner = document.getElementById('scrapbook-input-partner')?.value.trim() || 'Someone Special';
+      const activeThemeBtn = document.querySelector('#scrapbook-cover-picker .cover-opt-btn.active');
+      const theme = activeThemeBtn ? activeThemeBtn.dataset.coverTheme : 'gingham';
+
+      if (!title) return;
+
+      const newBook = {
+        id: 'scrap_' + Date.now(),
+        title: title,
+        partner: partner,
+        theme: theme,
+        date: 'Today',
+        updatedText: 'Just now',
+        pages: [
+          {
+            pageNumber: 1,
+            left: {
+              type: 'polaroid',
+              src: 'assets/medium_card.png',
+              caption: 'First page of our story',
+              rotation: -1
+            },
+            right: {
+              type: 'note',
+              author: 'Saanvi',
+              text: 'Every story begins somewhere. This one is ours.',
+              date: 'Today'
+            }
+          }
+        ]
+      };
+
+      const scrapbooks = getSharedScrapbooks();
+      scrapbooks.unshift(newBook);
+      saveSharedScrapbooks(scrapbooks);
+      renderSharedScrapbooks();
+
+      document.getElementById('modal-create-scrapbook').style.display = 'none';
+      showToast('Shared scrapbook created! Invite ' + partner + ' to add memories.');
+      openScrapbookViewer(newBook.id);
+    });
+  }
+
+  // Collection Viewer
+  let activeViewingCollectionId = null;
+  let activeViewingFilter = 'all';
+
+  function openCollectionViewer(collId) {
+    activeViewingCollectionId = collId;
+    activeViewingFilter = 'all';
+    const collections = getPersonalCollections();
+    const coll = collections.find(c => c.id === collId) || collections[0];
+
+    const modal = document.getElementById('modal-collection-viewer');
+    const iconEl = document.getElementById('coll-viewer-icon');
+    const titleEl = document.getElementById('coll-viewer-title');
+
+    if (iconEl) iconEl.textContent = coll.motif || '🔖';
+    if (titleEl) titleEl.textContent = coll.title;
+
+    renderCollectionItemsGrid();
+
+    if (modal) modal.style.display = 'flex';
+  }
+
+  function renderCollectionItemsGrid() {
+    const grid = document.getElementById('coll-items-grid');
+    if (!grid) return;
+    const allItems = getPersonalKeepsakes();
+    let filtered = allItems.filter(it => it.collectionId === activeViewingCollectionId);
+
+    if (activeViewingFilter !== 'all') {
+      filtered = filtered.filter(it => it.type === activeViewingFilter || (it.type === 'quick' && activeViewingFilter === 'quick'));
+    }
+
+    const subEl = document.getElementById('coll-viewer-sub');
+    if (subEl) subEl.textContent = `${filtered.length} saved keepsakes • Private collection`;
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 36px 16px; color: #87585F;">
+          <div style="font-size: 32px; margin-bottom: 8px;">💌</div>
+          <h4 style="font-family:'Playfair Display',serif; color:#521319; margin: 0 0 4px;">Nothing here yet</h4>
+          <p style="font-size: 12px; margin: 0;">Preserve cards, letters, and memories into this pocket folder.</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(it => `
+      <div class="collection-item-card" data-item-id="${escapeHtml(it.id)}">
+        <span class="collection-item-badge">${escapeHtml(it.badge || 'Keepsake')}</span>
+        <h4 class="collection-item-title">${escapeHtml(it.title)}</h4>
+        <p class="collection-item-sub">From: ${escapeHtml(it.from || 'Someone')} • ${escapeHtml(it.date || '')}</p>
+        <p style="font-size: 11px; color: #521319; margin: 0; font-style: italic;">${escapeHtml(it.summary || '')}</p>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.collection-item-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.itemId;
+        const item = allItems.find(i => i.id === id);
+        if (item) {
+          if (item.type === 'card' && typeof renderRecipientCardExperience === 'function') {
+            renderRecipientCardExperience(item);
+          } else if (item.type === 'letter' && typeof renderRecipientLetterExperience === 'function') {
+            renderRecipientLetterExperience(item);
+          } else if (item.type === 'bouquet' && typeof renderRecipientBouquetExperience === 'function') {
+            renderRecipientBouquetExperience(item);
+          } else if (typeof renderRecipientExperience === 'function') {
+            renderRecipientExperience(item);
+          } else {
+            showToast(`Viewing keepsake: ${item.title}`);
+          }
+        }
+      });
+    });
+  }
+
+  const collFilterBtns = document.querySelectorAll('.coll-filter-btn');
+  collFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      collFilterBtns.forEach(b => b.classList.toggle('active', b === btn));
+      activeViewingFilter = btn.dataset.filter;
+      renderCollectionItemsGrid();
+    });
   });
+
+  const btnCollQuickAdd = document.getElementById('btn-coll-quick-add');
+  if (btnCollQuickAdd) {
+    btnCollQuickAdd.addEventListener('click', () => {
+      openQuickAddModal('note');
+    });
+  }
+
+  // Create Collection Form Submit
+  const formCreateColl = document.getElementById('form-create-collection');
+  if (formCreateColl) {
+    formCreateColl.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('coll-input-title')?.value.trim();
+      const activeThemeBtn = document.querySelector('#coll-theme-picker .folder-theme-opt.active');
+      const theme = activeThemeBtn ? activeThemeBtn.dataset.folderTheme : 'blush';
+      const activeMotifBtn = document.querySelector('#coll-motif-picker .motif-opt-btn.active');
+      const motif = activeMotifBtn ? activeMotifBtn.dataset.motif : '🔖';
+
+      if (!title) return;
+
+      const newColl = {
+        id: 'coll_' + Date.now(),
+        title: title,
+        subtitle: 'Personal collection',
+        motif: motif,
+        theme: theme
+      };
+
+      const colls = getPersonalCollections();
+      colls.push(newColl);
+      savePersonalCollections(colls);
+      renderPersonalCollections();
+
+      document.getElementById('modal-create-collection').style.display = 'none';
+      showToast('New collection folder created! ♡');
+    });
+  }
+
+  // Quick Add Modal & Submit
+  function openQuickAddModal(type) {
+    const modal = document.getElementById('modal-quick-add');
+    if (!modal) return;
+
+    const badge = document.getElementById('quick-add-badge-icon');
+    const heading = document.getElementById('quick-add-heading');
+
+    const icons = { photo: '🖼', song: '🎵', note: '📝', sticker: '🌸', memory: '♡' };
+    const titles = { photo: 'Quick Add Photo', song: 'Quick Add Song', note: 'Quick Add Note', sticker: 'Quick Add Sticker', memory: 'Quick Add Memory' };
+
+    if (badge) badge.textContent = icons[type] || '✨';
+    if (heading) heading.textContent = titles[type] || 'Quick Add to My Keepsakes';
+
+    const collSelect = document.getElementById('quick-add-target-coll');
+    if (collSelect) {
+      const colls = getPersonalCollections();
+      collSelect.innerHTML = colls.map(c => `<option value="${escapeHtml(c.id)}">${escapeHtml(c.motif)} ${escapeHtml(c.title)}</option>`).join('');
+    }
+
+    const songSelect = document.getElementById('quick-add-song-select');
+    if (songSelect && songSelect.children.length === 0 && window.CURATED_VINYL_TRACKS) {
+      songSelect.innerHTML = window.CURATED_VINYL_TRACKS.map(t => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.num)}. ${escapeHtml(t.trackName)} — ${escapeHtml(t.artistName)}</option>`).join('');
+    }
+
+    document.getElementById('quick-field-note').style.display = (type === 'note' || type === 'memory') ? 'block' : 'none';
+    document.getElementById('quick-field-song').style.display = (type === 'song') ? 'block' : 'none';
+    document.getElementById('quick-field-photo').style.display = (type === 'photo') ? 'block' : 'none';
+    document.getElementById('quick-field-sticker').style.display = (type === 'sticker') ? 'block' : 'none';
+
+    modal.dataset.quickType = type;
+    modal.style.display = 'flex';
+  }
+
+  const formQuickAdd = document.getElementById('form-quick-add');
+  if (formQuickAdd) {
+    formQuickAdd.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const modal = document.getElementById('modal-quick-add');
+      const type = modal ? modal.dataset.quickType || 'note' : 'note';
+      const targetCollId = document.getElementById('quick-add-target-coll')?.value || 'coll_saved';
+      const title = document.getElementById('quick-add-title')?.value.trim() || 'Saved Moment';
+
+      let summary = '';
+      if (type === 'note' || type === 'memory') {
+        summary = document.getElementById('quick-add-note-text')?.value.trim() || 'A handwritten memory';
+      } else if (type === 'song') {
+        const songId = document.getElementById('quick-add-song-select')?.value;
+        const song = (window.CURATED_VINYL_TRACKS || []).find(s => s.id === songId) || (window.CURATED_VINYL_TRACKS || [])[0];
+        summary = `${song.trackName} — ${song.artistName}`;
+      } else if (type === 'photo') {
+        summary = 'Polaroid photo memory';
+      } else if (type === 'sticker') {
+        summary = 'Decorative sticker preserved';
+      }
+
+      const badges = { photo: '🖼 Polaroid Photo', song: '🎵 Vinyl Song', note: '📝 Personal Note', sticker: '🌸 Sticker', memory: '♡ Memory' };
+
+      const newItem = {
+        id: 'keep_' + Date.now(),
+        collectionId: targetCollId,
+        type: 'quick',
+        subType: type,
+        title: title,
+        from: 'Saanvi',
+        date: 'Today',
+        badge: badges[type] || '🔖 Keepsake',
+        summary: summary
+      };
+
+      const items = getPersonalKeepsakes();
+      items.unshift(newItem);
+      savePersonalKeepsakes(items);
+
+      renderPersonalCollections();
+      if (modal) modal.style.display = 'none';
+      showToast('Saved to My Keepsakes! ♡');
+    });
+  }
+
+  // Hero Card Clicks
+  const heroOurKeepsakes = document.getElementById('hero-our-keepsakes');
+  const heroMyKeepsakes = document.getElementById('hero-my-keepsakes');
+  const sectionOurKeepsakes = document.getElementById('section-our-keepsakes');
+  const sectionMyKeepsakes = document.getElementById('section-my-keepsakes');
+
+  if (heroOurKeepsakes && sectionOurKeepsakes) {
+    heroOurKeepsakes.addEventListener('click', () => {
+      heroOurKeepsakes.classList.add('active');
+      if (heroMyKeepsakes) heroMyKeepsakes.classList.remove('active');
+      sectionOurKeepsakes.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  if (heroMyKeepsakes && sectionMyKeepsakes) {
+    heroMyKeepsakes.addEventListener('click', () => {
+      heroMyKeepsakes.classList.add('active');
+      if (heroOurKeepsakes) heroOurKeepsakes.classList.remove('active');
+      sectionMyKeepsakes.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  // Action Buttons
+  const btnCreateScrapbook = document.getElementById('btn-create-scrapbook');
+  if (btnCreateScrapbook) {
+    btnCreateScrapbook.addEventListener('click', () => {
+      const modal = document.getElementById('modal-create-scrapbook');
+      if (modal) modal.style.display = 'flex';
+    });
+  }
+  const btnCreateCollection = document.getElementById('btn-create-collection');
+  if (btnCreateCollection) {
+    btnCreateCollection.addEventListener('click', () => {
+      const modal = document.getElementById('modal-create-collection');
+      if (modal) modal.style.display = 'flex';
+    });
+  }
+
+  // Quick Add Pills
+  document.querySelectorAll('.quick-add-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      openQuickAddModal(pill.dataset.quick);
+    });
+  });
+
+  // Modal Closers Helper
+  const bindModalCloser = (closeBtnId, modalId) => {
+    const btn = document.getElementById(closeBtnId);
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const m = document.getElementById(modalId);
+        if (m) m.style.display = 'none';
+      });
+    }
+  };
+
+  bindModalCloser('btn-close-create-scrapbook', 'modal-create-scrapbook');
+  bindModalCloser('btn-cancel-create-scrapbook', 'modal-create-scrapbook');
+  bindModalCloser('btn-close-add-memory', 'modal-add-scrapbook-memory');
+  bindModalCloser('btn-cancel-add-memory', 'modal-add-scrapbook-memory');
+  bindModalCloser('btn-close-collection-viewer', 'modal-collection-viewer');
+  bindModalCloser('btn-close-create-coll', 'modal-create-collection');
+  bindModalCloser('btn-cancel-create-coll', 'modal-create-collection');
+  bindModalCloser('btn-close-quick-add', 'modal-quick-add');
+  bindModalCloser('btn-cancel-quick-add', 'modal-quick-add');
+
+  // Option Picker Toggles
+  const bindChoiceGroup = (selector) => {
+    const buttons = document.querySelectorAll(selector);
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.toggle('active', b === btn));
+      });
+    });
+  };
+  bindChoiceGroup('#scrapbook-cover-picker .cover-opt-btn');
+  bindChoiceGroup('#coll-theme-picker .folder-theme-opt');
+  bindChoiceGroup('#coll-motif-picker .motif-opt-btn');
+  bindChoiceGroup('#memory-flower-picker .flower-opt-btn');
+  bindChoiceGroup('#quick-sticker-picker .sticker-choice-btn');
+
+  // Memory Type Selector in Add Memory Modal
+  document.querySelectorAll('#memory-type-selector .type-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#memory-type-selector .type-pill-btn').forEach(b => b.classList.toggle('active', b === btn));
+      const t = btn.dataset.type;
+      const grpCaption = document.getElementById('grp-memory-caption');
+      const grpSong = document.getElementById('grp-memory-song');
+      const grpPhoto = document.getElementById('grp-memory-photo');
+      const grpFlower = document.getElementById('grp-memory-flower');
+      if (grpCaption) grpCaption.style.display = 'block';
+      if (grpSong) grpSong.style.display = (t === 'song') ? 'block' : 'none';
+      if (grpPhoto) grpPhoto.style.display = (t === 'photo') ? 'block' : 'none';
+      if (grpFlower) grpFlower.style.display = (t === 'flower') ? 'block' : 'none';
+    });
+  });
+
+  // Global renderKeepsakesRoom
+  function renderKeepsakesRoom() {
+    renderSharedScrapbooks();
+    renderPersonalCollections();
+  }
+  window.renderKeepsakesRoom = renderKeepsakesRoom;
+
+  const keepsakesNavTab = document.querySelector('.nav-tab[data-room="keepsakes"]');
+  if (keepsakesNavTab) {
+    keepsakesNavTab.addEventListener('click', renderKeepsakesRoom);
+  }
+
 
   // URL Param direct deep-linking (e.g. ?nosplash=1&medium=bouquet&step=arrange)
   try {
@@ -5952,6 +6921,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (urlParams.has('unfold')) {
       if (typeof openBouquetUnfoldedNote === 'function') openBouquetUnfoldedNote();
+    }
+    if (urlParams.get('room') === 'keepsakes' || urlParams.has('keepsakes')) {
+      const keepsakesTab = document.querySelector('.nav-tab[data-room="keepsakes"]');
+      if (keepsakesTab) keepsakesTab.click();
+    }
+    if (urlParams.has('open_scrapbook')) {
+      const scrapId = urlParams.get('open_scrapbook') || 'scrap_1';
+      openScrapbookViewer(scrapId);
+    }
+    if (urlParams.has('open_collection')) {
+      const collId = urlParams.get('open_collection') || 'coll_received';
+      openCollectionViewer(collId);
     }
   } catch (err) {}
 
