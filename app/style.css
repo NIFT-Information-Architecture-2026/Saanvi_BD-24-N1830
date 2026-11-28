@@ -3282,7 +3282,14 @@ body {
 .card-theme-swatches {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  overflow-x: auto;
+  max-width: 220px;
+  padding: 2px 2px;
+  scrollbar-width: none;
+}
+.card-theme-swatches::-webkit-scrollbar {
+  display: none;
 }
 .card-theme-btn {
   width: 26px;
@@ -3296,6 +3303,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 .card-theme-btn:hover {
   transform: scale(1.1);
@@ -3311,18 +3319,38 @@ body {
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.18);
   display: block;
+  background-size: cover;
+  background-position: center;
 }
-.vibe-crimson-romance {
-  background: linear-gradient(135deg, #5C1D24 0%, #8A2D3A 50%, #C5A059 100%);
+.vibe-gingham-pressed {
+  background-image: url('assets/card_themes/theme_gingham_pressed.jpg');
 }
-.vibe-vintage-botanical {
-  background: linear-gradient(135deg, #F5EFEB 0%, #D8C8B8 50%, #6E8F67 100%);
+.vibe-stardust-wildflowers {
+  background-image: url('assets/card_themes/theme_stardust_wildflowers.jpg');
 }
-.vibe-pastel-celestial {
-  background: linear-gradient(135deg, #FDECEF 0%, #E2D4F0 50%, #9FB4E8 100%);
+.vibe-dolce-vita {
+  background-image: url('assets/card_themes/theme_dolce_vita.jpg');
 }
-.vibe-minimal-editorial {
-  background: linear-gradient(135deg, #FCFBF7 0%, #EDE6DC 50%, #333333 100%);
+.vibe-royal-lotus {
+  background-image: url('assets/card_themes/theme_royal_lotus.jpg');
+}
+.vibe-denim-embroidery {
+  background-image: url('assets/card_themes/theme_denim_embroidery.jpg');
+}
+.vibe-burgundy-arch {
+  background-image: url('assets/card_themes/theme_burgundy_arch.jpg');
+}
+.vibe-plumeria-bows {
+  background-image: url('assets/card_themes/theme_plumeria_bows.jpg');
+}
+.vibe-periwinkle-stripes {
+  background: #f7f9fc;
+  background-image: repeating-linear-gradient(90deg, #9ab4cb 0px, #9ab4cb 3px, transparent 3px, transparent 6px);
+  border: 1px solid #7d9cb8;
+}
+.vibe-midnight-celestial {
+  background: radial-gradient(circle at 50% 35%, #23355b 0%, #0c1426 100%);
+  border: 1px solid #d4af37;
 }
 
 .card-cover-tools-group,
@@ -3381,28 +3409,222 @@ body {
   box-sizing: border-box;
 }
 
-/* 4 Theme Styles for Cover & Inside */
-.theme-crimson-romance {
-  background: radial-gradient(circle at 50% 30%, #872836 0%, #4E131A 100%);
-  color: #FFF6F7;
-  border: 1px solid #6E1B25;
+/* 9 Theme Styles for Cover & Inside Spread */
+
+/* 1. Sunshine Gingham & Pressed Blooms */
+.theme-gingham-pressed {
+  background: url('assets/card_themes/theme_gingham_pressed.jpg') center / cover no-repeat;
+  color: #4a382c;
+  border: 1px solid #ebd9a9;
 }
-.theme-vintage-botanical {
-  background: #F8F4EC;
-  background-image: radial-gradient(rgba(110, 143, 103, 0.08) 1px, transparent 0);
-  background-size: 14px 14px;
-  color: #2D231E;
-  border: 1px solid #DDCFBE;
+.card-inside-bifold.theme-gingham-pressed {
+  background: #fdf8eb;
+  background-image: repeating-linear-gradient(0deg, rgba(234, 210, 140, 0.25) 0px, rgba(234, 210, 140, 0.25) 12px, transparent 12px, transparent 24px), repeating-linear-gradient(90deg, rgba(234, 210, 140, 0.25) 0px, rgba(234, 210, 140, 0.25) 12px, transparent 12px, transparent 24px);
+  color: #4a382c;
+  border: 1px solid #ebd9a9;
 }
-.theme-pastel-celestial {
-  background: linear-gradient(145deg, #FFF0F3 0%, #F0E8F8 50%, #E3EBF9 100%);
-  color: #36283C;
-  border: 1px solid #E2D8E8;
+.card-inside-bifold.theme-gingham-pressed .inside-left-panel,
+.card-inside-bifold.theme-gingham-pressed .inside-right-panel {
+  background: rgba(255, 252, 246, 0.88);
+  margin: 6px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(220, 190, 120, 0.15);
 }
-.theme-minimal-editorial {
-  background: #FCFBF8;
-  color: #262422;
-  border: 1px solid #E5DED4;
+
+/* 2. Stardust & Wildflower Parchment */
+.theme-stardust-wildflowers {
+  background: url('assets/card_themes/theme_stardust_wildflowers.jpg') center / cover no-repeat;
+  color: #3e3328;
+  border: 1px solid #d4c4b0;
+}
+.card-inside-bifold.theme-stardust-wildflowers {
+  background: #f4ecdf url('assets/card_themes/theme_stardust_wildflowers.jpg') center / cover no-repeat;
+  color: #3e3328;
+  border: 1px solid #d4c4b0;
+}
+.card-inside-bifold.theme-stardust-wildflowers .inside-left-panel,
+.card-inside-bifold.theme-stardust-wildflowers .inside-right-panel {
+  background: rgba(250, 246, 238, 0.82);
+  margin: 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(190, 165, 135, 0.35);
+}
+
+/* 3. La Dolce Vita / Garden Celebration */
+.theme-dolce-vita {
+  background: url('assets/card_themes/theme_dolce_vita.jpg') center / cover no-repeat;
+  color: #2b3a27;
+  border: 1px solid #b5ccab;
+}
+.card-inside-bifold.theme-dolce-vita {
+  background: #fbfcf8;
+  color: #2b3a27;
+  border: 3px solid #6b8c62;
+}
+.card-inside-bifold.theme-dolce-vita .inside-left-panel,
+.card-inside-bifold.theme-dolce-vita .inside-right-panel {
+  background: rgba(255, 255, 255, 0.9);
+  margin: 6px;
+  border-radius: 8px;
+  border: 1.5px dashed rgba(107, 140, 98, 0.45);
+}
+
+/* 4. Royal Lotus Sage */
+.theme-royal-lotus {
+  background: url('assets/card_themes/theme_royal_lotus.jpg') center / cover no-repeat;
+  color: #f7f3ec;
+  border: 1px solid #5a6e55;
+}
+.card-inside-bifold.theme-royal-lotus {
+  background: #5b6f56;
+  color: #fcf9f2;
+  border: 1px solid #4a5c46;
+}
+.card-inside-bifold.theme-royal-lotus .inside-left-panel,
+.card-inside-bifold.theme-royal-lotus .inside-right-panel {
+  background: rgba(43, 56, 40, 0.65);
+  margin: 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(220, 160, 180, 0.35);
+  color: #fcf9f2;
+}
+.card-inside-bifold.theme-royal-lotus .card-deckle-input,
+.card-inside-bifold.theme-royal-lotus .card-inside-textarea {
+  color: #ffffff;
+  border-bottom-color: rgba(255, 255, 255, 0.4);
+}
+
+/* 5. Denim & Embroidered Keepsakes */
+.theme-denim-embroidery {
+  background: url('assets/card_themes/theme_denim_embroidery.jpg') center / cover no-repeat;
+  color: #f6f0ea;
+  border: 1px solid #233554;
+}
+.card-inside-bifold.theme-denim-embroidery {
+  background: #25395c;
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 2px, transparent 2px, transparent 4px);
+  color: #f6f0ea;
+  border: 1px solid #233554;
+}
+.card-inside-bifold.theme-denim-embroidery .inside-left-panel,
+.card-inside-bifold.theme-denim-embroidery .inside-right-panel {
+  background: rgba(252, 248, 238, 0.94);
+  color: #233554;
+  margin: 6px;
+  border-radius: 8px;
+  border: 2px dashed #b88e3c;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.08);
+}
+.card-inside-bifold.theme-denim-embroidery .card-deckle-input,
+.card-inside-bifold.theme-denim-embroidery .card-inside-textarea {
+  color: #233554;
+  border-bottom-color: rgba(35, 53, 84, 0.4);
+}
+
+/* 6. Burgundy Velvet Arch */
+.theme-burgundy-arch {
+  background: url('assets/card_themes/theme_burgundy_arch.jpg') center / cover no-repeat;
+  color: #f8f4ee;
+  border: 1px solid #6b1d28;
+}
+.card-inside-bifold.theme-burgundy-arch {
+  background: #eae2d5;
+  color: #3b1d22;
+  border: 1px solid #6b1d28;
+}
+.card-inside-bifold.theme-burgundy-arch .inside-left-panel,
+.card-inside-bifold.theme-burgundy-arch .inside-right-panel {
+  background: rgba(84, 18, 27, 0.88);
+  color: #fbf5ee;
+  margin: 6px;
+  border-radius: 20px 20px 8px 8px;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+.card-inside-bifold.theme-burgundy-arch .card-deckle-input,
+.card-inside-bifold.theme-burgundy-arch .card-inside-textarea {
+  color: #ffffff;
+  border-bottom-color: rgba(212, 175, 55, 0.5);
+}
+
+/* 7. Plumeria & Golden Bows */
+.theme-plumeria-bows {
+  background: url('assets/card_themes/theme_plumeria_bows.jpg') center / cover no-repeat;
+  color: #554428;
+  border: 1px solid #ebd9a9;
+}
+.card-inside-bifold.theme-plumeria-bows {
+  background: #fff9ea;
+  background-image: repeating-linear-gradient(0deg, rgba(240, 220, 150, 0.25) 0px, rgba(240, 220, 150, 0.25) 14px, transparent 14px, transparent 28px), repeating-linear-gradient(90deg, rgba(240, 220, 150, 0.25) 0px, rgba(240, 220, 150, 0.25) 14px, transparent 14px, transparent 28px);
+  color: #554428;
+  border: 1px solid #ebd9a9;
+}
+.card-inside-bifold.theme-plumeria-bows .inside-left-panel,
+.card-inside-bifold.theme-plumeria-bows .inside-right-panel {
+  background: rgba(255, 255, 255, 0.9);
+  margin: 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(225, 195, 120, 0.4);
+}
+
+/* 8. Periwinkle Stripes & Whimsical Ribbon */
+.theme-periwinkle-stripes {
+  background: #fdfcf9;
+  background-image: 
+    repeating-linear-gradient(90deg, rgba(145, 175, 200, 0.45) 0px, rgba(145, 175, 200, 0.45) 18px, transparent 18px, transparent 36px);
+  color: #243b52;
+  border: 3px double #3b5670;
+  box-shadow: inset 0 0 0 10px #fdfcf9, inset 0 0 0 12px #3b5670;
+}
+.card-inside-bifold.theme-periwinkle-stripes {
+  background: #f7f9fc;
+  background-image: repeating-linear-gradient(90deg, rgba(154, 180, 203, 0.25) 0px, rgba(154, 180, 203, 0.25) 18px, transparent 18px, transparent 36px);
+  color: #2b3c4e;
+  border: 1.5px solid #3b5670;
+}
+.card-inside-bifold.theme-periwinkle-stripes .inside-left-panel,
+.card-inside-bifold.theme-periwinkle-stripes .inside-right-panel {
+  background: rgba(255, 255, 255, 0.94);
+  margin: 6px;
+  border-radius: 8px;
+  border: 1.5px solid #4a6886;
+}
+
+/* 9. Midnight Celestial Gold */
+.theme-midnight-celestial {
+  background: #0d162a;
+  background-image: 
+    radial-gradient(1.5px 1.5px at 40px 60px, #ffe699, transparent),
+    radial-gradient(2px 2px at 150px 120px, #ffffff, transparent),
+    radial-gradient(1.5px 1.5px at 260px 80px, #ffe699, transparent),
+    radial-gradient(2px 2px at 90px 240px, #ffe082, transparent),
+    radial-gradient(1.5px 1.5px at 220px 310px, #ffffff, transparent),
+    radial-gradient(2px 2px at 180px 420px, #ffe699, transparent),
+    radial-gradient(2px 2px at 70px 520px, #ffe082, transparent),
+    radial-gradient(1.5px 1.5px at 250px 580px, #ffffff, transparent),
+    radial-gradient(circle at 50% 30%, #203152 0%, #0d172a 55%, #060a14 100%);
+  color: #f7eecf;
+  border: 1.5px solid #d4af37;
+  box-shadow: inset 0 0 0 8px #0c1527, inset 0 0 0 10px rgba(212, 175, 55, 0.65);
+}
+.card-inside-bifold.theme-midnight-celestial {
+  background: #0e162a;
+  color: #f7eecf;
+  border: 1.5px solid #d4af37;
+}
+.card-inside-bifold.theme-midnight-celestial .inside-left-panel,
+.card-inside-bifold.theme-midnight-celestial .inside-right-panel {
+  background: rgba(22, 33, 60, 0.9);
+  margin: 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+  color: #f7eecf;
+}
+.card-inside-bifold.theme-midnight-celestial .card-deckle-input,
+.card-inside-bifold.theme-midnight-celestial .card-inside-textarea {
+  color: #fff9e6;
+  border-bottom-color: rgba(212, 175, 55, 0.5);
 }
 
 /* Placed Items Layer & Controls */

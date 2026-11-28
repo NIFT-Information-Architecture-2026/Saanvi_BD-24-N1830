@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 960" width="540" height="960">
+  <defs>
+    <radialGradient id="mNightGlow" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#1e2c4d"/>
+      <stop offset="50%" stop-color="#111a33"/>
+      <stop offset="100%" stop-color="#0a0f20"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="540" height="960" fill="url(#mNightGlow)" />
+
+  <!-- Elegant gold border framing -->
+  <rect x="25" y="25" width="490" height="910" rx="12" fill="none" stroke="#d4af37" stroke-width="2" stroke-opacity="0.65" />
+  <rect x="35" y="35" width="470" height="890" rx="8" fill="none" stroke="#ffe082" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.5" />
+
+  <!-- Corner filigree accents -->
+  <g stroke="#d4af37" stroke-width="1.8" fill="none" stroke-opacity="0.8">
+    <path d="M 45 65 A 20 20 0 0 1 65 45" />
+    <circle cx="65" cy="45" r="3" fill="#ffe082"/>
+    <path d="M 495 65 A 20 20 0 0 0 475 45" />
+    <circle cx="475" cy="45" r="3" fill="#ffe082"/>
+    <path d="M 45 895 A 20 20 0 0 0 65 915" />
+    <circle cx="65" cy="915" r="3" fill="#ffe082"/>
+    <path d="M 495 895 A 20 20 0 0 1 475 915" />
+    <circle cx="475" cy="915" r="3" fill="#ffe082"/>
+  </g>
+
+  <!-- Crescent moon at top center -->
+  <g transform="translate(270, 110)">
+    <path d="M 0 -24 A 24 24 0 1 0 20 14 A 20 20 0 1 1 0 -24 Z" fill="#ffe8a3" />
+    <circle cx="0" cy="0" r="2" fill="#ffffff" />
+  </g>
+
+  <!-- Constellations & Shimmering stars -->
+  <g fill="#ffe082" opacity="0.9">
+    <path d="M 120 180 Q 120 198 102 198 Q 120 198 120 216 Q 120 198 138 198 Q 120 198 120 180 Z" fill="#fff5cc" />
+    <path d="M 420 220 Q 420 235 405 235 Q 420 235 420 250 Q 420 235 435 235 Q 420 235 420 220 Z" fill="#fff5cc" />
+    <path d="M 160 760 Q 160 776 144 776 Q 160 776 160 792 Q 160 776 176 776 Q 160 776 160 760 Z" fill="#fff5cc" />
+    <path d="M 390 790 Q 390 805 375 805 Q 390 805 390 820 Q 390 805 405 805 Q 390 805 390 790 Z" fill="#fff5cc" />
+    
+    <circle cx="90" cy="320" r="2.5" fill="#ffe699"/>
+    <circle cx="140" cy="420" r="2" fill="#fff"/>
+    <circle cx="80" cy="620" r="2.2" fill="#ffe699"/>
+    <circle cx="450" cy="380" r="2.5" fill="#ffe699"/>
+    <circle cx="430" cy="520" r="2" fill="#fff"/>
+    <circle cx="460" cy="680" r="2.2" fill="#ffe699"/>
+    <circle cx="270" cy="850" r="3" fill="#fff5cc"/>
+  </g>
+</svg>

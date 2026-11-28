@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     greetingCard: {
       step: 1,
-      theme: 'crimson-romance',
+      theme: 'gingham-pressed',
       coverElements: [
         {
           id: 'cover-title-1',
@@ -2384,7 +2384,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderCoverElements();
     } else if (stepNum === 2) {
       if (cardInsideBifold) {
-        cardInsideBifold.className = `card-inside-bifold theme-${state.greetingCard.theme || 'crimson-romance'}`;
+        cardInsideBifold.className = `card-inside-bifold theme-${state.greetingCard.theme || 'gingham-pressed'}`;
       }
       renderInsideKeepsakes();
       syncInsideNoteInputs();
@@ -3067,7 +3067,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderCardRevealedDisplay() {
     if (!cardRevealDisplay) return;
     const face = state.greetingCard.previewFace || 'inside';
-    const theme = state.greetingCard.theme || 'crimson-romance';
+    const theme = state.greetingCard.theme || 'gingham-pressed';
 
     if (face === 'inside') {
       if (cardFlipLabel) cardFlipLabel.textContent = 'View Cover';
@@ -3196,7 +3196,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const item = {
         type: 'card',
         title: 'Greeting Card',
-        theme: state.greetingCard.theme || 'crimson-romance',
+        theme: state.greetingCard.theme || 'gingham-pressed',
         coverElements: [...(state.greetingCard.coverElements || [])],
         insideKeepsakes: [...(state.greetingCard.insideKeepsakes || [])],
         to: state.greetingCard.insideTo || 'Kabir',
@@ -4362,7 +4362,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toVal = data.to || 'You';
     const fromVal = data.from || 'Someone who loves you';
     const bodyVal = data.m || data.body || '';
-    const themeVal = data.th || data.theme || 'crimson-romance';
+    const themeVal = data.th || data.theme || 'gingham-pressed';
     const fontVal = data.ff || data.fontFamily || "'Caveat', cursive";
     const sizeVal = data.fs || data.fontSize || 19;
     const vesselVal = data.v || data.vessel || 'envelope';
@@ -4742,8 +4742,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const paramCardTheme = urlParams.get('ctheme');
     if (paramCardTheme && state.greetingCard) {
       state.greetingCard.theme = paramCardTheme;
-      if (cardCoverCanvas) cardCoverCanvas.className = `card-cover-canvas theme-${paramCardTheme}`;
-      if (cardInsideBifold) cardInsideBifold.className = `card-inside-bifold theme-${paramCardTheme}`;
+      const cvCover = document.getElementById('card-cover-canvas');
+      const cvInside = document.getElementById('card-inside-bifold');
+      if (cvCover) cvCover.className = `card-cover-canvas theme-${paramCardTheme}`;
+      if (cvInside) cvInside.className = `card-inside-bifold theme-${paramCardTheme}`;
       document.querySelectorAll('.card-theme-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.cardTheme === paramCardTheme);
       });

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 960" width="540" height="960">
+  <defs>
+    <linearGradient id="pStripe1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9ab4cb" stop-opacity="0.75"/>
+      <stop offset="50%" stop-color="#839eb9" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#9ab4cb" stop-opacity="0.75"/>
+    </linearGradient>
+    <linearGradient id="pStripe2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b4c7d9" stop-opacity="0.7"/>
+      <stop offset="40%" stop-color="#98b1c9" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#aec3d6" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="pCenter" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fdfcfa"/>
+      <stop offset="100%" stop-color="#f8f5ee"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="540" height="960" fill="#faf7f2" />
+
+  <!-- Soft watercolor vertical stripes -->
+  <g opacity="0.95">
+    <path d="M 12 0 C 18 200, 10 400, 16 600 C 22 800, 14 960, 14 960 L 36 960 C 38 800, 30 600, 36 400 C 42 200, 34 0, 34 0 Z" fill="url(#pStripe1)" />
+    <path d="M 54 0 C 62 180, 52 420, 60 620 C 66 820, 56 960, 56 960 L 80 960 C 82 820, 74 620, 80 420 C 86 180, 78 0, 78 0 Z" fill="url(#pStripe2)" />
+    <path d="M 98 0 C 104 220, 96 450, 102 680 C 108 850, 100 960, 100 960 L 124 960 C 126 850, 118 680, 124 450 C 130 220, 122 0, 122 0 Z" fill="url(#pStripe1)" />
+    <path d="M 142 0 C 148 190, 140 430, 146 640 C 152 830, 144 960, 144 960 L 168 960 C 170 830, 162 640, 168 430 C 174 190, 166 0, 166 0 Z" fill="url(#pStripe2)" />
+    
+    <path d="M 372 0 C 378 200, 370 410, 376 630 C 382 810, 374 960, 374 960 L 398 960 C 400 810, 392 630, 398 410 C 404 200, 396 0, 396 0 Z" fill="url(#pStripe1)" />
+    <path d="M 416 0 C 422 180, 414 430, 420 650 C 426 840, 418 960, 418 960 L 442 960 C 444 840, 436 650, 442 430 C 448 180, 440 0, 440 0 Z" fill="url(#pStripe2)" />
+    <path d="M 460 0 C 466 210, 458 440, 464 660 C 470 850, 462 960, 462 960 L 486 960 C 488 850, 480 660, 486 440 C 492 210, 484 0, 484 0 Z" fill="url(#pStripe1)" />
+    <path d="M 504 0 C 510 190, 502 430, 508 640 C 514 830, 506 960, 506 960 L 530 960 C 532 830, 524 640, 530 430 C 536 190, 528 0, 528 0 Z" fill="url(#pStripe2)" />
+  </g>
+
+  <!-- Central Cream Canvas Area -->
+  <path d="M 75 110 C 140 95, 230 115, 270 102 C 310 90, 400 115, 465 110 C 490 140, 460 210, 475 300 C 490 390, 460 480, 475 580 C 490 680, 460 770, 470 850 C 400 860, 310 840, 270 855 C 230 870, 140 845, 75 850 C 60 770, 85 680, 70 580 C 55 480, 85 390, 70 300 C 55 210, 85 140, 75 110 Z" fill="url(#pCenter)" stroke="#3b5670" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Whimsical Navy Doodle Ribbon Border with signature loops -->
+  <path d="M 90 125 C 150 115, 210 135, 270 120 C 330 105, 390 130, 430 115 C 445 110, 455 125, 450 140 C 440 155, 420 145, 425 130 C 430 115, 455 125, 455 155 C 450 250, 475 340, 455 430 C 445 470, 425 455, 435 440 C 445 425, 465 440, 460 470 C 455 560, 470 650, 455 740 C 445 800, 465 835, 440 840 C 380 850, 320 830, 265 845 C 245 850, 235 870, 220 865 C 205 860, 215 840, 230 845 C 250 850, 190 840, 130 845 C 105 845, 95 825, 100 810 C 105 795, 120 805, 115 820 C 110 835, 90 820, 85 790 C 90 700, 70 610, 85 520 C 95 480, 115 495, 105 510 C 95 525, 75 510, 80 480 C 85 390, 70 300, 85 210 C 90 180, 70 140, 90 125 Z" fill="none" stroke="#2c445c" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
