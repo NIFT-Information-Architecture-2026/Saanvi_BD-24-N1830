@@ -4659,7 +4659,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function getCompactCardPayload(slug) {
     const ks = (state.greetingCard.insideKeepsakes || []).map(k => {
       if (k.type === 'vinyl') {
-        return { t: 'v', id: k.id || 'track_1', tit: k.title, x: Math.round(k.x), y: Math.round(k.y) };
+        return { t: 'v', id: k.id || 'track_1', sid: k.songId || (k.id && !k.id.startsWith('track_') ? k.id : null), tit: k.title, src: k.audioSrc, x: Math.round(k.x), y: Math.round(k.y) };
       }
       if (k.type === 'flower') {
         return { t: 'f', f: k.file, n: k.name, x: Math.round(k.x), y: Math.round(k.y), w: Math.round(k.width || 90), r: Math.round(k.rotation || 0) };
@@ -5532,7 +5532,15 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             `;
           } else if (itType === 'vinyl' || itType === 'v') {
-            const trackTitle = item.title || item.tit || 'Die With A Smile - Lady Gaga & Bruno Mars';
+            let trackTitle = item.title || item.tit || 'Die With A Smile - Lady Gaga & Bruno Mars';
+            let matchedTrack = CURATED_VINYL_TRACKS.find(t => t.id === item.sid || t.audioSrc === item.src);
+            if (!matchedTrack && trackTitle) {
+              matchedTrack = CURATED_VINYL_TRACKS.find(t => trackTitle.toLowerCase().includes(t.title.toLowerCase()));
+            }
+            if (matchedTrack) {
+              item.audioSrc = matchedTrack.audioSrc;
+              trackTitle = matchedTrack.title + (matchedTrack.artist ? ` - ${matchedTrack.artist}` : '');
+            }
             ksHtml += `
               <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.w || item.width || 140}px; transform: rotate(${item.r || item.rotation || 0}deg); pointer-events:auto;">
                 <div class="vinyl-disc-widget ${vinylIsPlaying ? 'is-playing' : ''}">
