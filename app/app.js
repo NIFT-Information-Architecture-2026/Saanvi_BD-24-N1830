@@ -71,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
       insideBody: 'Wishing you all the joy, peace, and warmth this season brings.',
       insideFontSize: 19,
       insideFontFamily: "'Caveat', cursive",
+      paperTone: 'vanilla',
+      borderStyle: 'classic',
+      stickerTarget: 'inside',
       vessel: 'envelope',
       envelope: 'dusty-blue',
       seal: 'gold-celestial',
@@ -2144,6 +2147,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const cardLine2 = document.getElementById('card-line-2');
   const cardLine3 = document.getElementById('card-line-3');
 
+  // Segmented Switcher & Stage Elements
+  const cardViewSegmentedWrapper = document.getElementById('card-view-segmented-wrapper');
+  const cardViewSegmentedToggle = document.getElementById('card-view-segmented-toggle');
+  const btnCardToggleCover = document.getElementById('btn-card-toggle-cover');
+  const btnCardToggleInside = document.getElementById('btn-card-toggle-inside');
+
   // Step Panels
   const cardPanelCover = document.getElementById('card-panel-cover');
   const cardPanelInside = document.getElementById('card-panel-inside');
@@ -2152,11 +2161,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Step 1: Cover Elements
   const cardCoverCanvas = document.getElementById('card-cover-canvas');
+  const cardCoverOuterFrame = document.getElementById('card-cover-outer-frame');
   const cardCoverElementsLayer = document.getElementById('card-cover-elements-layer');
   const cardThemeBtns = document.querySelectorAll('.card-theme-btn');
+  const btnThemePrev = document.getElementById('btn-theme-prev');
+  const btnThemeNext = document.getElementById('btn-theme-next');
+  const cardThemeCounter = document.getElementById('card-theme-counter');
   const cardCoverPhotoInput = document.getElementById('card-cover-photo-input');
   const btnCardAddCoverPhoto = document.getElementById('btn-card-add-cover-photo');
   const btnCardAddCoverText = document.getElementById('btn-card-add-cover-text');
+  const btnCardAddCoverSticker = document.getElementById('btn-card-add-cover-sticker');
   const cardFontSelect = document.getElementById('card-font-select');
   const btnCardFontMinus = document.getElementById('btn-card-font-minus');
   const btnCardFontPlus = document.getElementById('btn-card-font-plus');
@@ -2165,6 +2179,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Step 2: Inside Elements
   const cardInsideBifold = document.getElementById('card-inside-bifold');
   const cardInsideItemsOverlay = document.getElementById('card-inside-items-overlay');
+  const btnInsidePrev = document.getElementById('btn-inside-prev');
+  const btnInsideNext = document.getElementById('btn-inside-next');
+  const cardInsideCounter = document.getElementById('card-inside-counter');
   const cardInsideToInput = document.getElementById('card-inside-to-input');
   const cardInsideBodyTextarea = document.getElementById('card-inside-body-textarea');
   const cardInsideFromInput = document.getElementById('card-inside-from-input');
@@ -2177,6 +2194,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCardAddVinyl = document.getElementById('btn-card-add-vinyl');
   const btnCardAddSticker = document.getElementById('btn-card-add-sticker');
   const cardPolaroidFileInput = document.getElementById('card-polaroid-file-input');
+
+  const cardPaperBtns = document.querySelectorAll('.card-paper-btn');
+  const cardBorderOptionBtns = document.querySelectorAll('.card-border-option-btn');
 
   const cardFlowersPopup = document.getElementById('card-flowers-popup');
   const cardFlowersPopupGrid = document.getElementById('card-flowers-popup-grid');
@@ -2445,9 +2465,64 @@ document.addEventListener('DOMContentLoaded', () => {
   // Active Selected Item on Cover for Font / Style manipulation
   let activeSelectedCoverItem = null;
 
+  const CARD_THEMES_ORDER = [
+    'gingham-pressed',
+    'stardust-wildflowers',
+    'dolce-vita',
+    'royal-lotus',
+    'denim-embroidery',
+    'burgundy-arch',
+    'plumeria-bows',
+    'periwinkle-stripes',
+    'midnight-celestial'
+  ];
+
+  function updateThemeCounters() {
+    const currTheme = state.greetingCard.theme || 'gingham-pressed';
+    const idx = Math.max(0, CARD_THEMES_ORDER.indexOf(currTheme));
+    const counterText = `• 0${idx + 1}/09 •`;
+    if (cardThemeCounter) cardThemeCounter.textContent = counterText;
+    if (cardInsideCounter) cardInsideCounter.textContent = counterText;
+  }
+
+  function applyCardTheme(theme) {
+    state.greetingCard.theme = theme;
+    updateThemeCounters();
+
+    cardThemeBtns.forEach(b => b.classList.toggle('active', b.dataset.cardTheme === theme));
+
+    const border = state.greetingCard.borderStyle || 'classic';
+    const paper = state.greetingCard.paperTone || 'vanilla';
+
+    if (cardCoverCanvas) {
+      cardCoverCanvas.className = `card-cover-canvas theme-${theme}`;
+    }
+    if (cardCoverOuterFrame) {
+      cardCoverOuterFrame.className = `card-cover-outer-frame border-${border}`;
+    }
+    if (cardInsideBifold) {
+      cardInsideBifold.className = `card-inside-bifold theme-${theme} paper-${paper} border-${border}`;
+    }
+  }
+
+  function cycleCardTheme(direction) {
+    const currTheme = state.greetingCard.theme || 'gingham-pressed';
+    let idx = CARD_THEMES_ORDER.indexOf(currTheme);
+    if (idx === -1) idx = 0;
+    const nextIdx = (idx + direction + CARD_THEMES_ORDER.length) % CARD_THEMES_ORDER.length;
+    applyCardTheme(CARD_THEMES_ORDER[nextIdx]);
+  }
+
   // Stepper Controller
   function setCardStep(stepNum) {
     state.greetingCard.step = stepNum;
+
+    // Update Segmented Switcher (Visible on Steps 1 & 2)
+    if (cardViewSegmentedWrapper) {
+      cardViewSegmentedWrapper.style.display = (stepNum === 1 || stepNum === 2) ? 'flex' : 'none';
+    }
+    if (btnCardToggleCover) btnCardToggleCover.classList.toggle('active', stepNum === 1);
+    if (btnCardToggleInside) btnCardToggleInside.classList.toggle('active', stepNum === 2);
 
     // Update Dots & Lines
     if (cardDot1) cardDot1.classList.toggle('active', stepNum === 1);
@@ -2465,12 +2540,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cardPanelDelivery) cardPanelDelivery.style.display = stepNum === 3 ? 'block' : 'none';
     if (cardPanelPreview) cardPanelPreview.style.display = stepNum === 4 ? 'block' : 'none';
 
+    updateThemeCounters();
+
     if (stepNum === 1) {
       renderCoverElements();
     } else if (stepNum === 2) {
-      if (cardInsideBifold) {
-        cardInsideBifold.className = `card-inside-bifold theme-${state.greetingCard.theme || 'gingham-pressed'}`;
-      }
+      applyCardTheme(state.greetingCard.theme || 'gingham-pressed');
       renderInsideKeepsakes();
       syncInsideNoteInputs();
     } else if (stepNum === 3) {
@@ -2486,6 +2561,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Segmented Switcher Click Handlers
+  if (btnCardToggleCover) btnCardToggleCover.addEventListener('click', () => setCardStep(1));
+  if (btnCardToggleInside) btnCardToggleInside.addEventListener('click', () => setCardStep(2));
+
+  // Carousel Arrow Handlers
+  if (btnThemePrev) btnThemePrev.addEventListener('click', () => cycleCardTheme(-1));
+  if (btnThemeNext) btnThemeNext.addEventListener('click', () => cycleCardTheme(1));
+  if (btnInsidePrev) btnInsidePrev.addEventListener('click', () => cycleCardTheme(-1));
+  if (btnInsideNext) btnInsideNext.addEventListener('click', () => cycleCardTheme(1));
+
   if (btnCardToStep2) btnCardToStep2.addEventListener('click', () => setCardStep(2));
   if (btnCardBackToStep1) btnCardBackToStep1.addEventListener('click', () => setCardStep(1));
   if (btnCardToStep3) btnCardToStep3.addEventListener('click', () => setCardStep(3));
@@ -2496,15 +2581,24 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Step 1: Design Cover Logic ---
   cardThemeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      cardThemeBtns.forEach(b => b.classList.toggle('active', b === btn));
-      const theme = btn.dataset.cardTheme;
-      state.greetingCard.theme = theme;
-      if (cardCoverCanvas) {
-        cardCoverCanvas.className = `card-cover-canvas theme-${theme}`;
-      }
-      if (cardInsideBifold) {
-        cardInsideBifold.className = `card-inside-bifold theme-${theme}`;
-      }
+      applyCardTheme(btn.dataset.cardTheme);
+    });
+  });
+
+  // Paper & Border Options Handlers
+  cardPaperBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      cardPaperBtns.forEach(b => b.classList.toggle('active', b === btn));
+      state.greetingCard.paperTone = btn.dataset.paper || 'vanilla';
+      applyCardTheme(state.greetingCard.theme || 'gingham-pressed');
+    });
+  });
+
+  cardBorderOptionBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      cardBorderOptionBtns.forEach(b => b.classList.toggle('active', b === btn));
+      state.greetingCard.borderStyle = btn.dataset.border || 'classic';
+      applyCardTheme(state.greetingCard.theme || 'gingham-pressed');
     });
   });
 
@@ -2578,6 +2672,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (btnCardAddCoverSticker && cardStickersPopup) {
+    btnCardAddCoverSticker.addEventListener('click', () => {
+      state.greetingCard.stickerTarget = 'cover';
+      populateCardStickersPopup();
+      cardStickersPopup.style.display = 'block';
+      if (cardStickersPopupGrid) cardStickersPopupGrid.scrollTop = 0;
+    });
+  }
+
   function renderCoverElements() {
     if (!cardCoverElementsLayer) return;
     cardCoverElementsLayer.innerHTML = '';
@@ -2602,6 +2705,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="card-rotate-handle" title="Drag to rotate">↻</div>
           <div class="card-drag-handle" title="Drag to move">✥ Move</div>
           <img src="${item.src}" class="card-cover-photo-img" style="width:100%; height:auto; border-radius:6px; display:block; pointer-events:none;" />
+          <div class="card-resize-handle" title="Drag to resize"></div>
+        `;
+      } else if (item.type === 'sticker') {
+        itemEl.innerHTML = `
+          <button class="btn-item-delete" title="Delete">×</button>
+          <div class="card-rotate-handle" title="Drag to rotate">↻</div>
+          <div class="card-drag-handle" title="Drag to move">✥ Move</div>
+          <img src="assets/stickers/${item.file}" class="card-cover-sticker-img" style="width:100%; height:auto; display:block; pointer-events:none; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.18));" />
           <div class="card-resize-handle" title="Drag to resize"></div>
         `;
       } else {
@@ -2812,18 +2923,33 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="sticker-popup-name">${stk.name}</span>
       `;
       btn.addEventListener('click', () => {
-        state.greetingCard.insideKeepsakes.push({
-          id: 'sticker_' + Date.now(),
-          type: 'sticker',
-          name: stk.name,
-          file: stk.file,
-          x: 42,
-          y: 35,
-          width: 75,
-          rotation: 0
-        });
-        if (cardStickersPopup) cardStickersPopup.style.display = 'none';
-        renderInsideKeepsakes();
+        if (state.greetingCard.stickerTarget === 'cover') {
+          state.greetingCard.coverElements.push({
+            id: 'sticker_' + Date.now(),
+            type: 'sticker',
+            name: stk.name,
+            file: stk.file,
+            x: 35,
+            y: 40,
+            width: 70,
+            rotation: 0
+          });
+          if (cardStickersPopup) cardStickersPopup.style.display = 'none';
+          renderCoverElements();
+        } else {
+          state.greetingCard.insideKeepsakes.push({
+            id: 'sticker_' + Date.now(),
+            type: 'sticker',
+            name: stk.name,
+            file: stk.file,
+            x: 42,
+            y: 35,
+            width: 75,
+            rotation: 0
+          });
+          if (cardStickersPopup) cardStickersPopup.style.display = 'none';
+          renderInsideKeepsakes();
+        }
       });
       cardStickersPopupGrid.appendChild(btn);
     });
@@ -2831,6 +2957,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnCardAddSticker && cardStickersPopup) {
     btnCardAddSticker.addEventListener('click', () => {
+      state.greetingCard.stickerTarget = 'inside';
       populateCardStickersPopup();
       cardStickersPopup.style.display = 'block';
       if (cardStickersPopupGrid) cardStickersPopupGrid.scrollTop = 0;

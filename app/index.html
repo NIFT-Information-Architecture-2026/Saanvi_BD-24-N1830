@@ -1390,131 +1390,191 @@
             <div class="card-subbar-spacer"></div>
           </div>
 
+          <!-- Card View Segmented Switcher (Cover ⇄ Inside) -->
+          <div class="card-view-segmented-wrapper" id="card-view-segmented-wrapper">
+            <div class="card-view-segmented-toggle" id="card-view-segmented-toggle">
+              <button type="button" class="card-view-toggle-btn active" id="btn-card-toggle-cover" data-step="1">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span>Cover (Outside)</span>
+              </button>
+              <button type="button" class="card-view-toggle-btn" id="btn-card-toggle-inside" data-step="2">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+                <span>Inside</span>
+              </button>
+            </div>
+          </div>
+
           <!-- ================= STEP 1: DESIGN COVER ================= -->
           <div class="card-step-panel" id="card-panel-cover">
-            <!-- Cover Options Bar -->
-            <div class="card-options-bar">
-              <!-- Left: Theme Vibe Swatches -->
-              <div class="card-theme-group">
-                <span class="card-opt-label">Theme <span class="opt-bar">|</span></span>
-                <div class="card-theme-swatches" id="card-theme-swatches">
-                  <button class="card-theme-btn active" data-card-theme="gingham-pressed" title="Sunshine Gingham &amp; Pressed Blooms">
-                    <span class="card-theme-vibe vibe-gingham-pressed"></span>
-                  </button>
-                  <button class="card-theme-btn" data-card-theme="stardust-wildflowers" title="Stardust &amp; Wildflower Parchment">
-                    <span class="card-theme-vibe vibe-stardust-wildflowers"></span>
-                  </button>
-                  <button class="card-theme-btn" data-card-theme="dolce-vita" title="La Dolce Vita / Garden Celebration">
-                    <span class="card-theme-vibe vibe-dolce-vita"></span>
-                  </button>
-                  <button class="card-theme-btn" data-card-theme="royal-lotus" title="Royal Lotus Sage">
-                    <span class="card-theme-vibe vibe-royal-lotus"></span>
-                  </button>
-                  <button class="card-theme-btn" data-card-theme="denim-embroidery" title="Denim &amp; Embroidered Keepsakes">
-                    <span class="card-theme-vibe vibe-denim-embroidery"></span>
-                  </button>
-                  <button class="card-theme-btn" data-card-theme="burgundy-arch" title="Burgundy Velvet Arch">
-                    <span class="card-theme-vibe vibe-burgundy-arch"></span>
-                  </button>
-                  <button class="card-theme-btn" data-card-theme="plumeria-bows" title="Plumeria &amp; Golden Bows">
-                    <span class="card-theme-vibe vibe-plumeria-bows"></span>
-                  </button>
-                  <button class="card-theme-btn" data-card-theme="periwinkle-stripes" title="Periwinkle Stripes &amp; Whimsical Ribbon">
-                    <span class="card-theme-vibe vibe-periwinkle-stripes"></span>
-                  </button>
-                  <button class="card-theme-btn" data-card-theme="midnight-celestial" title="Midnight Celestial Gold">
-                    <span class="card-theme-vibe vibe-midnight-celestial"></span>
-                  </button>
+            <!-- Top Delicate Badge -->
+            <div class="card-badge-container">
+              <span class="card-badge-pill">Design Your Card</span>
+            </div>
+
+            <!-- Themes Bar -->
+            <div class="card-themes-bar">
+              <span class="card-section-label">Themes</span>
+              <div class="card-theme-swatches" id="card-theme-swatches">
+                <button type="button" class="card-theme-btn active" data-card-theme="gingham-pressed" title="Sunshine Gingham &amp; Pressed Blooms">
+                  <span class="card-theme-vibe vibe-gingham-pressed"></span>
+                </button>
+                <button type="button" class="card-theme-btn" data-card-theme="stardust-wildflowers" title="Stardust &amp; Wildflower Parchment">
+                  <span class="card-theme-vibe vibe-stardust-wildflowers"></span>
+                </button>
+                <button type="button" class="card-theme-btn" data-card-theme="dolce-vita" title="La Dolce Vita / Garden Celebration">
+                  <span class="card-theme-vibe vibe-dolce-vita"></span>
+                </button>
+                <button type="button" class="card-theme-btn" data-card-theme="royal-lotus" title="Royal Lotus Sage">
+                  <span class="card-theme-vibe vibe-royal-lotus"></span>
+                </button>
+                <button type="button" class="card-theme-btn" data-card-theme="denim-embroidery" title="Denim &amp; Embroidered Keepsakes">
+                  <span class="card-theme-vibe vibe-denim-embroidery"></span>
+                </button>
+                <button type="button" class="card-theme-btn" data-card-theme="burgundy-arch" title="Burgundy Velvet Arch">
+                  <span class="card-theme-vibe vibe-burgundy-arch"></span>
+                </button>
+                <button type="button" class="card-theme-btn" data-card-theme="plumeria-bows" title="Plumeria &amp; Golden Bows">
+                  <span class="card-theme-vibe vibe-plumeria-bows"></span>
+                </button>
+                <button type="button" class="card-theme-btn" data-card-theme="periwinkle-stripes" title="Periwinkle Stripes &amp; Whimsical Ribbon">
+                  <span class="card-theme-vibe vibe-periwinkle-stripes"></span>
+                </button>
+                <button type="button" class="card-theme-btn" data-card-theme="midnight-celestial" title="Midnight Celestial Gold">
+                  <span class="card-theme-vibe vibe-midnight-celestial"></span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Cover Interactive Stage with Scallop Frame & Carousel Arrows -->
+            <div class="card-cover-stage-wrap">
+              <button type="button" class="card-carousel-arrow left" id="btn-theme-prev" title="Previous theme" aria-label="Previous theme">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+
+              <div class="card-cover-outer-frame" id="card-cover-outer-frame">
+                <div class="card-cover-canvas theme-gingham-pressed" id="card-cover-canvas">
+                  <div class="card-cover-elements-layer" id="card-cover-elements-layer">
+                    <!-- Default cover title box -->
+                    <div class="card-placed-item card-placed-text" id="cover-default-title" style="left: 20%; top: 68%; width: 60%;">
+                      <button class="btn-item-delete" title="Delete">×</button>
+                      <div class="card-item-content" contenteditable="true" spellcheck="false">A Little Wish For You</div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <!-- Center/Right: Cover Tools (+ Photo, + Text, Font Controls) -->
-              <div class="card-cover-tools-group">
+              <button type="button" class="card-carousel-arrow right" id="btn-theme-next" title="Next theme" aria-label="Next theme">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Theme Counter -->
+            <div class="card-counter-indicator" id="card-theme-counter">• 01/09 •</div>
+
+            <!-- Cover Control Box (Trio Card + Font Row) -->
+            <div class="card-cover-control-box">
+              <div class="card-tools-trio">
                 <input type="file" id="card-cover-photo-input" accept="image/*" style="display:none;" />
-                <button class="card-tool-btn" id="btn-card-add-cover-photo" title="Add picture anywhere on cover">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <button type="button" class="card-trio-btn" id="btn-card-add-cover-photo" title="Add picture on cover">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                     <circle cx="8.5" cy="8.5" r="1.5"/>
                     <polyline points="21 15 16 10 5 21"/>
                   </svg>
                   <span>+ Photo</span>
                 </button>
-                <button class="card-tool-btn" id="btn-card-add-cover-text" title="Add text box on cover">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="card-trio-divider"></div>
+                <button type="button" class="card-trio-btn" id="btn-card-add-cover-text" title="Add text box on cover">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="4 7 4 4 20 4 20 7"/>
                     <line x1="9" y1="20" x2="15" y2="20"/>
                     <line x1="12" y1="4" x2="12" y2="20"/>
                   </svg>
                   <span>+ Text</span>
                 </button>
+                <div class="card-trio-divider"></div>
+                <button type="button" class="card-trio-btn" id="btn-card-add-cover-sticker" title="Add sticker on cover">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>+ Sticker</span>
+                </button>
+              </div>
 
-                <div class="font-controls-row card-font-row">
-                  <div class="font-size-pill">
-                    <button id="btn-card-font-minus" title="Decrease Font Size">A-</button>
-                    <button id="btn-card-font-plus" title="Increase Font Size">A+</button>
-                  </div>
-                  <div class="font-select-wrapper">
-                    <select id="card-font-select" class="postcard-font-select">
-                      <option value="'Caveat', cursive">Caveat</option>
-                      <option value="'Dancing Script', cursive">Dancing Script</option>
-                      <option value="'Pacifico', cursive">Pacifico</option>
-                      <option value="'Satisfy', cursive">Satisfy</option>
-                      <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
-                      <option value="'Playfair Display', serif">Playfair Display</option>
-                      <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans</option>
-                    </select>
-                  </div>
+              <div class="card-control-font-row">
+                <div class="font-size-pill">
+                  <button type="button" id="btn-card-font-minus" title="Decrease Font Size">A-</button>
+                  <button type="button" id="btn-card-font-plus" title="Increase Font Size">A+</button>
+                </div>
+                <div class="font-select-wrapper">
+                  <select id="card-font-select" class="postcard-font-select">
+                    <option value="'Caveat', cursive">Caveat</option>
+                    <option value="'Dancing Script', cursive">Dancing Script</option>
+                    <option value="'Satisfy', cursive">Satisfy</option>
+                    <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                    <option value="'Playfair Display', serif">Playfair Display</option>
+                    <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans</option>
+                  </select>
                 </div>
               </div>
             </div>
 
-            <!-- Card Cover Interactive Canvas -->
-            <div class="card-cover-stage-container">
-              <div class="card-cover-canvas theme-gingham-pressed" id="card-cover-canvas">
-                <div class="card-cover-elements-layer" id="card-cover-elements-layer">
-                  <!-- Default cover title box -->
-                  <div class="card-placed-item card-placed-text" id="cover-default-title" style="left: 20%; top: 68%; width: 60%;">
-                    <button class="btn-item-delete" title="Delete">×</button>
-                    <div class="card-item-content" contenteditable="true" spellcheck="false">A Little Wish For You</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            <!-- Bottom Action with Floral Flanks -->
             <div class="card-bottom-actions">
-              <button class="card-action-btn primary" id="btn-card-to-step2">
-                <span>Next: Inside Card</span>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-              </button>
+              <div class="card-next-floral-wrap">
+                <span class="card-floral-sprig">🌸</span>
+                <button class="card-action-btn primary" id="btn-card-to-step2">
+                  <span>Next: Inside Card</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+                <span class="card-floral-sprig">🌸</span>
+              </div>
             </div>
           </div>
 
           <!-- ================= STEP 2: INSIDE CARD ================= -->
           <div class="card-step-panel" id="card-panel-inside" style="display:none;">
-            <!-- Inside Card Action Bar: Keepsakes on left, Font controls on right -->
-            <div class="card-options-bar inside-options-bar">
-              <div class="card-keepsake-tools">
-                <span class="card-opt-label">Add Keepsakes:</span>
-                <button class="card-tool-btn mini" id="btn-card-add-polaroid" title="Add resizable polaroid photo">
-                  <span>📷 + Polaroid</span>
-                </button>
-                <button class="card-tool-btn mini" id="btn-card-add-flower" title="Pick from 15 pressed flowers">
-                  <span>🌸 + Flower</span>
-                </button>
-                <button class="card-tool-btn mini" id="btn-card-add-vinyl" title="Add functional vinyl music player">
-                  <span>💿 + Vinyl</span>
-                </button>
-                <button class="card-tool-btn mini" id="btn-card-add-sticker" title="Add resizable sticker">
-                  <span>✨ + Sticker</span>
-                </button>
+            <!-- Inside Keepsakes Tool Row: 4 Cloud Buttons + Font Controls -->
+            <div class="card-inside-tools-row">
+              <div class="card-cloud-keepsakes-group">
+                <span class="card-section-label">Add Keepsakes</span>
+                <div class="card-cloud-buttons-flex">
+                  <button type="button" class="card-cloud-btn" id="btn-card-add-polaroid" title="Add Polaroid Photo">
+                    <span class="cloud-icon">📷</span>
+                    <span class="cloud-text">+ Polaroid</span>
+                  </button>
+                  <button type="button" class="card-cloud-btn" id="btn-card-add-flower" title="Pick from 15 pressed flowers">
+                    <span class="cloud-icon">🌸</span>
+                    <span class="cloud-text">+ Flower</span>
+                  </button>
+                  <button type="button" class="card-cloud-btn" id="btn-card-add-vinyl" title="Add spinning vinyl record">
+                    <span class="cloud-icon">💿</span>
+                    <span class="cloud-text">+ Vinyl</span>
+                  </button>
+                  <button type="button" class="card-cloud-btn" id="btn-card-add-sticker" title="Add resizable sticker">
+                    <span class="cloud-icon">✨</span>
+                    <span class="cloud-text">+ Sticker</span>
+                  </button>
+                </div>
               </div>
 
-              <div class="font-controls-row card-font-row">
+              <div class="font-controls-row card-font-row inside-font-row">
                 <div class="font-size-pill">
-                  <button id="btn-inside-font-minus" title="Decrease Font Size">A-</button>
-                  <button id="btn-inside-font-plus" title="Increase Font Size">A+</button>
+                  <button type="button" id="btn-inside-font-minus" title="Decrease Font Size">A-</button>
+                  <button type="button" id="btn-inside-font-plus" title="Increase Font Size">A+</button>
                 </div>
                 <div class="font-select-wrapper">
                   <select id="card-inside-font-select" class="postcard-font-select">
@@ -1530,34 +1590,51 @@
               </div>
             </div>
 
-            <!-- Inside Spread Bifold Layout -->
-            <div class="card-inside-container">
-              <div class="card-inside-bifold theme-gingham-pressed" id="card-inside-bifold">
-                <!-- Left Hand Side: Interactive Keepsakes Pocket -->
-                <div class="inside-left-panel" id="card-inside-left-panel">
-                  <div class="panel-watermark-label">Memories &amp; Keepsakes</div>
-                </div>
+            <!-- Inside Spread Stage with Carousel Arrows -->
+            <div class="card-inside-stage-wrapper">
+              <button type="button" class="card-carousel-arrow left" id="btn-inside-prev" title="Previous theme" aria-label="Previous theme">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
 
-                <!-- Center Spine / Fold Crease -->
-                <div class="inside-bifold-crease"></div>
-
-                <!-- Right Hand Side: Dedicated Handwritten Message -->
-                <div class="inside-right-panel" id="card-inside-right-panel">
-                  <div class="card-inside-note-header">
-                    <span class="card-note-label">To:</span>
-                    <input type="text" value="Kabir" id="card-inside-to-input" class="card-deckle-input" />
+              <div class="card-inside-container">
+                <div class="card-inside-bifold theme-gingham-pressed paper-vanilla border-classic" id="card-inside-bifold">
+                  <!-- Left Hand Side: Memories & Keepsakes Pocket -->
+                  <div class="inside-left-panel" id="card-inside-left-panel">
+                    <div class="panel-watermark-label">Memories &amp; Keepsakes</div>
                   </div>
-                  <textarea class="card-inside-textarea" id="card-inside-body-textarea" placeholder="Write your heartfelt message here...">Wishing you all the joy, peace, and warmth this season brings.</textarea>
-                  <div class="card-inside-note-footer">
-                    <span class="card-note-label">From:</span>
-                    <input type="text" value="Saanvi" id="card-inside-from-input" class="card-deckle-input" />
-                  </div>
-                </div>
 
-                <!-- Unified Interactive Items Overlay across entire bifold -->
-                <div class="card-inside-items-overlay" id="card-inside-items-overlay"></div>
+                  <!-- Center Spine Fold Crease -->
+                  <div class="inside-bifold-crease"></div>
+
+                  <!-- Right Hand Side: Dedicated Message Page -->
+                  <div class="inside-right-panel" id="card-inside-right-panel">
+                    <div class="card-inside-note-header">
+                      <span class="card-note-label">To:</span>
+                      <input type="text" value="Kabir" id="card-inside-to-input" class="card-deckle-input" />
+                    </div>
+                    <textarea class="card-inside-textarea" id="card-inside-body-textarea" placeholder="Write your heartfelt message here...">Wishing you all the joy, peace, and warmth this season brings.</textarea>
+                    <div class="card-inside-note-footer">
+                      <span class="card-note-label">From:</span>
+                      <input type="text" value="Saanvi" id="card-inside-from-input" class="card-deckle-input" />
+                    </div>
+                  </div>
+
+                  <!-- Unified Interactive Items Overlay across entire bifold -->
+                  <div class="card-inside-items-overlay" id="card-inside-items-overlay"></div>
+                </div>
               </div>
+
+              <button type="button" class="card-carousel-arrow right" id="btn-inside-next" title="Next theme" aria-label="Next theme">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
             </div>
+
+            <!-- Inside Spread Counter -->
+            <div class="card-counter-indicator" id="card-inside-counter">• 01/09 •</div>
 
             <!-- Popup Tray: 15 Pressed Flowers -->
             <div class="card-popup-picker" id="card-flowers-popup" style="display:none;">
@@ -1673,6 +1750,67 @@
                   <span>Place Vinyl on Card ♡</span>
                 </button>
               </div>
+            </div>
+
+            <!-- Paper Swatches Row -->
+            <div class="card-customize-bar">
+              <span class="card-section-label">Paper</span>
+              <div class="card-paper-swatches" id="card-paper-swatches">
+                <button type="button" class="card-paper-btn active" data-paper="vanilla" title="Warm Vanilla">
+                  <span class="paper-swatch-vibe paper-vibe-vanilla"></span>
+                  <span class="paper-label">Vanilla</span>
+                </button>
+                <button type="button" class="card-paper-btn" data-paper="ivory" title="Soft Ivory">
+                  <span class="paper-swatch-vibe paper-vibe-ivory"></span>
+                  <span class="paper-label">Ivory</span>
+                </button>
+                <button type="button" class="card-paper-btn" data-paper="parchment" title="Vintage Parchment">
+                  <span class="paper-swatch-vibe paper-vibe-parchment"></span>
+                  <span class="paper-label">Parchment</span>
+                </button>
+                <button type="button" class="card-paper-btn" data-paper="rose" title="Rose Velvet">
+                  <span class="paper-swatch-vibe paper-vibe-rose"></span>
+                  <span class="paper-label">Rose</span>
+                </button>
+                <button type="button" class="card-paper-btn" data-paper="charcoal" title="Charcoal Slate">
+                  <span class="paper-swatch-vibe paper-vibe-charcoal"></span>
+                  <span class="paper-label">Slate</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Border Styles Row -->
+            <div class="card-customize-bar">
+              <span class="card-section-label">Border</span>
+              <div class="card-border-styles" id="card-border-styles">
+                <button type="button" class="card-border-option-btn active" data-border="classic" title="Classic Clean">
+                  <span class="border-vibe border-vibe-classic"></span>
+                  <span class="border-label">Classic</span>
+                </button>
+                <button type="button" class="card-border-option-btn" data-border="scalloped" title="Scalloped Lace">
+                  <span class="border-vibe border-vibe-scalloped"></span>
+                  <span class="border-label">Scalloped</span>
+                </button>
+                <button type="button" class="card-border-option-btn" data-border="stitched" title="Stitched Ribbon">
+                  <span class="border-vibe border-vibe-stitched"></span>
+                  <span class="border-label">Stitched</span>
+                </button>
+                <button type="button" class="card-border-option-btn" data-border="gingham" title="Gingham Trim">
+                  <span class="border-vibe border-vibe-gingham"></span>
+                  <span class="border-label">Gingham</span>
+                </button>
+                <button type="button" class="card-border-option-btn" data-border="ornate" title="Vintage Ornate">
+                  <span class="border-vibe border-vibe-ornate"></span>
+                  <span class="border-label">Ornate</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Floral Divider -->
+            <div class="card-floral-divider">
+              <span class="floral-divider-dash"></span>
+              <span class="floral-divider-bloom">🌸</span>
+              <span class="floral-divider-dash"></span>
             </div>
 
             <!-- Hidden file input for polaroids -->

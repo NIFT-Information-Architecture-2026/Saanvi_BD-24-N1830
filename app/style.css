@@ -3251,7 +3251,447 @@ body {
   width: 26px;
 }
 
-/* Card Options Bar */
+/* ================= GREETING CARD REDESIGN STYLES ================= */
+
+/* Segmented Switcher (Cover ⇄ Inside) */
+.card-view-segmented-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px 0 12px 0;
+  width: 100%;
+}
+.card-view-segmented-toggle {
+  display: inline-flex;
+  background: #FFF9F8;
+  border: 1.5px solid rgba(82, 19, 25, 0.16);
+  border-radius: 26px;
+  padding: 3px;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(82, 19, 25, 0.06);
+}
+.card-view-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 18px;
+  border-radius: 22px;
+  border: none;
+  background: transparent;
+  color: #521319;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-view-toggle-btn svg {
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+.card-view-toggle-btn:hover {
+  background: rgba(82, 19, 25, 0.05);
+}
+.card-view-toggle-btn.active {
+  background: #521319;
+  color: #FFFFFF;
+  box-shadow: 0 3px 10px rgba(82, 19, 25, 0.28);
+}
+.card-view-toggle-btn.active svg {
+  stroke: #FFFFFF;
+}
+
+/* Delicate Badge: Design Your Card */
+.card-badge-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.card-badge-pill {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: #6E1824;
+  background: #FFFBFB;
+  border: 1px solid rgba(110, 24, 36, 0.22);
+  border-radius: 20px;
+  padding: 4px 16px;
+  box-shadow: 0 2px 6px rgba(110, 24, 36, 0.06);
+}
+
+/* Themes Bar */
+.card-themes-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+.card-section-label {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #521319;
+}
+.card-themes-bar .card-theme-swatches {
+  max-width: 95%;
+  justify-content: center;
+  padding: 3px 6px;
+}
+
+/* Stage Wrappers with Carousel Navigation Arrows */
+.card-cover-stage-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 6px 0;
+  width: 100%;
+  position: relative;
+}
+.card-inside-stage-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 6px 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 2px;
+  position: relative;
+}
+.card-carousel-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(82, 19, 25, 0.18);
+  color: #521319;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(82, 19, 25, 0.1);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+.card-carousel-arrow:hover {
+  background: #521319;
+  color: #FFFFFF;
+  border-color: #521319;
+  transform: scale(1.08);
+}
+.card-carousel-arrow svg {
+  stroke: currentColor;
+}
+
+/* Card Cover Outer Scallop Frame */
+.card-cover-outer-frame {
+  position: relative;
+  padding: 8px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(82, 19, 25, 0.14), 0 2px 6px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid rgba(82, 19, 25, 0.1);
+  width: min(230px, 62vw);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* Pagination / Counter Indicator */
+.card-counter-indicator {
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-size: 17px;
+  font-weight: 700;
+  color: #6E1824;
+  letter-spacing: 2px;
+  margin: 4px 0 8px 0;
+}
+
+/* Cover Control Box (Trio + Font) */
+.card-cover-control-box {
+  background: #FFFDFE;
+  border: 1.2px solid rgba(82, 19, 25, 0.15);
+  border-radius: 18px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 16px rgba(82, 19, 25, 0.06);
+  max-width: 340px;
+  margin: 6px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.card-tools-trio {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
+.card-trio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #521319;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+.card-trio-btn:hover {
+  background: rgba(82, 19, 25, 0.08);
+}
+.card-trio-btn svg {
+  stroke: currentColor;
+}
+.card-trio-divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(82, 19, 25, 0.14);
+}
+.card-control-font-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(82, 19, 25, 0.12);
+}
+
+/* Floral Sprigs for Next Button */
+.card-next-floral-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.card-floral-sprig {
+  font-size: 16px;
+  opacity: 0.9;
+  filter: drop-shadow(0 2px 4px rgba(82, 19, 25, 0.12));
+}
+
+/* Cloud Keepsake Buttons */
+.card-inside-tools-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+.card-cloud-keepsakes-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+.card-cloud-buttons-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.card-cloud-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #FFFDFE 0%, #FFF3F5 100%);
+  border: 1.2px solid rgba(220, 150, 165, 0.6);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #521319;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(82, 19, 25, 0.06);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-cloud-btn:hover {
+  background: #521319;
+  color: #FFFFFF;
+  border-color: #521319;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(82, 19, 25, 0.22);
+}
+.card-cloud-btn .cloud-icon {
+  font-size: 13px;
+}
+.inside-font-row {
+  margin-top: 2px;
+}
+
+/* Paper & Border Customization Bars */
+.card-customize-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 5px 0;
+  width: 100%;
+}
+.card-customize-bar .card-section-label {
+  min-width: 46px;
+  text-align: right;
+  font-size: 11px;
+}
+.card-paper-swatches,
+.card-border-styles {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 0;
+}
+.card-paper-swatches::-webkit-scrollbar,
+.card-border-styles::-webkit-scrollbar {
+  display: none;
+}
+.card-paper-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 14px;
+  border: 1.5px solid transparent;
+  background: #FFFDFE;
+  box-shadow: 0 1px 4px rgba(82, 19, 25, 0.08);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #521319;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.card-paper-btn.active {
+  border-color: #521319;
+  box-shadow: 0 0 0 1.5px rgba(82, 19, 25, 0.25);
+}
+.paper-swatch-vibe {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+.paper-vibe-vanilla { background: #FFFDF9; }
+.paper-vibe-ivory { background: #F7F3E9; }
+.paper-vibe-parchment { background: #EFE4D2; }
+.paper-vibe-rose { background: #FBECEE; }
+.paper-vibe-charcoal { background: #E8E7E4; }
+
+/* Border Options */
+.card-border-option-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 14px;
+  border: 1.5px solid transparent;
+  background: #FFFDFE;
+  box-shadow: 0 1px 4px rgba(82, 19, 25, 0.08);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #521319;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.card-border-option-btn.active {
+  border-color: #521319;
+  box-shadow: 0 0 0 1.5px rgba(82, 19, 25, 0.25);
+}
+.border-vibe {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.border-vibe-classic { border: 1.5px solid #521319; }
+.border-vibe-scalloped { border: 1.5px dashed #A6384A; border-radius: 5px; }
+.border-vibe-stitched { border: 1.5px dotted #7D5056; }
+.border-vibe-gingham { border: 1.5px double #D99B26; }
+.border-vibe-ornate { border: 1.5px solid #521319; box-shadow: inset 0 0 0 1px #d4af37; }
+
+/* Paper tone modifiers on inside panels */
+.card-inside-bifold.paper-vanilla .inside-left-panel,
+.card-inside-bifold.paper-vanilla .inside-right-panel {
+  background: #FFFDF9 !important;
+}
+.card-inside-bifold.paper-ivory .inside-left-panel,
+.card-inside-bifold.paper-ivory .inside-right-panel {
+  background: #F7F3E9 !important;
+}
+.card-inside-bifold.paper-parchment .inside-left-panel,
+.card-inside-bifold.paper-parchment .inside-right-panel {
+  background: #EFE4D2 !important;
+}
+.card-inside-bifold.paper-rose .inside-left-panel,
+.card-inside-bifold.paper-rose .inside-right-panel {
+  background: #FBECEE !important;
+}
+.card-inside-bifold.paper-charcoal .inside-left-panel,
+.card-inside-bifold.paper-charcoal .inside-right-panel {
+  background: #E8E7E4 !important;
+}
+
+/* Border styles on card frame & bifold */
+.card-inside-bifold.border-scalloped,
+.card-cover-outer-frame.border-scalloped {
+  border: 2px dashed rgba(82, 19, 25, 0.45) !important;
+  border-radius: 16px;
+}
+.card-inside-bifold.border-stitched,
+.card-cover-outer-frame.border-stitched {
+  border: 2px dotted #8A4652 !important;
+}
+.card-inside-bifold.border-gingham,
+.card-cover-outer-frame.border-gingham {
+  border: 3px double #D99B26 !important;
+}
+.card-inside-bifold.border-ornate,
+.card-cover-outer-frame.border-ornate {
+  border: 2px solid #521319 !important;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.4), 0 12px 32px rgba(40, 20, 25, 0.16) !important;
+}
+
+/* Floral Divider */
+.card-floral-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 260px;
+  margin: 12px auto 6px auto;
+}
+.floral-divider-dash {
+  flex: 1;
+  height: 1px;
+  background: rgba(82, 19, 25, 0.18);
+}
+.floral-divider-bloom {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* Legacy Card Options Bar (retained for backward compatibility) */
 .card-options-bar {
   display: flex;
   align-items: center;
@@ -3399,11 +3839,11 @@ body {
 }
 .card-cover-canvas {
   width: 100%;
-  max-width: min(290px, 70vw);
   aspect-ratio: 9 / 16;
+  min-height: 360px;
   border-radius: 12px;
   position: relative;
-  box-shadow: 0 10px 30px rgba(40, 20, 25, 0.18), 0 2px 6px rgba(0,0,0,0.06);
+  box-shadow: none;
   overflow: hidden;
   transition: background 0.3s ease;
   box-sizing: border-box;
@@ -3853,13 +4293,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 6px 0;
+  padding: 0;
+  width: 100%;
+  max-width: min(315px, 73vw);
+  flex-shrink: 0;
 }
 .card-inside-bifold {
   width: 100%;
-  max-width: min(440px, 94vw);
   aspect-ratio: 9 / 8;
-  min-height: 360px;
+  min-height: 290px;
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(40, 20, 25, 0.16);
   display: flex;
