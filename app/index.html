@@ -1670,61 +1670,16 @@
             <div class="card-popup-picker vinyl-song-modal" id="card-vinyl-song-modal" style="display:none;">
               <div class="popup-picker-header">
                 <div class="popup-picker-title-group">
-                  <span class="popup-picker-title">Connect Song to Vinyl Record 🎵</span>
-                  <span class="popup-picker-count">Search real music, choose trending hits, or upload audio</span>
+                  <span class="popup-picker-title">Select Song for Vinyl Record 🎵</span>
+                  <span class="popup-picker-count">30 handpicked romantic & sentimental songs — all fully playable</span>
                 </div>
                 <button type="button" class="btn-popup-close" id="btn-close-vinyl-modal" title="Close">×</button>
               </div>
 
               <div class="vinyl-song-modal-body">
-                <!-- Navigation Tabs -->
-                <div class="vinyl-modal-tabs">
-                  <button type="button" class="vinyl-tab-btn active" data-vtab="search">🔍 Search Songs</button>
-                  <button type="button" class="vinyl-tab-btn" data-vtab="trending">✨ Trending Hits</button>
-                  <button type="button" class="vinyl-tab-btn" data-vtab="upload">📁 Upload Audio</button>
-                </div>
-
-                <!-- Tab 1: Live Music Search (Global Music Catalog) -->
-                <div class="vinyl-tab-panel active" id="vinyl-panel-search">
-                  <div class="vinyl-search-input-wrap">
-                    <input type="text" id="vinyl-music-search-input" class="vinyl-search-input" placeholder="Search any song or artist (e.g. Taylor Swift, Bruno Mars, Arijit)..." />
-                    <button type="button" id="btn-vinyl-music-search" class="btn-vinyl-search-go">Search</button>
-                  </div>
-
-                  <div class="vinyl-quick-tags" id="vinyl-quick-tags">
-                    <span class="vinyl-tag" data-query="Taylor Swift Lover">Taylor Swift</span>
-                    <span class="vinyl-tag" data-query="Lady Gaga Bruno Mars Die With A Smile">Bruno Mars</span>
-                    <span class="vinyl-tag" data-query="JVKE golden hour">JVKE</span>
-                    <span class="vinyl-tag" data-query="Billie Eilish Birds of a Feather">Billie Eilish</span>
-                    <span class="vinyl-tag" data-query="Stephen Sanchez Until I Found You">Stephen Sanchez</span>
-                    <span class="vinyl-tag" data-query="Arijit Singh Tum Hi Ho">Arijit Singh</span>
-                  </div>
-
-                  <div class="vinyl-search-results-list" id="vinyl-search-results">
-                    <div class="vinyl-search-empty-state">
-                      <div class="empty-state-icon">🎧</div>
-                      <p>Type any song or artist above to connect live audio to your vinyl record!</p>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Tab 2: Trending / Love Songs with Verified Real Audio -->
-                <div class="vinyl-tab-panel" id="vinyl-panel-trending" style="display:none;">
-                  <div class="vinyl-trending-list" id="vinyl-trending-list">
-                    <!-- Populated dynamically with real songs -->
-                  </div>
-                </div>
-
-                <!-- Tab 3: Upload Audio / Voice Note -->
-                <div class="vinyl-tab-panel" id="vinyl-panel-upload" style="display:none;">
-                  <div class="vinyl-upload-zone" id="vinyl-upload-dropzone">
-                    <div class="vinyl-upload-icon">🎙️</div>
-                    <div class="vinyl-upload-text">Upload audio file (.mp3, .m4a, .wav)</div>
-                    <div class="vinyl-upload-sub">Add your favorite audio track or a personal voice note</div>
-                    <input type="file" id="vinyl-audio-file-input" accept="audio/*" class="vinyl-file-input" />
-                    <button type="button" class="btn-vinyl-browse-file" id="btn-vinyl-browse-file">Choose Audio File</button>
-                    <div class="vinyl-upload-status" id="vinyl-upload-status" style="display:none;"></div>
-                  </div>
+                <!-- 30 Curated Songs List (No search, only the 30 user songs) -->
+                <div class="vinyl-curated-list" id="vinyl-curated-songs-list">
+                  <!-- Populated dynamically with all 30 songs -->
                 </div>
 
                 <!-- Currently Selected Song Summary Card -->

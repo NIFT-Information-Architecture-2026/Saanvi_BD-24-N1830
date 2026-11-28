@@ -4675,15 +4675,24 @@ body {
   background: #FAF0F2;
 }
 
-/* Results & Trending Lists */
+/* Results & Trending & Curated Lists */
 .vinyl-search-results-list,
-.vinyl-trending-list {
+.vinyl-trending-list,
+.vinyl-curated-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  max-height: 180px;
+  max-height: 260px;
   overflow-y: auto;
-  padding-right: 3px;
+  padding-right: 4px;
+}
+.vinyl-song-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8C5B64;
+  min-width: 22px;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
 }
 .vinyl-search-empty-state {
   display: flex;

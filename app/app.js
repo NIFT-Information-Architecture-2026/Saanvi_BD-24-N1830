@@ -2235,9 +2235,10 @@ document.addEventListener('DOMContentLoaded', () => {
     'crimson-heart': 'assets/letter/seals/seal_crimson_heart.png'
   };
 
-  // Verified Trending Real Audio Tracks
-  const VERIFIED_TRENDING_TRACKS = [
+  // 30 User Curated Verified Real Audio Tracks (Playable Apple Music Streams)
+  const CURATED_VINYL_TRACKS = [
     {
+      num: 1,
       id: 'die-with-a-smile',
       title: 'Die With A Smile',
       artist: 'Lady Gaga & Bruno Mars',
@@ -2246,31 +2247,35 @@ document.addEventListener('DOMContentLoaded', () => {
       audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/07/6a/99/076a99ed-b946-431b-6f1f-54fa187ca5bd/mzaf_8102882277995122875.plus.aac.p.m4a'
     },
     {
-      id: 'golden-hour-real',
-      title: 'golden hour',
-      artist: 'JVKE',
-      album: 'this is what ____ feels like',
-      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8d/1a/7b/8d1a7b44-316f-7c7f-4380-935673fb697a/5056167175650.jpg/100x100bb.jpg',
-      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/30/02/8c/30028c8a-a125-5466-bcc6-27a83b1c0135/mzaf_16911571635366913039.plus.aac.p.m4a'
+      num: 2,
+      id: 'here-with-me',
+      title: 'Here With Me',
+      artist: 'd4vd',
+      album: 'Petals to Thorns',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d6/83/1a/d6831a94-4e8f-5b23-df44-a313eb358257/23UMGIM33457.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bf/a3/6d/bfa36d9c-8e41-e05f-8a2b-970c9b21c695/mzaf_9987737564511061938.plus.aac.p.m4a'
     },
     {
-      id: 'birds-of-a-feather',
-      title: 'BIRDS OF A FEATHER',
-      artist: 'Billie Eilish',
-      album: 'HIT ME HARD AND SOFT',
-      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/92/9f/69/929f69f1-9977-3a44-d674-11f70c852d1b/24UMGIM36186.rgb.jpg/100x100bb.jpg',
-      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/34/31/d3/3431d34e-847f-5d66-df83-0bce688d997e/mzaf_18106743962423782018.plus.aac.p.m4a'
+      num: 3,
+      id: 'i-said-i-love-you-first',
+      title: 'I Said I Love You First',
+      artist: 'Selena Gomez & benny blanco',
+      album: 'I Said I Love You First',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/23/05/65/23056516-0ba3-97d6-b1be-55e5d1bd209b/25UMGIM10095.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9e/47/e9/9e47e910-33d3-5e8e-da70-bb95f4912147/mzaf_15783254037702249248.plus.aac.p.m4a'
     },
     {
-      id: 'until-i-found-you',
-      title: 'Until I Found You',
-      artist: 'Stephen Sanchez',
-      album: 'Until I Found You - Single',
-      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/64/d2/c5/64d2c511-67f4-ae09-5153-d39c3da413a3/21UMGIM75467.rgb.jpg/100x100bb.jpg',
-      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/53/82/c1/5382c1d4-ddba-aa2b-90df-57268895fac9/mzaf_8926201202931541051.plus.aac.p.m4a'
+      num: 4,
+      id: 'glue-song',
+      title: 'Glue Song (feat. Clairo)',
+      artist: 'beabadoobee',
+      album: 'Glue Song (feat. Clairo) - Single',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/84/07/1d/84071d8e-2877-6068-9025-db2ee93c83c7/196922429125_Cover.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8d/13/0e/8d130e3e-b49b-15d7-9443-97aa50439e57/mzaf_16213972116878709749.plus.aac.p.m4a'
     },
     {
-      id: 'lover-taylor',
+      num: 5,
+      id: 'lover',
       title: 'Lover',
       artist: 'Taylor Swift',
       album: 'Lover',
@@ -2278,14 +2283,233 @@ document.addEventListener('DOMContentLoaded', () => {
       audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e0/db/47/e0db47b0-7f70-0631-0414-cd4777d2fb3e/mzaf_6362891154838442638.plus.aac.p.m4a'
     },
     {
-      id: 'tum-hi-ho',
-      title: 'Tum Hi Ho',
-      artist: 'Arijit Singh',
-      album: 'Aashiqui 2',
-      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/bb/23/ee/bb23eeed-0c35-4f1d-2b11-485622777ae4/8902894353007_cover.jpg/100x100bb.jpg',
-      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3a/8c/9b/3a8c9b0b-2def-750a-f615-1555bf941edf/mzaf_17229496441442805917.plus.aac.p.m4a'
+      num: 6,
+      id: 'cant-help-falling-in-love',
+      title: "Can't Help Falling in Love",
+      artist: 'Elvis Presley',
+      album: 'The Essential Elvis Presley',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/3e/63/93/3e6393fb-5fe2-1ef4-1c0d-6452919a351c/828768904824.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/11/23/69/112369f6-6645-e9ec-8019-e06e3efb160d/mzaf_14601922769880394709.plus.aac.p.m4a'
+    },
+    {
+      num: 7,
+      id: 'count-on-me',
+      title: 'Count on Me',
+      artist: 'Bruno Mars',
+      album: 'Doo-Wops & Hooligans',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/52/b1/45/52b1452b-229e-78db-231b-7b43fa0077cc/075679956491.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5e/92/52/5e9252df-60a0-1125-a172-b815aba4d091/mzaf_2590488776063542214.plus.aac.p.m4a'
+    },
+    {
+      num: 8,
+      id: 'ill-be-there-for-you',
+      title: "I'll Be There for You",
+      artist: 'The Rembrandts',
+      album: 'The Rembrandts: L.P.',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/10/b0/d0/10b0d0fd-008c-b493-b9e2-ac579eb87393/mzi.unizvawf.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d1/e4/9e/d1e49e0b-ff45-ed0e-fa77-5b6e9a5a7ecd/mzaf_10467587259594931193.plus.aac.p.m4a'
+    },
+    {
+      num: 9,
+      id: 'perfect',
+      title: 'Perfect',
+      artist: 'Ed Sheeran',
+      album: '÷ (Deluxe)',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/15/e6/e8/15e6e8a4-4190-6a8b-86c3-ab4a51b88288/190295851286.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c7/ba/bc/c7babc66-f598-aaa6-bcf6-307281795817/mzaf_16337361235117168274.plus.aac.p.m4a'
+    },
+    {
+      num: 10,
+      id: 'yellow',
+      title: 'Yellow',
+      artist: 'Coldplay',
+      album: 'Parachutes',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f5/93/8c/f5938c49-964c-31d1-4b33-78b634f71fb7/190295978075.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/66/f3/1a/66f31a76-a6ed-cb4c-f353-23310a7ae9a8/mzaf_10593596652344378873.plus.aac.p.m4a'
+    },
+    {
+      num: 11,
+      id: 'iris',
+      title: 'Iris',
+      artist: 'Goo Goo Dolls',
+      album: 'Dizzy Up the Girl',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2c/13/18/2c131801-00af-58b1-3cc2-13abf4ad5416/093624919162.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/60/17/35/60173512-3d5c-1d6f-549e-d8ddafa93e07/mzaf_5281658494050788067.plus.aac.p.m4a'
+    },
+    {
+      num: 12,
+      id: 'photograph',
+      title: 'Photograph',
+      artist: 'Ed Sheeran',
+      album: 'x (Wembley Edition)',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/2d/36/f9/2d36f9a7-2c3e-ce0f-7fb6-036feecb221f/825646974450.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/11/4f/6a/114f6ad0-165c-1e3c-8fbd-df4707d7ae26/mzaf_12480083080052535279.plus.aac.p.m4a'
+    },
+    {
+      num: 13,
+      id: 'adore-you',
+      title: 'Adore You',
+      artist: 'Harry Styles',
+      album: 'Fine Line',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2b/c4/c9/2bc4c9d4-3bc6-ab13-3f71-df0b89b173de/886448022213.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fe/16/73/fe1673d4-ebd7-91b8-f770-b5e7dae1808c/mzaf_907220311258391060.plus.aac.p.m4a'
+    },
+    {
+      num: 14,
+      id: 'you-me',
+      title: 'you+me=<3',
+      artist: 'Olivia Rodrigo',
+      album: 'you seem pretty sad for a girl so in love',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b9/92/51/b9925128-dac6-2cef-5674-d5ebbe1a4e83/26UMGIM75556.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/70/fc/38/70fc381b-1b14-28a3-34a4-050588d2dc46/mzaf_9301241217597877382.plus.aac.p.m4a'
+    },
+    {
+      num: 15,
+      id: 'invisible-string',
+      title: 'invisible string',
+      artist: 'Taylor Swift',
+      album: 'folklore',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/7c/04/ba/7c04ba17-2ff8-21b3-0ac0-7d141f86e924/20UMGIM64216.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f4/14/80/f4148046-efae-5a04-0325-0b4f736756fb/mzaf_1042587197761373143.plus.aac.p.m4a'
+    },
+    {
+      num: 16,
+      id: 'enchanted',
+      title: 'Enchanted',
+      artist: 'Taylor Swift',
+      album: 'Speak Now',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d4/23/57/d423579f-24f7-5c82-ed10-fbfd21ceef25/10UMDIM00487.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/74/3c/e9/743ce91a-fa0d-1b7a-8558-85c4004022d2/mzaf_16021923754792372642.plus.aac.p.m4a'
+    },
+    {
+      num: 17,
+      id: 'loml',
+      title: 'loml',
+      artist: 'Taylor Swift',
+      album: 'THE TORTURED POETS DEPARTMENT: THE ANTHOLOGY',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a3/8a/8d/a38a8de5-ae11-154c-dca5-221e6549caee/24UMGIM44778.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b5/d0/e6/b5d0e6df-7280-7392-9203-7cbbb108b22e/mzaf_5532732726143458150.plus.aac.p.m4a'
+    },
+    {
+      num: 18,
+      id: 'actually-romantic',
+      title: 'Actually Romantic',
+      artist: 'Taylor Swift',
+      album: 'The Life of a Showgirl',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/30/0c/5a/300c5a57-d3be-a170-f880-f63380ca6312/25UM1IM19577.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/12/b3/3f/12b33f79-9cd8-8aef-3ab9-a9df241058bd/mzaf_9797782389776903083.plus.aac.p.m4a'
+    },
+    {
+      num: 19,
+      id: 'a-sky-full-of-stars',
+      title: 'A Sky Full of Stars',
+      artist: 'Coldplay',
+      album: 'Ghost Stories',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/60/90/ad/6090adc3-8863-861d-afcc-23c55c6fe5da/dj.vmtulfyu.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f1/24/d0/f124d058-5d43-73ca-79e4-36f5eb42b172/mzaf_12358370529108063354.plus.aac.p.m4a'
+    },
+    {
+      num: 20,
+      id: 'feelslikeimfallinginlove',
+      title: 'feelslikeimfallinginlove',
+      artist: 'Coldplay',
+      album: 'Moon Music',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/af/3c/0f/af3c0fe2-1c4f-8499-67a8-14a8e41fdbf8/5021732410535.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/24/b6/b4/24b6b452-f1d3-1641-96d7-a6cf75de81c1/mzaf_4877748280762124077.plus.aac.p.m4a'
+    },
+    {
+      num: 21,
+      id: 'something-just-like-this',
+      title: 'Something Just Like This',
+      artist: 'The Chainsmokers & Coldplay',
+      album: 'Memories...Do Not Open',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/9d/56/6f/9d566f55-5253-bed6-5c31-df952dae649d/886446379289.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/64/7f/96/647f9601-aa94-3599-6c73-0143510b8b92/mzaf_13538528720942742126.plus.aac.p.m4a'
+    },
+    {
+      num: 22,
+      id: 'paris',
+      title: 'Paris',
+      artist: 'The Chainsmokers',
+      album: 'Memories...Do Not Open',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/9d/56/6f/9d566f55-5253-bed6-5c31-df952dae649d/886446379289.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1f/da/a7/1fdaa7c3-9af3-bd5f-9048-406a31e21c1d/mzaf_14744732617925969794.plus.aac.p.m4a'
+    },
+    {
+      num: 23,
+      id: 'you-and-i',
+      title: 'You & I',
+      artist: 'One Direction',
+      album: 'Midnight Memories (Deluxe Edition)',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/66/75/88/6675882c-3685-2b6b-f9de-c6d3e06602b5/dj.fuklqvvg.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c2/e8/e0/c2e8e031-0855-c419-39d5-408f0c0069b1/mzaf_1784843304112430882.plus.aac.p.m4a'
+    },
+    {
+      num: 24,
+      id: 'close-to-you',
+      title: 'Close to You',
+      artist: 'Gracie Abrams',
+      album: 'The Secret of Us',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/52/9a/a7/529aa76f-5d60-cd81-9eb0-0eb521de861d/24UMGIM43968.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4d/63/ec/4d63ec08-5018-2f90-4095-db0961ec292f/mzaf_4896725712962603390.plus.aac.p.m4a'
+    },
+    {
+      num: 25,
+      id: 'about-you',
+      title: 'About You',
+      artist: 'The 1975',
+      album: 'Being Funny In A Foreign Language',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/1f/c7/98/1fc7988e-0a39-5724-1390-e45246250e24/198704825934_Cover.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d0/8c/64/d08c6440-e727-10ab-589c-e36d5afea47e/mzaf_15879604028025493401.plus.aac.p.m4a'
+    },
+    {
+      num: 26,
+      id: 'ribs',
+      title: 'Ribs',
+      artist: 'Lorde',
+      album: 'Pure Heroine',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/96/a5/09/96a50916-169b-724c-b722-b8c474406352/13UAAIM68691.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/13/8c/1a/138c1a93-5fdf-f1a3-c288-c0fd8d7c8d2f/mzaf_12940840614985303434.plus.aac.p.m4a'
+    },
+    {
+      num: 27,
+      id: 'moonlight',
+      title: 'Moonlight',
+      artist: 'Ariana Grande',
+      album: 'Dangerous Woman',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/fc/38/e6/fc38e60e-02f5-882d-689b-f8f40f842a3e/16UMGIM12432.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/be/f1/a7/bef1a709-50c7-6464-a5df-066d557b5d7a/mzaf_6336835299570766981.plus.aac.p.m4a'
+    },
+    {
+      num: 28,
+      id: 'i-like-me-better',
+      title: 'i like me better',
+      artist: 'Lauv',
+      album: 'I met you when I was 18. (the playlist)',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/5c/3d/e5/5c3de510-1123-0da6-9531-318d9597159c/5056167107347_Cover.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/12/49/cc/1249cc81-a570-f4fe-ad01-c9d9fddf5601/mzaf_10704657862018478118.plus.aac.p.m4a'
+    },
+    {
+      num: 29,
+      id: 'just-the-way-you-are',
+      title: 'Just the Way You Are',
+      artist: 'Billy Joel',
+      album: 'The Essential Billy Joel',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/f0/7a/54/f07a54ab-3ebc-6813-e515-86200b8138fc/dj.uthntyfe.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/12/d2/c9/12d2c929-e387-ccbd-6678-c85075024db0/mzaf_15566485760020786632.plus.aac.p.m4a'
+    },
+    {
+      num: 30,
+      id: 'sailor-song',
+      title: 'Sailor Song',
+      artist: 'Gigi Perez',
+      album: 'Sailor Song - Single',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/25/d4/96/25d49699-acc0-401f-a7cc-d7697339a474/24UM1IM03751.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6d/fe/18/6dfe184e-7612-f171-0356-0b7a84112e9a/mzaf_9760607751711758843.plus.aac.p.m4a'
     }
   ];
+
+  const VERIFIED_TRENDING_TRACKS = CURATED_VINYL_TRACKS;
 
   // Active Audio Controller for Vinyl Player & Audition Previews
   let mainVinylAudio = null;
@@ -2921,6 +3145,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let editingVinylId = null;
 
   // Cache modal elements
+  const vinylCuratedSongsList = document.getElementById('vinyl-curated-songs-list');
   const vinylTabBtns = document.querySelectorAll('.vinyl-tab-btn');
   const vinylTabPanels = document.querySelectorAll('.vinyl-tab-panel');
   const vinylMusicSearchInput = document.getElementById('vinyl-music-search-input');
@@ -2949,16 +3174,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function renderTrendingTracksList() {
-    if (!vinylTrendingList) return;
-    vinylTrendingList.innerHTML = '';
-    VERIFIED_TRENDING_TRACKS.forEach(trk => {
+  function renderCuratedTracksList() {
+    const listEl = vinylCuratedSongsList || vinylTrendingList;
+    if (!listEl) return;
+    listEl.innerHTML = '';
+    CURATED_VINYL_TRACKS.forEach(trk => {
       const itemEl = document.createElement('div');
       itemEl.className = 'vinyl-music-item' + (activeSelectedSong.id === trk.id ? ' active' : '');
       itemEl.dataset.songId = trk.id;
       itemEl.dataset.audioSrc = trk.audioSrc;
       itemEl.innerHTML = `
-        <img src="${trk.artwork}" alt="${trk.title}" class="vinyl-music-art" />
+        <span class="vinyl-song-num">${trk.num}.</span>
+        <img src="${trk.artwork}" alt="${escapeHtml(trk.title)}" class="vinyl-music-art" />
         <div class="vinyl-music-info">
           <div class="vinyl-music-title">${escapeHtml(trk.title)}</div>
           <div class="vinyl-music-artist">${escapeHtml(trk.artist)}</div>
@@ -2982,8 +3209,12 @@ document.addEventListener('DOMContentLoaded', () => {
           updateSelectedSongUI(trk);
         }
       });
-      vinylTrendingList.appendChild(itemEl);
+      listEl.appendChild(itemEl);
     });
+  }
+
+  function renderTrendingTracksList() {
+    renderCuratedTracksList();
   }
 
   function renderSearchResults(tracks) {
@@ -5547,6 +5778,8 @@ document.addEventListener('DOMContentLoaded', () => {
   window.renderRecipientCardInUnifiedStage = renderRecipientCardInUnifiedStage;
   window.renderRecipientLetterInUnifiedStage = renderRecipientLetterInUnifiedStage;
   window.checkUrlRecipientView = checkUrlRecipientView;
+  window.openVinylSongModal = openVinylSongModal;
+  window.CURATED_VINYL_TRACKS = CURATED_VINYL_TRACKS;
   checkUrlRecipientView();
 
   // ================= 7. KEEPSAKES TABS =================
