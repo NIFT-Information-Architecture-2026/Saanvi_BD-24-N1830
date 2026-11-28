@@ -2412,8 +2412,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mainVinylAudio.play().then(() => {
       vinylIsPlaying = true;
-      document.querySelectorAll('.vinyl-player-widget').forEach(el => el.classList.add('is-playing'));
-      document.querySelectorAll('.vinyl-play-btn').forEach(btn => {
+      document.querySelectorAll('.vinyl-disc-widget, .vinyl-player-widget').forEach(el => el.classList.add('is-playing'));
+      document.querySelectorAll('.vinyl-disc-play-btn, .vinyl-play-btn').forEach(btn => {
         btn.innerHTML = '⏸';
         btn.title = 'Pause Record';
       });
@@ -2427,8 +2427,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mainVinylAudio) {
       mainVinylAudio.pause();
     }
-    document.querySelectorAll('.vinyl-player-widget').forEach(el => el.classList.remove('is-playing'));
-    document.querySelectorAll('.vinyl-play-btn').forEach(btn => {
+    document.querySelectorAll('.vinyl-disc-widget, .vinyl-player-widget').forEach(el => el.classList.remove('is-playing'));
+    document.querySelectorAll('.vinyl-disc-play-btn, .vinyl-play-btn').forEach(btn => {
       btn.innerHTML = '▶';
       btn.title = 'Play Record';
     });
@@ -3132,13 +3132,14 @@ document.addEventListener('DOMContentLoaded', () => {
           audioSrc: activeSelectedSong.audioSrc,
           dedication: finalDedication,
           x: 10,
-          y: 28,
-          width: 155,
+          y: 35,
+          width: 140,
           rotation: 0
         });
       }
       closeVinylSongModal();
       renderInsideKeepsakes();
+      startVinylAudio();
     });
   }
 
@@ -3195,31 +3196,30 @@ document.addEventListener('DOMContentLoaded', () => {
           <button class="btn-item-delete" title="Delete">×</button>
           <div class="card-rotate-handle" title="Drag to rotate">↻</div>
           <div class="card-drag-handle" title="Drag to move">✥ Move</div>
-          <div class="vinyl-player-widget ${vinylIsPlaying ? 'is-playing' : ''}">
-            <div class="vinyl-sleeve">
-              <div class="vinyl-disc">
-                <div class="vinyl-center-label">
-                  ${item.artworkUrl ? `<img src="${item.artworkUrl}" class="vinyl-label-art" alt="" />` : ''}
-                  <div class="vinyl-label-spindle"></div>
-                  <div class="vinyl-label-content">
-                    <span class="vinyl-label-title">Side A</span>
-                    <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + (state.greetingCard.insideTo || 'Kabir')))}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="vinyl-needle-arm"></div>
+          <div class="vinyl-disc-widget ${vinylIsPlaying ? 'is-playing' : ''}">
+            <div class="vinyl-disc-disc-wrap" title="Tap to ${vinylIsPlaying ? 'pause' : 'play'}">
+              <img src="assets/vinyl_disc_pretty.png" class="placed-vinyl-disc" alt="Vinyl Record" />
+              <button type="button" class="vinyl-disc-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
             </div>
-            <div class="vinyl-player-controls">
-              <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
-              <span class="vinyl-track-info" title="Click to change song">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
+            <div class="vinyl-floating-track-tag" title="Click to change song">
+              <span class="vinyl-tag-music-icon">🎵</span>
+              <span class="vinyl-tag-text">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
             </div>
           </div>
           <div class="card-resize-handle" title="Drag to resize"></div>
         `;
 
-        const trackInfoEl = itemEl.querySelector('.vinyl-track-info');
-        if (trackInfoEl) {
-          trackInfoEl.addEventListener('click', (e) => {
+        const discWrap = itemEl.querySelector('.vinyl-disc-disc-wrap');
+        if (discWrap) {
+          discWrap.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleVinylAudio(item);
+          });
+        }
+
+        const trackTag = itemEl.querySelector('.vinyl-floating-track-tag');
+        if (trackTag) {
+          trackTag.addEventListener('click', (e) => {
             e.stopPropagation();
             openVinylSongModal(item);
           });
@@ -3266,7 +3266,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Vinyl audio toggle
-    const vinylBtn = itemEl.querySelector('.vinyl-play-btn');
+    const vinylBtn = itemEl.querySelector('.vinyl-play-btn, .vinyl-disc-play-btn');
     if (vinylBtn) {
       vinylBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -3276,7 +3276,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Selection
     itemEl.addEventListener('click', (e) => {
-      if (e.target.closest('.btn-item-delete') || e.target.closest('.vinyl-play-btn') || e.target.closest('.vinyl-track-info')) return;
+      if (e.target.closest('.btn-item-delete') || 
+          e.target.closest('.vinyl-play-btn') || 
+          e.target.closest('.vinyl-disc-play-btn') || 
+          e.target.closest('.vinyl-disc-disc-wrap') || 
+          e.target.closest('.vinyl-floating-track-tag') || 
+          e.target.closest('.vinyl-track-info')) return;
       parentContainer.querySelectorAll('.card-placed-item').forEach(el => el.classList.remove('is-selected'));
       itemEl.classList.add('is-selected');
       activeSelectedCoverItem = itemData;
@@ -3375,6 +3380,8 @@ document.addEventListener('DOMContentLoaded', () => {
           e.target.closest('.item-resize-handle') || 
           e.target.closest('.card-rotate-handle') || 
           e.target.closest('.vinyl-play-btn') || 
+          e.target.closest('.vinyl-disc-play-btn') || 
+          (!e.target.closest('.card-drag-handle') && (e.target.closest('.vinyl-disc-disc-wrap') || e.target.closest('.vinyl-floating-track-tag'))) || 
           e.target.closest('.vinyl-track-info')) {
         return;
       }
@@ -3611,24 +3618,15 @@ document.addEventListener('DOMContentLoaded', () => {
           `;
         } else if (item.type === 'vinyl') {
           keepsakesHtml += `
-            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 150}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
-              <div class="vinyl-player-widget ${vinylIsPlaying ? 'is-playing' : ''}">
-                <div class="vinyl-sleeve">
-                  <div class="vinyl-disc">
-                    <div class="vinyl-center-label">
-                      ${item.artworkUrl ? `<img src="${item.artworkUrl}" class="vinyl-label-art" alt="" />` : ''}
-                      <div class="vinyl-label-spindle"></div>
-                      <div class="vinyl-label-content">
-                        <span class="vinyl-label-title">Side A</span>
-                        <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + (state.greetingCard.insideTo || 'Kabir')))}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="vinyl-needle-arm"></div>
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 140}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
+              <div class="vinyl-disc-widget ${vinylIsPlaying ? 'is-playing' : ''}">
+                <div class="vinyl-disc-disc-wrap" title="Tap to ${vinylIsPlaying ? 'pause' : 'play'}">
+                  <img src="assets/vinyl_disc_pretty.png" class="placed-vinyl-disc" alt="Vinyl Record" />
+                  <button type="button" class="vinyl-disc-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
                 </div>
-                <div class="vinyl-player-controls">
-                  <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
-                  <span class="vinyl-track-info">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
+                <div class="vinyl-floating-track-tag">
+                  <span class="vinyl-tag-music-icon">🎵</span>
+                  <span class="vinyl-tag-text">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
                 </div>
               </div>
             </div>
@@ -3667,7 +3665,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
 
-      cardRevealDisplay.querySelectorAll('.vinyl-play-btn').forEach(btn => {
+      cardRevealDisplay.querySelectorAll('.vinyl-disc-disc-wrap, .vinyl-disc-play-btn, .vinyl-play-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           toggleVinylAudio();
@@ -4978,24 +4976,15 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
           } else if (item.type === 'vinyl') {
             ksHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 150}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
-                <div class="vinyl-player-widget ${vinylIsPlaying ? 'is-playing' : ''}">
-                  <div class="vinyl-sleeve">
-                    <div class="vinyl-disc">
-                      <div class="vinyl-center-label">
-                        ${item.artworkUrl ? `<img src="${item.artworkUrl}" class="vinyl-label-art" alt="" />` : ''}
-                        <div class="vinyl-label-spindle"></div>
-                        <div class="vinyl-label-content">
-                          <span class="vinyl-label-title">Side A</span>
-                          <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + toVal))}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="vinyl-needle-arm"></div>
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 140}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
+                <div class="vinyl-disc-widget ${vinylIsPlaying ? 'is-playing' : ''}">
+                  <div class="vinyl-disc-disc-wrap" title="Tap to ${vinylIsPlaying ? 'pause' : 'play'}">
+                    <img src="assets/vinyl_disc_pretty.png" class="placed-vinyl-disc" alt="Vinyl Record" />
+                    <button type="button" class="vinyl-disc-play-btn" data-item-id="${item.id}" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
                   </div>
-                  <div class="vinyl-player-controls">
-                    <button type="button" class="vinyl-play-btn" data-item-id="${item.id}" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
-                    <span class="vinyl-track-info">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
+                  <div class="vinyl-floating-track-tag">
+                    <span class="vinyl-tag-music-icon">🎵</span>
+                    <span class="vinyl-tag-text">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
                   </div>
                 </div>
               </div>
@@ -5034,7 +5023,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
 
-        contentArea.querySelectorAll('.vinyl-play-btn').forEach(btn => {
+        contentArea.querySelectorAll('.vinyl-disc-disc-wrap, .vinyl-disc-play-btn, .vinyl-play-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const itm = keepsakesVal.find(k => k.type === 'vinyl');
@@ -5297,8 +5286,8 @@ document.addEventListener('DOMContentLoaded', () => {
           audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/07/6a/99/076a99ed-b946-431b-6f1f-54fa187ca5bd/mzaf_8102882277995122875.plus.aac.p.m4a',
           dedication: 'For Kabir',
           x: 6,
-          y: 50,
-          width: 155,
+          y: 48,
+          width: 140,
           rotation: 0
         },
         { id: 'st_1', type: 'sticker', name: 'Pink Hearts', file: 'sticker_hearts_pink.png', x: 68, y: 64, width: 72, rotation: -12 }

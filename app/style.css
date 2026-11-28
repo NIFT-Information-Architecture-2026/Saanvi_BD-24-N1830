@@ -3973,155 +3973,114 @@ body {
   pointer-events: auto;
 }
 
-/* Functional Vinyl Record Player */
+/* Pretty Standalone Circular Vinyl Record */
+.vinyl-disc-widget,
 .vinyl-player-widget {
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(82, 19, 25, 0.18);
-  border-radius: 10px;
-  padding: 6px 6px 8px 6px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  box-sizing: border-box;
-  width: 100%;
-}
-.vinyl-sleeve {
-  position: relative;
-  width: 70px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.vinyl-disc {
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  background: repeating-radial-gradient(circle, #151515, #151515 2px, #242424 3px, #151515 4px);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.vinyl-player-widget.is-playing .vinyl-disc {
-  animation: spinVinyl 3.5s linear infinite;
-}
-@keyframes spinVinyl {
-  100% { transform: rotate(360deg); }
-}
-.vinyl-center-label {
-  position: relative;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  background: #C93B3B;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #FFF;
-  text-align: center;
-  line-height: 1;
-  box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
-  overflow: hidden;
-  padding: 1px;
-  box-sizing: border-box;
-}
-.vinyl-label-art {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  z-index: 1;
-  opacity: 0.92;
-}
-.vinyl-label-spindle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 4.5px;
-  height: 4.5px;
-  background: #111;
-  border: 1px solid rgba(255,255,255,0.7);
-  border-radius: 50%;
-  z-index: 3;
-}
-.vinyl-label-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-.vinyl-label-title {
-  font-size: 6px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-}
-.vinyl-label-sub {
-  font-size: 5px;
-  opacity: 0.95;
-  white-space: nowrap;
-  max-width: 22px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-}
-.vinyl-needle-arm {
-  position: absolute;
-  top: 4px;
-  right: 2px;
-  width: 3.5px;
-  height: 30px;
-  background: #C5A059;
-  border-radius: 2px;
-  transform-origin: top center;
-  transform: rotate(-25deg);
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-  transition: transform 0.3s ease;
-  pointer-events: none;
-}
-.vinyl-player-widget.is-playing .vinyl-needle-arm {
-  transform: rotate(-5deg);
-}
-.vinyl-player-controls {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  width: 100%;
-  justify-content: center;
-}
-.vinyl-play-btn {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #521319;
-  color: #FFF;
+  background: transparent;
   border: none;
-  font-size: 10px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  position: relative;
+  user-select: none;
+}
+.vinyl-disc-disc-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+.vinyl-disc-disc-wrap:hover {
+  transform: scale(1.025);
+}
+.placed-vinyl-disc {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.3));
+  transition: filter 0.2s ease;
+}
+.vinyl-disc-disc-wrap:hover .placed-vinyl-disc {
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+}
+.vinyl-disc-widget.is-playing .placed-vinyl-disc,
+.vinyl-player-widget.is-playing .placed-vinyl-disc,
+.vinyl-player-widget.is-playing .vinyl-disc {
+  animation: spinVinyl 3.2s linear infinite;
+}
+@keyframes spinVinyl {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.vinyl-disc-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(82, 19, 25, 0.88);
+  color: #FFFFFF;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+  z-index: 2;
+  opacity: 0.9;
+  padding: 0;
+  line-height: 1;
+}
+.vinyl-disc-widget.is-playing .vinyl-disc-play-btn {
+  opacity: 0;
+}
+.vinyl-disc-disc-wrap:hover .vinyl-disc-play-btn {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+  background: #521319;
+}
+.vinyl-floating-track-tag {
+  background: rgba(255, 253, 249, 0.94);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(82, 19, 25, 0.18);
+  border-radius: 12px;
+  padding: 2.5px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 95%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.vinyl-floating-track-tag:hover {
+  transform: translateY(-1.5px);
+  background: #FFFFFF;
+  border-color: #521319;
+  box-shadow: 0 3px 8px rgba(82, 19, 25, 0.18);
+}
+.vinyl-tag-music-icon {
+  font-size: 9px;
+  line-height: 1;
   flex-shrink: 0;
-  transition: transform 0.15s ease;
 }
-.vinyl-play-btn:hover {
-  transform: scale(1.1);
-  background: #731A23;
-}
-.vinyl-track-info {
+.vinyl-tag-text {
   font-family: var(--font-sans);
   font-size: 8px;
   font-weight: 600;
@@ -4129,7 +4088,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 75px;
+  line-height: 1.2;
 }
 
 /* Popup Modals for Flowers & Stickers */
