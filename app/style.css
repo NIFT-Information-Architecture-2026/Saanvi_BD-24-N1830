@@ -7502,5 +7502,512 @@ body {
   margin: 0;
 }
 
+/* ==========================================================================
+   VAULT ROOM STYLES
+   ========================================================================== */
+.vault-container {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 18px 16px 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+}
+
+.vault-header-block {
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.vault-main-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: #521319;
+  margin: 0 0 4px;
+  letter-spacing: -0.5px;
+}
+
+.vault-main-subtitle {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13.5px;
+  color: #87585F;
+  margin: 0 0 10px;
+}
+
+.vault-divider {
+  font-size: 16px;
+  color: #C97384;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Segmented Tabs */
+.vault-tabs-segmented {
+  display: flex;
+  background: #FAF2EF;
+  border: 1px solid #EAD8DC;
+  border-radius: 20px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.vault-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  padding: 8px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7A5B61;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.vault-tab-btn:hover {
+  color: #521319;
+}
+
+.vault-tab-btn.active {
+  background: #FFFFFF;
+  color: #521319;
+  box-shadow: 0 2px 6px rgba(82, 19, 25, 0.08);
+}
+
+.vault-tab-icon {
+  font-size: 13px;
+}
+
+.vault-count-pill {
+  font-size: 10px;
+  background: #F1CAD3;
+  color: #521319;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.vault-tab-btn.active .vault-count-pill {
+  background: #521319;
+  color: #FFFFFF;
+}
+
+/* Toolbar: Search & Sort */
+.vault-toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.vault-search-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.vault-search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 13px;
+  color: #9E7D84;
+  pointer-events: none;
+}
+
+.vault-search-input {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  border-radius: 20px;
+  border: 1px solid #D9B8BE;
+  background: #FFFFFF;
+  font-size: 12.5px;
+  color: #3C1C24;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.vault-search-input:focus {
+  border-color: #521319;
+  box-shadow: 0 0 0 2px rgba(82, 19, 25, 0.08);
+}
+
+.vault-sort-select {
+  padding: 8px 12px;
+  border-radius: 18px;
+  border: 1px solid #D9B8BE;
+  background: #FFFFFF;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #521319;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Vault Items Grid */
+.vault-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+/* Vault Item Card (Postage Stamp / Polaroid Style) */
+.vault-item-card {
+  background: #FFFFFF;
+  border: 1.5px solid #F1CAD3;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(82, 19, 25, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+
+.vault-item-card:hover {
+  transform: translateY(-2px);
+  border-color: #521319;
+  box-shadow: 0 6px 16px rgba(82, 19, 25, 0.09);
+}
+
+.vault-card-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vault-type-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #521319;
+  background: #FAF2EF;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+.vault-status-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.vault-status-badge.status-draft {
+  background: #FFF4DC;
+  color: #8C6200;
+  border: 1px solid #FFE4A0;
+}
+
+.vault-status-badge.status-sent {
+  background: #FCE8EC;
+  color: #87293E;
+  border: 1px solid #F1CAD3;
+}
+
+.vault-status-badge.status-saved {
+  background: #E8F2EC;
+  color: #2D6A4F;
+  border: 1px solid #CDE5D7;
+}
+
+.btn-vault-dots-menu {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #EAD8DC;
+  background: #FFF;
+  color: #521319;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.btn-vault-dots-menu:hover {
+  background: #FAF2EF;
+  border-color: #521319;
+}
+
+/* Card Thumbnail / Preview Slot */
+.vault-card-thumb-slot {
+  height: 110px;
+  background: linear-gradient(135deg, #FAF6F0 0%, #FFF5F7 100%);
+  border: 1px dashed #EAD8DC;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.vault-thumb-icon {
+  font-size: 40px;
+  opacity: 0.85;
+}
+
+.vault-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vault-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #3C1C24;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.vault-card-dedication {
+  font-size: 11.5px;
+  color: #87585F;
+  margin: 0;
+}
+
+.vault-card-date {
+  font-size: 10.5px;
+  color: #A3848B;
+  margin: 0;
+}
+
+/* Bottom Action Row */
+.vault-card-actions-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-vault-resume {
+  flex: 1;
+  background: #521319;
+  color: #FFFFFF;
+  border: 1px solid #521319;
+  border-radius: 14px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+}
+
+.btn-vault-resume:hover {
+  background: #731B23;
+  border-color: #731B23;
+}
+
+.btn-vault-revisit-quick {
+  background: #FAF2EF;
+  color: #521319;
+  border: 1px solid #D9B8BE;
+  border-radius: 14px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+}
+
+.btn-vault-revisit-quick:hover {
+  background: #521319;
+  color: #FFF;
+  border-color: #521319;
+}
+
+/* Empty State */
+.vault-empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  background: #FFFFFF;
+  border: 1.5px dashed #EAD8DC;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+.vault-empty-icon {
+  font-size: 42px;
+  margin-bottom: 8px;
+}
+
+.vault-empty-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #521319;
+  margin: 0 0 6px;
+}
+
+.vault-empty-sub {
+  font-size: 12.5px;
+  color: #87585F;
+  margin: 0 0 16px;
+}
+
+.btn-vault-start-create {
+  background: #521319;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-vault-start-create:hover {
+  background: #731B23;
+}
+
+/* Floating Action Button (FAB) */
+.btn-vault-fab {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: #521319;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 28px;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 18px rgba(82, 19, 25, 0.35);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+}
+
+.btn-vault-fab:hover {
+  background: #731B23;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(82, 19, 25, 0.45);
+}
+
+/* Options Modal / Dropdown */
+.vault-options-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 8, 12, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.vault-options-dialog {
+  background: #FFFFFF;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 380px;
+  border: 1.5px solid #F1CAD3;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.vault-options-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid #EAD8DC;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vault-options-header h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #521319;
+  margin: 0;
+}
+
+.vault-options-list {
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vault-opt-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+  width: 100%;
+}
+
+.vault-opt-row:hover {
+  background: #FAF2EF;
+}
+
+.vault-opt-row.danger {
+  color: #A31D2E;
+}
+
+.vault-opt-row.danger:hover {
+  background: #FDF0F2;
+}
+
+.opt-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.opt-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.opt-text strong {
+  font-size: 12.5px;
+  color: #3C1C24;
+}
+
+.vault-opt-row.danger .opt-text strong {
+  color: #A31D2E;
+}
+
+.opt-text small {
+  font-size: 10.5px;
+  color: #87585F;
+}
+
+
 
 

@@ -2070,16 +2070,74 @@
         </div>
       </section>
 
-      <!-- ================= ROOM 3: MY VAULT ================= -->
+      <!-- ================= ROOM 3: VAULT ================= -->
       <section class="room-view" id="room-vault" style="display:none;">
         <div class="vault-container">
-          <div class="vault-header">
-            <h3 class="vault-title">Keepsake Vault</h3>
-            <p class="vault-subtitle">All your completed creations are safely preserved here</p>
+          <!-- Header block matching mockups -->
+          <div class="vault-header-block">
+            <h2 class="vault-main-title">🌿 Vault 🌿</h2>
+            <p class="vault-main-subtitle">Your personal space to store, organise and revisit everything you create or send.</p>
+            <div class="vault-divider"><span>— ♡ —</span></div>
           </div>
+
+          <!-- Segmented Filter Tabs -->
+          <div class="vault-tabs-segmented" id="vault-tabs-segmented">
+            <button type="button" class="vault-tab-btn active" data-vault-filter="all">
+              <span class="vault-tab-icon">📚</span>
+              <span>All</span>
+              <span class="vault-count-pill" id="vault-count-all">0</span>
+            </button>
+            <button type="button" class="vault-tab-btn" data-vault-filter="draft">
+              <span class="vault-tab-icon">✏️</span>
+              <span>Drafts</span>
+              <span class="vault-count-pill" id="vault-count-draft">0</span>
+            </button>
+            <button type="button" class="vault-tab-btn" data-vault-filter="sent">
+              <span class="vault-tab-icon">🚀</span>
+              <span>Sent</span>
+              <span class="vault-count-pill" id="vault-count-sent">0</span>
+            </button>
+            <button type="button" class="vault-tab-btn" data-vault-filter="saved">
+              <span class="vault-tab-icon">🔖</span>
+              <span>Saved</span>
+              <span class="vault-count-pill" id="vault-count-saved">0</span>
+            </button>
+          </div>
+
+          <!-- Search & Sort Toolbar -->
+          <div class="vault-toolbar">
+            <div class="vault-search-wrapper">
+              <span class="vault-search-icon">🔍</span>
+              <input type="text" class="vault-search-input" id="vault-search-input" placeholder="Search your vault creations..." autocomplete="off">
+            </div>
+            <div class="vault-sort-wrapper">
+              <select class="vault-sort-select" id="vault-sort-select">
+                <option value="latest">Sort: Latest</option>
+                <option value="oldest">Sort: Oldest</option>
+                <option value="title">Sort: Title A-Z</option>
+                <option value="recipient">Sort: Recipient</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Vault Items Grid -->
           <div class="vault-items-grid" id="vault-items-grid">
-            <!-- Dynamically populated from localStorage -->
+            <!-- Dynamically populated from localStorage['between_us_vault_items'] -->
           </div>
+
+          <!-- Empty State -->
+          <div class="vault-empty-state" id="vault-empty-state" style="display:none;">
+            <div class="vault-empty-icon">🗃️</div>
+            <h3 class="vault-empty-title">Your Vault is quiet</h3>
+            <p class="vault-empty-sub">Creations, drafts, and sent gifts will be safely preserved here.</p>
+            <button type="button" class="btn-vault-start-create" id="btn-vault-empty-start">✨ Create Something in Studio</button>
+          </div>
+
+          <!-- Floating Action Button: + New Creation -->
+          <button type="button" class="btn-vault-fab" id="btn-vault-fab" title="Create New in Studio">
+            <span class="fab-icon">✨</span>
+            <span class="fab-text">+ New Creation</span>
+          </button>
         </div>
       </section>
 
@@ -2501,6 +2559,82 @@
           <div class="modal-form-actions">
             <button type="button" class="btn-secondary" id="btn-cancel-quick-add">Cancel</button>
             <button type="submit" class="btn-primary" id="btn-submit-quick-add">Save to Keepsakes ♡</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ================= VAULT: OPTIONS DROPDOWN / MODAL ================= -->
+    <div class="vault-options-modal-backdrop" id="modal-vault-options" style="display:none;">
+      <div class="vault-options-dialog">
+        <div class="vault-options-header">
+          <h4 id="vault-options-item-title">Creation Options</h4>
+          <button type="button" class="btn-modal-close" id="btn-close-vault-options">✕</button>
+        </div>
+        <div class="vault-options-list">
+          <button type="button" class="vault-opt-row" id="opt-vault-revisit">
+            <span class="opt-icon">👁</span>
+            <div class="opt-text">
+              <strong>Revisit Creation</strong>
+              <small>View front, back, and keepsakes</small>
+            </div>
+          </button>
+          <button type="button" class="vault-opt-row" id="opt-vault-edit">
+            <span class="opt-icon">✏️</span>
+            <div class="opt-text">
+              <strong>Resume / Edit in Studio</strong>
+              <small>Continue modifying this design</small>
+            </div>
+          </button>
+          <button type="button" class="vault-opt-row" id="opt-vault-duplicate">
+            <span class="opt-icon">📄</span>
+            <div class="opt-text">
+              <strong>Duplicate Design</strong>
+              <small>Create a new copy as a starting point</small>
+            </div>
+          </button>
+          <button type="button" class="vault-opt-row" id="opt-vault-rename">
+            <span class="opt-icon">🏷</span>
+            <div class="opt-text">
+              <strong>Rename Creation</strong>
+              <small>Change the title in your vault</small>
+            </div>
+          </button>
+          <button type="button" class="vault-opt-row" id="opt-vault-share">
+            <span class="opt-icon">🔗</span>
+            <div class="opt-text">
+              <strong>Share Link</strong>
+              <small>Copy shareable link for recipient</small>
+            </div>
+          </button>
+          <button type="button" class="vault-opt-row danger" id="opt-vault-delete">
+            <span class="opt-icon">🗑</span>
+            <div class="opt-text">
+              <strong>Delete Creation</strong>
+              <small>Remove permanently from vault</small>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= VAULT: RENAME MODAL ================= -->
+    <div class="keepsake-form-modal-backdrop" id="modal-vault-rename" style="display:none;">
+      <div class="keepsake-form-dialog">
+        <button type="button" class="btn-modal-close" id="btn-close-vault-rename">✕</button>
+        <div class="keepsake-form-header">
+          <span class="keepsake-modal-badge">🏷</span>
+          <h3>Rename Creation</h3>
+          <p>Give this keepsake or draft a memorable name.</p>
+        </div>
+        <form id="form-vault-rename" onsubmit="return false;">
+          <div class="form-group">
+            <label for="vault-rename-input">Creation Title</label>
+            <input type="text" id="vault-rename-input" class="form-control" required>
+          </div>
+          <div class="modal-form-actions">
+            <button type="button" class="btn-secondary" id="btn-cancel-vault-rename">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-submit-vault-rename">Save Name ♡</button>
           </div>
         </form>
       </div>

@@ -5703,83 +5703,473 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   window.renderRecipientCardExperience = renderRecipientCardExperience;
 
-  // ================= VAULT ROOM DYNAMIC LIST =================
+  function bindModalCloser(closeBtnId, modalId) {
+    const btn = document.getElementById(closeBtnId);
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const m = document.getElementById(modalId);
+        if (m) m.style.display = 'none';
+      });
+    }
+  }
+
+  // ==========================================================================
+  // COMPLETE VAULT ENGINE (My Drafts, Sent Creations, Search & Sort)
+  // ==========================================================================
+  const DEFAULT_VAULT_ITEMS = [
+    {
+      id: 'vault_1',
+      type: 'card',
+      status: 'sent',
+      title: 'Autumn Love Note',
+      to: 'Kabir',
+      from: 'Saanvi',
+      date: 'Nov 14, 2026',
+      theme: 'gingham-pressed',
+      fontFamily: "'Caveat', cursive",
+      fontSize: 20,
+      body: 'Every moment with you feels like poetry. Happy Anniversary! ♡',
+      song: {
+        id: 'sailor-song',
+        trackName: 'Sailor Song',
+        artistName: 'Gigi Perez'
+      },
+      savedAt: 'Nov 14, 2026'
+    },
+    {
+      id: 'vault_2',
+      type: 'bouquet',
+      status: 'draft',
+      title: 'Pastel Wildflower Arrangement',
+      to: 'Kabir',
+      from: 'Saanvi',
+      date: 'Nov 20, 2026',
+      wrap: 'lace',
+      stems: ['peony', 'hydrangea', 'eucalyptus'],
+      body: 'A little floral reminder that you are loved today.',
+      savedAt: '2 days ago'
+    },
+    {
+      id: 'vault_3',
+      type: 'postcard',
+      status: 'sent',
+      title: 'Hawa Mahal Morning',
+      to: 'Kabir',
+      from: 'Saanvi',
+      date: 'Sep 24, 2026',
+      theme: 'candy',
+      body: 'Thinking of you as the pigeons took flight over the pink walls...',
+      savedAt: 'Sep 24, 2026'
+    },
+    {
+      id: 'vault_4',
+      type: 'letter',
+      status: 'saved',
+      title: 'Midnight Musings',
+      to: 'Kabir',
+      from: 'Saanvi',
+      date: 'Oct 06, 2026',
+      theme: 'parchment',
+      body: 'It is quiet tonight, and my thoughts naturally wandered right back to you.',
+      savedAt: 'Oct 06, 2026'
+    }
+  ];
+
+  function getVaultItems() {
+    try {
+      const stored = localStorage.getItem('between_us_vault_items');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+      localStorage.setItem('between_us_vault_items', JSON.stringify(DEFAULT_VAULT_ITEMS));
+      return DEFAULT_VAULT_ITEMS;
+    } catch (e) {
+      return DEFAULT_VAULT_ITEMS;
+    }
+  }
+
+  function saveVaultItems(items) {
+    try {
+      localStorage.setItem('between_us_vault_items', JSON.stringify(items));
+    } catch (e) {}
+  }
+
+  let currentVaultFilter = 'all';
+  let currentVaultSearch = '';
+  let currentVaultSort = 'latest';
+  let activeVaultMenuIdx = null;
+
   function renderVaultItems() {
     const vaultGrid = document.getElementById('vault-items-grid');
+    const emptyState = document.getElementById('vault-empty-state');
     if (!vaultGrid) return;
 
-    const vaultItems = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
-    if (vaultItems.length === 0) {
-      vaultGrid.innerHTML = `
-        <div class="vault-empty-state">
-          <div class="vault-empty-icon">🔖</div>
-          <h4 style="font-family:'Playfair Display', Georgia, serif; font-size:18px; color:#521319; margin:0 0 6px 0;">Your vault is waiting</h4>
-          <p style="font-family:'Cormorant Garamond', Georgia, serif; font-size:14px; font-style:italic; color:#8E4A56; margin:0;">
-            Any postcard, letter, or card you design will be automatically preserved here.
-          </p>
-        </div>
-      `;
+    const allItems = getVaultItems();
+
+    // Update Counts on Segmented Buttons
+    const countAll = allItems.length;
+    const countDraft = allItems.filter(i => (i.status || 'saved') === 'draft').length;
+    const countSent = allItems.filter(i => (i.status || 'saved') === 'sent').length;
+    const countSaved = allItems.filter(i => (i.status || 'saved') === 'saved').length;
+
+    const elCountAll = document.getElementById('vault-count-all');
+    const elCountDraft = document.getElementById('vault-count-draft');
+    const elCountSent = document.getElementById('vault-count-sent');
+    const elCountSaved = document.getElementById('vault-count-saved');
+
+    if (elCountAll) elCountAll.textContent = countAll;
+    if (elCountDraft) elCountDraft.textContent = countDraft;
+    if (elCountSent) elCountSent.textContent = countSent;
+    if (elCountSaved) elCountSaved.textContent = countSaved;
+
+    // Filter Items
+    let filtered = allItems.slice();
+    if (currentVaultFilter !== 'all') {
+      filtered = filtered.filter(i => (i.status || 'saved') === currentVaultFilter);
+    }
+
+    // Search Query
+    if (currentVaultSearch.trim()) {
+      const q = currentVaultSearch.toLowerCase().trim();
+      filtered = filtered.filter(i =>
+        (i.title || '').toLowerCase().includes(q) ||
+        (i.to || '').toLowerCase().includes(q) ||
+        (i.body || '').toLowerCase().includes(q) ||
+        (i.from || '').toLowerCase().includes(q)
+      );
+    }
+
+    // Sort Items
+    if (currentVaultSort === 'latest') {
+      // Keep natural reverse chronological
+    } else if (currentVaultSort === 'oldest') {
+      filtered.reverse();
+    } else if (currentVaultSort === 'title') {
+      filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    } else if (currentVaultSort === 'recipient') {
+      filtered.sort((a, b) => (a.to || '').localeCompare(b.to || ''));
+    }
+
+    if (filtered.length === 0) {
+      vaultGrid.innerHTML = '';
+      if (emptyState) emptyState.style.display = 'block';
       return;
     }
 
-    vaultGrid.innerHTML = vaultItems.map((item, idx) => {
-      let iconHtml = '💌';
+    if (emptyState) emptyState.style.display = 'none';
+
+    vaultGrid.innerHTML = filtered.map((item) => {
+      const realIdx = allItems.findIndex(x => x.id === item.id);
+      const idx = realIdx !== -1 ? realIdx : 0;
+      const st = item.status || 'saved';
+
+      let mediumBadge = '💌 Greeting Card';
+      let thumbIcon = '💌';
       if (item.type === 'bouquet') {
-        iconHtml = `<img src="assets/medium_bouquet.png" style="width:100%; height:100%; object-fit:contain;" alt="Bouquet" />`;
+        mediumBadge = '💐 Bouquet';
+        thumbIcon = '💐';
       } else if (item.type === 'letter') {
-        iconHtml = `<img src="assets/medium_letter.png" style="width:100%; height:100%; object-fit:contain;" alt="Letter" />`;
-      } else if (item.type === 'card' || item.type === 'greeting-card') {
-        iconHtml = `<img src="assets/medium_card.png" style="width:100%; height:100%; object-fit:contain;" alt="Card" />`;
-      } else if (item.v === 'truck') {
-        iconHtml = `<img src="assets/truck.png" style="width:100%; height:100%; object-fit:contain;" alt="Truck" />`;
-      } else if (item.v === 'box') {
-        const boxSrc = boxImages[item.bi || '1'] || 'assets/boxes/box1.jpg';
-        iconHtml = `<img src="${boxSrc}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply;" alt="Box" />`;
-      } else {
-        const envIndex = item.ei || '1';
-        iconHtml = `<img src="assets/envelopes/env${envIndex}.jpg" style="width:100%; height:100%; object-fit:contain;" alt="Envelope" />`;
+        mediumBadge = '✉️ Letter';
+        thumbIcon = '✉️';
+      } else if (item.type === 'postcard') {
+        mediumBadge = '🖼 Postcard';
+        thumbIcon = '🖼';
       }
 
+      const statusLabels = { draft: 'Draft', sent: 'Sent', saved: 'Saved' };
+
       return `
-        <div class="vault-item-card">
-          <div class="vault-item-icon">
-            ${iconHtml}
+        <div class="vault-item-card" data-vault-idx="${idx}">
+          <div class="vault-card-topbar">
+            <span class="vault-type-badge">${escapeHtml(mediumBadge)}</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="vault-status-badge status-${escapeHtml(st)}">${statusLabels[st] || 'Saved'}</span>
+              <button type="button" class="btn-vault-dots-menu" data-vault-idx="${idx}" title="Options">⋮</button>
+            </div>
           </div>
-          <div class="vault-item-info">
-            <h5 class="vault-item-title">${escapeHtml(item.title || (item.type === 'bouquet' ? 'Botanical Bouquet' : (item.type === 'letter' ? 'Keepsake Letter' : (item.type === 'card' ? 'Greeting Card' : 'Handwritten Postcard'))))}</h5>
-            <p class="vault-item-dedication">To: ${escapeHtml(item.to || 'Someone Special')} • From: ${escapeHtml(item.from || 'Me')}</p>
-            <p class="vault-item-date">Saved on ${item.savedAt || item.date || 'Recently'}</p>
+
+          <div class="vault-card-thumb-slot">
+            <span class="vault-thumb-icon">${thumbIcon}</span>
           </div>
-          <button class="btn-vault-view" data-vault-idx="${idx}">View</button>
+
+          <div class="vault-card-details">
+            <h4 class="vault-card-title">${escapeHtml(item.title || 'Untitled Creation')}</h4>
+            <p class="vault-card-dedication">To: ${escapeHtml(item.to || 'Someone Special')} • From: ${escapeHtml(item.from || 'Me')}</p>
+            <p class="vault-card-date">Preserved: ${escapeHtml(item.savedAt || item.date || 'Recently')}</p>
+          </div>
+
+          <div class="vault-card-actions-row">
+            <button type="button" class="btn-vault-resume" data-vault-idx="${idx}">
+              <span>✏️</span>
+              <span>${st === 'draft' ? 'Resume Draft' : 'Edit in Studio'}</span>
+            </button>
+            <button type="button" class="btn-vault-revisit-quick" data-vault-idx="${idx}">
+              <span>👁</span>
+              <span>Revisit</span>
+            </button>
+          </div>
         </div>
       `;
     }).join('');
 
-    // Attach click events to vault view buttons
-    vaultGrid.querySelectorAll('.btn-vault-view').forEach(btn => {
+    // Wire Card Buttons
+    vaultGrid.querySelectorAll('.btn-vault-resume').forEach(btn => {
       btn.addEventListener('click', () => {
         const idx = parseInt(btn.dataset.vaultIdx);
-        const item = vaultItems[idx];
-        if (item) {
-          if (item.type === 'bouquet') {
-            renderRecipientBouquetExperience(item);
-          } else if (item.type === 'letter') {
-            renderRecipientLetterExperience(item);
-          } else if (item.type === 'card' || item.type === 'greeting-card') {
-            renderRecipientCardExperience(item);
-          } else {
-            renderRecipientExperience(item);
-          }
-        }
+        resumeVaultItemInStudio(allItems[idx]);
+      });
+    });
+
+    vaultGrid.querySelectorAll('.btn-vault-revisit-quick').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.vaultIdx);
+        revisitVaultItem(allItems[idx]);
+      });
+    });
+
+    vaultGrid.querySelectorAll('.btn-vault-dots-menu').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.vaultIdx);
+        openVaultOptionsMenu(idx);
       });
     });
   }
+
+  // Resume / Load Vault Item in Studio
+  function resumeVaultItemInStudio(item) {
+    if (!item) return;
+
+    // Switch to Studio Tab
+    const studioTab = document.querySelector('.nav-tab[data-room="studio"]');
+    if (studioTab) studioTab.click();
+
+    if (item.type === 'bouquet') {
+      selectMedium('bouquet');
+      if (item.to) {
+        const toInp = document.getElementById('bouquet-to-input');
+        if (toInp) toInp.value = item.to;
+      }
+    } else if (item.type === 'letter') {
+      selectMedium('letter');
+      if (item.body && letterTextarea) {
+        letterTextarea.value = item.body;
+        if (state.letter) state.letter.body = item.body;
+      }
+      if (item.to) {
+        const toInp = document.getElementById('letter-to-input');
+        if (toInp) toInp.value = item.to;
+      }
+    } else if (item.type === 'postcard') {
+      selectMedium('postcard');
+      if (item.body) {
+        const backMsg = document.getElementById('postcard-back-message');
+        if (backMsg) backMsg.value = item.body;
+      }
+      if (item.to) {
+        const toInp = document.getElementById('postcard-to-input');
+        if (toInp) toInp.value = item.to;
+      }
+    } else {
+      selectMedium('greeting-card');
+      if (item.body) {
+        const cardMsg = document.getElementById('card-note-message');
+        if (cardMsg) cardMsg.value = item.body;
+      }
+      if (item.to) {
+        const toInp = document.getElementById('card-to-input');
+        if (toInp) toInp.value = item.to;
+      }
+    }
+
+    showToast(`Loaded "${item.title || 'Creation'}" into Studio! You can edit and dispatch.`);
+  }
+
+  // Revisit Vault Item
+  function revisitVaultItem(item) {
+    if (!item) return;
+    if (item.type === 'bouquet') {
+      renderRecipientBouquetExperience(item);
+    } else if (item.type === 'letter') {
+      renderRecipientLetterExperience(item);
+    } else if (item.type === 'card' || item.type === 'greeting-card') {
+      renderRecipientCardExperience(item);
+    } else {
+      renderRecipientExperience(item);
+    }
+  }
+
+  // Vault Options Menu
+  function openVaultOptionsMenu(idx) {
+    activeVaultMenuIdx = idx;
+    const items = getVaultItems();
+    const item = items[idx];
+    if (!item) return;
+
+    const modal = document.getElementById('modal-vault-options');
+    const titleEl = document.getElementById('vault-options-item-title');
+    if (titleEl) titleEl.textContent = item.title || 'Creation Options';
+
+    if (modal) modal.style.display = 'flex';
+  }
+
+  // Wire Options Menu Rows
+  const optRevisit = document.getElementById('opt-vault-revisit');
+  if (optRevisit) {
+    optRevisit.addEventListener('click', () => {
+      document.getElementById('modal-vault-options').style.display = 'none';
+      const items = getVaultItems();
+      if (activeVaultMenuIdx !== null) revisitVaultItem(items[activeVaultMenuIdx]);
+    });
+  }
+
+  const optEdit = document.getElementById('opt-vault-edit');
+  if (optEdit) {
+    optEdit.addEventListener('click', () => {
+      document.getElementById('modal-vault-options').style.display = 'none';
+      const items = getVaultItems();
+      if (activeVaultMenuIdx !== null) resumeVaultItemInStudio(items[activeVaultMenuIdx]);
+    });
+  }
+
+  const optDuplicate = document.getElementById('opt-vault-duplicate');
+  if (optDuplicate) {
+    optDuplicate.addEventListener('click', () => {
+      document.getElementById('modal-vault-options').style.display = 'none';
+      const items = getVaultItems();
+      if (activeVaultMenuIdx === null) return;
+      const orig = items[activeVaultMenuIdx];
+      const copy = JSON.parse(JSON.stringify(orig));
+      copy.id = 'vault_' + Date.now();
+      copy.title = 'Copy of ' + (orig.title || 'Creation');
+      copy.status = 'draft';
+      copy.savedAt = 'Just now';
+      items.unshift(copy);
+      saveVaultItems(items);
+      renderVaultItems();
+      showToast('Duplicated as new draft in your Vault! ♡');
+    });
+  }
+
+  const optRename = document.getElementById('opt-vault-rename');
+  if (optRename) {
+    optRename.addEventListener('click', () => {
+      document.getElementById('modal-vault-options').style.display = 'none';
+      const items = getVaultItems();
+      if (activeVaultMenuIdx === null) return;
+      const orig = items[activeVaultMenuIdx];
+      const renameModal = document.getElementById('modal-vault-rename');
+      const renameInput = document.getElementById('vault-rename-input');
+      if (renameInput) renameInput.value = orig.title || '';
+      if (renameModal) renameModal.style.display = 'flex';
+    });
+  }
+
+  const formVaultRename = document.getElementById('form-vault-rename');
+  if (formVaultRename) {
+    formVaultRename.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newTitle = document.getElementById('vault-rename-input')?.value.trim();
+      if (!newTitle) return;
+      const items = getVaultItems();
+      if (activeVaultMenuIdx !== null && items[activeVaultMenuIdx]) {
+        items[activeVaultMenuIdx].title = newTitle;
+        saveVaultItems(items);
+        renderVaultItems();
+        document.getElementById('modal-vault-rename').style.display = 'none';
+        showToast('Creation renamed to "' + newTitle + '"! ♡');
+      }
+    });
+  }
+
+  const optShare = document.getElementById('opt-vault-share');
+  if (optShare) {
+    optShare.addEventListener('click', () => {
+      document.getElementById('modal-vault-options').style.display = 'none';
+      const items = getVaultItems();
+      if (activeVaultMenuIdx === null) return;
+      const it = items[activeVaultMenuIdx];
+      const shareUrl = `https://betweenus.love/#c=${encodeURIComponent((it.title || 'gift').toLowerCase().replace(/\s+/g, '-'))}&d=vault`;
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        showToast('Shareable link copied to clipboard!');
+      }).catch(() => {
+        showToast('Link: ' + shareUrl);
+      });
+    });
+  }
+
+  const optDelete = document.getElementById('opt-vault-delete');
+  if (optDelete) {
+    optDelete.addEventListener('click', () => {
+      document.getElementById('modal-vault-options').style.display = 'none';
+      const items = getVaultItems();
+      if (activeVaultMenuIdx === null) return;
+      const it = items[activeVaultMenuIdx];
+      if (confirm(`Are you sure you want to delete "${it.title || 'this creation'}" from your Vault?`)) {
+        items.splice(activeVaultMenuIdx, 1);
+        saveVaultItems(items);
+        renderVaultItems();
+        showToast('Creation deleted from your Vault.');
+      }
+    });
+  }
+
+  // Segmented Tab Buttons Filter
+  document.querySelectorAll('#vault-tabs-segmented .vault-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#vault-tabs-segmented .vault-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      currentVaultFilter = btn.dataset.vaultFilter || 'all';
+      renderVaultItems();
+    });
+  });
+
+  // Search Input Filter
+  const vaultSearchInp = document.getElementById('vault-search-input');
+  if (vaultSearchInp) {
+    vaultSearchInp.addEventListener('input', () => {
+      currentVaultSearch = vaultSearchInp.value;
+      renderVaultItems();
+    });
+  }
+
+  // Sort Dropdown Filter
+  const vaultSortSel = document.getElementById('vault-sort-select');
+  if (vaultSortSel) {
+    vaultSortSel.addEventListener('change', () => {
+      currentVaultSort = vaultSortSel.value;
+      renderVaultItems();
+    });
+  }
+
+  // FAB: + New Creation -> Studio
+  const btnVaultFab = document.getElementById('btn-vault-fab');
+  if (btnVaultFab) {
+    btnVaultFab.addEventListener('click', () => {
+      const studioTab = document.querySelector('.nav-tab[data-room="studio"]');
+      if (studioTab) studioTab.click();
+    });
+  }
+
+  const btnVaultEmptyStart = document.getElementById('btn-vault-empty-start');
+  if (btnVaultEmptyStart) {
+    btnVaultEmptyStart.addEventListener('click', () => {
+      const studioTab = document.querySelector('.nav-tab[data-room="studio"]');
+      if (studioTab) studioTab.click();
+    });
+  }
+
+  // Modal Closers for Vault
+  bindModalCloser('btn-close-vault-options', 'modal-vault-options');
+  bindModalCloser('btn-close-vault-rename', 'modal-vault-rename');
+  bindModalCloser('btn-cancel-vault-rename', 'modal-vault-rename');
 
   // Hook Vault Room Rendering into navigation tabs
   const vaultNavTab = document.querySelector('.nav-tab[data-room="vault"]');
   if (vaultNavTab) {
     vaultNavTab.addEventListener('click', renderVaultItems);
   }
+  window.renderVaultItems = renderVaultItems;
 
   // Check Recipient URL param on load
   window.openUnifiedDispatchModal = openUnifiedDispatchModal;
@@ -6710,17 +7100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Modal Closers Helper
-  const bindModalCloser = (closeBtnId, modalId) => {
-    const btn = document.getElementById(closeBtnId);
-    if (btn) {
-      btn.addEventListener('click', () => {
-        const m = document.getElementById(modalId);
-        if (m) m.style.display = 'none';
-      });
-    }
-  };
-
   bindModalCloser('btn-close-create-scrapbook', 'modal-create-scrapbook');
   bindModalCloser('btn-cancel-create-scrapbook', 'modal-create-scrapbook');
   bindModalCloser('btn-close-add-memory', 'modal-add-scrapbook-memory');
@@ -6933,6 +7312,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.has('open_collection')) {
       const collId = urlParams.get('open_collection') || 'coll_received';
       openCollectionViewer(collId);
+    }
+    if (urlParams.get('room') === 'vault' || urlParams.has('vault')) {
+      const vaultTab = document.querySelector('.nav-tab[data-room="vault"]');
+      if (vaultTab) vaultTab.click();
     }
   } catch (err) {}
 
