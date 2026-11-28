@@ -2187,8 +2187,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const cardStickersPopup = document.getElementById('card-stickers-popup');
   const cardStickersPopupGrid = document.getElementById('card-stickers-popup-grid');
   const btnCloseStickerPopup = document.getElementById('btn-close-sticker-popup');
-  const btnStickerScrollLeft = document.getElementById('btn-sticker-scroll-left');
-  const btnStickerScrollRight = document.getElementById('btn-sticker-scroll-right');
 
   const cardVinylSongModal = document.getElementById('card-vinyl-song-modal');
   const btnCloseVinylModal = document.getElementById('btn-close-vinyl-modal');
@@ -2835,31 +2833,13 @@ document.addEventListener('DOMContentLoaded', () => {
     btnCardAddSticker.addEventListener('click', () => {
       populateCardStickersPopup();
       cardStickersPopup.style.display = 'block';
-      if (cardStickersPopupGrid) cardStickersPopupGrid.scrollLeft = 0;
+      if (cardStickersPopupGrid) cardStickersPopupGrid.scrollTop = 0;
     });
   }
   if (btnCloseStickerPopup && cardStickersPopup) {
     btnCloseStickerPopup.addEventListener('click', () => {
       cardStickersPopup.style.display = 'none';
     });
-  }
-  if (btnStickerScrollLeft && cardStickersPopupGrid) {
-    btnStickerScrollLeft.addEventListener('click', () => {
-      cardStickersPopupGrid.scrollBy({ left: -160, behavior: 'smooth' });
-    });
-  }
-  if (btnStickerScrollRight && cardStickersPopupGrid) {
-    btnStickerScrollRight.addEventListener('click', () => {
-      cardStickersPopupGrid.scrollBy({ left: 160, behavior: 'smooth' });
-    });
-  }
-  if (cardStickersPopupGrid) {
-    cardStickersPopupGrid.addEventListener('wheel', (e) => {
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-        cardStickersPopupGrid.scrollLeft += e.deltaY;
-      }
-    }, { passive: false });
   }
 
   // Connect Real Music to Vinyl Record

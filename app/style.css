@@ -4614,9 +4614,8 @@ body {
   color: #521319;
 }
 
-/* Horizontal scroll strip for flowers and stickers showing 4-5 items at once */
-.flowers-popup-grid,
-.stickers-popup-grid {
+/* Horizontal scroll strip for flowers showing 4-5 items at once */
+.flowers-popup-grid {
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -4632,24 +4631,20 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #D3A5AF #F7ECE9;
 }
-.flowers-popup-grid::-webkit-scrollbar,
-.stickers-popup-grid::-webkit-scrollbar {
+.flowers-popup-grid::-webkit-scrollbar {
   height: 4px;
 }
-.flowers-popup-grid::-webkit-scrollbar-thumb,
-.stickers-popup-grid::-webkit-scrollbar-thumb {
+.flowers-popup-grid::-webkit-scrollbar-thumb {
   background: #D3A5AF;
   border-radius: 4px;
 }
-.flowers-popup-grid::-webkit-scrollbar-track,
-.stickers-popup-grid::-webkit-scrollbar-track {
+.flowers-popup-grid::-webkit-scrollbar-track {
   background: #F7ECE9;
   border-radius: 4px;
 }
 
-/* Flower and Sticker item cards */
+/* Flower item cards */
 .flower-popup-item,
-.sticker-popup-item,
 .popup-item-btn {
   flex: 0 0 66px;
   width: 66px;
@@ -4668,19 +4663,16 @@ body {
   user-select: none;
 }
 .flower-popup-item:hover,
-.sticker-popup-item:hover,
 .popup-item-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(82, 19, 25, 0.14);
   border-color: #521319;
 }
 .flower-popup-item:active,
-.sticker-popup-item:active,
 .popup-item-btn:active {
   transform: scale(0.96);
 }
-.flower-popup-thumb-wrap,
-.sticker-popup-thumb-wrap {
+.flower-popup-thumb-wrap {
   width: 44px;
   height: 44px;
   display: flex;
@@ -4689,7 +4681,6 @@ body {
   pointer-events: none;
 }
 .flower-popup-thumb,
-.sticker-popup-thumb,
 .popup-item-btn img {
   max-width: 42px;
   max-height: 42px;
@@ -4700,7 +4691,6 @@ body {
   pointer-events: none;
 }
 .flower-popup-name,
-.sticker-popup-name,
 .popup-item-btn small {
   font-family: 'Playfair Display', serif;
   font-size: 9px;
@@ -4713,6 +4703,96 @@ body {
   text-align: center;
   line-height: 1.1;
   pointer-events: none;
+}
+
+/* Sticker Popup Modal & All 15 Stickers 5-Column Grid */
+#card-stickers-popup {
+  max-height: 370px;
+}
+.stickers-popup-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 7px;
+  max-height: 290px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 2px 6px;
+  margin: 0;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #D3A5AF #F7ECE9;
+}
+.stickers-popup-grid::-webkit-scrollbar {
+  width: 4px;
+}
+.stickers-popup-grid::-webkit-scrollbar-thumb {
+  background: #D3A5AF;
+  border-radius: 4px;
+}
+.stickers-popup-grid::-webkit-scrollbar-track {
+  background: #F7ECE9;
+  border-radius: 4px;
+}
+
+.stickers-popup-grid .sticker-popup-item {
+  flex: none;
+  width: 100%;
+  height: 74px;
+  background: #FFFFFF;
+  border: 1px solid #EFE4E1;
+  border-radius: 10px;
+  padding: 5px 2px 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+}
+.stickers-popup-grid .sticker-popup-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(82, 19, 25, 0.14);
+  border-color: #521319;
+}
+.stickers-popup-grid .sticker-popup-item:active {
+  transform: scale(0.96);
+}
+.stickers-popup-grid .sticker-popup-thumb-wrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.stickers-popup-grid .sticker-popup-thumb {
+  max-width: 36px;
+  max-height: 36px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
+  pointer-events: none;
+}
+.stickers-popup-grid .sticker-popup-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 8px;
+  font-weight: 500;
+  color: #521319;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: center;
+  line-height: 1.1;
+  pointer-events: none;
+}
+@media (max-width: 360px) {
+  .stickers-popup-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* Card Bottom Actions */
