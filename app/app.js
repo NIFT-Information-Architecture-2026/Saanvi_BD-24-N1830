@@ -7166,10 +7166,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const DEFAULT_USER = {
-    name: 'Saanvi',
-    email: 'saanvi@gmail.com',
+    name: 'Ditya',
+    email: 'ditya.sah@gmail.com',
     bio: 'Making little somethings for the people I love ♡',
-    avatar: 'S',
+    avatar: 'DS',
     loggedIn: true
   };
 
@@ -7216,6 +7216,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function saveContactsList(list) {
     localStorage.setItem(PROFILE_KEYS.CONTACTS, JSON.stringify(list));
     renderMyPeople();
+    checkSpecialDatesReminders();
   }
 
   function getNotificationsList() {
@@ -7268,6 +7269,53 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   window.recordSharedLink = recordSharedLink;
 
+  // Check special dates & schedule reminders for contacts within 7 days and 1 day
+  function checkSpecialDatesReminders() {
+    const contacts = getContactsList();
+    const notifs = getNotificationsList();
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1;
+    const currentDay = today.getDate();
+
+    let updated = false;
+    contacts.forEach(contact => {
+      if (!contact.birthday) return;
+      try {
+        const parts = contact.birthday.split('-');
+        if (parts.length === 3) {
+          const bMonth = parseInt(parts[1], 10);
+          const bDay = parseInt(parts[2], 10);
+
+          let nextBday = new Date(today.getFullYear(), bMonth - 1, bDay);
+          if (nextBday < new Date(today.getFullYear(), currentMonth - 1, currentDay)) {
+            nextBday.setFullYear(today.getFullYear() + 1);
+          }
+          const diffTime = nextBday.getTime() - today.getTime();
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+          if (diffDays === 7 || diffDays === 1) {
+            const reminderId = `bday_reminder_${contact.id}_${diffDays}d_${nextBday.getFullYear()}`;
+            if (!notifs.some(n => n.id === reminderId)) {
+              notifs.unshift({
+                id: reminderId,
+                type: 'reminder',
+                title: diffDays === 1 ? `🎂 ${contact.name}'s Birthday is Tomorrow!` : `🎂 ${contact.name}'s Birthday is in 7 days`,
+                body: `Don't forget to prepare a special postcard, letter, or bouquet for ${contact.name}.`,
+                timeText: 'Today',
+                unread: true
+              });
+              updated = true;
+            }
+          }
+        }
+      } catch (e) {}
+    });
+
+    if (updated) {
+      saveNotificationsList(notifs);
+    }
+  }
+
   // Update Profile Hub & Global Elements
   function updateProfileUI() {
     const user = getProfileUser();
@@ -7280,15 +7328,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactEmailInp = document.getElementById('contact-email');
     const privacyEmailSub = document.getElementById('privacy-current-email-sub');
 
-    if (avatarEl) avatarEl.textContent = user.avatar || user.name.charAt(0).toUpperCase();
-    if (nameEl) nameEl.textContent = user.name || 'Saanvi';
-    if (emailEl) emailEl.textContent = user.email || 'saanvi@gmail.com';
+    if (avatarEl) avatarEl.textContent = user.avatar || (user.name ? user.name.slice(0, 2).toUpperCase() : 'DS');
+    if (nameEl) nameEl.textContent = user.name || 'Ditya';
+    if (emailEl) emailEl.textContent = user.email || 'ditya.sah@gmail.com';
     if (bioEl) {
       const cleanBio = (user.bio || '').replace(/^["']+|["']+$/g, '');
       bioEl.textContent = cleanBio ? `"${cleanBio}"` : '';
     }
     if (sessionStatusEl) {
-      sessionStatusEl.textContent = user.loggedIn ? `Logged in as ${user.name}` : 'Not signed in';
+      sessionStatusEl.textContent = user.loggedIn ? `Logged in as ${user.name || 'Ditya'}` : 'Not signed in';
     }
     if (contactNameInp) contactNameInp.value = user.name || '';
     if (contactEmailInp) contactEmailInp.value = user.email || '';
@@ -7305,6 +7353,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cardInsideFrom) cardInsideFrom.value = user.name;
 
     updateNotifBadge();
+    checkSpecialDatesReminders();
   }
 
   function updateNotifBadge() {
@@ -7333,16 +7382,35 @@ document.addEventListener('DOMContentLoaded', () => {
       if (subpageKey === 'notifications') renderNotifications();
       if (subpageKey === 'privacy') updateProfileUI();
       if (subpageKey === 'help') {
-        const firstTab = document.querySelector('.help-tab-btn[data-help-tab="faqs"]');
-        if (firstTab) firstTab.click();
+        showHelpHub();
       }
     }
+  }
+
+  // Help & Support Navigation (Hub View vs Detail Panes)
+  function showHelpHub() {
+    const helpHub = document.getElementById('help-hub-view');
+    if (helpHub) helpHub.style.display = 'block';
+    document.querySelectorAll('.help-detail-pane').forEach(p => p.style.display = 'none');
+  }
+
+  function showHelpPane(paneId) {
+    const helpHub = document.getElementById('help-hub-view');
+    if (helpHub) helpHub.style.display = 'none';
+    document.querySelectorAll('.help-detail-pane').forEach(p => p.style.display = 'none');
+    const pane = document.getElementById(paneId);
+    if (pane) pane.style.display = 'block';
   }
 
   // Back button in all subpages
   document.querySelectorAll('.btn-subpage-back').forEach(btn => {
     btn.addEventListener('click', () => {
-      showProfileHub();
+      const backTarget = btn.dataset.backTo;
+      if (backTarget === 'help-hub') {
+        showHelpHub();
+      } else {
+        showProfileHub();
+      }
     });
   });
 
@@ -7358,6 +7426,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const menuHelp = document.getElementById('menu-help');
   if (menuHelp) menuHelp.addEventListener('click', () => showProfileSubpage('help'));
+
+  // Help Hub Menu Card Click Listeners
+  const btnHelpFaqs = document.getElementById('btn-help-to-faqs');
+  if (btnHelpFaqs) btnHelpFaqs.addEventListener('click', () => showHelpPane('pane-help-faqs'));
+
+  const btnHelpContact = document.getElementById('btn-help-to-contact');
+  if (btnHelpContact) btnHelpContact.addEventListener('click', () => showHelpPane('pane-help-contact'));
+
+  const btnHelpAbout = document.getElementById('btn-help-to-about');
+  if (btnHelpAbout) btnHelpAbout.addEventListener('click', () => showHelpPane('pane-help-about'));
+
+  const btnHelpTerms = document.getElementById('btn-help-to-terms');
+  if (btnHelpTerms) btnHelpTerms.addEventListener('click', () => showHelpPane('pane-help-terms'));
+
+  const btnHelpPrivacy = document.getElementById('btn-help-to-privacy');
+  if (btnHelpPrivacy) btnHelpPrivacy.addEventListener('click', () => showHelpPane('pane-help-privacy'));
+
+  const btnFaqsToContact = document.getElementById('btn-faqs-to-contact');
+  if (btnFaqsToContact) btnFaqsToContact.addEventListener('click', () => showHelpPane('pane-help-contact'));
+
+  const linkContactToFaqs = document.getElementById('link-contact-to-faqs');
+  if (linkContactToFaqs) {
+    linkContactToFaqs.addEventListener('click', (e) => {
+      e.preventDefault();
+      showHelpPane('pane-help-faqs');
+    });
+  }
+
+  // Sharing & Privacy card in Privacy & Account subpage
+  const btnSharingPrivacy = document.getElementById('btn-open-sharing-privacy');
+  if (btnSharingPrivacy) {
+    btnSharingPrivacy.addEventListener('click', () => {
+      if (typeof showToast === 'function') {
+        showToast('🔒 Your creations are private by default.');
+      } else {
+        alert('Your drafts and creations in Vault are completely private to your account.');
+      }
+    });
+  }
 
   // Switch Account / Sign In button
   const btnSwitchAccount = document.getElementById('btn-profile-switch-account');
@@ -7433,9 +7540,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  document.querySelectorAll('#people-filter-pills .people-pill-btn').forEach(pill => {
+  document.querySelectorAll('#people-filter-pills .people-tab-btn, #people-filter-pills .people-pill-btn').forEach(pill => {
     pill.addEventListener('click', () => {
-      document.querySelectorAll('#people-filter-pills .people-pill-btn').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('#people-filter-pills .people-tab-btn, #people-filter-pills .people-pill-btn').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
       currentPeopleFilter = pill.dataset.peopleFilter;
       renderMyPeople();
@@ -7448,6 +7555,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!container) return;
 
     const contacts = getContactsList();
+    const allCount = contacts.length;
+    const favCount = contacts.filter(c => c.isFav).length;
+    const bdayCount = contacts.filter(c => !!c.birthday).length;
+
+    const tabAll = document.getElementById('tab-people-all');
+    const tabFav = document.getElementById('tab-people-fav');
+    const tabBday = document.getElementById('tab-people-bday');
+    if (tabAll) tabAll.textContent = `All (${allCount})`;
+    if (tabFav) tabFav.textContent = `☆ Favourites (${favCount})`;
+    if (tabBday) tabBday.textContent = `🎂 Birthdays (${bdayCount})`;
 
     let filtered = contacts.filter(c => {
       if (currentPeopleFilter === 'fav' && !c.isFav) return false;
@@ -7479,34 +7596,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (emptyState) emptyState.style.display = 'none';
-    container.style.display = 'grid';
+    container.style.display = 'flex';
     container.innerHTML = '';
 
-    filtered.forEach(person => {
+    const stampImages = [
+      'assets/stamps/stamp_tulip.png',
+      'assets/stamps/stamp_blue_cherries.png',
+      'assets/stamps/stamp_heart.png',
+      'assets/stamps/stamp_kraft_flower.png',
+      'assets/stamps/stamp_butterfly.png',
+      'assets/stamps/stamp_bear.png'
+    ];
+
+    filtered.forEach((person, index) => {
       const card = document.createElement('div');
       card.className = 'contact-card';
 
-      const initial = person.name ? person.name.charAt(0).toUpperCase() : '?';
+      const stampSrc = person.stamp || stampImages[index % stampImages.length];
       const bdayDisplay = person.birthday ? `🎂 ${formatBday(person.birthday)}` : '';
 
       card.innerHTML = `
-        <div class="contact-main-row">
-          <div class="contact-avatar">${initial}</div>
-          <div class="contact-info">
-            <div class="contact-name-row">
-              <h4 class="contact-name">${escapeHtml(person.name)}</h4>
-              <span class="contact-rel-badge">${escapeHtml(person.relationship || 'Friend')}</span>
-            </div>
-            ${person.email ? `<p class="contact-email">${escapeHtml(person.email)}</p>` : ''}
-          </div>
+        <div class="contact-stamp-frame">
+          <img src="${stampSrc}" class="contact-stamp-img" alt="Stamp">
         </div>
-        ${bdayDisplay || person.notes ? `
+        <div class="contact-main-col">
+          <div class="contact-name-row">
+            <h4 class="contact-name">${escapeHtml(person.name)}</h4>
+            ${person.relationship ? `<span class="contact-rel-badge">${escapeHtml(person.relationship)}</span>` : ''}
+          </div>
+          ${person.email ? `<p class="contact-email">${escapeHtml(person.email)}</p>` : ''}
           <div class="contact-details-row">
             ${bdayDisplay ? `<span class="contact-bday-pill">${bdayDisplay}</span>` : ''}
             ${person.notes ? `<span class="contact-notes-pill">"${escapeHtml(person.notes)}"</span>` : ''}
           </div>
-        ` : ''}
-        <div class="contact-actions-row">
+        </div>
+        <div class="contact-actions-col">
           <button type="button" class="btn-contact-action star ${person.isFav ? 'active' : ''}" data-person-id="${person.id}" title="${person.isFav ? 'Unstar' : 'Star as Favourite'}">
             ${person.isFav ? '★' : '☆'}
           </button>
@@ -8097,31 +8221,47 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {}
 
       // Render confirmation receipt
-      const card = formContact.closest('.contact-support-form-card');
-      if (card) {
-        card.innerHTML = `
-          <div class="contact-card-header">
-            <span style="font-size:32px;">💌</span>
-            <h4>Message Received!</h4>
-            <p>Thank you, ${escapeHtml(name)}. We have received your note and will be in touch shortly.</p>
-          </div>
-          <div class="support-ticket-receipt">
-            <small style="color:#7E4D57; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Ticket Reference</small><br>
-            <span class="ticket-number">${ticketRef}</span>
-            <p style="font-size:12px; color:#6F454E; margin:6px 0 0 0;">
-              A confirmation has been recorded for <strong>${escapeHtml(email)}</strong>. Our team typically replies within 24 hours.
-            </p>
-          </div>
-          <div style="text-align:center; margin-top:20px;">
-            <button type="button" class="btn-secondary" id="btn-reset-support-card">Send Another Message</button>
-          </div>
-        `;
-
-        const resetBtn = card.querySelector('#btn-reset-support-card');
+      const banner = document.getElementById('contact-success-banner');
+      const ticketRefEl = document.getElementById('contact-ticket-ref');
+      if (banner && ticketRefEl) {
+        ticketRefEl.textContent = 'Reference: ' + ticketRef;
+        formContact.style.display = 'none';
+        banner.style.display = 'block';
+        const resetBtn = document.getElementById('btn-reset-support-card');
         if (resetBtn) {
-          resetBtn.addEventListener('click', () => {
-            showProfileSubpage('help');
-          });
+          resetBtn.onclick = () => {
+            formContact.reset();
+            updateProfileUI();
+            formContact.style.display = 'block';
+            banner.style.display = 'none';
+          };
+        }
+      } else {
+        const card = formContact.closest('.contact-support-form-card');
+        if (card) {
+          card.innerHTML = `
+            <div class="contact-card-header">
+              <span style="font-size:32px;">💌</span>
+              <h4>Message Received!</h4>
+              <p>Thank you, ${escapeHtml(name)}. We have received your note and will be in touch shortly.</p>
+            </div>
+            <div class="support-ticket-receipt">
+              <small style="color:#7E4D57; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Ticket Reference</small><br>
+              <span class="ticket-number">${ticketRef}</span>
+              <p style="font-size:12px; color:#6F454E; margin:6px 0 0 0;">
+                A confirmation has been recorded for <strong>${escapeHtml(email)}</strong>. Our team typically replies within 24 hours.
+              </p>
+            </div>
+            <div style="text-align:center; margin-top:20px;">
+              <button type="button" class="btn-secondary" id="btn-reset-support-card">Send Another Message</button>
+            </div>
+          `;
+          const resetBtn = card.querySelector('#btn-reset-support-card');
+          if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+              showHelpPane('pane-help-contact');
+            });
+          }
         }
       }
 

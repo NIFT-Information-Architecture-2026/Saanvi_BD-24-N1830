@@ -2147,31 +2147,39 @@
       <!-- ================= ROOM 4: PROFILE ================= -->
       <section class="room-view" id="room-profile" style="display:none;">
         <div class="profile-container">
-          <!-- Profile Main Hub View -->
+          <!-- Profile Main Hub View (Matches Reference Image 5) -->
           <div class="profile-hub-view" id="profile-hub-view">
             <div class="profile-header-block">
               <h2 class="profile-main-title">Your little space</h2>
               <p class="profile-main-subtitle">Manage your account and the people you share with.</p>
-              <div class="profile-divider"><span>— ♡ —</span></div>
+              <div class="profile-divider">
+                <span class="divider-line"></span>
+                <span class="divider-heart">♥</span>
+                <span class="divider-line"></span>
+              </div>
             </div>
 
             <!-- Profile User Card -->
             <div class="profile-user-card" id="profile-user-card">
               <div class="user-avatar-wrap">
-                <div class="user-avatar" id="profile-avatar-display">S</div>
+                <div class="user-avatar" id="profile-avatar-display">DS</div>
               </div>
+              <div class="user-avatar-divider"></div>
               <div class="user-details-wrap">
-                <h3 class="user-name" id="profile-name-display">Saanvi</h3>
-                <p class="user-email" id="profile-email-display">saanvi@gmail.com</p>
-                <p class="user-bio" id="profile-bio-display">"Making little somethings for the people I love ♡"</p>
+                <h3 class="user-name" id="profile-name-display">Ditya</h3>
+                <p class="user-email" id="profile-email-display">ditya.sah@gmail.com</p>
               </div>
               <button type="button" class="btn-profile-edit" id="btn-open-edit-profile">Edit profile</button>
             </div>
 
-            <!-- 4 Menu Cards -->
+            <!-- 4 Menu Cards (Stacked 1-column vertically per Image 5) -->
             <div class="profile-menu-grid">
               <div class="profile-menu-card" id="menu-my-people">
-                <div class="menu-icon-wrap">👥</div>
+                <div class="menu-icon-wrap">
+                  <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                </div>
                 <div class="menu-text-wrap">
                   <h4 class="menu-card-title">My People</h4>
                   <p class="menu-card-sub">Manage saved recipients</p>
@@ -2181,7 +2189,9 @@
 
               <div class="profile-menu-card" id="menu-notifications">
                 <div class="menu-icon-wrap">
-                  🔔
+                  <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
                   <span class="menu-unread-badge" id="notifications-unread-dot" style="display:none;"></span>
                 </div>
                 <div class="menu-text-wrap">
@@ -2192,7 +2202,11 @@
               </div>
 
               <div class="profile-menu-card" id="menu-privacy">
-                <div class="menu-icon-wrap">🔒</div>
+                <div class="menu-icon-wrap">
+                  <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </div>
                 <div class="menu-text-wrap">
                   <h4 class="menu-card-title">Privacy & Account</h4>
                   <p class="menu-card-sub">Sharing, security and account details</p>
@@ -2201,7 +2215,11 @@
               </div>
 
               <div class="profile-menu-card" id="menu-help">
-                <div class="menu-icon-wrap">❓</div>
+                <div class="menu-icon-wrap">
+                  <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </div>
                 <div class="menu-text-wrap">
                   <h4 class="menu-card-title">Help & Support</h4>
                   <p class="menu-card-sub">FAQs, contact and app information</p>
@@ -2212,30 +2230,37 @@
 
             <!-- Active Account Bar -->
             <div class="profile-auth-status-bar">
-              <span id="profile-session-status">Logged in as Saanvi</span>
+              <span id="profile-session-status">Logged in as Ditya</span>
               <button type="button" class="btn-text-link" id="btn-profile-switch-account">Switch Account / Sign In</button>
             </div>
           </div>
 
-          <!-- Subpage 1: My People -->
+          <!-- Subpage 1: My People (Matches Reference Image 4) -->
           <div class="profile-subpage" id="subpage-my-people" style="display:none;">
             <div class="subpage-topbar">
-              <button type="button" class="btn-subpage-back" data-back-to="hub">‹ Back</button>
+              <button type="button" class="btn-subpage-back" data-back-to="hub">‹</button>
               <h3 class="subpage-title">My People</h3>
-              <button type="button" class="btn-subpage-action" id="btn-add-person">+ Add Person</button>
+              <div style="width:36px;"></div>
             </div>
-            <p class="subpage-subtitle">Your private address book for quick and thoughtful gifting.</p>
+            <p class="subpage-subtitle">Your saved recipients for quicker, more meaningful sharing.</p>
+            <div class="profile-divider">
+              <span class="divider-line"></span>
+              <span class="divider-heart">♥</span>
+              <span class="divider-line"></span>
+            </div>
 
-            <div class="people-toolbar">
+            <div class="people-toolbar-row">
               <div class="people-search-wrapper">
                 <span class="search-icon">🔍</span>
                 <input type="text" class="people-search-input" id="people-search-input" placeholder="Search people..." autocomplete="off">
               </div>
-              <div class="people-filter-pills" id="people-filter-pills">
-                <button type="button" class="people-pill-btn active" data-people-filter="all">All</button>
-                <button type="button" class="people-pill-btn" data-people-filter="fav">Favourites ⭐</button>
-                <button type="button" class="people-pill-btn" data-people-filter="bday">Birthdays 🎂</button>
-              </div>
+              <button type="button" class="btn-add-person-pill" id="btn-add-person">+ Add Person</button>
+            </div>
+
+            <div class="people-segmented-tabs" id="people-filter-pills">
+              <button type="button" class="people-tab-btn active" data-people-filter="all" id="tab-people-all">All (0)</button>
+              <button type="button" class="people-tab-btn" data-people-filter="fav" id="tab-people-fav">☆ Favourites (0)</button>
+              <button type="button" class="people-tab-btn" data-people-filter="bday" id="tab-people-bday">🎂 Birthdays (0)</button>
             </div>
 
             <div class="people-contacts-list" id="people-contacts-list">
@@ -2243,169 +2268,230 @@
             </div>
 
             <div class="people-empty-state" id="people-empty-state" style="display:none;">
-              <div class="people-empty-icon">👥</div>
+              <div class="people-empty-stamp">💌</div>
               <h4>No saved people yet</h4>
-              <p>Add someone special or create a gift to quickly select them later.</p>
+              <p>Your address book is empty. Add someone special to quickly select them when creating postcards, letters, bouquets, or cards.</p>
               <button type="button" class="btn-primary" id="btn-people-empty-add">+ Add Your First Person</button>
             </div>
           </div>
 
-          <!-- Subpage 2: Notifications -->
+          <!-- Subpage 2: Notifications (Matches Reference Image 2) -->
           <div class="profile-subpage" id="subpage-notifications" style="display:none;">
             <div class="subpage-topbar">
-              <button type="button" class="btn-subpage-back" data-back-to="hub">‹ Back</button>
+              <button type="button" class="btn-subpage-back" data-back-to="hub">‹</button>
               <h3 class="subpage-title">Notifications</h3>
-              <button type="button" class="btn-subpage-action" id="btn-clear-notifications">Clear All</button>
+              <div style="width:36px;"></div>
             </div>
-            <p class="subpage-subtitle">Delivery updates, received gifts and reminders.</p>
-
-            <div class="notif-filter-pills" id="notif-filter-pills">
-              <button type="button" class="notif-pill-btn active" data-notif-filter="all">All</button>
-              <button type="button" class="notif-pill-btn" data-notif-filter="creation">Creations</button>
-              <button type="button" class="notif-pill-btn" data-notif-filter="incoming">Incoming</button>
-              <button type="button" class="notif-pill-btn" data-notif-filter="reminder">Reminders</button>
+            <p class="subpage-subtitle">Your updates, all in one place.</p>
+            <div class="profile-divider">
+              <span class="divider-line"></span>
+              <span class="divider-heart">♥</span>
+              <span class="divider-line"></span>
             </div>
 
             <div class="notifications-stream" id="notifications-stream">
               <!-- Dynamically populated from localStorage['between_us_notifications'] -->
             </div>
 
-            <div class="notif-preferences-card">
-              <h4 class="notif-pref-title">Notification Preferences</h4>
-              <div class="notif-pref-row">
-                <div>
-                  <strong>Creation & Dispatch Updates</strong>
-                  <small>When your gifts are delivered or opened</small>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="pref-creations" checked>
-                  <span class="slider round"></span>
-                </label>
-              </div>
-              <div class="notif-pref-row">
-                <div>
-                  <strong>Incoming Gifts & Invites</strong>
-                  <small>When someone shares a card or scrapbook</small>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="pref-incoming" checked>
-                  <span class="slider round"></span>
-                </label>
-              </div>
-              <div class="notif-pref-row">
-                <div>
-                  <strong>Special Occasion Reminders</strong>
-                  <small>7 days and 1 day before birthdays & anniversaries</small>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="pref-reminders" checked>
-                  <span class="slider round"></span>
-                </label>
-              </div>
+            <div class="notif-bottom-row">
+              <button type="button" class="btn-notif-clear-all" id="btn-clear-notifications">
+                <span class="btn-icon">🗑</span>
+                <span>Clear All</span>
+              </button>
             </div>
           </div>
 
-          <!-- Subpage 3: Privacy & Account -->
+          <!-- Subpage 3: Privacy & Account (Matches Reference Image 3) -->
           <div class="profile-subpage" id="subpage-privacy" style="display:none;">
             <div class="subpage-topbar">
-              <button type="button" class="btn-subpage-back" data-back-to="hub">‹ Back</button>
+              <button type="button" class="btn-subpage-back" data-back-to="hub">‹</button>
               <h3 class="subpage-title">Privacy & Account</h3>
-              <div style="width:50px;"></div>
+              <div style="width:36px;"></div>
             </div>
-            <p class="subpage-subtitle">Security, sharing controls, and data privacy.</p>
+            <p class="subpage-subtitle">Keep your account safe and in your control.</p>
+            <div class="profile-divider">
+              <span class="divider-line"></span>
+              <span class="divider-heart">♥</span>
+              <span class="divider-line"></span>
+            </div>
 
             <div class="privacy-cards-stack">
-              <!-- Account Security -->
-              <div class="privacy-card">
-                <h4 class="privacy-card-title">Account Security</h4>
-                <div class="privacy-action-list">
-                  <button type="button" class="privacy-action-row" id="btn-open-change-password">
-                    <span class="row-icon">🔑</span>
-                    <div class="row-text">
-                      <strong>Change Password</strong>
-                      <small>Update your account access password</small>
+              <!-- Section: Account -->
+              <div class="privacy-section-group">
+                <h5 class="privacy-section-label">Account</h5>
+                <div class="privacy-cards-list">
+                  <div class="profile-menu-card" id="btn-open-change-password">
+                    <div class="menu-icon-wrap">
+                      <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     </div>
-                    <span class="row-chevron">›</span>
-                  </button>
-                  <button type="button" class="privacy-action-row" id="btn-open-update-email">
-                    <span class="row-icon">✉️</span>
-                    <div class="row-text">
-                      <strong>Update Email Address</strong>
-                      <small id="privacy-current-email-sub">Current: saanvi@gmail.com</small>
+                    <div class="menu-text-wrap">
+                      <h4 class="menu-card-title">Change Password</h4>
+                      <p class="menu-card-sub">Update your password to keep your account secure.</p>
                     </div>
-                    <span class="row-chevron">›</span>
-                  </button>
+                    <span class="menu-chevron">›</span>
+                  </div>
+                  <div class="profile-menu-card" id="btn-open-update-email">
+                    <div class="menu-icon-wrap">
+                      <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </div>
+                    <div class="menu-text-wrap">
+                      <h4 class="menu-card-title">Update Email</h4>
+                      <p class="menu-card-sub">Change your email address.</p>
+                    </div>
+                    <span class="menu-chevron">›</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Sharing & Privacy -->
-              <div class="privacy-card">
-                <h4 class="privacy-card-title">Sharing & Privacy</h4>
-                <div class="privacy-notice-box">
-                  <p>🔒 <strong>Your creations are private:</strong> Unfinished drafts and Vault items are only visible to you. Shared Keepsakes scrapbooks are accessible only to invited participants. Public links can only be viewed by someone who has the specific link.</p>
-                </div>
-                <div class="privacy-action-list">
-                  <button type="button" class="privacy-action-row" id="btn-manage-shared-links">
-                    <span class="row-icon">🔗</span>
-                    <div class="row-text">
-                      <strong>Manage Shared Links</strong>
-                      <small>View and revoke access to generated links</small>
+              <!-- Section: Privacy -->
+              <div class="privacy-section-group">
+                <h5 class="privacy-section-label">Privacy</h5>
+                <div class="privacy-cards-list">
+                  <div class="profile-menu-card" id="btn-open-sharing-privacy">
+                    <div class="menu-icon-wrap">
+                      <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <span class="row-chevron">›</span>
-                  </button>
+                    <div class="menu-text-wrap">
+                      <h4 class="menu-card-title">Sharing & Privacy</h4>
+                      <p class="menu-card-sub">Manage who can access your shared keepsakes.</p>
+                    </div>
+                    <span class="menu-chevron">›</span>
+                  </div>
+                  <div class="profile-menu-card" id="btn-manage-shared-links">
+                    <div class="menu-icon-wrap">
+                      <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    </div>
+                    <div class="menu-text-wrap">
+                      <h4 class="menu-card-title">Manage Shared Links</h4>
+                      <p class="menu-card-sub">View or revoke links to your creations.</p>
+                    </div>
+                    <span class="menu-chevron">›</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Account Management -->
-              <div class="privacy-card">
-                <h4 class="privacy-card-title">Account Management</h4>
-                <div class="privacy-action-list">
-                  <button type="button" class="privacy-action-row" id="btn-account-logout">
-                    <span class="row-icon">🚪</span>
-                    <div class="row-text">
-                      <strong>Log Out</strong>
-                      <small>Sign out of your account on this device</small>
+              <!-- Section: Account Management -->
+              <div class="privacy-section-group">
+                <h5 class="privacy-section-label">Account Management</h5>
+                <div class="privacy-cards-list">
+                  <div class="profile-menu-card" id="btn-account-logout">
+                    <div class="menu-icon-wrap">
+                      <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     </div>
-                    <span class="row-chevron">›</span>
-                  </button>
-                  <button type="button" class="privacy-action-row danger" id="btn-account-delete">
-                    <span class="row-icon">🗑</span>
-                    <div class="row-text">
-                      <strong>Delete Account</strong>
-                      <small>Permanently delete your profile and creations</small>
+                    <div class="menu-text-wrap">
+                      <h4 class="menu-card-title">Log Out</h4>
+                      <p class="menu-card-sub">Sign out of your account.</p>
                     </div>
-                    <span class="row-chevron">›</span>
-                  </button>
+                    <span class="menu-chevron">›</span>
+                  </div>
+                  <div class="profile-menu-card danger-card" id="btn-account-delete">
+                    <div class="menu-icon-wrap danger-icon">
+                      <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                    </div>
+                    <div class="menu-text-wrap">
+                      <h4 class="menu-card-title text-danger">Delete Account</h4>
+                      <p class="menu-card-sub">Permanently delete your account and data.</p>
+                    </div>
+                    <span class="menu-chevron">›</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Subpage 4: Help & Support -->
+          <!-- Subpage 4: Help & Support (Matches Reference Image 1) -->
           <div class="profile-subpage" id="subpage-help" style="display:none;">
-            <div class="subpage-topbar">
-              <button type="button" class="btn-subpage-back" data-back-to="hub">‹ Back</button>
-              <h3 class="subpage-title">Help & Support</h3>
-              <div style="width:50px;"></div>
-            </div>
-            <p class="subpage-subtitle">We're always here to help make your experience special.</p>
-
-            <div class="help-section-switcher" id="help-section-switcher">
-              <button type="button" class="help-tab-btn active" data-help-tab="faqs">FAQs</button>
-              <button type="button" class="help-tab-btn" data-help-tab="contact">Contact Us</button>
-              <button type="button" class="help-tab-btn" data-help-tab="about">About</button>
-              <button type="button" class="help-tab-btn" data-help-tab="terms">Terms</button>
-              <button type="button" class="help-tab-btn" data-help-tab="privacy">Privacy</button>
-            </div>
-
-            <!-- Help Tab 1: FAQs -->
-            <div class="help-tab-pane active" id="pane-help-faqs">
-              <div class="faqs-intro-box">
-                <h4 class="faqs-heading">Frequently Asked Questions</h4>
-                <p class="faqs-sub">Everything you need to know about A Little Something, From Me to You.</p>
+            <!-- Main Help Hub Menu View -->
+            <div class="help-hub-view" id="help-hub-view">
+              <div class="subpage-topbar">
+                <button type="button" class="btn-subpage-back" data-back-to="hub">‹</button>
+                <h3 class="subpage-title">Help & Support</h3>
+                <div style="width:36px;"></div>
+              </div>
+              <p class="subpage-subtitle">We're here to make your experience a little easier.</p>
+              <div class="profile-divider">
+                <span class="divider-line"></span>
+                <span class="divider-heart">♥</span>
+                <span class="divider-line"></span>
               </div>
 
-              <!-- 13 Accordions Verbatim -->
+              <div class="profile-menu-grid">
+                <div class="profile-menu-card" id="btn-help-to-faqs">
+                  <div class="menu-icon-wrap">
+                    <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="12" y1="8" x2="12.01" y2="8"/><path d="M10 11a2 2 0 1 1 4 0c0 1-2 1.5-2 2.5"/></svg>
+                  </div>
+                  <div class="menu-text-wrap">
+                    <h4 class="menu-card-title">FAQs</h4>
+                    <p class="menu-card-sub">Find quick answers to common questions.</p>
+                  </div>
+                  <span class="menu-chevron">›</span>
+                </div>
+
+                <div class="profile-menu-card" id="btn-help-to-contact">
+                  <div class="menu-icon-wrap">
+                    <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </div>
+                  <div class="menu-text-wrap">
+                    <h4 class="menu-card-title">Contact Support</h4>
+                    <p class="menu-card-sub">Tell us about your issue or suggestion.</p>
+                  </div>
+                  <span class="menu-chevron">›</span>
+                </div>
+
+                <div class="profile-menu-card" id="btn-help-to-about">
+                  <div class="menu-icon-wrap">
+                    <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  </div>
+                  <div class="menu-text-wrap">
+                    <h4 class="menu-card-title">About the App</h4>
+                    <p class="menu-card-sub">App details, version and what we're about.</p>
+                  </div>
+                  <span class="menu-chevron">›</span>
+                </div>
+
+                <div class="profile-menu-card" id="btn-help-to-terms">
+                  <div class="menu-icon-wrap">
+                    <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  </div>
+                  <div class="menu-text-wrap">
+                    <h4 class="menu-card-title">Terms & Conditions</h4>
+                    <p class="menu-card-sub">Our community guidelines and user terms.</p>
+                  </div>
+                  <span class="menu-chevron">›</span>
+                </div>
+
+                <div class="profile-menu-card" id="btn-help-to-privacy">
+                  <div class="menu-icon-wrap">
+                    <svg class="menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                  </div>
+                  <div class="menu-text-wrap">
+                    <h4 class="menu-card-title">Privacy Policy</h4>
+                    <p class="menu-card-sub">How your data and creations are protected.</p>
+                  </div>
+                  <span class="menu-chevron">›</span>
+                </div>
+              </div>
+
+              <!-- Artwork at bottom of Help Hub (Matches Reference Image 1) -->
+              <div class="help-artwork-wrap">
+                <img src="assets/splash_envelope.png" alt="Decorative botanical envelope with flowers" class="help-footer-envelope">
+              </div>
+            </div>
+
+            <!-- Help Sub-Pane 1: FAQs (13 Verbatim Q&As) -->
+            <div class="help-detail-pane" id="pane-help-faqs" style="display:none;">
+              <div class="subpage-topbar">
+                <button type="button" class="btn-subpage-back" data-back-to="help-hub">‹</button>
+                <h3 class="subpage-title">Frequently Asked Questions</h3>
+                <div style="width:36px;"></div>
+              </div>
+              <p class="subpage-subtitle">Everything you need to know about A Little Something, From Me to You.</p>
+              <div class="profile-divider">
+                <span class="divider-line"></span>
+                <span class="divider-heart">♥</span>
+                <span class="divider-line"></span>
+              </div>
+
               <div class="faqs-accordion-list" id="faqs-accordion-list">
                 <!-- Group A: Getting Started -->
                 <div class="faq-group-label">Getting Started</div>
@@ -2445,7 +2531,7 @@
                     <span class="faq-arrow">▾</span>
                   </button>
                   <div class="faq-answer-content">
-                    <p>You can create four types of digital gifts:<br>• Postcards<br>• Letters<br>• Bouquets<br>• Greeting Cards</p>
+                    <p>You can create four types of digital gifts:<br>• <strong>Postcards</strong><br>• <strong>Letters</strong><br>• <strong>Bouquets</strong><br>• <strong>Greeting Cards</strong></p>
                   </div>
                 </div>
                 <div class="faq-item">
@@ -2535,17 +2621,38 @@
                     <p>Use the Forgot Password option on the login screen to reset your password.</p>
                   </div>
                 </div>
+
+                <!-- Need more help box -->
+                <div class="faqs-more-help-card">
+                  <span class="more-help-icon">💌</span>
+                  <h4>Need more help?</h4>
+                  <p>If you have any other questions or face an issue, visit the Contact Support section in your Profile. We're happy to help make your experience a little more special.</p>
+                  <button type="button" class="btn-primary btn-sm" id="btn-faqs-to-contact">Contact Support ♡</button>
+                </div>
               </div>
             </div>
 
-            <!-- Help Tab 2: Contact Support -->
-            <div class="help-tab-pane" id="pane-help-contact" style="display:none;">
+            <!-- Help Sub-Pane 2: Contact Support Form -->
+            <div class="help-detail-pane" id="pane-help-contact" style="display:none;">
+              <div class="subpage-topbar">
+                <button type="button" class="btn-subpage-back" data-back-to="help-hub">‹</button>
+                <h3 class="subpage-title">Contact Support</h3>
+                <div style="width:36px;"></div>
+              </div>
+              <p class="subpage-subtitle">We're always happy to hear from you.</p>
+              <div class="profile-divider">
+                <span class="divider-line"></span>
+                <span class="divider-heart">♥</span>
+                <span class="divider-line"></span>
+              </div>
+
               <div class="contact-support-form-card">
                 <div class="contact-card-header">
-                  <span style="font-size:26px;">💌</span>
+                  <span class="contact-header-badge">💌</span>
                   <h4>Get in Touch</h4>
-                  <p>We're always happy to hear from you.</p>
+                  <p>Have a question, suggestion or ran into an issue? Drop us a little note.</p>
                 </div>
+
                 <form id="form-contact-support" onsubmit="return false;">
                   <div class="form-group">
                     <label for="contact-name">Your Name</label>
@@ -2570,8 +2677,8 @@
                     <input type="text" id="contact-subject" class="form-control" placeholder="Briefly describe your issue..." required>
                   </div>
                   <div class="form-group">
-                    <label for="contact-message">Message</label>
-                    <textarea id="contact-message" class="form-control" rows="4" placeholder="Explain the problem in detail..." required></textarea>
+                    <label for="contact-message">Your Message</label>
+                    <textarea id="contact-message" class="form-control" rows="4" placeholder="Explain the problem or share your thoughts with us..." required></textarea>
                   </div>
                   <div class="form-group">
                     <label>Attach Screenshot (Optional)</label>
@@ -2581,18 +2688,38 @@
                 </form>
 
                 <div class="contact-success-banner" id="contact-success-banner" style="display:none;">
-                  <div style="font-size:32px; margin-bottom:6px;">✨</div>
-                  <h4 style="font-family:'Playfair Display',serif; color:#521319; margin:0 0 4px;">Message Received!</h4>
-                  <p style="font-size:12px; color:#87585F; margin:0 0 8px;">We'll get back to you soon. Thank you for reaching out.</p>
-                  <p style="font-size:11px; font-weight:700; color:#521319;" id="contact-ticket-ref">Ticket ID: TICK-18301</p>
+                  <div style="font-size:32px; margin-bottom:6px;">💌</div>
+                  <h4 style="font-family:'Playfair Display',serif; color:#521319; margin:0 0 6px;">Your message has been received!</h4>
+                  <p style="font-size:12px; color:#87585F; margin:0 0 10px;">We'll get back to you soon. Thank you for reaching out.</p>
+                  <p style="font-size:11.5px; font-weight:700; color:#521319; background:#FFF; padding:6px 14px; border-radius:10px; border:1px solid #E5BAC4; display:inline-block;" id="contact-ticket-ref">Reference: TICK-18301</p>
+                  <div style="margin-top:16px;">
+                    <button type="button" class="btn-secondary btn-sm" id="btn-reset-support-card">Send Another Message</button>
+                  </div>
+                </div>
+
+                <div class="contact-other-ways">
+                  <h5>Other ways to reach us</h5>
+                  <p>• <strong>Email Support:</strong> <a href="mailto:support@alittlesomething.love" style="color:#7C273C;">support@alittlesomething.love</a><br>• <strong>FAQs:</strong> Find quick answers in our <a href="#" id="link-contact-to-faqs" style="color:#7C273C; text-decoration:underline;">FAQs section</a>.</p>
                 </div>
               </div>
             </div>
 
-            <!-- Help Tab 3: About the App -->
-            <div class="help-tab-pane" id="pane-help-about" style="display:none;">
-              <div class="about-text-card">
-                <h4 class="about-card-title">About the App</h4>
+            <!-- Help Sub-Pane 3: About the App (Verbatim Sections 1-6) -->
+            <div class="help-detail-pane" id="pane-help-about" style="display:none;">
+              <div class="subpage-topbar">
+                <button type="button" class="btn-subpage-back" data-back-to="help-hub">‹</button>
+                <h3 class="subpage-title">About the App</h3>
+                <div style="width:36px;"></div>
+              </div>
+              <p class="subpage-subtitle">App details, version and what we're about.</p>
+              <div class="profile-divider">
+                <span class="divider-line"></span>
+                <span class="divider-heart">♥</span>
+                <span class="divider-line"></span>
+              </div>
+
+              <div class="legal-text-card">
+                <h4>About the App</h4>
                 <h5>1. Our Story</h5>
                 <p>A Little Something is a digital gifting and creative expression app designed to make thoughtful gestures feel more personal. It brings the charm of handwritten letters, postcards, greeting cards and bouquets into a digital space, allowing people to create and send little expressions of affection.</p>
                 <h5>2. Our Philosophy</h5>
@@ -2619,8 +2746,20 @@
               </div>
             </div>
 
-            <!-- Help Tab 4: Terms & Conditions -->
-            <div class="help-tab-pane" id="pane-help-terms" style="display:none;">
+            <!-- Help Sub-Pane 4: Terms & Conditions (Verbatim Sections 1-10) -->
+            <div class="help-detail-pane" id="pane-help-terms" style="display:none;">
+              <div class="subpage-topbar">
+                <button type="button" class="btn-subpage-back" data-back-to="help-hub">‹</button>
+                <h3 class="subpage-title">Terms & Conditions</h3>
+                <div style="width:36px;"></div>
+              </div>
+              <p class="subpage-subtitle">Our community guidelines and user terms.</p>
+              <div class="profile-divider">
+                <span class="divider-line"></span>
+                <span class="divider-heart">♥</span>
+                <span class="divider-line"></span>
+              </div>
+
               <div class="legal-text-card">
                 <h4>Terms & Conditions</h4>
                 <small>Last updated: November 2026</small>
@@ -2628,44 +2767,70 @@
                 <h5>1. Using the App</h5>
                 <p>A Little Something allows users to create personalised digital postcards, letters, bouquets and greeting cards. You agree to use the app responsibly and only for lawful purposes.</p>
                 <h5>2. Your Creations</h5>
-                <p>You own the personal content you create, including your messages, photographs and uploaded images. You are responsible for the content you upload and share. Do not upload content that is harmful, offensive, misleading or violates someone else's rights.</p>
+                <p>• You own the personal content you create, including your messages, photographs and uploaded images.<br>• You are responsible for the content you upload and share.<br>• Do not upload content that is harmful, offensive, misleading or violates someone else's rights.<br>• You must have permission to use photographs or other content belonging to someone else.</p>
                 <h5>3. Sharing Your Creations</h5>
-                <p>You can share your creations with others through a unique link. Anyone with access to a shared link may be able to view the creation. You are responsible for sharing links only with people you trust.</p>
+                <p>• You can share your creations with others through a unique link.<br>• Anyone with access to a shared link may be able to view the creation.<br>• You are responsible for sharing links only with people you trust.<br>• Do not use sharing features to send unwanted or harmful content.</p>
                 <h5>4. Your Vault and Keepsakes</h5>
-                <p>Your Vault stores your drafts and completed creations. Keepsakes allows you to preserve personal memories and collaboratively collect creations with friends.</p>
+                <p>• Your Vault stores your drafts and completed creations.<br>• Keepsakes allows you to preserve personal memories and collaboratively collect creations with friends.<br>• You are responsible for managing the content you choose to save.<br>• We recommend keeping a separate copy of anything especially important.</p>
                 <h5>5. Privacy</h5>
                 <p>Your personal information and account details should be handled in accordance with our Privacy Policy. We do not intend for your private creations to be publicly accessible unless you choose to share them.</p>
                 <h5>6. User Responsibilities</h5>
-                <p>You agree not to misuse the app or its features, attempt to access another user's private account, or interfere with the app's functionality.</p>
+                <p>You agree not to:<br>• Misuse the app or its features.<br>• Attempt to access another user's private account.<br>• Copy, distribute or misuse another user's creations without permission.<br>• Interfere with the app's functionality or security.</p>
                 <h5>7. Availability and Changes</h5>
-                <p>We aim to keep the app accessible and functioning smoothly. However, certain features may occasionally be unavailable due to maintenance, technical issues or updates.</p>
+                <p>We aim to keep the app accessible and functioning smoothly. However, certain features may occasionally be unavailable due to maintenance, technical issues or updates. We may modify or discontinue features as the app evolves.</p>
                 <h5>8. Account and Content Management</h5>
-                <p>You can manage your account and saved creations through the app. If you choose to delete your account, associated content may also be deleted.</p>
+                <p>You can manage your account and saved creations through the app. If you choose to delete your account, associated content may also be deleted, subject to applicable retention requirements.</p>
                 <h5>9. Changes to These Terms</h5>
-                <p>We may update these Terms & Conditions from time to time. Any changes will be reflected on this page.</p>
+                <p>We may update these Terms & Conditions from time to time. Any changes will be reflected on this page. Continued use of the app means you accept the updated terms.</p>
                 <h5>10. Contact Us</h5>
-                <p>Have questions about these terms? Reach out to us through the Help & Support section in the app.</p>
+                <p>Have questions about these terms? Reach out to us through the <strong>Help & Support</strong> section in the app.</p>
+                <div style="text-align:center; margin-top:16px;">
+                  <p><strong>A Little Something – From Me to You</strong><br><em>Because every little gesture deserves to be remembered.</em></p>
+                </div>
               </div>
             </div>
 
-            <!-- Help Tab 5: Privacy Policy -->
-            <div class="help-tab-pane" id="pane-help-privacy" style="display:none;">
+            <!-- Help Sub-Pane 5: Privacy Policy (Verbatim Sections 1-10) -->
+            <div class="help-detail-pane" id="pane-help-privacy" style="display:none;">
+              <div class="subpage-topbar">
+                <button type="button" class="btn-subpage-back" data-back-to="help-hub">‹</button>
+                <h3 class="subpage-title">Privacy Policy</h3>
+                <div style="width:36px;"></div>
+              </div>
+              <p class="subpage-subtitle">How your data and creations are protected.</p>
+              <div class="profile-divider">
+                <span class="divider-line"></span>
+                <span class="divider-heart">♥</span>
+                <span class="divider-line"></span>
+              </div>
+
               <div class="legal-text-card">
                 <h4>Privacy Policy</h4>
                 <small>Last updated: November 2026</small>
                 <p>At <strong>A Little Something – From Me to You</strong>, we believe that personal messages and memories deserve to be treated with care. This Privacy Policy explains how your information is collected, used and protected when you use our app.</p>
                 <h5>1. Information We Collect</h5>
-                <p>• Personal Details: Your name, email address and profile picture.<br>• Contact Details: Names, email addresses and birthdays of people you choose to save in My People.<br>• Creative Content: Postcards, letters, bouquets, greeting cards, photographs and messages you create.<br>• Account Information: Login details and account-related information.</p>
+                <p>When you use the app, we may collect:<br>• <strong>Personal Details:</strong> Your name, email address and profile picture.<br>• <strong>Contact Details:</strong> Names, email addresses and birthdays of people you choose to save in My People.<br>• <strong>Creative Content:</strong> Postcards, letters, bouquets, greeting cards, photographs and messages you create.<br>• <strong>Account Information:</strong> Login details and account-related information.<br>• <strong>Usage Information:</strong> Basic information about how you interact with the app to help improve its functionality.</p>
                 <h5>2. How We Use Your Information</h5>
-                <p>Your information is used to create and manage your account, save drafts and completed creations in your Vault, help you manage saved contacts, enable shared scrapbooks, and deliver notifications.</p>
+                <p>Your information is used to:<br>• Create and manage your account.<br>• Allow you to create and personalise digital gifts.<br>• Save drafts and completed creations in your Vault.<br>• Help you manage your saved contacts.<br>• Enable shared scrapbook experiences through Keepsakes.<br>• Deliver notifications and important updates.<br>• Respond to support requests and improve the app experience.</p>
                 <h5>3. Your Creations and Privacy</h5>
-                <p>Your unfinished drafts remain private to your account. Your Vault is a personal space accessible only to you. Shared Keepsakes scrapbooks are accessible to invited participants.</p>
+                <p>We understand that your creations can contain personal messages and meaningful memories.<br>• Your unfinished drafts remain private to your account.<br>• Your Vault is a personal space accessible only to you.<br>• Shared Keepsakes scrapbooks are accessible to invited participants.<br>• Creations shared through a public link may be viewed by anyone who has access to that link.<br>• We do not make your private creations publicly available without your action.</p>
                 <h5>4. Sharing of Information</h5>
-                <p>We do not sell your personal information. Your information may be shared only when necessary to enable features you choose to use.</p>
+                <p>We do not sell your personal information. Your information may be shared only when necessary to:<br>• Enable the features you choose to use, such as sharing a creation or collaborating on a scrapbook.<br>• Provide essential app services through authorised service providers.<br>• Comply with applicable legal requirements.</p>
                 <h5>5. Data Security</h5>
-                <p>We take reasonable measures to protect your personal information and creations from unauthorised access, misuse or loss.</p>
+                <p>We take reasonable measures to protect your personal information and creations from unauthorised access, misuse or loss. However, no digital platform can guarantee complete security, and users should avoid sharing sensitive personal information through public links.</p>
                 <h5>6. Your Choices and Controls</h5>
-                <p>You can edit your profile information, manage saved contacts in My People, control notification preferences, and request deletion of your account.</p>
+                <p>You remain in control of your account and personal information. You can:<br>• Edit your profile information.<br>• Manage saved contacts in My People.<br>• Control notification preferences.<br>• Manage access to shared creations.<br>• Delete saved creations.<br>• Request deletion of your account.</p>
+                <h5>7. Data Retention and Deletion</h5>
+                <p>Your information is retained for as long as necessary to provide the app's services. If you choose to delete your account, your personal information and associated creations will be deleted or handled according to applicable retention requirements.</p>
+                <h5>8. Children's Privacy</h5>
+                <p>The app is not intended to collect personal information from children without appropriate parental or guardian consent. If we become aware of such collection, appropriate steps will be taken to address it.</p>
+                <h5>9. Updates to This Policy</h5>
+                <p>We may update this Privacy Policy as the app develops. Any changes will be reflected on this page along with the revised update date.</p>
+                <h5>10. Contact Us</h5>
+                <p>If you have questions or concerns about your privacy, please reach out through the <strong>Help & Support</strong> section of the app.</p>
+                <div style="text-align:center; margin-top:16px;">
+                  <p><strong>A Little Something – From Me to You</strong><br><em>Your little moments, your memories, your privacy.</em></p>
+                </div>
               </div>
             </div>
           </div>

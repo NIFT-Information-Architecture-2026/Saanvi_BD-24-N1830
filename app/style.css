@@ -8057,9 +8057,20 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   color: #C78292;
-  font-size: 12px;
-  letter-spacing: 4px;
+  margin: 4px 0 16px 0;
+}
+
+.profile-divider .divider-line {
+  width: 44px;
+  height: 1px;
+  background: #E5BCC6;
+}
+
+.profile-divider .divider-heart {
+  color: #87293E;
+  font-size: 11px;
 }
 
 /* Profile User Card */
@@ -8100,6 +8111,14 @@ body {
   font-weight: 600;
   color: #521319;
   box-shadow: 0 3px 10px rgba(117, 38, 59, 0.1);
+}
+
+.user-avatar-divider {
+  width: 1px;
+  height: 48px;
+  background: #EBDAD5;
+  flex-shrink: 0;
+  margin: 0 2px;
 }
 
 .user-details-wrap {
@@ -8149,12 +8168,13 @@ body {
   border-color: #7C273C;
 }
 
-/* 4 Menu Cards Grid */
+/* 4 Menu Cards (Single column vertical stack per reference design) */
 .profile-menu-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 22px;
+  width: 100%;
 }
 
 .profile-menu-card {
@@ -8168,6 +8188,8 @@ body {
   box-shadow: 0 3px 12px rgba(117, 38, 59, 0.04);
   cursor: pointer;
   transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .profile-menu-card:hover {
@@ -8183,12 +8205,19 @@ body {
   border-radius: 12px;
   background: #FDF0F3;
   border: 1px solid #F2D2DA;
+  color: #7C273C;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
   position: relative;
   flex-shrink: 0;
+}
+
+.menu-svg {
+  width: 22px;
+  height: 22px;
+  stroke: #7C273C;
 }
 
 .menu-unread-badge {
@@ -8231,8 +8260,8 @@ body {
 }
 
 .menu-chevron {
-  font-size: 18px;
-  color: #BCA3AA;
+  font-size: 20px;
+  color: #C2A5AE;
   font-weight: 300;
   transition: transform 0.2s ease;
 }
@@ -8291,14 +8320,22 @@ body {
 }
 
 .btn-subpage-back {
-  background: #FFF;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  background: #FFFDFD;
   border: 1px solid #EBDAD5;
-  border-radius: 18px;
-  padding: 6px 14px;
-  font-size: 12.5px;
   color: #5A1926;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  padding: 0;
+  box-shadow: 0 1px 4px rgba(117, 38, 59, 0.05);
   transition: all 0.15s ease;
 }
 
@@ -8338,23 +8375,20 @@ body {
   text-align: center;
   font-size: 12.5px;
   color: #7E4D57;
-  margin: 0 0 18px 0;
+  margin: 0 0 10px 0;
 }
 
 /* My People Toolbar */
-.people-toolbar {
+.people-toolbar-row {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
 .people-search-wrapper {
   position: relative;
   flex: 1;
-  min-width: 200px;
 }
 
 .people-search-wrapper .search-icon {
@@ -8364,6 +8398,7 @@ body {
   transform: translateY(-50%);
   font-size: 13px;
   opacity: 0.6;
+  pointer-events: none;
 }
 
 .people-search-input {
@@ -8383,52 +8418,79 @@ body {
   box-shadow: 0 0 0 3px rgba(199, 130, 146, 0.15);
 }
 
-.people-filter-pills, .notif-filter-pills {
-  display: flex;
-  gap: 6px;
+.btn-add-person-pill {
+  background: #7C273C;
+  color: #FFF;
+  border: 1px solid #7C273C;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
 }
 
-.people-pill-btn, .notif-pill-btn {
-  background: #FFF;
+.btn-add-person-pill:hover {
+  background: #5A1926;
+  border-color: #5A1926;
+}
+
+/* Segmented Filter Bar */
+.people-segmented-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.people-tab-btn {
+  background: #FFFDFD;
   border: 1px solid #EBDAD5;
-  border-radius: 16px;
-  padding: 6px 12px;
-  font-size: 11.5px;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
   font-weight: 500;
   color: #7E4D57;
   cursor: pointer;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
-.people-pill-btn:hover, .notif-pill-btn:hover {
+.people-tab-btn:hover {
   background: #FAF0F2;
   color: #521319;
 }
 
-.people-pill-btn.active, .notif-pill-btn.active {
+.people-tab-btn.active {
   background: #7C273C;
   border-color: #7C273C;
   color: #FFF;
 }
 
-/* Contacts List & Cards */
+/* Contacts List & Stamp Cards */
 .people-contacts-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 12px;
   margin-bottom: 24px;
+  width: 100%;
 }
 
 .contact-card {
   background: #FFFDFD;
   border: 1.2px solid #EBDAD5;
   border-radius: 16px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  gap: 14px;
   box-shadow: 0 3px 10px rgba(117, 38, 59, 0.04);
   transition: all 0.2s ease;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .contact-card:hover {
@@ -8437,31 +8499,35 @@ body {
   border-color: #DFB7C2;
 }
 
-.contact-main-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.contact-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #FCE8EC;
-  border: 1.5px solid #E3AAB6;
-  color: #521319;
+.contact-stamp-frame {
+  width: 50px;
+  height: 60px;
+  min-width: 50px;
+  background: #FFF;
+  border: 1.5px dashed #D6A4B0;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(117, 38, 59, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 17px;
-  font-weight: 600;
   flex-shrink: 0;
+  overflow: hidden;
+  padding: 3px;
+  box-sizing: border-box;
 }
 
-.contact-info {
+.contact-stamp-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.contact-main-col {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .contact-name-row {
@@ -8492,7 +8558,7 @@ body {
 .contact-email {
   font-size: 11.5px;
   color: #7E4D57;
-  margin: 2px 0 0 0;
+  margin: 1px 0 0 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -8504,6 +8570,7 @@ body {
   gap: 8px;
   font-size: 11px;
   color: #6F454E;
+  margin-top: 2px;
 }
 
 .contact-bday-pill {
@@ -8530,19 +8597,17 @@ body {
   text-overflow: ellipsis;
 }
 
-.contact-actions-row {
+.contact-actions-col {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  border-top: 1px solid #F6EAE7;
-  padding-top: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .btn-contact-action {
   background: none;
   border: none;
-  font-size: 13px;
+  font-size: 13.5px;
   color: #8A5D67;
   cursor: pointer;
   padding: 4px 6px;
@@ -8766,103 +8831,138 @@ input:checked + .slider:before {
 .privacy-cards-stack {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.privacy-card {
-  background: #FFFDFD;
-  border: 1.2px solid #EBDAD5;
-  border-radius: 16px;
-  padding: 16px 18px;
-  box-shadow: 0 3px 12px rgba(117, 38, 59, 0.04);
-}
-
-.privacy-card-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 16px;
-  font-weight: 600;
-  color: #43121C;
-  margin: 0 0 12px 0;
-}
-
-.privacy-notice-box {
-  background: #FAF2EF;
-  border-left: 3px solid #C78292;
-  padding: 10px 14px;
-  border-radius: 0 8px 8px 0;
-  font-size: 12px;
-  color: #6F454E;
-  line-height: 1.4;
-  margin-bottom: 12px;
-}
-
-.privacy-action-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.privacy-action-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: #FFF;
-  border: 1px solid #F0DFDB;
-  border-radius: 12px;
-  padding: 12px 14px;
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.15s ease;
+  gap: 18px;
   width: 100%;
-  box-sizing: border-box;
 }
 
-.privacy-action-row:hover {
-  background: #FAF2EF;
-  border-color: #DFB7C2;
-}
-
-.privacy-action-row.danger {
-  color: #A31D2E;
-}
-
-.privacy-action-row.danger:hover {
-  background: #FDF0F2;
-  border-color: #E8A8B4;
-}
-
-.row-icon {
-  font-size: 18px;
-  width: 24px;
-  text-align: center;
-}
-
-.row-text {
-  flex: 1;
+.privacy-section-group {
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
-.row-text strong {
-  font-size: 13px;
-  color: #3C1C24;
+.privacy-section-label {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #4A121F;
+  margin: 0 0 2px 4px;
 }
 
-.privacy-action-row.danger .row-text strong {
+.privacy-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-menu-card.danger-card .menu-icon-wrap {
+  background: #FDF0F2;
+  border-color: #F7D0D7;
+}
+
+.profile-menu-card.danger-card .menu-svg {
+  stroke: #A31D2E;
+}
+
+.profile-menu-card.danger-card .text-danger {
   color: #A31D2E;
 }
 
-.row-text small {
-  font-size: 11px;
-  color: #87585F;
+.profile-menu-card.danger-card:hover {
+  border-color: #EAA8B4;
+  background: #FFF5F6;
 }
 
-.row-chevron {
-  font-size: 18px;
-  color: #BCA3AA;
+/* ================= NOTIFICATIONS BOTTOM ROW ================= */
+.notif-bottom-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+  margin-bottom: 24px;
+}
+
+.btn-notif-clear-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFFDFD;
+  border: 1px solid #D697A6;
+  color: #7C273C;
+  border-radius: 20px;
+  padding: 8px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(117, 38, 59, 0.04);
+}
+
+.btn-notif-clear-all:hover {
+  background: #7C273C;
+  color: #FFF;
 }
 
 /* ================= HELP & SUPPORT ================= */
+.help-hub-view {
+  animation: fadeInSubpage 0.25s ease-out;
+}
+
+.help-artwork-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+  padding-bottom: 16px;
+}
+
+.help-footer-envelope {
+  max-width: 140px;
+  height: auto;
+  opacity: 0.92;
+  filter: drop-shadow(0 4px 12px rgba(117, 38, 59, 0.08));
+}
+
+.help-detail-pane {
+  animation: fadeInSubpage 0.25s ease-out;
+}
+
+.faqs-more-help-card {
+  background: #FFFDFD;
+  border: 1.5px dashed #E6B8C4;
+  border-radius: 16px;
+  padding: 18px 20px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.faqs-more-help-card h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 16px;
+  color: #4A121F;
+  margin: 6px 0 4px;
+}
+
+.faqs-more-help-card p {
+  font-size: 12px;
+  color: #7E4D57;
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+.contact-other-ways {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed #EBDAD5;
+  font-size: 12px;
+  color: #6F454E;
+}
+
+.contact-other-ways h5 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 14px;
+  color: #4A121F;
+  margin: 0 0 6px 0;
+}
 .help-section-switcher {
   display: flex;
   flex-wrap: wrap;
