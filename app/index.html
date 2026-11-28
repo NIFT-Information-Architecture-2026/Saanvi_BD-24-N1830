@@ -1591,73 +1591,87 @@
               <div class="stickers-popup-grid" id="card-stickers-popup-grid"></div>
             </div>
 
-            <!-- Popup Modal: Select Vinyl Song -->
+            <!-- Popup Modal: Connect Song to Vinyl Record -->
             <div class="card-popup-picker vinyl-song-modal" id="card-vinyl-song-modal" style="display:none;">
               <div class="popup-picker-header">
-                <span>Select Song for Vinyl Record</span>
-                <button class="btn-popup-close" id="btn-close-vinyl-modal">×</button>
+                <div class="popup-picker-title-group">
+                  <span class="popup-picker-title">Connect Song to Vinyl Record 🎵</span>
+                  <span class="popup-picker-count">Search real music, choose trending hits, or upload audio</span>
+                </div>
+                <button type="button" class="btn-popup-close" id="btn-close-vinyl-modal" title="Close">×</button>
               </div>
+
               <div class="vinyl-song-modal-body">
-                <div class="vinyl-presets-list" id="vinyl-presets-list">
-                  <div class="vinyl-preset-option active" data-song-id="golden-hour" data-title="Golden Hour (Acoustic)">
-                    <div class="vinyl-preset-icon">🌅</div>
-                    <div class="vinyl-preset-info">
-                      <div class="vinyl-preset-title">Golden Hour</div>
-                      <div class="vinyl-preset-sub">Warm acoustic arpeggio</div>
-                    </div>
-                    <div class="vinyl-preset-check">✓</div>
+                <!-- Navigation Tabs -->
+                <div class="vinyl-modal-tabs">
+                  <button type="button" class="vinyl-tab-btn active" data-vtab="search">🔍 Search Songs</button>
+                  <button type="button" class="vinyl-tab-btn" data-vtab="trending">✨ Trending Hits</button>
+                  <button type="button" class="vinyl-tab-btn" data-vtab="upload">📁 Upload Audio</button>
+                </div>
+
+                <!-- Tab 1: Live Music Search (Global Music Catalog) -->
+                <div class="vinyl-tab-panel active" id="vinyl-panel-search">
+                  <div class="vinyl-search-input-wrap">
+                    <input type="text" id="vinyl-music-search-input" class="vinyl-search-input" placeholder="Search any song or artist (e.g. Taylor Swift, Bruno Mars, Arijit)..." />
+                    <button type="button" id="btn-vinyl-music-search" class="btn-vinyl-search-go">Search</button>
                   </div>
-                  <div class="vinyl-preset-option" data-song-id="la-vie-en-rose" data-title="La Vie En Rose (Music Box)">
-                    <div class="vinyl-preset-icon">🌹</div>
-                    <div class="vinyl-preset-info">
-                      <div class="vinyl-preset-title">La Vie En Rose</div>
-                      <div class="vinyl-preset-sub">Romantic music box waltz</div>
-                    </div>
-                    <div class="vinyl-preset-check">✓</div>
+
+                  <div class="vinyl-quick-tags" id="vinyl-quick-tags">
+                    <span class="vinyl-tag" data-query="Taylor Swift Lover">Taylor Swift</span>
+                    <span class="vinyl-tag" data-query="Lady Gaga Bruno Mars Die With A Smile">Bruno Mars</span>
+                    <span class="vinyl-tag" data-query="JVKE golden hour">JVKE</span>
+                    <span class="vinyl-tag" data-query="Billie Eilish Birds of a Feather">Billie Eilish</span>
+                    <span class="vinyl-tag" data-query="Stephen Sanchez Until I Found You">Stephen Sanchez</span>
+                    <span class="vinyl-tag" data-query="Arijit Singh Tum Hi Ho">Arijit Singh</span>
                   </div>
-                  <div class="vinyl-preset-option" data-song-id="midnight-serenade" data-title="Midnight Serenade (Lo-Fi)">
-                    <div class="vinyl-preset-icon">🌙</div>
-                    <div class="vinyl-preset-info">
-                      <div class="vinyl-preset-title">Midnight Serenade</div>
-                      <div class="vinyl-preset-sub">Cozy nocturnal dream bells</div>
+
+                  <div class="vinyl-search-results-list" id="vinyl-search-results">
+                    <div class="vinyl-search-empty-state">
+                      <div class="empty-state-icon">🎧</div>
+                      <p>Type any song or artist above to connect live audio to your vinyl record!</p>
                     </div>
-                    <div class="vinyl-preset-check">✓</div>
-                  </div>
-                  <div class="vinyl-preset-option" data-song-id="sunflower-waltz" data-title="Sunflower Waltz (Piano)">
-                    <div class="vinyl-preset-icon">🌻</div>
-                    <div class="vinyl-preset-info">
-                      <div class="vinyl-preset-title">Sunflower Waltz</div>
-                      <div class="vinyl-preset-sub">Sunny piano chords</div>
-                    </div>
-                    <div class="vinyl-preset-check">✓</div>
-                  </div>
-                  <div class="vinyl-preset-option" data-song-id="claire-de-lune" data-title="Clair de Lune (Celestial)">
-                    <div class="vinyl-preset-icon">💫</div>
-                    <div class="vinyl-preset-info">
-                      <div class="vinyl-preset-title">Clair de Lune</div>
-                      <div class="vinyl-preset-sub">Soft celestial melody</div>
-                    </div>
-                    <div class="vinyl-preset-check">✓</div>
                   </div>
                 </div>
 
-                <div class="vinyl-custom-song-section">
-                  <div class="vinyl-custom-divider"><span>or customize title</span></div>
-                  <div class="vinyl-input-group">
-                    <label class="vinyl-input-label">Song Title &amp; Artist:</label>
-                    <input type="text" id="vinyl-custom-title-input" class="vinyl-modal-input" placeholder="e.g. Lover - Taylor Swift" />
+                <!-- Tab 2: Trending / Love Songs with Verified Real Audio -->
+                <div class="vinyl-tab-panel" id="vinyl-panel-trending" style="display:none;">
+                  <div class="vinyl-trending-list" id="vinyl-trending-list">
+                    <!-- Populated dynamically with real songs -->
                   </div>
-                  <div class="vinyl-input-group">
-                    <label class="vinyl-input-label">Dedication Note:</label>
-                    <input type="text" id="vinyl-custom-dedication-input" class="vinyl-modal-input" placeholder="e.g. For Kabir" />
-                  </div>
-                  <div class="vinyl-input-group">
-                    <label class="vinyl-input-label">Upload Audio (optional):</label>
+                </div>
+
+                <!-- Tab 3: Upload Audio / Voice Note -->
+                <div class="vinyl-tab-panel" id="vinyl-panel-upload" style="display:none;">
+                  <div class="vinyl-upload-zone" id="vinyl-upload-dropzone">
+                    <div class="vinyl-upload-icon">🎙️</div>
+                    <div class="vinyl-upload-text">Upload audio file (.mp3, .m4a, .wav)</div>
+                    <div class="vinyl-upload-sub">Add your favorite audio track or a personal voice note</div>
                     <input type="file" id="vinyl-audio-file-input" accept="audio/*" class="vinyl-file-input" />
+                    <button type="button" class="btn-vinyl-browse-file" id="btn-vinyl-browse-file">Choose Audio File</button>
+                    <div class="vinyl-upload-status" id="vinyl-upload-status" style="display:none;"></div>
                   </div>
                 </div>
 
-                <button class="card-action-btn primary full-width" id="btn-confirm-vinyl-song">
+                <!-- Currently Selected Song Summary Card -->
+                <div class="vinyl-selected-card" id="vinyl-selected-card">
+                  <div class="vinyl-selected-art-col">
+                    <img id="vinyl-selected-art" src="assets/medium_letter.png" alt="Album Cover" class="vinyl-selected-art" />
+                    <button type="button" class="btn-audition-play" id="btn-audition-selected" title="Preview audio">▶</button>
+                  </div>
+                  <div class="vinyl-selected-details">
+                    <div class="vinyl-selected-badge">ACTIVE SONG ON VINYL</div>
+                    <div class="vinyl-selected-title" id="vinyl-selected-title">Die With A Smile</div>
+                    <div class="vinyl-selected-artist" id="vinyl-selected-artist">Lady Gaga &amp; Bruno Mars</div>
+                  </div>
+                </div>
+
+                <!-- Dedication note on Side A -->
+                <div class="vinyl-input-group">
+                  <label class="vinyl-input-label">Dedication Note (printed on Center Vinyl Label):</label>
+                  <input type="text" id="vinyl-custom-dedication-input" class="vinyl-modal-input" placeholder="e.g. For Kabir ♡" />
+                </div>
+
+                <button type="button" class="card-action-btn primary full-width" id="btn-confirm-vinyl-song">
                   <span>Place Vinyl on Card ♡</span>
                 </button>
               </div>

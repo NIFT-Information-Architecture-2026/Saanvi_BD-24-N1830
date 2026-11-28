@@ -2277,145 +2277,157 @@ document.addEventListener('DOMContentLoaded', () => {
     'crimson-heart': 'assets/letter/seals/seal_crimson_heart.png'
   };
 
-  // Web Audio Synth for Functional Vinyl Player
-  let vinylAudioCtx = null;
+  // Verified Trending Real Audio Tracks
+  const VERIFIED_TRENDING_TRACKS = [
+    {
+      id: 'die-with-a-smile',
+      title: 'Die With A Smile',
+      artist: 'Lady Gaga & Bruno Mars',
+      album: 'Die With A Smile - Single',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/11/ae/f2/11aef294-f57c-bab9-c9fc-529162984e62/24UMGIM85348.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/07/6a/99/076a99ed-b946-431b-6f1f-54fa187ca5bd/mzaf_8102882277995122875.plus.aac.p.m4a'
+    },
+    {
+      id: 'golden-hour-real',
+      title: 'golden hour',
+      artist: 'JVKE',
+      album: 'this is what ____ feels like',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8d/1a/7b/8d1a7b44-316f-7c7f-4380-935673fb697a/5056167175650.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/30/02/8c/30028c8a-a125-5466-bcc6-27a83b1c0135/mzaf_16911571635366913039.plus.aac.p.m4a'
+    },
+    {
+      id: 'birds-of-a-feather',
+      title: 'BIRDS OF A FEATHER',
+      artist: 'Billie Eilish',
+      album: 'HIT ME HARD AND SOFT',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/92/9f/69/929f69f1-9977-3a44-d674-11f70c852d1b/24UMGIM36186.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/34/31/d3/3431d34e-847f-5d66-df83-0bce688d997e/mzaf_18106743962423782018.plus.aac.p.m4a'
+    },
+    {
+      id: 'until-i-found-you',
+      title: 'Until I Found You',
+      artist: 'Stephen Sanchez',
+      album: 'Until I Found You - Single',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/64/d2/c5/64d2c511-67f4-ae09-5153-d39c3da413a3/21UMGIM75467.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/53/82/c1/5382c1d4-ddba-aa2b-90df-57268895fac9/mzaf_8926201202931541051.plus.aac.p.m4a'
+    },
+    {
+      id: 'lover-taylor',
+      title: 'Lover',
+      artist: 'Taylor Swift',
+      album: 'Lover',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/49/3d/ab/493dab54-f920-9043-6181-80993b8116c9/19UMGIM53909.rgb.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e0/db/47/e0db47b0-7f70-0631-0414-cd4777d2fb3e/mzaf_6362891154838442638.plus.aac.p.m4a'
+    },
+    {
+      id: 'tum-hi-ho',
+      title: 'Tum Hi Ho',
+      artist: 'Arijit Singh',
+      album: 'Aashiqui 2',
+      artwork: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/bb/23/ee/bb23eeed-0c35-4f1d-2b11-485622777ae4/8902894353007_cover.jpg/100x100bb.jpg',
+      audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3a/8c/9b/3a8c9b0b-2def-750a-f615-1555bf941edf/mzaf_17229496441442805917.plus.aac.p.m4a'
+    }
+  ];
+
+  // Active Audio Controller for Vinyl Player & Audition Previews
+  let mainVinylAudio = null;
+  let auditionAudio = null;
+  let currentlyAuditioningUrl = null;
   let vinylIsPlaying = false;
-  let vinylLoopTimer = null;
-  let vinylMelodyIdx = 0;
 
-  function initVinylAudio() {
-    if (!vinylAudioCtx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (AudioContext) vinylAudioCtx = new AudioContext();
-    }
-    if (vinylAudioCtx && vinylAudioCtx.state === 'suspended') {
-      vinylAudioCtx.resume();
-    }
-  }
-
-  function playVinylTone(freq, duration = 0.55) {
-    if (!vinylAudioCtx) return;
+  async function searchAppleMusicTracks(query) {
+    if (!query || !query.trim()) return [];
     try {
-      const osc = vinylAudioCtx.createOscillator();
-      const gain = vinylAudioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, vinylAudioCtx.currentTime);
-
-      gain.gain.setValueAtTime(0.001, vinylAudioCtx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.14, vinylAudioCtx.currentTime + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.0001, vinylAudioCtx.currentTime + duration);
-
-      osc.connect(gain);
-      gain.connect(vinylAudioCtx.destination);
-
-      osc.start(vinylAudioCtx.currentTime);
-      osc.stop(vinylAudioCtx.currentTime + duration);
-    } catch (e) {}
+      const resp = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query.trim())}&media=music&entity=song&limit=10`);
+      if (!resp.ok) return [];
+      const data = await resp.json();
+      return (data.results || []).map(r => ({
+        id: String(r.trackId),
+        title: r.trackName,
+        artist: r.artistName,
+        album: r.collectionName,
+        artwork: r.artworkUrl100 || r.artworkUrl60,
+        audioSrc: r.previewUrl
+      }));
+    } catch (err) {
+      console.warn('Music search error:', err);
+      return [];
+    }
   }
 
-  const VINYL_TRACK_MELODIES = {
-    'golden-hour': [
-      { f: 261.63, d: 0.6 },
-      { f: 329.63, d: 0.6 },
-      { f: 392.00, d: 0.7 },
-      { f: 523.25, d: 0.9 },
-      { f: 493.88, d: 0.6 },
-      { f: 392.00, d: 0.6 },
-      { f: 329.63, d: 0.7 },
-      { f: 440.00, d: 1.0 },
-      { f: 349.23, d: 0.6 },
-      { f: 440.00, d: 0.6 },
-      { f: 523.25, d: 0.8 },
-      { f: 392.00, d: 1.1 }
-    ],
-    'la-vie-en-rose': [
-      { f: 392.00, d: 0.7 },
-      { f: 493.88, d: 0.7 },
-      { f: 587.33, d: 0.9 },
-      { f: 659.25, d: 1.1 },
-      { f: 587.33, d: 0.7 },
-      { f: 493.88, d: 0.7 },
-      { f: 440.00, d: 0.8 },
-      { f: 392.00, d: 1.2 }
-    ],
-    'midnight-serenade': [
-      { f: 440.00, d: 0.8 },
-      { f: 523.25, d: 0.8 },
-      { f: 659.25, d: 1.0 },
-      { f: 587.33, d: 0.8 },
-      { f: 493.88, d: 0.8 },
-      { f: 392.00, d: 0.8 },
-      { f: 440.00, d: 1.3 }
-    ],
-    'sunflower-waltz': [
-      { f: 349.23, d: 0.6 },
-      { f: 440.00, d: 0.6 },
-      { f: 523.25, d: 0.8 },
-      { f: 587.33, d: 0.9 },
-      { f: 523.25, d: 0.6 },
-      { f: 440.00, d: 0.6 },
-      { f: 392.00, d: 0.7 },
-      { f: 349.23, d: 1.2 }
-    ],
-    'claire-de-lune': [
-      { f: 311.13, d: 0.9 },
-      { f: 349.23, d: 0.8 },
-      { f: 415.30, d: 1.0 },
-      { f: 466.16, d: 0.9 },
-      { f: 523.25, d: 1.2 },
-      { f: 466.16, d: 0.8 },
-      { f: 415.30, d: 1.1 }
-    ]
-  };
+  function toggleAuditionSong(audioSrc, btnEl) {
+    if (!audioSrc) return;
+    if (auditionAudio && currentlyAuditioningUrl === audioSrc && !auditionAudio.paused) {
+      auditionAudio.pause();
+      if (btnEl) {
+        btnEl.innerHTML = '▶';
+        btnEl.classList.remove('is-playing');
+      }
+      return;
+    }
+    if (auditionAudio) {
+      auditionAudio.pause();
+    }
+    stopVinylAudio();
 
-  let customVinylAudioEl = null;
+    auditionAudio = new Audio(audioSrc);
+    currentlyAuditioningUrl = audioSrc;
+    document.querySelectorAll('.btn-audition-play').forEach(b => {
+      b.innerHTML = '▶';
+      b.classList.remove('is-playing');
+    });
+    if (btnEl) {
+      btnEl.innerHTML = '⏸';
+      btnEl.classList.add('is-playing');
+    }
+
+    auditionAudio.play().catch(e => console.warn('Audition play prevented:', e));
+    auditionAudio.onended = () => {
+      if (btnEl) {
+        btnEl.innerHTML = '▶';
+        btnEl.classList.remove('is-playing');
+      }
+      currentlyAuditioningUrl = null;
+    };
+  }
 
   function startVinylAudio(customItem = null) {
     const vinylItem = customItem || (state.greetingCard.insideKeepsakes || []).find(i => i.type === 'vinyl');
-    vinylIsPlaying = true;
-    document.querySelectorAll('.vinyl-player-widget').forEach(el => el.classList.add('is-playing'));
-    document.querySelectorAll('.vinyl-play-btn').forEach(btn => {
-      btn.innerHTML = '⏸';
-      btn.title = 'Pause Record';
+    if (!vinylItem) return;
+
+    if (auditionAudio) {
+      auditionAudio.pause();
+      document.querySelectorAll('.btn-audition-play').forEach(b => {
+        b.innerHTML = '▶';
+        b.classList.remove('is-playing');
+      });
+    }
+
+    const audioUrl = vinylItem.audioSrc || (VERIFIED_TRENDING_TRACKS[0] && VERIFIED_TRENDING_TRACKS[0].audioSrc);
+    if (!audioUrl) return;
+
+    if (!mainVinylAudio || mainVinylAudio.src !== audioUrl) {
+      if (mainVinylAudio) mainVinylAudio.pause();
+      mainVinylAudio = new Audio(audioUrl);
+      mainVinylAudio.loop = true;
+    }
+
+    mainVinylAudio.play().then(() => {
+      vinylIsPlaying = true;
+      document.querySelectorAll('.vinyl-player-widget').forEach(el => el.classList.add('is-playing'));
+      document.querySelectorAll('.vinyl-play-btn').forEach(btn => {
+        btn.innerHTML = '⏸';
+        btn.title = 'Pause Record';
+      });
+    }).catch(err => {
+      console.warn('Playback error:', err);
     });
-
-    if (vinylItem && vinylItem.audioSrc) {
-      try {
-        if (!customVinylAudioEl) {
-          customVinylAudioEl = new Audio(vinylItem.audioSrc);
-          customVinylAudioEl.loop = true;
-        }
-        customVinylAudioEl.play();
-        return;
-      } catch (err) {}
-    }
-
-    initVinylAudio();
-    const songId = (vinylItem && vinylItem.songId) || 'golden-hour';
-    const melody = VINYL_TRACK_MELODIES[songId] || VINYL_TRACK_MELODIES['golden-hour'];
-    vinylMelodyIdx = 0;
-
-    function loopMelody() {
-      if (!vinylIsPlaying) return;
-      const note = melody[vinylMelodyIdx];
-      playVinylTone(note.f, note.d);
-      vinylMelodyIdx = (vinylMelodyIdx + 1) % melody.length;
-      vinylLoopTimer = setTimeout(loopMelody, note.d * 750);
-    }
-    loopMelody();
   }
 
   function stopVinylAudio() {
     vinylIsPlaying = false;
-    if (vinylLoopTimer) {
-      clearTimeout(vinylLoopTimer);
-      vinylLoopTimer = null;
-    }
-    if (customVinylAudioEl) {
-      try {
-        customVinylAudioEl.pause();
-        customVinylAudioEl.currentTime = 0;
-      } catch (err) {}
+    if (mainVinylAudio) {
+      mainVinylAudio.pause();
     }
     document.querySelectorAll('.vinyl-player-widget').forEach(el => el.classList.remove('is-playing'));
     document.querySelectorAll('.vinyl-play-btn').forEach(btn => {
@@ -2850,65 +2862,214 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: false });
   }
 
-  // Vinyl Song Modal & Functional Vinyl Record
-  let selectedVinylSongPreset = 'golden-hour';
-  let selectedVinylAudioBase64 = null;
+  // Connect Real Music to Vinyl Record
+  let activeSelectedSong = {
+    id: VERIFIED_TRENDING_TRACKS[0].id,
+    title: VERIFIED_TRENDING_TRACKS[0].title,
+    artist: VERIFIED_TRENDING_TRACKS[0].artist,
+    album: VERIFIED_TRENDING_TRACKS[0].album,
+    artwork: VERIFIED_TRENDING_TRACKS[0].artwork,
+    audioSrc: VERIFIED_TRENDING_TRACKS[0].audioSrc
+  };
   let editingVinylId = null;
 
-  function openVinylSongModal(existingVinyl = null) {
-    if (!cardVinylSongModal) return;
-    editingVinylId = existingVinyl ? existingVinyl.id : null;
-    selectedVinylSongPreset = (existingVinyl && existingVinyl.songId) || 'golden-hour';
-    selectedVinylAudioBase64 = (existingVinyl && existingVinyl.audioSrc) || null;
+  // Cache modal elements
+  const vinylTabBtns = document.querySelectorAll('.vinyl-tab-btn');
+  const vinylTabPanels = document.querySelectorAll('.vinyl-tab-panel');
+  const vinylMusicSearchInput = document.getElementById('vinyl-music-search-input');
+  const btnVinylMusicSearch = document.getElementById('btn-vinyl-music-search');
+  const vinylSearchResults = document.getElementById('vinyl-search-results');
+  const vinylQuickTags = document.querySelectorAll('.vinyl-tag');
+  const vinylTrendingList = document.getElementById('vinyl-trending-list');
+  const vinylUploadDropzone = document.getElementById('vinyl-upload-dropzone');
+  const btnVinylBrowseFile = document.getElementById('btn-vinyl-browse-file');
+  const vinylUploadStatus = document.getElementById('vinyl-upload-status');
+  const vinylSelectedCard = document.getElementById('vinyl-selected-card');
+  const vinylSelectedArt = document.getElementById('vinyl-selected-art');
+  const vinylSelectedTitle = document.getElementById('vinyl-selected-title');
+  const vinylSelectedArtist = document.getElementById('vinyl-selected-artist');
+  const btnAuditionSelected = document.getElementById('btn-audition-selected');
 
-    if (vinylPresetsList) {
-      vinylPresetsList.querySelectorAll('.vinyl-preset-option').forEach(opt => {
-        opt.classList.toggle('active', opt.dataset.songId === selectedVinylSongPreset);
-      });
-    }
-    if (vinylCustomTitleInput) {
-      vinylCustomTitleInput.value = (existingVinyl && existingVinyl.title) || '';
-    }
-    if (vinylCustomDedicationInput) {
-      vinylCustomDedicationInput.value = (existingVinyl && existingVinyl.dedication) || ('For ' + (state.greetingCard.insideTo || 'Kabir'));
-    }
-    if (vinylAudioFileInput) {
-      vinylAudioFileInput.value = '';
-    }
-    cardVinylSongModal.style.display = 'block';
-  }
+  function updateSelectedSongUI(song) {
+    if (!song) return;
+    activeSelectedSong = { ...song };
+    if (vinylSelectedArt) vinylSelectedArt.src = song.artwork || 'assets/medium_letter.png';
+    if (vinylSelectedTitle) vinylSelectedTitle.textContent = song.title || 'Selected Track';
+    if (vinylSelectedArtist) vinylSelectedArtist.textContent = song.artist || 'Live Music Stream';
 
-  function closeVinylSongModal() {
-    if (cardVinylSongModal) cardVinylSongModal.style.display = 'none';
-    editingVinylId = null;
-  }
-
-  if (btnCloseVinylModal) {
-    btnCloseVinylModal.addEventListener('click', closeVinylSongModal);
-  }
-
-  if (vinylPresetsList) {
-    vinylPresetsList.querySelectorAll('.vinyl-preset-option').forEach(opt => {
-      opt.addEventListener('click', () => {
-        vinylPresetsList.querySelectorAll('.vinyl-preset-option').forEach(o => o.classList.remove('active'));
-        opt.classList.add('active');
-        selectedVinylSongPreset = opt.dataset.songId;
-        if (vinylCustomTitleInput) {
-          vinylCustomTitleInput.value = opt.dataset.title;
-        }
-      });
+    document.querySelectorAll('.vinyl-music-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.songId === song.id || el.dataset.audioSrc === song.audioSrc);
     });
   }
 
+  function renderTrendingTracksList() {
+    if (!vinylTrendingList) return;
+    vinylTrendingList.innerHTML = '';
+    VERIFIED_TRENDING_TRACKS.forEach(trk => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'vinyl-music-item' + (activeSelectedSong.id === trk.id ? ' active' : '');
+      itemEl.dataset.songId = trk.id;
+      itemEl.dataset.audioSrc = trk.audioSrc;
+      itemEl.innerHTML = `
+        <img src="${trk.artwork}" alt="${trk.title}" class="vinyl-music-art" />
+        <div class="vinyl-music-info">
+          <div class="vinyl-music-title">${escapeHtml(trk.title)}</div>
+          <div class="vinyl-music-artist">${escapeHtml(trk.artist)}</div>
+        </div>
+        <div class="vinyl-music-actions">
+          <button type="button" class="btn-audition-play" title="Listen preview">▶</button>
+          <button type="button" class="btn-choose-song">Select</button>
+        </div>
+      `;
+      const auditionBtn = itemEl.querySelector('.btn-audition-play');
+      auditionBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleAuditionSong(trk.audioSrc, auditionBtn);
+      });
+      const chooseBtn = itemEl.querySelector('.btn-choose-song');
+      chooseBtn.addEventListener('click', () => {
+        updateSelectedSongUI(trk);
+      });
+      itemEl.addEventListener('click', (e) => {
+        if (!e.target.closest('.btn-audition-play')) {
+          updateSelectedSongUI(trk);
+        }
+      });
+      vinylTrendingList.appendChild(itemEl);
+    });
+  }
+
+  function renderSearchResults(tracks) {
+    if (!vinylSearchResults) return;
+    vinylSearchResults.innerHTML = '';
+    if (!tracks || tracks.length === 0) {
+      vinylSearchResults.innerHTML = `
+        <div class="vinyl-search-empty-state">
+          <div class="empty-state-icon">🔍</div>
+          <p>No songs found. Try typing another song title, artist, or band!</p>
+        </div>
+      `;
+      return;
+    }
+
+    tracks.forEach(trk => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'vinyl-music-item' + (activeSelectedSong.id === trk.id ? ' active' : '');
+      itemEl.dataset.songId = trk.id;
+      itemEl.dataset.audioSrc = trk.audioSrc;
+      itemEl.innerHTML = `
+        <img src="${trk.artwork || 'assets/medium_letter.png'}" alt="${trk.title}" class="vinyl-music-art" />
+        <div class="vinyl-music-info">
+          <div class="vinyl-music-title">${escapeHtml(trk.title)}</div>
+          <div class="vinyl-music-artist">${escapeHtml(trk.artist)} ${trk.album ? `• <em>${escapeHtml(trk.album)}</em>` : ''}</div>
+        </div>
+        <div class="vinyl-music-actions">
+          <button type="button" class="btn-audition-play" title="Listen preview">▶</button>
+          <button type="button" class="btn-choose-song">Select</button>
+        </div>
+      `;
+      const auditionBtn = itemEl.querySelector('.btn-audition-play');
+      auditionBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleAuditionSong(trk.audioSrc, auditionBtn);
+      });
+      const chooseBtn = itemEl.querySelector('.btn-choose-song');
+      chooseBtn.addEventListener('click', () => {
+        updateSelectedSongUI(trk);
+      });
+      itemEl.addEventListener('click', (e) => {
+        if (!e.target.closest('.btn-audition-play')) {
+          updateSelectedSongUI(trk);
+        }
+      });
+      vinylSearchResults.appendChild(itemEl);
+    });
+  }
+
+  async function performMusicSearch(query) {
+    if (!vinylSearchResults) return;
+    if (!query || !query.trim()) {
+      vinylSearchResults.innerHTML = `
+        <div class="vinyl-search-empty-state">
+          <div class="empty-state-icon">🎧</div>
+          <p>Type any song or artist above to connect live audio to your vinyl record!</p>
+        </div>
+      `;
+      return;
+    }
+    vinylSearchResults.innerHTML = `
+      <div class="vinyl-search-empty-state">
+        <div class="empty-state-icon">⏳</div>
+        <p>Connecting to music catalog for "${escapeHtml(query)}"...</p>
+      </div>
+    `;
+    const results = await searchAppleMusicTracks(query);
+    renderSearchResults(results);
+  }
+
+  // Audition for Selected Track
+  if (btnAuditionSelected) {
+    btnAuditionSelected.addEventListener('click', () => {
+      if (activeSelectedSong && activeSelectedSong.audioSrc) {
+        toggleAuditionSong(activeSelectedSong.audioSrc, btnAuditionSelected);
+      }
+    });
+  }
+
+  // Tab switching
+  vinylTabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.vtab;
+      vinylTabBtns.forEach(b => b.classList.toggle('active', b === btn));
+      vinylTabPanels.forEach(p => {
+        p.style.display = p.id === `vinyl-panel-${tab}` ? 'flex' : 'none';
+      });
+    });
+  });
+
+  // Search input listeners
+  if (btnVinylMusicSearch && vinylMusicSearchInput) {
+    btnVinylMusicSearch.addEventListener('click', () => {
+      performMusicSearch(vinylMusicSearchInput.value);
+    });
+    vinylMusicSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        performMusicSearch(vinylMusicSearchInput.value);
+      }
+    });
+  }
+
+  // Quick suggestion tags
+  vinylQuickTags.forEach(tag => {
+    tag.addEventListener('click', () => {
+      const q = tag.dataset.query;
+      if (vinylMusicSearchInput) vinylMusicSearchInput.value = q;
+      performMusicSearch(q);
+    });
+  });
+
+  // File upload
+  if (btnVinylBrowseFile && vinylAudioFileInput) {
+    btnVinylBrowseFile.addEventListener('click', () => vinylAudioFileInput.click());
+  }
   if (vinylAudioFileInput) {
     vinylAudioFileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (evt) => {
-          selectedVinylAudioBase64 = evt.target.result;
-          if (vinylCustomTitleInput && !vinylCustomTitleInput.value) {
-            vinylCustomTitleInput.value = file.name.replace(/\.[^/.]+$/, "");
+          const songObj = {
+            id: 'upload_' + Date.now(),
+            title: file.name.replace(/\.[^/.]+$/, ""),
+            artist: 'Personal Audio File',
+            album: 'Custom Upload',
+            artwork: 'assets/medium_letter.png',
+            audioSrc: evt.target.result
+          };
+          updateSelectedSongUI(songObj);
+          if (vinylUploadStatus) {
+            vinylUploadStatus.textContent = `✓ Loaded: ${file.name}`;
+            vinylUploadStatus.style.display = 'block';
           }
         };
         reader.readAsDataURL(file);
@@ -2916,20 +3077,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function openVinylSongModal(existingVinyl = null) {
+    if (!cardVinylSongModal) return;
+    editingVinylId = existingVinyl ? existingVinyl.id : null;
+
+    if (existingVinyl) {
+      updateSelectedSongUI({
+        id: existingVinyl.songId || 'custom',
+        title: existingVinyl.trackName || existingVinyl.title || 'Selected Track',
+        artist: existingVinyl.artistName || '',
+        album: existingVinyl.album || '',
+        artwork: existingVinyl.artworkUrl || 'assets/medium_letter.png',
+        audioSrc: existingVinyl.audioSrc || VERIFIED_TRENDING_TRACKS[0].audioSrc
+      });
+    } else {
+      updateSelectedSongUI(VERIFIED_TRENDING_TRACKS[0]);
+    }
+
+    if (vinylCustomDedicationInput) {
+      vinylCustomDedicationInput.value = (existingVinyl && existingVinyl.dedication) || ('For ' + (state.greetingCard.insideTo || 'Kabir'));
+    }
+
+    renderTrendingTracksList();
+    cardVinylSongModal.style.display = 'block';
+  }
+
+  function closeVinylSongModal() {
+    if (cardVinylSongModal) cardVinylSongModal.style.display = 'none';
+    if (auditionAudio) {
+      auditionAudio.pause();
+      document.querySelectorAll('.btn-audition-play').forEach(b => {
+        b.innerHTML = '▶';
+        b.classList.remove('is-playing');
+      });
+    }
+    editingVinylId = null;
+  }
+
+  if (btnCloseVinylModal) {
+    btnCloseVinylModal.addEventListener('click', closeVinylSongModal);
+  }
+
   if (btnConfirmVinylSong) {
     btnConfirmVinylSong.addEventListener('click', () => {
-      const activeOpt = vinylPresetsList ? vinylPresetsList.querySelector('.vinyl-preset-option.active') : null;
-      const defaultTitle = activeOpt ? activeOpt.dataset.title : 'Golden Hour (Acoustic)';
-      const finalTitle = (vinylCustomTitleInput && vinylCustomTitleInput.value.trim()) || defaultTitle;
       const finalDedication = (vinylCustomDedicationInput && vinylCustomDedicationInput.value.trim()) || ('For ' + (state.greetingCard.insideTo || 'Kabir'));
+      const finalTitle = activeSelectedSong.title + (activeSelectedSong.artist ? ` - ${activeSelectedSong.artist}` : '');
 
       if (editingVinylId) {
         const item = state.greetingCard.insideKeepsakes.find(i => i.id === editingVinylId);
         if (item) {
-          item.songId = selectedVinylSongPreset;
+          item.songId = activeSelectedSong.id;
           item.title = finalTitle;
+          item.trackName = activeSelectedSong.title;
+          item.artistName = activeSelectedSong.artist;
+          item.artworkUrl = activeSelectedSong.artwork;
+          item.audioSrc = activeSelectedSong.audioSrc;
           item.dedication = finalDedication;
-          if (selectedVinylAudioBase64) item.audioSrc = selectedVinylAudioBase64;
         }
       } else {
         const hasVinyl = state.greetingCard.insideKeepsakes.some(i => i.type === 'vinyl');
@@ -2941,10 +3144,13 @@ document.addEventListener('DOMContentLoaded', () => {
         state.greetingCard.insideKeepsakes.push({
           id: 'vinyl_' + Date.now(),
           type: 'vinyl',
-          songId: selectedVinylSongPreset,
+          songId: activeSelectedSong.id,
           title: finalTitle,
+          trackName: activeSelectedSong.title,
+          artistName: activeSelectedSong.artist,
+          artworkUrl: activeSelectedSong.artwork,
+          audioSrc: activeSelectedSong.audioSrc,
           dedication: finalDedication,
-          audioSrc: selectedVinylAudioBase64,
           x: 10,
           y: 28,
           width: 155,
@@ -3013,15 +3219,19 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="vinyl-sleeve">
               <div class="vinyl-disc">
                 <div class="vinyl-center-label">
-                  <span class="vinyl-label-title">Side A</span>
-                  <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + (state.greetingCard.insideTo || 'Kabir')))}</span>
+                  ${item.artworkUrl ? `<img src="${item.artworkUrl}" class="vinyl-label-art" alt="" />` : ''}
+                  <div class="vinyl-label-spindle"></div>
+                  <div class="vinyl-label-content">
+                    <span class="vinyl-label-title">Side A</span>
+                    <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + (state.greetingCard.insideTo || 'Kabir')))}</span>
+                  </div>
                 </div>
               </div>
               <div class="vinyl-needle-arm"></div>
             </div>
             <div class="vinyl-player-controls">
               <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
-              <span class="vinyl-track-info" title="Click to change song">${escapeHtml(item.title || 'Golden Hour (Acoustic)')}</span>
+              <span class="vinyl-track-info" title="Click to change song">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
             </div>
           </div>
           <div class="card-resize-handle" title="Drag to resize"></div>
@@ -3426,15 +3636,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="vinyl-sleeve">
                   <div class="vinyl-disc">
                     <div class="vinyl-center-label">
-                      <span class="vinyl-label-title">Side A</span>
-                      <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + (state.greetingCard.insideTo || 'Kabir')))}</span>
+                      ${item.artworkUrl ? `<img src="${item.artworkUrl}" class="vinyl-label-art" alt="" />` : ''}
+                      <div class="vinyl-label-spindle"></div>
+                      <div class="vinyl-label-content">
+                        <span class="vinyl-label-title">Side A</span>
+                        <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + (state.greetingCard.insideTo || 'Kabir')))}</span>
+                      </div>
                     </div>
                   </div>
                   <div class="vinyl-needle-arm"></div>
                 </div>
                 <div class="vinyl-player-controls">
                   <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
-                  <span class="vinyl-track-info">${escapeHtml(item.title || 'Golden Hour (Acoustic)')}</span>
+                  <span class="vinyl-track-info">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
                 </div>
               </div>
             </div>
@@ -4789,15 +5003,19 @@ document.addEventListener('DOMContentLoaded', () => {
                   <div class="vinyl-sleeve">
                     <div class="vinyl-disc">
                       <div class="vinyl-center-label">
-                        <span class="vinyl-label-title">Side A</span>
-                        <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + toVal))}</span>
+                        ${item.artworkUrl ? `<img src="${item.artworkUrl}" class="vinyl-label-art" alt="" />` : ''}
+                        <div class="vinyl-label-spindle"></div>
+                        <div class="vinyl-label-content">
+                          <span class="vinyl-label-title">Side A</span>
+                          <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + toVal))}</span>
+                        </div>
                       </div>
                     </div>
                     <div class="vinyl-needle-arm"></div>
                   </div>
                   <div class="vinyl-player-controls">
                     <button type="button" class="vinyl-play-btn" data-item-id="${item.id}" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
-                    <span class="vinyl-track-info">${escapeHtml(item.title || 'Golden Hour (Acoustic)')}</span>
+                    <span class="vinyl-track-info">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
                   </div>
                 </div>
               </div>
@@ -5088,7 +5306,21 @@ document.addEventListener('DOMContentLoaded', () => {
       state.greetingCard.insideKeepsakes = [
         { id: 'pol_1', type: 'polaroid', src: 'assets/medium_letter.png', caption: 'Forever & Always', x: 6, y: 8, width: 130, rotation: -4 },
         { id: 'fl_1', type: 'flower', name: 'Lily', file: 'lily.png', x: 22, y: 14, width: 90, rotation: 8 },
-        { id: 'vn_1', type: 'vinyl', songId: 'la-vie-en-rose', title: 'La Vie En Rose (Music Box)', dedication: 'For Kabir', x: 6, y: 50, width: 155, rotation: 0 },
+        {
+          id: 'vn_1',
+          type: 'vinyl',
+          songId: 'die-with-a-smile',
+          title: 'Die With A Smile - Lady Gaga & Bruno Mars',
+          trackName: 'Die With A Smile',
+          artistName: 'Lady Gaga & Bruno Mars',
+          artworkUrl: 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/11/ae/f2/11aef294-f57c-bab9-c9fc-529162984e62/24UMGIM85348.rgb.jpg/100x100bb.jpg',
+          audioSrc: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/07/6a/99/076a99ed-b946-431b-6f1f-54fa187ca5bd/mzaf_8102882277995122875.plus.aac.p.m4a',
+          dedication: 'For Kabir',
+          x: 6,
+          y: 50,
+          width: 155,
+          rotation: 0
+        },
         { id: 'st_1', type: 'sticker', name: 'Pink Hearts', file: 'sticker_hearts_pink.png', x: 68, y: 64, width: 72, rotation: -12 }
       ];
       if (typeof renderInsideKeepsakes === 'function') renderInsideKeepsakes();
@@ -5103,6 +5335,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.has('open_stickers')) {
       const btnStk = document.getElementById('btn-card-add-sticker');
       if (btnStk) btnStk.click();
+    }
+    if (urlParams.has('open_vinyl')) {
+      const btnVn = document.getElementById('btn-card-add-vinyl');
+      if (btnVn) btnVn.click();
     }
     const paramTheme = urlParams.get('theme');
     if (paramTheme && state.letter) {
