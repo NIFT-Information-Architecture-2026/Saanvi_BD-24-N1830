@@ -2164,8 +2164,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Step 2: Inside Elements
   const cardInsideBifold = document.getElementById('card-inside-bifold');
-  const insideKeepsakesDropzone = document.getElementById('inside-keepsakes-dropzone');
-  const insideRightStickersOverlay = document.getElementById('inside-right-stickers-overlay');
+  const cardInsideItemsOverlay = document.getElementById('card-inside-items-overlay');
   const cardInsideToInput = document.getElementById('card-inside-to-input');
   const cardInsideBodyTextarea = document.getElementById('card-inside-body-textarea');
   const cardInsideFromInput = document.getElementById('card-inside-from-input');
@@ -2186,6 +2185,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const cardStickersPopup = document.getElementById('card-stickers-popup');
   const cardStickersPopupGrid = document.getElementById('card-stickers-popup-grid');
   const btnCloseStickerPopup = document.getElementById('btn-close-sticker-popup');
+
+  const cardVinylSongModal = document.getElementById('card-vinyl-song-modal');
+  const btnCloseVinylModal = document.getElementById('btn-close-vinyl-modal');
+  const vinylPresetsList = document.getElementById('vinyl-presets-list');
+  const vinylCustomTitleInput = document.getElementById('vinyl-custom-title-input');
+  const vinylCustomDedicationInput = document.getElementById('vinyl-custom-dedication-input');
+  const vinylAudioFileInput = document.getElementById('vinyl-audio-file-input');
+  const btnConfirmVinylSong = document.getElementById('btn-confirm-vinyl-song');
 
   const btnCardBackToStep1 = document.getElementById('btn-card-back-to-step1');
   const btnCardToStep3 = document.getElementById('btn-card-to-step3');
@@ -2302,23 +2309,65 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {}
   }
 
-  const VINYL_MELODY = [
-    { f: 261.63, d: 0.6 },
-    { f: 329.63, d: 0.6 },
-    { f: 392.00, d: 0.7 },
-    { f: 523.25, d: 0.9 },
-    { f: 493.88, d: 0.6 },
-    { f: 392.00, d: 0.6 },
-    { f: 329.63, d: 0.7 },
-    { f: 440.00, d: 1.0 },
-    { f: 349.23, d: 0.6 },
-    { f: 440.00, d: 0.6 },
-    { f: 523.25, d: 0.8 },
-    { f: 392.00, d: 1.1 }
-  ];
+  const VINYL_TRACK_MELODIES = {
+    'golden-hour': [
+      { f: 261.63, d: 0.6 },
+      { f: 329.63, d: 0.6 },
+      { f: 392.00, d: 0.7 },
+      { f: 523.25, d: 0.9 },
+      { f: 493.88, d: 0.6 },
+      { f: 392.00, d: 0.6 },
+      { f: 329.63, d: 0.7 },
+      { f: 440.00, d: 1.0 },
+      { f: 349.23, d: 0.6 },
+      { f: 440.00, d: 0.6 },
+      { f: 523.25, d: 0.8 },
+      { f: 392.00, d: 1.1 }
+    ],
+    'la-vie-en-rose': [
+      { f: 392.00, d: 0.7 },
+      { f: 493.88, d: 0.7 },
+      { f: 587.33, d: 0.9 },
+      { f: 659.25, d: 1.1 },
+      { f: 587.33, d: 0.7 },
+      { f: 493.88, d: 0.7 },
+      { f: 440.00, d: 0.8 },
+      { f: 392.00, d: 1.2 }
+    ],
+    'midnight-serenade': [
+      { f: 440.00, d: 0.8 },
+      { f: 523.25, d: 0.8 },
+      { f: 659.25, d: 1.0 },
+      { f: 587.33, d: 0.8 },
+      { f: 493.88, d: 0.8 },
+      { f: 392.00, d: 0.8 },
+      { f: 440.00, d: 1.3 }
+    ],
+    'sunflower-waltz': [
+      { f: 349.23, d: 0.6 },
+      { f: 440.00, d: 0.6 },
+      { f: 523.25, d: 0.8 },
+      { f: 587.33, d: 0.9 },
+      { f: 523.25, d: 0.6 },
+      { f: 440.00, d: 0.6 },
+      { f: 392.00, d: 0.7 },
+      { f: 349.23, d: 1.2 }
+    ],
+    'claire-de-lune': [
+      { f: 311.13, d: 0.9 },
+      { f: 349.23, d: 0.8 },
+      { f: 415.30, d: 1.0 },
+      { f: 466.16, d: 0.9 },
+      { f: 523.25, d: 1.2 },
+      { f: 466.16, d: 0.8 },
+      { f: 415.30, d: 1.1 }
+    ]
+  };
 
-  function startVinylAudio() {
-    initVinylAudio();
+  let customVinylAudioEl = null;
+
+  function startVinylAudio(customItem = null) {
+    const vinylItem = customItem || (state.greetingCard.insideKeepsakes || []).find(i => i.type === 'vinyl');
     vinylIsPlaying = true;
     document.querySelectorAll('.vinyl-player-widget').forEach(el => el.classList.add('is-playing'));
     document.querySelectorAll('.vinyl-play-btn').forEach(btn => {
@@ -2326,11 +2375,27 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.title = 'Pause Record';
     });
 
+    if (vinylItem && vinylItem.audioSrc) {
+      try {
+        if (!customVinylAudioEl) {
+          customVinylAudioEl = new Audio(vinylItem.audioSrc);
+          customVinylAudioEl.loop = true;
+        }
+        customVinylAudioEl.play();
+        return;
+      } catch (err) {}
+    }
+
+    initVinylAudio();
+    const songId = (vinylItem && vinylItem.songId) || 'golden-hour';
+    const melody = VINYL_TRACK_MELODIES[songId] || VINYL_TRACK_MELODIES['golden-hour'];
+    vinylMelodyIdx = 0;
+
     function loopMelody() {
       if (!vinylIsPlaying) return;
-      const note = VINYL_MELODY[vinylMelodyIdx];
+      const note = melody[vinylMelodyIdx];
       playVinylTone(note.f, note.d);
-      vinylMelodyIdx = (vinylMelodyIdx + 1) % VINYL_MELODY.length;
+      vinylMelodyIdx = (vinylMelodyIdx + 1) % melody.length;
       vinylLoopTimer = setTimeout(loopMelody, note.d * 750);
     }
     loopMelody();
@@ -2342,6 +2407,12 @@ document.addEventListener('DOMContentLoaded', () => {
       clearTimeout(vinylLoopTimer);
       vinylLoopTimer = null;
     }
+    if (customVinylAudioEl) {
+      try {
+        customVinylAudioEl.pause();
+        customVinylAudioEl.currentTime = 0;
+      } catch (err) {}
+    }
     document.querySelectorAll('.vinyl-player-widget').forEach(el => el.classList.remove('is-playing'));
     document.querySelectorAll('.vinyl-play-btn').forEach(btn => {
       btn.innerHTML = '▶';
@@ -2349,11 +2420,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function toggleVinylAudio() {
+  function toggleVinylAudio(item = null) {
     if (vinylIsPlaying) {
       stopVinylAudio();
     } else {
-      startVinylAudio();
+      startVinylAudio(item);
     }
   }
 
@@ -2506,6 +2577,7 @@ document.addEventListener('DOMContentLoaded', () => {
       itemEl.dataset.id = item.id;
       itemEl.style.left = item.x + '%';
       itemEl.style.top = item.y + '%';
+      itemEl.style.transform = `rotate(${item.rotation || 0}deg)`;
       if (item.width) {
         itemEl.style.width = typeof item.width === 'number' ? item.width + 'px' : item.width;
       }
@@ -2513,12 +2585,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (item.type === 'photo') {
         itemEl.innerHTML = `
           <button class="btn-item-delete" title="Delete">×</button>
+          <div class="card-rotate-handle" title="Drag to rotate">↻</div>
+          <div class="card-drag-handle" title="Drag to move">✥ Move</div>
           <img src="${item.src}" class="card-cover-photo-img" style="width:100%; height:auto; border-radius:6px; display:block; pointer-events:none;" />
           <div class="card-resize-handle" title="Drag to resize"></div>
         `;
       } else {
         itemEl.innerHTML = `
           <button class="btn-item-delete" title="Delete">×</button>
+          <div class="card-rotate-handle" title="Drag to rotate">↻</div>
+          <div class="card-drag-handle" title="Drag to move">✥ Move</div>
           <div class="card-item-content card-text-content" contenteditable="true" spellcheck="false" style="font-family:${item.fontFamily || "'Caveat', cursive"}; font-size:${item.fontSize || 24}px;">${escapeHtml(item.text)}</div>
           <div class="card-resize-handle" title="Drag to resize"></div>
         `;
@@ -2630,9 +2706,10 @@ document.addEventListener('DOMContentLoaded', () => {
             type: 'polaroid',
             src: evt.target.result,
             caption: 'Cherished Memory',
-            x: 12,
-            y: 14,
-            width: 140
+            x: 8,
+            y: 12,
+            width: 140,
+            rotation: 0
           });
           renderInsideKeepsakes();
         };
@@ -2658,9 +2735,10 @@ document.addEventListener('DOMContentLoaded', () => {
           type: 'flower',
           name: fl.name,
           file: fl.file,
-          x: 24,
+          x: 18,
           y: 20,
-          width: 95
+          width: 95,
+          rotation: 0
         });
         if (cardFlowersPopup) cardFlowersPopup.style.display = 'none';
         renderInsideKeepsakes();
@@ -2697,9 +2775,10 @@ document.addEventListener('DOMContentLoaded', () => {
           type: 'sticker',
           name: stk.name,
           file: stk.file,
-          x: 28,
+          x: 42,
           y: 35,
-          width: 75
+          width: 75,
+          rotation: 0
         });
         if (cardStickersPopup) cardStickersPopup.style.display = 'none';
         renderInsideKeepsakes();
@@ -2720,29 +2799,122 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Functional Vinyl Record
-  if (btnCardAddVinyl) {
-    btnCardAddVinyl.addEventListener('click', () => {
-      const hasVinyl = state.greetingCard.insideKeepsakes.some(i => i.type === 'vinyl');
-      if (hasVinyl) {
-        showAtelierToast('Vinyl record is already placed on your card ♡');
-        return;
-      }
-      state.greetingCard.insideKeepsakes.push({
-        id: 'vinyl_' + Date.now(),
-        type: 'vinyl',
-        title: 'Golden Hour (Acoustic)',
-        x: 10,
-        y: 28,
-        width: 155
+  // Vinyl Song Modal & Functional Vinyl Record
+  let selectedVinylSongPreset = 'golden-hour';
+  let selectedVinylAudioBase64 = null;
+  let editingVinylId = null;
+
+  function openVinylSongModal(existingVinyl = null) {
+    if (!cardVinylSongModal) return;
+    editingVinylId = existingVinyl ? existingVinyl.id : null;
+    selectedVinylSongPreset = (existingVinyl && existingVinyl.songId) || 'golden-hour';
+    selectedVinylAudioBase64 = (existingVinyl && existingVinyl.audioSrc) || null;
+
+    if (vinylPresetsList) {
+      vinylPresetsList.querySelectorAll('.vinyl-preset-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.songId === selectedVinylSongPreset);
       });
+    }
+    if (vinylCustomTitleInput) {
+      vinylCustomTitleInput.value = (existingVinyl && existingVinyl.title) || '';
+    }
+    if (vinylCustomDedicationInput) {
+      vinylCustomDedicationInput.value = (existingVinyl && existingVinyl.dedication) || ('For ' + (state.greetingCard.insideTo || 'Kabir'));
+    }
+    if (vinylAudioFileInput) {
+      vinylAudioFileInput.value = '';
+    }
+    cardVinylSongModal.style.display = 'block';
+  }
+
+  function closeVinylSongModal() {
+    if (cardVinylSongModal) cardVinylSongModal.style.display = 'none';
+    editingVinylId = null;
+  }
+
+  if (btnCloseVinylModal) {
+    btnCloseVinylModal.addEventListener('click', closeVinylSongModal);
+  }
+
+  if (vinylPresetsList) {
+    vinylPresetsList.querySelectorAll('.vinyl-preset-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        vinylPresetsList.querySelectorAll('.vinyl-preset-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        selectedVinylSongPreset = opt.dataset.songId;
+        if (vinylCustomTitleInput) {
+          vinylCustomTitleInput.value = opt.dataset.title;
+        }
+      });
+    });
+  }
+
+  if (vinylAudioFileInput) {
+    vinylAudioFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          selectedVinylAudioBase64 = evt.target.result;
+          if (vinylCustomTitleInput && !vinylCustomTitleInput.value) {
+            vinylCustomTitleInput.value = file.name.replace(/\.[^/.]+$/, "");
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  if (btnConfirmVinylSong) {
+    btnConfirmVinylSong.addEventListener('click', () => {
+      const activeOpt = vinylPresetsList ? vinylPresetsList.querySelector('.vinyl-preset-option.active') : null;
+      const defaultTitle = activeOpt ? activeOpt.dataset.title : 'Golden Hour (Acoustic)';
+      const finalTitle = (vinylCustomTitleInput && vinylCustomTitleInput.value.trim()) || defaultTitle;
+      const finalDedication = (vinylCustomDedicationInput && vinylCustomDedicationInput.value.trim()) || ('For ' + (state.greetingCard.insideTo || 'Kabir'));
+
+      if (editingVinylId) {
+        const item = state.greetingCard.insideKeepsakes.find(i => i.id === editingVinylId);
+        if (item) {
+          item.songId = selectedVinylSongPreset;
+          item.title = finalTitle;
+          item.dedication = finalDedication;
+          if (selectedVinylAudioBase64) item.audioSrc = selectedVinylAudioBase64;
+        }
+      } else {
+        const hasVinyl = state.greetingCard.insideKeepsakes.some(i => i.type === 'vinyl');
+        if (hasVinyl) {
+          showAtelierToast('Vinyl record is already placed on your card ♡');
+          closeVinylSongModal();
+          return;
+        }
+        state.greetingCard.insideKeepsakes.push({
+          id: 'vinyl_' + Date.now(),
+          type: 'vinyl',
+          songId: selectedVinylSongPreset,
+          title: finalTitle,
+          dedication: finalDedication,
+          audioSrc: selectedVinylAudioBase64,
+          x: 10,
+          y: 28,
+          width: 155,
+          rotation: 0
+        });
+      }
+      closeVinylSongModal();
       renderInsideKeepsakes();
     });
   }
 
+  if (btnCardAddVinyl) {
+    btnCardAddVinyl.addEventListener('click', () => {
+      const existing = state.greetingCard.insideKeepsakes.find(i => i.type === 'vinyl');
+      openVinylSongModal(existing || null);
+    });
+  }
+
   function renderInsideKeepsakes() {
-    if (!insideKeepsakesDropzone) return;
-    insideKeepsakesDropzone.innerHTML = '';
+    if (!cardInsideItemsOverlay) return;
+    cardInsideItemsOverlay.innerHTML = '';
 
     (state.greetingCard.insideKeepsakes || []).forEach(item => {
       const itemEl = document.createElement('div');
@@ -2750,6 +2922,7 @@ document.addEventListener('DOMContentLoaded', () => {
       itemEl.dataset.id = item.id;
       itemEl.style.left = item.x + '%';
       itemEl.style.top = item.y + '%';
+      itemEl.style.transform = `rotate(${item.rotation || 0}deg)`;
       if (item.width) {
         itemEl.style.width = typeof item.width === 'number' ? item.width + 'px' : item.width;
       }
@@ -2757,6 +2930,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (item.type === 'polaroid') {
         itemEl.innerHTML = `
           <button class="btn-item-delete" title="Delete">×</button>
+          <div class="card-rotate-handle" title="Drag to rotate">↻</div>
+          <div class="card-drag-handle" title="Drag to move">✥ Move</div>
           <div class="placed-polaroid-frame">
             <div class="polaroid-pin"></div>
             <img src="${item.src}" class="polaroid-photo" alt="Memory" />
@@ -2773,32 +2948,46 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (item.type === 'flower') {
         itemEl.innerHTML = `
           <button class="btn-item-delete" title="Delete">×</button>
+          <div class="card-rotate-handle" title="Drag to rotate">↻</div>
+          <div class="card-drag-handle" title="Drag to move">✥ Move</div>
           <img src="assets/flowers/${item.file}" class="placed-flower-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12)); pointer-events:none;" />
           <div class="card-resize-handle" title="Drag to resize"></div>
         `;
       } else if (item.type === 'vinyl') {
         itemEl.innerHTML = `
           <button class="btn-item-delete" title="Delete">×</button>
+          <div class="card-rotate-handle" title="Drag to rotate">↻</div>
+          <div class="card-drag-handle" title="Drag to move">✥ Move</div>
           <div class="vinyl-player-widget ${vinylIsPlaying ? 'is-playing' : ''}">
             <div class="vinyl-sleeve">
               <div class="vinyl-disc">
                 <div class="vinyl-center-label">
                   <span class="vinyl-label-title">Side A</span>
-                  <span class="vinyl-label-sub">For ${escapeHtml(state.greetingCard.insideTo || 'Kabir')}</span>
+                  <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + (state.greetingCard.insideTo || 'Kabir')))}</span>
                 </div>
               </div>
               <div class="vinyl-needle-arm"></div>
             </div>
             <div class="vinyl-player-controls">
               <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
-              <span class="vinyl-track-info">Golden Hour (Acoustic)</span>
+              <span class="vinyl-track-info" title="Click to change song">${escapeHtml(item.title || 'Golden Hour (Acoustic)')}</span>
             </div>
           </div>
           <div class="card-resize-handle" title="Drag to resize"></div>
         `;
+
+        const trackInfoEl = itemEl.querySelector('.vinyl-track-info');
+        if (trackInfoEl) {
+          trackInfoEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openVinylSongModal(item);
+          });
+        }
       } else if (item.type === 'sticker') {
         itemEl.innerHTML = `
           <button class="btn-item-delete" title="Delete">×</button>
+          <div class="card-rotate-handle" title="Drag to rotate">↻</div>
+          <div class="card-drag-handle" title="Drag to move">✥ Move</div>
           <img src="assets/stickers/${item.file}" class="placed-sticker-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18)); pointer-events:none;" />
           <div class="card-resize-handle" title="Drag to resize"></div>
         `;
@@ -2807,7 +2996,7 @@ document.addEventListener('DOMContentLoaded', () => {
       attachItemInteractions(
         itemEl,
         item,
-        insideKeepsakesDropzone,
+        cardInsideItemsOverlay,
         () => {},
         () => {
           if (item.type === 'vinyl' && vinylIsPlaying) {
@@ -2818,12 +3007,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       );
 
-      insideKeepsakesDropzone.appendChild(itemEl);
+      cardInsideItemsOverlay.appendChild(itemEl);
     });
   }
 
-  // Generalized Interaction Engine: Dragging, Resizing & Deleting
+  // Generalized Interaction Engine: Dragging, Resizing, Rotating & Deleting
   function attachItemInteractions(itemEl, itemData, parentContainer, onUpdate, onDelete) {
+    if (!itemEl || !itemData || !parentContainer) return;
+
+    // Delete
     const deleteBtn = itemEl.querySelector('.btn-item-delete');
     if (deleteBtn) {
       deleteBtn.addEventListener('click', (e) => {
@@ -2832,17 +3024,18 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Vinyl audio toggle
     const vinylBtn = itemEl.querySelector('.vinyl-play-btn');
     if (vinylBtn) {
       vinylBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        toggleVinylAudio();
+        toggleVinylAudio(itemData);
       });
     }
 
     // Selection
     itemEl.addEventListener('click', (e) => {
-      if (e.target.closest('.btn-item-delete') || e.target.closest('.vinyl-play-btn')) return;
+      if (e.target.closest('.btn-item-delete') || e.target.closest('.vinyl-play-btn') || e.target.closest('.vinyl-track-info')) return;
       parentContainer.querySelectorAll('.card-placed-item').forEach(el => el.classList.remove('is-selected'));
       itemEl.classList.add('is-selected');
       activeSelectedCoverItem = itemData;
@@ -2851,12 +3044,50 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Resize
-    const resizeHandle = itemEl.querySelector('.card-resize-handle');
+    // 1. Rotation Interaction (card-rotate-handle)
+    const rotateHandle = itemEl.querySelector('.card-rotate-handle');
+    if (rotateHandle) {
+      let isRotating = false;
+      let centerX = 0;
+      let centerY = 0;
+
+      rotateHandle.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        isRotating = true;
+        const rect = itemEl.getBoundingClientRect();
+        centerX = rect.left + rect.width / 2;
+        centerY = rect.top + rect.height / 2;
+        try { rotateHandle.setPointerCapture(e.pointerId); } catch (err) {}
+      });
+
+      rotateHandle.addEventListener('pointermove', (e) => {
+        if (!isRotating) return;
+        const rad = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+        let deg = Math.round((rad * 180 / Math.PI) + 90);
+        while (deg < 0) deg += 360;
+        deg = deg % 360;
+        itemData.rotation = deg;
+        itemEl.style.transform = `rotate(${deg}deg)`;
+      });
+
+      const onRotateEnd = (e) => {
+        if (!isRotating) return;
+        isRotating = false;
+        try { rotateHandle.releasePointerCapture(e.pointerId); } catch (err) {}
+        onUpdate();
+      };
+      rotateHandle.addEventListener('pointerup', onRotateEnd);
+      rotateHandle.addEventListener('pointercancel', onRotateEnd);
+    }
+
+    // 2. Resize Interaction (card-resize-handle)
+    const resizeHandle = itemEl.querySelector('.card-resize-handle') || itemEl.querySelector('.item-resize-handle');
     if (resizeHandle) {
       let isResizing = false;
       let startX = 0;
       let startW = 0;
+      let cachedParentW = 300;
 
       resizeHandle.addEventListener('pointerdown', (e) => {
         e.stopPropagation();
@@ -2864,14 +3095,14 @@ document.addEventListener('DOMContentLoaded', () => {
         isResizing = true;
         startX = e.clientX;
         startW = itemEl.offsetWidth;
+        cachedParentW = parentContainer.offsetWidth || 300;
         try { resizeHandle.setPointerCapture(e.pointerId); } catch (err) {}
       });
 
       resizeHandle.addEventListener('pointermove', (e) => {
         if (!isResizing) return;
         const deltaX = e.clientX - startX;
-        const parentW = parentContainer.offsetWidth || 300;
-        const newW = Math.max(50, Math.min(parentW * 0.95, startW + deltaX));
+        const newW = Math.max(45, Math.min(cachedParentW * 0.95, startW + deltaX));
         itemData.width = Math.round(newW);
         itemEl.style.width = itemData.width + 'px';
       });
@@ -2886,16 +3117,31 @@ document.addEventListener('DOMContentLoaded', () => {
       resizeHandle.addEventListener('pointercancel', onResizeEnd);
     }
 
-    // Drag
+    // 3. Smooth Drag Interaction (Handle or Item body)
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
     let initialLeftPx = 0;
     let initialTopPx = 0;
+    let cachedParentRect = null;
+    let cachedItemW = 0;
+    let cachedItemH = 0;
+    let dragRaf = null;
 
-    itemEl.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.btn-item-delete') || e.target.closest('.card-resize-handle') || e.target.closest('.vinyl-play-btn')) return;
-      if (e.target.getAttribute('contenteditable') === 'true') return;
+    const startDrag = (e) => {
+      if (e.target.closest('.btn-item-delete') || 
+          e.target.closest('.card-resize-handle') || 
+          e.target.closest('.item-resize-handle') || 
+          e.target.closest('.card-rotate-handle') || 
+          e.target.closest('.vinyl-play-btn') || 
+          e.target.closest('.vinyl-track-info')) {
+        return;
+      }
+
+      // If user is actively typing in contenteditable, don't drag unless clicking the drag handle
+      if (e.target.getAttribute('contenteditable') === 'true' && !e.target.closest('.card-drag-handle')) {
+        return;
+      }
 
       e.preventDefault();
       isDragging = true;
@@ -2903,32 +3149,65 @@ document.addEventListener('DOMContentLoaded', () => {
       dragStartY = e.clientY;
       initialLeftPx = itemEl.offsetLeft;
       initialTopPx = itemEl.offsetTop;
-      itemEl.classList.add('is-dragging');
-      try { itemEl.setPointerCapture(e.pointerId); } catch (err) {}
-    });
+      cachedParentRect = parentContainer.getBoundingClientRect();
+      cachedItemW = itemEl.offsetWidth;
+      cachedItemH = itemEl.offsetHeight;
 
-    itemEl.addEventListener('pointermove', (e) => {
-      if (!isDragging) return;
+      itemEl.classList.add('is-dragging');
+      const captureTarget = e.target.closest('.card-drag-handle') || itemEl;
+      try { captureTarget.setPointerCapture(e.pointerId); } catch (err) {}
+    };
+
+    itemEl.addEventListener('pointerdown', startDrag);
+
+    const dragHandle = itemEl.querySelector('.card-drag-handle');
+    if (dragHandle) {
+      dragHandle.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        startDrag(e);
+      });
+    }
+
+    const onPointerMove = (e) => {
+      if (!isDragging || !cachedParentRect) return;
       const deltaX = e.clientX - dragStartX;
       const deltaY = e.clientY - dragStartY;
-      const parentW = parentContainer.offsetWidth || 300;
-      const parentH = parentContainer.offsetHeight || 400;
 
-      const newLeftPx = Math.max(0, Math.min(parentW - 40, initialLeftPx + deltaX));
-      const newTopPx = Math.max(0, Math.min(parentH - 40, initialTopPx + deltaY));
+      if (dragRaf) cancelAnimationFrame(dragRaf);
+      dragRaf = requestAnimationFrame(() => {
+        const isInsideOverlay = (parentContainer.id === 'card-inside-items-overlay');
+        let minLeft = 0;
+        let maxLeft = cachedParentRect.width - cachedItemW;
 
-      itemData.x = parseFloat(((newLeftPx / parentW) * 100).toFixed(1));
-      itemData.y = parseFloat(((newTopPx / parentH) * 100).toFixed(1));
+        if (isInsideOverlay) {
+          if (itemData.type !== 'sticker') {
+            // Constrain Polaroid, Flower, Vinyl to left panel only (0% to ~48%)
+            maxLeft = Math.max(0, cachedParentRect.width * 0.48 - cachedItemW);
+          } else {
+            // Stickers can go anywhere on both left and right sides
+            maxLeft = Math.max(0, cachedParentRect.width - cachedItemW);
+          }
+        }
 
-      itemEl.style.left = itemData.x + '%';
-      itemEl.style.top = itemData.y + '%';
-    });
+        const newLeftPx = Math.max(minLeft, Math.min(maxLeft, initialLeftPx + deltaX));
+        const newTopPx = Math.max(0, Math.min(cachedParentRect.height - Math.min(cachedItemH, 40), initialTopPx + deltaY));
+
+        itemData.x = parseFloat(((newLeftPx / cachedParentRect.width) * 100).toFixed(2));
+        itemData.y = parseFloat(((newTopPx / cachedParentRect.height) * 100).toFixed(2));
+
+        itemEl.style.left = itemData.x + '%';
+        itemEl.style.top = itemData.y + '%';
+      });
+    };
+
+    itemEl.addEventListener('pointermove', onPointerMove);
 
     const onDragEnd = (e) => {
       if (!isDragging) return;
       isDragging = false;
+      if (dragRaf) cancelAnimationFrame(dragRaf);
       itemEl.classList.remove('is-dragging');
-      try { itemEl.releasePointerCapture(e.pointerId); } catch (err) {}
+      try { (e.target.closest('.card-drag-handle') || itemEl).releasePointerCapture(e.pointerId); } catch (err) {}
       onUpdate();
     };
 
@@ -3075,7 +3354,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (state.greetingCard.insideKeepsakes || []).forEach(item => {
         if (item.type === 'polaroid') {
           keepsakesHtml += `
-            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 130}px;">
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 130}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
               <div class="placed-polaroid-frame">
                 <div class="polaroid-pin"></div>
                 <img src="${item.src}" class="polaroid-photo" alt="Memory" />
@@ -3085,33 +3364,33 @@ document.addEventListener('DOMContentLoaded', () => {
           `;
         } else if (item.type === 'flower') {
           keepsakesHtml += `
-            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 90}px;">
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 90}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
               <img src="assets/flowers/${item.file}" class="placed-flower-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12)); pointer-events:none;" />
             </div>
           `;
         } else if (item.type === 'vinyl') {
           keepsakesHtml += `
-            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 150}px;">
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 150}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
               <div class="vinyl-player-widget ${vinylIsPlaying ? 'is-playing' : ''}">
                 <div class="vinyl-sleeve">
                   <div class="vinyl-disc">
                     <div class="vinyl-center-label">
                       <span class="vinyl-label-title">Side A</span>
-                      <span class="vinyl-label-sub">For ${escapeHtml(state.greetingCard.insideTo || 'Kabir')}</span>
+                      <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + (state.greetingCard.insideTo || 'Kabir')))}</span>
                     </div>
                   </div>
                   <div class="vinyl-needle-arm"></div>
                 </div>
                 <div class="vinyl-player-controls">
                   <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
-                  <span class="vinyl-track-info">Golden Hour (Acoustic)</span>
+                  <span class="vinyl-track-info">${escapeHtml(item.title || 'Golden Hour (Acoustic)')}</span>
                 </div>
               </div>
             </div>
           `;
         } else if (item.type === 'sticker') {
           keepsakesHtml += `
-            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 70}px;">
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 70}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
               <img src="assets/stickers/${item.file}" class="placed-sticker-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18)); pointer-events:none;" />
             </div>
           `;
@@ -3119,12 +3398,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       cardRevealDisplay.innerHTML = `
-        <div class="card-inside-bifold theme-${theme}" style="margin:0 auto; box-shadow:0 12px 32px rgba(82, 19, 25, 0.18);">
-          <div class="inside-left-panel" style="position:relative;">
+        <div class="card-inside-bifold theme-${theme}" style="margin:0 auto; box-shadow:0 12px 32px rgba(82, 19, 25, 0.18); position:relative;">
+          <div class="inside-left-panel">
             <div class="panel-watermark-label">Memories &amp; Keepsakes</div>
-            <div class="inside-keepsakes-dropzone" style="position:relative; width:100%; height:100%;">
-              ${keepsakesHtml}
-            </div>
           </div>
           <div class="inside-bifold-crease"></div>
           <div class="inside-right-panel">
@@ -3139,6 +3415,9 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="card-note-label">From:</span>
               <span style="font-family:${state.greetingCard.insideFontFamily || "'Caveat', cursive"}; font-size:18px; color:inherit; font-weight:600;">${escapeHtml(state.greetingCard.insideFrom || 'Saanvi')}</span>
             </div>
+          </div>
+          <div class="card-inside-items-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10;">
+            ${keepsakesHtml}
           </div>
         </div>
       `;
@@ -3155,13 +3434,13 @@ document.addEventListener('DOMContentLoaded', () => {
       (state.greetingCard.coverElements || []).forEach(item => {
         if (item.type === 'photo') {
           coverItemsHtml += `
-            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '55%'};">
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '55%'}; transform: rotate(${item.rotation || 0}deg);">
               <img src="${item.src}" class="card-cover-photo-img" style="width:100%; height:auto; border-radius:6px; display:block;" />
             </div>
           `;
         } else if (item.type === 'text') {
           coverItemsHtml += `
-            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '60%'};">
+            <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '60%'}; transform: rotate(${item.rotation || 0}deg);">
               <div class="card-item-content card-text-content" style="font-family:${item.fontFamily || "'Caveat', cursive"}; font-size:${item.fontSize || 24}px; text-align:center;">
                 ${escapeHtml(item.text)}
               </div>
@@ -4438,7 +4717,7 @@ document.addEventListener('DOMContentLoaded', () => {
         keepsakesVal.forEach(item => {
           if (item.type === 'polaroid') {
             ksHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 130}px;">
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 130}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
                 <div class="placed-polaroid-frame">
                   <div class="polaroid-pin"></div>
                   <img src="${item.src}" class="polaroid-photo" alt="Memory" />
@@ -4448,33 +4727,33 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
           } else if (item.type === 'flower') {
             ksHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 90}px;">
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 90}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
                 <img src="assets/flowers/${item.file}" class="placed-flower-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12)); pointer-events:none;" />
               </div>
             `;
           } else if (item.type === 'vinyl') {
             ksHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 150}px;">
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 150}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
                 <div class="vinyl-player-widget ${vinylIsPlaying ? 'is-playing' : ''}">
                   <div class="vinyl-sleeve">
                     <div class="vinyl-disc">
                       <div class="vinyl-center-label">
                         <span class="vinyl-label-title">Side A</span>
-                        <span class="vinyl-label-sub">For ${escapeHtml(toVal)}</span>
+                        <span class="vinyl-label-sub">${escapeHtml(item.dedication || ('For ' + toVal))}</span>
                       </div>
                     </div>
                     <div class="vinyl-needle-arm"></div>
                   </div>
                   <div class="vinyl-player-controls">
-                    <button type="button" class="vinyl-play-btn" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
-                    <span class="vinyl-track-info">Golden Hour (Acoustic)</span>
+                    <button type="button" class="vinyl-play-btn" data-item-id="${item.id}" title="${vinylIsPlaying ? 'Pause Record' : 'Play Record'}">${vinylIsPlaying ? '⏸' : '▶'}</button>
+                    <span class="vinyl-track-info">${escapeHtml(item.title || 'Golden Hour (Acoustic)')}</span>
                   </div>
                 </div>
               </div>
             `;
           } else if (item.type === 'sticker') {
             ksHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 70}px;">
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 70}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
                 <img src="assets/stickers/${item.file}" class="placed-sticker-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18)); pointer-events:none;" />
               </div>
             `;
@@ -4482,12 +4761,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         contentArea.innerHTML = `
-          <div class="card-inside-bifold theme-${themeVal}" style="margin:0 auto; box-shadow:0 12px 32px rgba(82, 19, 25, 0.18);">
-            <div class="inside-left-panel" style="position:relative;">
+          <div class="card-inside-bifold theme-${themeVal}" style="margin:0 auto; box-shadow:0 12px 32px rgba(82, 19, 25, 0.18); position:relative;">
+            <div class="inside-left-panel">
               <div class="panel-watermark-label">Memories &amp; Keepsakes</div>
-              <div class="inside-keepsakes-dropzone" style="position:relative; width:100%; height:100%;">
-                ${ksHtml}
-              </div>
             </div>
             <div class="inside-bifold-crease"></div>
             <div class="inside-right-panel">
@@ -4503,13 +4779,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span style="font-family:${fontVal}; font-size:18px; color:inherit; font-weight:600;">${escapeHtml(fromVal)}</span>
               </div>
             </div>
+            <div class="card-inside-items-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10;">
+              ${ksHtml}
+            </div>
           </div>
         `;
 
         contentArea.querySelectorAll('.vinyl-play-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            toggleVinylAudio();
+            const itm = keepsakesVal.find(k => k.type === 'vinyl');
+            toggleVinylAudio(itm || null);
           });
         });
       } else {
@@ -4518,13 +4798,13 @@ document.addEventListener('DOMContentLoaded', () => {
         coverElementsVal.forEach(item => {
           if (item.type === 'photo') {
             cvHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '55%'};">
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '55%'}; transform: rotate(${item.rotation || 0}deg);">
                 <img src="${item.src}" class="card-cover-photo-img" style="width:100%; height:auto; border-radius:6px; display:block;" />
               </div>
             `;
           } else if (item.type === 'text') {
             cvHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '60%'};">
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '60%'}; transform: rotate(${item.rotation || 0}deg);">
                 <div class="card-item-content card-text-content" style="font-family:${item.fontFamily || "'Caveat', cursive"}; font-size:${item.fontSize || 24}px; text-align:center;">
                   ${escapeHtml(item.text)}
                 </div>
@@ -4755,10 +5035,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (urlParams.has('demo_card') && state.greetingCard) {
       state.greetingCard.insideKeepsakes = [
-        { id: 'pol_1', type: 'polaroid', src: 'assets/medium_letter.png', caption: 'Forever & Always', x: 8, y: 12, width: 135 },
-        { id: 'fl_1', type: 'flower', name: 'Lily', file: 'lily.png', x: 45, y: 15, width: 95 },
-        { id: 'vn_1', type: 'vinyl', title: 'Golden Hour (Acoustic)', x: 10, y: 55, width: 155 },
-        { id: 'st_1', type: 'sticker', name: 'Pink Hearts', file: 'sticker_hearts_pink.png', x: 55, y: 64, width: 72 }
+        { id: 'pol_1', type: 'polaroid', src: 'assets/medium_letter.png', caption: 'Forever & Always', x: 6, y: 8, width: 130, rotation: -4 },
+        { id: 'fl_1', type: 'flower', name: 'Lily', file: 'lily.png', x: 22, y: 14, width: 90, rotation: 8 },
+        { id: 'vn_1', type: 'vinyl', songId: 'la-vie-en-rose', title: 'La Vie En Rose (Music Box)', dedication: 'For Kabir', x: 6, y: 50, width: 155, rotation: 0 },
+        { id: 'st_1', type: 'sticker', name: 'Pink Hearts', file: 'sticker_hearts_pink.png', x: 68, y: 64, width: 72, rotation: -12 }
       ];
       if (typeof renderInsideKeepsakes === 'function') renderInsideKeepsakes();
       if (state.greetingCard.step === 4 && typeof renderCardRevealedDisplay === 'function') {

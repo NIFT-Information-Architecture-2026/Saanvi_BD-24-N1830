@@ -1532,12 +1532,10 @@
 
             <!-- Inside Spread Bifold Layout -->
             <div class="card-inside-container">
-              <div class="card-inside-bifold theme-crimson-romance" id="card-inside-bifold">
+              <div class="card-inside-bifold theme-gingham-pressed" id="card-inside-bifold">
                 <!-- Left Hand Side: Interactive Keepsakes Pocket -->
                 <div class="inside-left-panel" id="card-inside-left-panel">
                   <div class="panel-watermark-label">Memories &amp; Keepsakes</div>
-                  <!-- Placed Keepsakes (Polaroids, Pressed Flowers, Vinyl, Stickers) -->
-                  <div class="inside-keepsakes-dropzone" id="inside-keepsakes-dropzone"></div>
                 </div>
 
                 <!-- Center Spine / Fold Crease -->
@@ -1554,9 +1552,10 @@
                     <span class="card-note-label">From:</span>
                     <input type="text" value="Saanvi" id="card-inside-from-input" class="card-deckle-input" />
                   </div>
-                  <!-- Right-side stickers overlay -->
-                  <div class="inside-right-stickers-overlay" id="inside-right-stickers-overlay"></div>
                 </div>
+
+                <!-- Unified Interactive Items Overlay across entire bifold -->
+                <div class="card-inside-items-overlay" id="card-inside-items-overlay"></div>
               </div>
             </div>
 
@@ -1572,10 +1571,82 @@
             <!-- Popup Tray: 15 Letter Stickers -->
             <div class="card-popup-picker" id="card-stickers-popup" style="display:none;">
               <div class="popup-picker-header">
-                <span>Select a Sticker (drag anywhere, resize)</span>
+                <span>Select a Sticker (place anywhere, rotate &amp; resize)</span>
                 <button class="btn-popup-close" id="btn-close-sticker-popup">×</button>
               </div>
               <div class="stickers-popup-grid" id="card-stickers-popup-grid"></div>
+            </div>
+
+            <!-- Popup Modal: Select Vinyl Song -->
+            <div class="card-popup-picker vinyl-song-modal" id="card-vinyl-song-modal" style="display:none;">
+              <div class="popup-picker-header">
+                <span>Select Song for Vinyl Record</span>
+                <button class="btn-popup-close" id="btn-close-vinyl-modal">×</button>
+              </div>
+              <div class="vinyl-song-modal-body">
+                <div class="vinyl-presets-list" id="vinyl-presets-list">
+                  <div class="vinyl-preset-option active" data-song-id="golden-hour" data-title="Golden Hour (Acoustic)">
+                    <div class="vinyl-preset-icon">🌅</div>
+                    <div class="vinyl-preset-info">
+                      <div class="vinyl-preset-title">Golden Hour</div>
+                      <div class="vinyl-preset-sub">Warm acoustic arpeggio</div>
+                    </div>
+                    <div class="vinyl-preset-check">✓</div>
+                  </div>
+                  <div class="vinyl-preset-option" data-song-id="la-vie-en-rose" data-title="La Vie En Rose (Music Box)">
+                    <div class="vinyl-preset-icon">🌹</div>
+                    <div class="vinyl-preset-info">
+                      <div class="vinyl-preset-title">La Vie En Rose</div>
+                      <div class="vinyl-preset-sub">Romantic music box waltz</div>
+                    </div>
+                    <div class="vinyl-preset-check">✓</div>
+                  </div>
+                  <div class="vinyl-preset-option" data-song-id="midnight-serenade" data-title="Midnight Serenade (Lo-Fi)">
+                    <div class="vinyl-preset-icon">🌙</div>
+                    <div class="vinyl-preset-info">
+                      <div class="vinyl-preset-title">Midnight Serenade</div>
+                      <div class="vinyl-preset-sub">Cozy nocturnal dream bells</div>
+                    </div>
+                    <div class="vinyl-preset-check">✓</div>
+                  </div>
+                  <div class="vinyl-preset-option" data-song-id="sunflower-waltz" data-title="Sunflower Waltz (Piano)">
+                    <div class="vinyl-preset-icon">🌻</div>
+                    <div class="vinyl-preset-info">
+                      <div class="vinyl-preset-title">Sunflower Waltz</div>
+                      <div class="vinyl-preset-sub">Sunny piano chords</div>
+                    </div>
+                    <div class="vinyl-preset-check">✓</div>
+                  </div>
+                  <div class="vinyl-preset-option" data-song-id="claire-de-lune" data-title="Clair de Lune (Celestial)">
+                    <div class="vinyl-preset-icon">💫</div>
+                    <div class="vinyl-preset-info">
+                      <div class="vinyl-preset-title">Clair de Lune</div>
+                      <div class="vinyl-preset-sub">Soft celestial melody</div>
+                    </div>
+                    <div class="vinyl-preset-check">✓</div>
+                  </div>
+                </div>
+
+                <div class="vinyl-custom-song-section">
+                  <div class="vinyl-custom-divider"><span>or customize title</span></div>
+                  <div class="vinyl-input-group">
+                    <label class="vinyl-input-label">Song Title &amp; Artist:</label>
+                    <input type="text" id="vinyl-custom-title-input" class="vinyl-modal-input" placeholder="e.g. Lover - Taylor Swift" />
+                  </div>
+                  <div class="vinyl-input-group">
+                    <label class="vinyl-input-label">Dedication Note:</label>
+                    <input type="text" id="vinyl-custom-dedication-input" class="vinyl-modal-input" placeholder="e.g. For Kabir" />
+                  </div>
+                  <div class="vinyl-input-group">
+                    <label class="vinyl-input-label">Upload Audio (optional):</label>
+                    <input type="file" id="vinyl-audio-file-input" accept="audio/*" class="vinyl-file-input" />
+                  </div>
+                </div>
+
+                <button class="card-action-btn primary full-width" id="btn-confirm-vinyl-song">
+                  <span>Place Vinyl on Card ♡</span>
+                </button>
+              </div>
             </div>
 
             <!-- Hidden file input for polaroids -->

@@ -3399,8 +3399,8 @@ body {
 }
 .card-cover-canvas {
   width: 100%;
-  max-width: 320px;
-  aspect-ratio: 1 / 1.38;
+  max-width: min(290px, 70vw);
+  aspect-ratio: 9 / 16;
   border-radius: 12px;
   position: relative;
   box-shadow: 0 10px 30px rgba(40, 20, 25, 0.18), 0 2px 6px rgba(0,0,0,0.06);
@@ -3413,7 +3413,7 @@ body {
 
 /* 1. Sunshine Gingham & Pressed Blooms */
 .theme-gingham-pressed {
-  background: url('assets/card_themes/theme_gingham_pressed.jpg') center / cover no-repeat;
+  background: url('assets/card_themes/theme_gingham_pressed.jpg') center / 100% 100% no-repeat;
   color: #4a382c;
   border: 1px solid #ebd9a9;
 }
@@ -3433,7 +3433,7 @@ body {
 
 /* 2. Stardust & Wildflower Parchment */
 .theme-stardust-wildflowers {
-  background: url('assets/card_themes/theme_stardust_wildflowers.jpg') center / cover no-repeat;
+  background: url('assets/card_themes/theme_stardust_wildflowers.jpg') center / 100% 100% no-repeat;
   color: #3e3328;
   border: 1px solid #d4c4b0;
 }
@@ -3452,7 +3452,7 @@ body {
 
 /* 3. La Dolce Vita / Garden Celebration */
 .theme-dolce-vita {
-  background: url('assets/card_themes/theme_dolce_vita.jpg') center / cover no-repeat;
+  background: url('assets/card_themes/theme_dolce_vita.jpg') center / 100% 100% no-repeat;
   color: #2b3a27;
   border: 1px solid #b5ccab;
 }
@@ -3471,7 +3471,7 @@ body {
 
 /* 4. Royal Lotus Sage */
 .theme-royal-lotus {
-  background: url('assets/card_themes/theme_royal_lotus.jpg') center / cover no-repeat;
+  background: url('assets/card_themes/theme_royal_lotus.jpg') center / 100% 100% no-repeat;
   color: #f7f3ec;
   border: 1px solid #5a6e55;
 }
@@ -3496,7 +3496,7 @@ body {
 
 /* 5. Denim & Embroidered Keepsakes */
 .theme-denim-embroidery {
-  background: url('assets/card_themes/theme_denim_embroidery.jpg') center / cover no-repeat;
+  background: url('assets/card_themes/theme_denim_embroidery.jpg') center / 100% 100% no-repeat;
   color: #f6f0ea;
   border: 1px solid #233554;
 }
@@ -3523,7 +3523,7 @@ body {
 
 /* 6. Burgundy Velvet Arch */
 .theme-burgundy-arch {
-  background: url('assets/card_themes/theme_burgundy_arch.jpg') center / cover no-repeat;
+  background: url('assets/card_themes/theme_burgundy_arch.jpg') center / 100% 100% no-repeat;
   color: #f8f4ee;
   border: 1px solid #6b1d28;
 }
@@ -3549,7 +3549,7 @@ body {
 
 /* 7. Plumeria & Golden Bows */
 .theme-plumeria-bows {
-  background: url('assets/card_themes/theme_plumeria_bows.jpg') center / cover no-repeat;
+  background: url('assets/card_themes/theme_plumeria_bows.jpg') center / 100% 100% no-repeat;
   color: #554428;
   border: 1px solid #ebd9a9;
 }
@@ -3634,56 +3634,145 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 5;
+}
+.card-inside-items-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+.card-inside-items-overlay .card-placed-item {
+  pointer-events: auto;
 }
 .card-placed-item {
   position: absolute;
   touch-action: none;
-  cursor: move;
   user-select: none;
   box-sizing: border-box;
   padding: 4px;
+  transform-origin: center center;
+  transition: transform 0.05s ease-out;
 }
-.card-placed-item.selected {
-  outline: 1.5px dashed #C97384;
+.card-placed-item.is-selected {
+  outline: 1.5px dashed #b84357;
+  outline-offset: 3px;
 }
+.card-placed-item.is-dragging {
+  cursor: grabbing !important;
+  opacity: 0.92;
+  z-index: 100 !important;
+}
+.card-placed-item.is-dragging * {
+  user-select: none !important;
+}
+
+/* Drag Handle for Text & Items */
+.card-drag-handle {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 20px;
+  padding: 0 8px;
+  background: #521319;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 11px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  cursor: grab;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  white-space: nowrap;
+  z-index: 20;
+}
+.card-drag-handle:active {
+  cursor: grabbing;
+}
+.card-placed-item.is-selected .card-drag-handle,
+.card-placed-item:hover .card-drag-handle {
+  display: flex;
+}
+
+/* Rotate Handle */
+.card-rotate-handle {
+  position: absolute;
+  top: -24px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  color: #521319;
+  border: 1.5px solid #521319;
+  border-radius: 50%;
+  font-size: 13px;
+  line-height: 1;
+  font-weight: bold;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: crosshair;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 20;
+  transition: transform 0.15s ease;
+}
+.card-rotate-handle:hover {
+  transform: scale(1.18);
+  background: #521319;
+  color: #fff;
+}
+.card-placed-item.is-selected .card-rotate-handle,
+.card-placed-item:hover .card-rotate-handle {
+  display: flex;
+}
+
+/* Delete Button */
 .card-placed-item .btn-item-delete {
   position: absolute;
   top: -8px;
   right: -8px;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: #D8263B;
   color: #FFF;
   border: 2px solid #FFF;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1;
   font-weight: bold;
   cursor: pointer;
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 20;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 .card-placed-item.is-selected .btn-item-delete,
 .card-placed-item:hover .btn-item-delete,
 .card-placed-item.selected .btn-item-delete {
   display: flex;
 }
+
+/* Resize Handle */
 .card-placed-item .card-resize-handle,
 .card-placed-item .item-resize-handle {
   position: absolute;
   bottom: -6px;
   right: -6px;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #521319;
   border: 2px solid #FFF;
   cursor: nwse-resize;
   display: none;
-  z-index: 10;
+  z-index: 20;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.25);
 }
 .card-placed-item.is-selected .card-resize-handle,
 .card-placed-item:hover .card-resize-handle,
@@ -3748,17 +3837,6 @@ body {
   display: block;
   border-radius: 2px;
 }
-  border-radius: 4px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-}
-.card-placed-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 2px;
-}
-
 /* Placed Text Item */
 .card-placed-text .card-item-content {
   font-family: 'Caveat', cursive;
@@ -3779,8 +3857,9 @@ body {
 }
 .card-inside-bifold {
   width: 100%;
-  max-width: 420px;
-  min-height: 380px;
+  max-width: min(440px, 94vw);
+  aspect-ratio: 9 / 8;
+  min-height: 360px;
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(40, 20, 25, 0.16);
   display: flex;
@@ -4039,6 +4118,139 @@ body {
 @keyframes popupSlideUp {
   from { transform: translate(-50%, 100%); }
   to { transform: translate(-50%, 0); }
+}
+
+/* Vinyl Song Selector Modal (Centered Floating Sheet) */
+.vinyl-song-modal {
+  bottom: auto;
+  top: 50%;
+  transform: translate(-50%, -50%) !important;
+  border-radius: 18px !important;
+  max-height: 82vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(45, 15, 20, 0.35);
+  animation: vinylModalFade 0.22s ease-out;
+  padding: 16px 18px;
+}
+@keyframes vinylModalFade {
+  from { opacity: 0; transform: translate(-50%, -46%) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.vinyl-song-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vinyl-presets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+.vinyl-preset-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1.5px solid #ebd9dc;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.vinyl-preset-option:hover {
+  border-color: #b84357;
+  background: #fff8f9;
+}
+.vinyl-preset-option.active {
+  border-color: #521319;
+  background: #fbf0f2;
+}
+.vinyl-preset-icon {
+  font-size: 18px;
+}
+.vinyl-preset-info {
+  flex: 1;
+}
+.vinyl-preset-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #3e1b20;
+}
+.vinyl-preset-sub {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  color: #8c5a62;
+}
+.vinyl-preset-check {
+  font-weight: bold;
+  color: #521319;
+  font-size: 13px;
+  opacity: 0;
+}
+.vinyl-preset-option.active .vinyl-preset-check {
+  opacity: 1;
+}
+.vinyl-custom-song-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+.vinyl-custom-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #a07880;
+  font-size: 11px;
+  font-style: italic;
+}
+.vinyl-custom-divider::before,
+.vinyl-custom-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px dashed #e8cfd3;
+}
+.vinyl-custom-divider span {
+  padding: 0 8px;
+}
+.vinyl-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.vinyl-input-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #521319;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.vinyl-modal-input {
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid #d9b8be;
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  background: #fff;
+  color: #3b1a20;
+}
+.vinyl-modal-input:focus {
+  outline: none;
+  border-color: #521319;
+}
+.vinyl-file-input {
+  font-size: 11px;
+  color: #6d3e45;
+}
+.vinyl-track-info {
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+.vinyl-track-info:hover {
+  color: #521319;
 }
 .popup-picker-header {
   display: flex;
