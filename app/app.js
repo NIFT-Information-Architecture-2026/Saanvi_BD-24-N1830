@@ -91,11 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const appBottomNav = document.getElementById('app-bottom-nav');
 
   function openApp() {
+    if (window.isRecipientMode) return;
     if (!splashScreen || splashScreen.dataset.opened === 'true') return;
     splashScreen.dataset.opened = 'true';
     splashScreen.style.opacity = '0';
     splashScreen.style.transform = 'scale(1.02)';
     setTimeout(() => {
+      if (window.isRecipientMode) return;
       splashScreen.style.display = 'none';
       if (appHeader) appHeader.style.display = 'flex';
       if (appStage) appStage.style.display = 'block';
@@ -1303,47 +1305,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Dispatch sharing
   function generateShareableLetterUrl() {
-    const toVal = state.letter.to || (letterToInput ? letterToInput.value : 'Kabir');
-    const fromVal = state.letter.from || (letterFromInput ? letterFromInput.value : 'Saanvi');
-    const bodyVal = state.letter.body || (letterTextarea ? letterTextarea.value : '');
-
-    const payload = {
-      type: 'letter',
-      to: toVal,
-      from: fromVal,
-      body: bodyVal,
-      th: state.letter.theme,
-      fs: state.letter.fontSize,
-      ff: state.letter.fontFamily,
-      env: state.letter.envelope,
-      sl: state.letter.seal,
-      stk: state.letter.stickers
-    };
-
-    const jsonStr = JSON.stringify(payload);
-    const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(jsonStr))));
-    const baseUrl = window.location.origin + window.location.pathname;
-    return `${baseUrl}?letter=${encoded}`;
+    return (typeof updateActiveDispatchUrl === 'function') 
+      ? updateActiveDispatchUrl(state.letter.to ? 'for-' + state.letter.to : 'for-you')
+      : window.location.href;
   }
 
   function openLetterDispatchModal() {
-    const modal = document.getElementById('dispatch-modal');
-    if (!modal) return;
-    const iconEl = document.getElementById('dispatch-badge-icon');
-    const titleEl = document.getElementById('dispatch-modal-title');
-    const subEl = document.getElementById('dispatch-modal-sub');
-    const copyDescEl = document.getElementById('dispatch-copy-desc');
-    const urlInput = document.getElementById('dispatch-url-input');
-
-    if (iconEl) iconEl.textContent = '💌';
-    if (titleEl) titleEl.textContent = 'Dispatch Your Letter';
-    if (subEl) subEl.textContent = 'Share your sealed keepsake letter with someone special.';
-    if (copyDescEl) copyDescEl.textContent = 'Anyone with this link can break the seal and read your letter';
-
-    const shareUrl = generateShareableLetterUrl();
-    if (urlInput) urlInput.value = shareUrl;
-
-    modal.style.display = 'flex';
+    if (typeof openUnifiedDispatchModal === 'function') {
+      openUnifiedDispatchModal('letter');
+    }
   }
 
   if (btnLetterDispatch) {
@@ -1585,45 +1555,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function generateShareableBouquetUrl() {
-    const toVal = bouquetToInput ? bouquetToInput.value : state.bouquet.noteTo;
-    const fromVal = bouquetFromInput ? bouquetFromInput.value : state.bouquet.noteFrom;
-    const bodyVal = bouquetNoteBody ? bouquetNoteBody.value : state.bouquet.noteBody;
-
-    const payload = {
-      type: 'bouquet',
-      fl: state.bouquet.flowers.map(f => ({ f: f.flower, file: f.file })),
-      gr: state.bouquet.greenery,
-      sd: state.bouquet.shuffleSeed,
-      th: state.bouquet.noteTheme || 'cream',
-      to: toVal,
-      from: fromVal,
-      m: bodyVal,
-      d: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    };
-    const jsonStr = JSON.stringify(payload);
-    const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
-    const base = window.location.origin + window.location.pathname;
-    return `${base}#bouquet=${encodeURIComponent(b64)}`;
+    return (typeof updateActiveDispatchUrl === 'function') 
+      ? updateActiveDispatchUrl(state.bouquet.noteTo ? 'for-' + state.bouquet.noteTo : 'for-you')
+      : window.location.href;
   }
 
   function openBouquetDispatchModal() {
-    const modal = document.getElementById('dispatch-modal');
-    if (!modal) return;
-    const iconEl = document.getElementById('dispatch-badge-icon');
-    const titleEl = document.getElementById('dispatch-modal-title');
-    const subEl = document.getElementById('dispatch-modal-sub');
-    const copyDescEl = document.getElementById('dispatch-copy-desc');
-    const urlInput = document.getElementById('dispatch-url-input');
-
-    if (iconEl) iconEl.textContent = '🌸';
-    if (titleEl) titleEl.textContent = 'Send Your Botanical Bouquet';
-    if (subEl) subEl.textContent = 'Share your handpicked bouquet and personal note.';
-    if (copyDescEl) copyDescEl.textContent = 'Anyone with this link can view your bouquet and read your attached note';
-
-    const shareUrl = generateShareableBouquetUrl();
-    if (urlInput) urlInput.value = shareUrl;
-
-    modal.style.display = 'flex';
+    if (typeof openUnifiedDispatchModal === 'function') {
+      openUnifiedDispatchModal('bouquet');
+    }
   }
 
   // Step 1: Flower Selection (5 to 8 stems total, allows duplicate stems)
@@ -3897,46 +3837,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function generateShareableCardUrl() {
-    const payload = {
-      type: 'card',
-      th: state.greetingCard.theme,
-      cv: state.greetingCard.coverElements,
-      ks: state.greetingCard.insideKeepsakes,
-      to: state.greetingCard.insideTo,
-      from: state.greetingCard.insideFrom,
-      m: state.greetingCard.insideBody,
-      ff: state.greetingCard.insideFontFamily,
-      fs: state.greetingCard.insideFontSize,
-      v: state.greetingCard.vessel,
-      env: state.greetingCard.envelope,
-      sl: state.greetingCard.seal,
-      bi: state.greetingCard.boxIndex,
-      d: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    };
-    const jsonStr = JSON.stringify(payload);
-    const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
-    const base = window.location.origin + window.location.pathname;
-    return `${base}#card=${encodeURIComponent(b64)}`;
+    return (typeof updateActiveDispatchUrl === 'function')
+      ? updateActiveDispatchUrl(state.greetingCard.insideTo ? 'for-' + state.greetingCard.insideTo : 'for-you')
+      : window.location.href;
   }
 
   function openCardDispatchModal() {
-    const modal = document.getElementById('dispatch-modal');
-    if (!modal) return;
-    const iconEl = document.getElementById('dispatch-badge-icon');
-    const titleEl = document.getElementById('dispatch-modal-title');
-    const subEl = document.getElementById('dispatch-modal-sub');
-    const copyDescEl = document.getElementById('dispatch-copy-desc');
-    const urlInput = document.getElementById('dispatch-url-input');
-
-    if (iconEl) iconEl.textContent = '💌';
-    if (titleEl) titleEl.textContent = 'Send Your Greeting Card';
-    if (subEl) subEl.textContent = 'Share your personalized card and keepsakes.';
-    if (copyDescEl) copyDescEl.textContent = 'Anyone with this link can unwrap and open your card';
-
-    const shareUrl = generateShareableCardUrl();
-    if (urlInput) urlInput.value = shareUrl;
-
-    modal.style.display = 'flex';
+    if (typeof openUnifiedDispatchModal === 'function') {
+      openUnifiedDispatchModal('card');
+    }
   }
 
   if (btnCardDispatch) {
@@ -4486,28 +4395,226 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ================= DISPATCH SHARING MODAL =================
-  function generateShareableUrl() {
+  // ================= UNIFIED DISPATCH & SHORT URL SYSTEM =================
+  let currentDispatchType = 'card';
+  const dispatchCustomSlugInput = document.getElementById('dispatch-custom-slug');
+  const dispatchSlugPrefix = document.getElementById('dispatch-slug-prefix');
+  const btnDispatchWhatsApp = document.getElementById('btn-dispatch-whatsapp');
+
+  function toBase64Url(str) {
+    return btoa(unescape(encodeURIComponent(str)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+  }
+
+  function fromBase64Url(str) {
+    let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    return decodeURIComponent(escape(atob(b64)));
+  }
+
+  function sanitizeSlug(slug) {
+    return (slug || 'for-you')
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'for-you';
+  }
+
+  function getBaseShareUrl() {
+    return window.location.origin + window.location.pathname;
+  }
+
+  function getCompactCardPayload(slug) {
+    const ks = (state.greetingCard.insideKeepsakes || []).map(k => {
+      if (k.type === 'vinyl') {
+        return { t: 'v', id: k.id || 'track_1', tit: k.title, x: Math.round(k.x), y: Math.round(k.y) };
+      }
+      if (k.type === 'flower') {
+        return { t: 'f', f: k.file, n: k.name, x: Math.round(k.x), y: Math.round(k.y), w: Math.round(k.width || 90), r: Math.round(k.rotation || 0) };
+      }
+      if (k.type === 'sticker') {
+        return { t: 's', f: k.file, n: k.name, x: Math.round(k.x), y: Math.round(k.y), w: Math.round(k.width || 70), r: Math.round(k.rotation || 0) };
+      }
+      if (k.type === 'polaroid') {
+        return { t: 'p', src: k.src, cap: k.caption, x: Math.round(k.x), y: Math.round(k.y), w: Math.round(k.width || 130), r: Math.round(k.rotation || 0) };
+      }
+      return k;
+    });
+
+    const cv = (state.greetingCard.coverElements || []).map(c => {
+      if (c.type === 'text') {
+        return { t: 'tx', txt: c.text, ff: c.fontFamily, sz: c.fontSize, x: Math.round(c.x), y: Math.round(c.y) };
+      }
+      if (c.type === 'photo') {
+        return { t: 'ph', src: c.src, x: Math.round(c.x), y: Math.round(c.y), w: c.width };
+      }
+      return c;
+    });
+
+    return {
+      t: 'c',
+      slg: slug,
+      to: state.greetingCard.insideTo || 'You',
+      fr: state.greetingCard.insideFrom || 'Someone Special',
+      m: state.greetingCard.insideBody || '',
+      th: state.greetingCard.theme || 'gingham-pressed',
+      ff: state.greetingCard.insideFontFamily || "'Caveat', cursive",
+      fs: state.greetingCard.insideFontSize || 19,
+      v: state.greetingCard.vessel || 'envelope',
+      env: state.greetingCard.envelope || 'dusty-blue',
+      sl: state.greetingCard.seal || 'gold-celestial',
+      bi: state.greetingCard.boxIndex || '1',
+      ks: ks,
+      cv: cv,
+      d: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    };
+  }
+
+  function getCompactLetterPayload(slug) {
+    const toVal = state.letter.to || (letterToInput ? letterToInput.value : 'Kabir');
+    const fromVal = state.letter.from || (letterFromInput ? letterFromInput.value : 'Saanvi');
+    const bodyVal = state.letter.body || (letterTextarea ? letterTextarea.value : '');
+
+    return {
+      t: 'l',
+      slg: slug,
+      to: toVal,
+      fr: fromVal,
+      m: bodyVal,
+      th: state.letter.theme,
+      fs: state.letter.fontSize,
+      ff: state.letter.fontFamily,
+      env: state.letter.envelope,
+      sl: state.letter.seal,
+      stk: state.letter.stickers,
+      d: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    };
+  }
+
+  function getCompactBouquetPayload(slug) {
+    const toVal = bouquetToInput ? bouquetToInput.value : state.bouquet.noteTo;
+    const fromVal = bouquetFromInput ? bouquetFromInput.value : state.bouquet.noteFrom;
+    const bodyVal = bouquetNoteBody ? bouquetNoteBody.value : state.bouquet.noteBody;
+
+    return {
+      t: 'b',
+      slg: slug,
+      fl: state.bouquet.flowers.map(f => ({ f: f.flower, file: f.file })),
+      gr: state.bouquet.greenery,
+      sd: state.bouquet.shuffleSeed,
+      th: state.bouquet.noteTheme || 'cream',
+      to: toVal,
+      fr: fromVal,
+      m: bodyVal,
+      d: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    };
+  }
+
+  function getCompactPostcardPayload(slug) {
     const payload = getPostcardStatePayload();
+    return {
+      t: 'p',
+      slg: slug,
+      to: payload.to,
+      fr: payload.from,
+      m: payload.body,
+      th: payload.stampTheme,
+      stmp: payload.stamps,
+      v: payload.vessel,
+      env: payload.envIndex,
+      bi: payload.boxIndex,
+      d: payload.date
+    };
+  }
+
+  function openUnifiedDispatchModal(mediumType) {
+    currentDispatchType = mediumType || 'card';
+    if (!dispatchModal) return;
+
+    const iconEl = document.getElementById('dispatch-badge-icon');
+    const titleEl = document.getElementById('dispatch-modal-title');
+    const subEl = document.getElementById('dispatch-modal-sub');
+
+    let toName = 'you';
+    if (currentDispatchType === 'card') {
+      if (iconEl) iconEl.textContent = '💌';
+      if (titleEl) titleEl.textContent = 'Dispatch Your Greeting Card';
+      if (subEl) subEl.textContent = 'Share your personalized card and keepsakes.';
+      toName = state.greetingCard.insideTo || 'you';
+    } else if (currentDispatchType === 'letter') {
+      if (iconEl) iconEl.textContent = '📜';
+      if (titleEl) titleEl.textContent = 'Dispatch Your Sealed Letter';
+      if (subEl) subEl.textContent = 'Share your handwritten letter with someone special.';
+      toName = state.letter.to || (letterToInput ? letterToInput.value : 'you');
+    } else if (currentDispatchType === 'bouquet') {
+      if (iconEl) iconEl.textContent = '🌸';
+      if (titleEl) titleEl.textContent = 'Dispatch Your Botanical Bouquet';
+      if (subEl) subEl.textContent = 'Share your handpicked bouquet and heartfelt note.';
+      toName = state.bouquet.noteTo || (bouquetToInput ? bouquetToInput.value : 'you');
+    } else {
+      if (iconEl) iconEl.textContent = '💌';
+      if (titleEl) titleEl.textContent = 'Dispatch Your Postcard';
+      if (subEl) subEl.textContent = 'Share your thoughtful gift with someone special.';
+      toName = state.to || 'you';
+    }
+
+    const initialSlug = sanitizeSlug('for-' + toName);
+    if (dispatchCustomSlugInput) {
+      dispatchCustomSlugInput.value = initialSlug;
+    }
+    if (dispatchSlugPrefix) {
+      const host = window.location.hostname || 'betweenus.love';
+      dispatchSlugPrefix.textContent = host + '/#';
+    }
+
+    updateActiveDispatchUrl(initialSlug);
+    dispatchModal.style.display = 'flex';
+  }
+
+  function updateActiveDispatchUrl(slug) {
+    const cleanSlug = sanitizeSlug(slug);
+    let payload = null;
+    if (currentDispatchType === 'card') {
+      payload = getCompactCardPayload(cleanSlug);
+    } else if (currentDispatchType === 'letter') {
+      payload = getCompactLetterPayload(cleanSlug);
+    } else if (currentDispatchType === 'bouquet') {
+      payload = getCompactBouquetPayload(cleanSlug);
+    } else {
+      payload = getCompactPostcardPayload(cleanSlug);
+    }
+
+    try {
+      localStorage.setItem('between_us_card_' + cleanSlug, JSON.stringify(payload));
+      localStorage.setItem('between_us_latest_share', JSON.stringify(payload));
+    } catch (e) {}
+
     const jsonStr = JSON.stringify(payload);
-    const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(jsonStr))));
-    const baseUrl = window.location.origin + window.location.pathname;
-    return `${baseUrl}?card=${encoded}`;
+    const compactData = toBase64Url(jsonStr);
+    const base = getBaseShareUrl();
+    const finalUrl = `${base}#c=${encodeURIComponent(cleanSlug)}&d=${compactData}`;
+
+    if (dispatchUrlInput) {
+      dispatchUrlInput.value = finalUrl;
+    }
+    return finalUrl;
+  }
+
+  if (dispatchCustomSlugInput) {
+    dispatchCustomSlugInput.addEventListener('input', (e) => {
+      const slugVal = e.target.value.trim();
+      updateActiveDispatchUrl(slugVal);
+    });
+  }
+
+  function generateShareableUrl() {
+    return updateActiveDispatchUrl(state.to ? 'for-' + state.to : 'for-you');
   }
 
   if (btnStep3Dispatch) {
     btnStep3Dispatch.addEventListener('click', () => {
-      const iconEl = document.getElementById('dispatch-badge-icon');
-      const titleEl = document.getElementById('dispatch-modal-title');
-      const subEl = document.getElementById('dispatch-modal-sub');
-      const copyDescEl = document.getElementById('dispatch-copy-desc');
-      if (iconEl) iconEl.textContent = '💌';
-      if (titleEl) titleEl.textContent = 'Dispatch Your Postcard';
-      if (subEl) subEl.textContent = 'Share your thoughtful gift with someone special.';
-      if (copyDescEl) copyDescEl.textContent = 'Anyone with this link can view and flip your postcard';
-      const shareUrl = generateShareableUrl();
-      if (dispatchUrlInput) dispatchUrlInput.value = shareUrl;
-      if (dispatchModal) dispatchModal.style.display = 'flex';
+      openUnifiedDispatchModal('postcard');
       autoSaveToVault();
     });
   }
@@ -4527,7 +4634,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function copyShareUrlToClipboard() {
-    const shareUrl = dispatchUrlInput?.value || generateShareableUrl();
+    const shareUrl = dispatchUrlInput?.value || updateActiveDispatchUrl(dispatchCustomSlugInput?.value || 'for-you');
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(shareUrl).then(() => {
         showToast('Link copied to clipboard! ✓');
@@ -4554,13 +4661,29 @@ document.addEventListener('DOMContentLoaded', () => {
     btnCopySmall.addEventListener('click', copyShareUrlToClipboard);
   }
 
+  if (btnDispatchWhatsApp) {
+    btnDispatchWhatsApp.addEventListener('click', () => {
+      const shareUrl = dispatchUrlInput?.value || updateActiveDispatchUrl(dispatchCustomSlugInput?.value || 'for-you');
+      let toName = '';
+      if (currentDispatchType === 'card') toName = state.greetingCard.insideTo;
+      else if (currentDispatchType === 'letter') toName = state.letter.to;
+      else if (currentDispatchType === 'bouquet') toName = state.bouquet.noteTo;
+      else toName = state.to;
+
+      const forWhom = toName ? `for ${toName}` : 'for you';
+      const msg = `A little handwritten gift ${forWhom} on Between Us ♡\nOpen your card: ${shareUrl}`;
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      window.open(waUrl, '_blank');
+    });
+  }
+
   if (btnDispatchSendFriends) {
     btnDispatchSendFriends.addEventListener('click', () => {
-      const shareUrl = dispatchUrlInput?.value || generateShareableUrl();
+      const shareUrl = dispatchUrlInput?.value || updateActiveDispatchUrl(dispatchCustomSlugInput?.value || 'for-you');
       if (navigator.share) {
         navigator.share({
           title: 'A Little Something, from Me to You',
-          text: 'I made a special handwritten postcard for you on Between Us ♡',
+          text: 'I made a special handwritten gift for you on Between Us ♡',
           url: shareUrl
         }).catch(err => {
           if (err.name !== 'AbortError') {
@@ -4574,7 +4697,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openFallbackShare(url) {
-    const text = encodeURIComponent('I made a special handwritten postcard for you on Between Us ♡ ' + url);
+    const text = encodeURIComponent('I made a special handwritten gift for you on Between Us ♡ ' + url);
     const waUrl = `https://api.whatsapp.com/send?text=${text}`;
     window.open(waUrl, '_blank');
   }
@@ -4584,36 +4707,129 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function checkUrlRecipientView() {
     try {
-      let rawQuery = window.location.search;
-      if (!rawQuery && window.location.hash) {
-        rawQuery = '?' + window.location.hash.replace(/^[#?]+/, '');
+      const rawSearch = window.location.search || '';
+      const rawHash = window.location.hash || '';
+
+      let hasRecipientParam = false;
+      let slug = '';
+      let dataParam = '';
+      let cardParam = '';
+      let letterParam = '';
+      let bouquetParam = '';
+
+      if (rawSearch) {
+        const sp = new URLSearchParams(rawSearch);
+        if (sp.has('c')) { hasRecipientParam = true; slug = sp.get('c'); }
+        if (sp.has('d')) { hasRecipientParam = true; dataParam = sp.get('d'); }
+        if (sp.has('card')) { hasRecipientParam = true; cardParam = sp.get('card'); }
+        if (sp.has('letter')) { hasRecipientParam = true; letterParam = sp.get('letter'); }
+        if (sp.has('bouquet')) { hasRecipientParam = true; bouquetParam = sp.get('bouquet'); }
       }
-      if (!rawQuery && window.location.href.includes('?')) {
-        rawQuery = window.location.href.slice(window.location.href.indexOf('?'));
-      }
-      const urlParams = new URLSearchParams(rawQuery);
-      const cardParam = urlParams.get('card');
-      const bouquetParam = urlParams.get('bouquet');
-      const letterParam = urlParams.get('letter');
-      if (cardParam) {
-        const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(cardParam))));
-        const cardData = JSON.parse(jsonStr);
-        if (cardData.type === 'card' || cardData.type === 'greeting-card') {
-          renderRecipientCardExperience(cardData);
-        } else {
-          renderRecipientExperience(cardData);
+
+      if (rawHash) {
+        const hashClean = rawHash.replace(/^[#?]+/, '');
+        const hp = new URLSearchParams(hashClean);
+        if (hp.has('c')) { hasRecipientParam = true; slug = hp.get('c'); }
+        if (hp.has('d')) { hasRecipientParam = true; dataParam = hp.get('d'); }
+        if (hp.has('card')) { hasRecipientParam = true; cardParam = hp.get('card'); }
+        if (hp.has('letter')) { hasRecipientParam = true; letterParam = hp.get('letter'); }
+        if (hp.has('bouquet')) { hasRecipientParam = true; bouquetParam = hp.get('bouquet'); }
+
+        if (!hasRecipientParam && (hashClean.startsWith('for-') || hashClean.includes('card') || hashClean.includes('gift'))) {
+          hasRecipientParam = true;
+          slug = hashClean;
         }
-      } else if (bouquetParam) {
-        const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(bouquetParam))));
-        const bqData = JSON.parse(jsonStr);
-        renderRecipientBouquetExperience(bqData);
-      } else if (letterParam) {
-        const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(letterParam))));
-        const letterData = JSON.parse(jsonStr);
-        renderRecipientLetterExperience(letterData);
+      }
+
+      if (!hasRecipientParam) return;
+
+      // Lock into Recipient Presentation Mode!
+      window.isRecipientMode = true;
+
+      // Immediately hide app editor studio, header, splash screen, and bottom navigation
+      if (splashScreen) splashScreen.style.display = 'none';
+      if (appHeader) appHeader.style.display = 'none';
+      if (appStage) appStage.style.display = 'none';
+      if (appBottomNav) appBottomNav.style.display = 'none';
+
+      const recipientStage = document.getElementById('recipient-stage');
+      if (recipientStage) recipientStage.style.display = 'flex';
+
+      let itemData = null;
+
+      // 1. Decode compact URL-safe base64 payload
+      if (dataParam) {
+        try {
+          const jsonStr = fromBase64Url(dataParam);
+          itemData = JSON.parse(jsonStr);
+        } catch (e) {
+          console.warn('Could not parse compact payload:', e);
+        }
+      }
+
+      // 2. Lookup by slug in localStorage
+      if (!itemData && slug) {
+        try {
+          const cached = localStorage.getItem('between_us_card_' + slug);
+          if (cached) itemData = JSON.parse(cached);
+        } catch (e) {}
+      }
+
+      // 3. Fallback to legacy atob params
+      if (!itemData && cardParam) {
+        try {
+          const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(cardParam))));
+          itemData = JSON.parse(jsonStr);
+        } catch (e) {}
+      }
+      if (!itemData && letterParam) {
+        try {
+          const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(letterParam))));
+          itemData = JSON.parse(jsonStr);
+        } catch (e) {}
+      }
+      if (!itemData && bouquetParam) {
+        try {
+          const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(bouquetParam))));
+          itemData = JSON.parse(jsonStr);
+        } catch (e) {}
+      }
+
+      // 4. Default fallback from slug if no payload provided
+      if (!itemData && slug) {
+        const cleanName = slug.replace(/^for-/, '').replace(/-/g, ' ');
+        const nameCap = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+        itemData = {
+          t: 'c',
+          to: nameCap,
+          fr: 'Someone who loves you',
+          m: `Thinking of you always...\n\nEvery moment between us is a memory I hold close to my heart ♡`,
+          th: 'gingham-pressed',
+          v: 'envelope',
+          env: 'dusty-blue',
+          sl: 'gold-celestial',
+          ks: [
+            { type: 'vinyl', id: 'track_1', title: 'Die With A Smile - Lady Gaga & Bruno Mars', x: 20, y: 32 },
+            { type: 'flower', file: 'peony.png', name: 'Peony', x: 22, y: 72, width: 85, rotation: 12 }
+          ],
+          cv: []
+        };
+      }
+
+      if (!itemData) return;
+
+      const type = itemData.t || itemData.type || 'c';
+      if (type === 'c' || type === 'card' || type === 'greeting-card') {
+        renderRecipientCardInUnifiedStage(itemData);
+      } else if (type === 'l' || type === 'letter') {
+        renderRecipientLetterInUnifiedStage(itemData);
+      } else if (type === 'b' || type === 'bouquet') {
+        renderRecipientBouquetExperience(itemData);
+      } else {
+        renderRecipientExperience(itemData);
       }
     } catch (err) {
-      console.warn('No valid recipient param found or decode error:', err);
+      console.warn('Recipient URL parse error:', err);
     }
   }
 
@@ -4852,25 +5068,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function renderRecipientLetterExperience(data) {
-    window.renderRecipientLetterExperience = renderRecipientLetterExperience;
+  function renderRecipientLetterInUnifiedStage(data) {
+    window.renderRecipientLetterExperience = renderRecipientLetterInUnifiedStage;
     if (splashScreen) splashScreen.style.display = 'none';
     if (appHeader) appHeader.style.display = 'none';
     if (appStage) appStage.style.display = 'none';
     if (appBottomNav) appBottomNav.style.display = 'none';
 
-    let recipientStage = document.getElementById('recipient-experience-stage');
-    if (!recipientStage) {
-      recipientStage = document.createElement('div');
-      recipientStage.id = 'recipient-experience-stage';
-      recipientStage.className = 'recipient-experience-stage';
-      document.body.appendChild(recipientStage);
-    }
+    const recipientStage = document.getElementById('recipient-stage');
+    if (!recipientStage) return;
     recipientStage.style.display = 'flex';
 
     const toVal = data.to || 'You';
-    const fromVal = data.from || 'Someone who loves you';
-    const bodyVal = data.body || data.m || '';
+    const fromVal = data.fr || data.from || 'Someone Special';
+    const bodyVal = data.m || data.body || '';
     const themeVal = data.th || data.theme || 'crimson-heart';
     const fontVal = data.ff || data.fontFamily || "'Caveat', cursive";
     const sizeVal = data.fs || data.fontSize || 19;
@@ -4882,81 +5093,76 @@ document.addEventListener('DOMContentLoaded', () => {
       'manila': '#D9C2A7',
       'vellum': '#ECE8E1',
       'maroon-lace': '#5C1D24',
-      'charcoal': '#333333'
+      'charcoal': '#333333',
+      'dusty-blue': '#7D95A8'
     };
     const sealColors = {
       'gold': '#C5A059',
       'cream': '#EFECE6',
-      'maroon': '#6B202A'
+      'maroon': '#6B202A',
+      'celestial': '#C5A059'
     };
 
-    const stickersHtml = stickersVal.map(st => `
-      <div style="position: absolute; left: ${st.left}; top: ${st.top}; pointer-events: none;">
-        <img src="${st.src}" style="max-width: 78px; max-height: 78px; object-fit: contain; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.22));" />
-      </div>
-    `).join('');
+    const headingEl = document.getElementById('recipient-dedication-heading');
+    const fromToEl = document.getElementById('recipient-from-to-text');
+    if (headingEl) headingEl.textContent = 'A sealed letter for you ♡';
+    if (fromToEl) fromToEl.textContent = `From ${fromVal} to ${toVal}`;
 
-    recipientStage.innerHTML = `
-      <div class="recipient-card-wrapper" style="padding: 24px 16px; text-align: center; max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px;">
-        <div style="font-family:'Playfair Display', Georgia, serif; font-size:22px; font-weight:600; color:#521319;">
-          A letter for you ♡
-        </div>
+    const postcardWrap = document.getElementById('recipient-postcard-wrap');
+    const bouquetWrap = document.getElementById('recipient-bouquet-wrap');
+    const bifoldCardWrap = document.getElementById('recipient-bifold-card-wrap');
+    const letterWrap = document.getElementById('recipient-letter-wrap');
+    if (postcardWrap) postcardWrap.style.display = 'none';
+    if (bouquetWrap) bouquetWrap.style.display = 'none';
+    if (bifoldCardWrap) bifoldCardWrap.style.display = 'none';
 
-        <!-- Sealed envelope view -->
-        <div id="recip-letter-sealed-view" style="display:flex; flex-direction:column; align-items:center; gap:16px;">
-          <div class="letter-sealed-envelope" style="width:240px; height:155px; box-shadow:0 10px 25px rgba(40,20,25,0.18);">
-            <div class="sealed-env-body" style="background:${envColors[envVal] || '#5C1D24'};">
-              <div class="sealed-env-flap"></div>
-              <div class="sealed-wax-seal" style="background:${sealColors[sealVal] || '#C5A059'};"></div>
-              <div class="sealed-env-to">To: <span>${escapeHtml(toVal)}</span></div>
-            </div>
-          </div>
-          <button id="btn-recip-open-letter" class="btn-letter-unfold">
-            <span class="unfold-heart">♡</span> Break the Seal &amp; Open Letter <span class="unfold-heart">♡</span>
-          </button>
-        </div>
+    const vesselStage = document.getElementById('recipient-vessel-stage');
+    const vesselArt = document.getElementById('recipient-vessel-art');
+    const btnOpen = document.getElementById('btn-recipient-open');
 
-        <!-- Unfolded letter view -->
-        <div id="recip-letter-unfolded-view" style="display:none; flex-direction:column; align-items:center; gap:16px; width:100%;">
-          <div class="letter-sheet theme-${themeVal}" style="margin: 0 auto; width:100%; box-shadow: 0 8px 24px rgba(40,20,25,0.15);">
-            <div class="letter-inner-content">
-              <div class="letter-header-row">
-                <span class="letter-date">A Special Keepsake</span>
-                <div class="letter-from-to">
-                  <span>To: ${escapeHtml(toVal)}</span>
-                  <span>From: ${escapeHtml(fromVal)}</span>
-                </div>
-              </div>
-              <div style="font-family: ${fontVal}; font-size: ${sizeVal}px; line-height: 1.6; color: #2D181B; white-space: pre-wrap; word-break: break-word; min-height: 260px; text-align: left;">
-                ${escapeHtml(bodyVal)}
-              </div>
-            </div>
-            <div style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; border-radius:14px;">
-              ${stickersHtml}
-            </div>
-          </div>
+    if (vesselStage) vesselStage.style.display = 'block';
+    if (letterWrap) letterWrap.style.display = 'none';
 
-          <div style="display:flex; gap:10px; justify-content:center; width:100%; margin-top:8px;">
-            <button id="btn-recip-letter-save" class="letter-action-btn secondary">Save to Keepsakes ♡</button>
-            <button id="btn-recip-letter-create" class="letter-action-btn primary">Write Your Own Letter →</button>
+    if (vesselArt) {
+      vesselArt.innerHTML = `
+        <div class="letter-sealed-envelope" style="width:240px; height:155px; margin:0 auto; box-shadow:0 10px 25px rgba(40,20,25,0.18); cursor:pointer;">
+          <div class="sealed-env-body" style="background:${envColors[envVal] || '#5C1D24'};">
+            <div class="sealed-env-flap"></div>
+            <div class="sealed-wax-seal" style="background:${sealColors[sealVal] || '#C5A059'};"></div>
+            <div class="sealed-env-label" style="font-family:'Caveat', cursive; font-size:17px; color:rgba(255,255,255,0.92); text-shadow:0 1px 3px rgba(0,0,0,0.5); text-align:center; padding-top:80px;">For ${escapeHtml(toVal)}</div>
           </div>
         </div>
-      </div>
-    `;
-
-    const btnOpen = document.getElementById('btn-recip-open-letter');
-    const sealedView = document.getElementById('recip-letter-sealed-view');
-    const unfoldedView = document.getElementById('recip-letter-unfolded-view');
-    if (btnOpen) {
-      btnOpen.onclick = () => {
-        sealedView.style.display = 'none';
-        unfoldedView.style.display = 'flex';
-      };
+      `;
     }
 
-    const btnSave = document.getElementById('btn-recip-letter-save');
-    if (btnSave) {
-      btnSave.onclick = () => {
+    const contentArea = document.getElementById('recip-letter-content-area');
+    function revealLetter() {
+      if (vesselStage) vesselStage.style.display = 'none';
+      if (letterWrap) letterWrap.style.display = 'block';
+      if (contentArea) {
+        let stkHtml = stickersVal.map(st => `
+          <div style="position: absolute; left: ${st.left}; top: ${st.top}; pointer-events: none;">
+            <img src="${st.src}" style="max-width: 78px; max-height: 78px; object-fit: contain; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.22));" />
+          </div>
+        `).join('');
+
+        contentArea.innerHTML = `
+          <div class="letter-paper theme-${themeVal}" style="position: relative; margin: 0 auto; box-shadow: 0 10px 28px rgba(82, 19, 25, 0.14); min-height: 280px; padding: 24px 20px; border-radius: 8px;">
+            <div style="font-family: ${fontVal}; font-size: ${sizeVal}px; line-height: 1.65; white-space: pre-wrap; word-break: break-word; color: #521319;">
+              ${escapeHtml(bodyVal)}
+            </div>
+            ${stkHtml}
+          </div>
+        `;
+      }
+    }
+
+    if (btnOpen) btnOpen.onclick = revealLetter;
+    if (vesselArt) vesselArt.onclick = revealLetter;
+
+    const btnSaveVault = document.getElementById('btn-recipient-save-vault');
+    if (btnSaveVault) {
+      btnSaveVault.onclick = () => {
         try {
           const vault = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
           vault.unshift({
@@ -4975,41 +5181,34 @@ document.addEventListener('DOMContentLoaded', () => {
             savedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
           });
           localStorage.setItem('between_us_vault_items', JSON.stringify(vault));
-          btnSave.textContent = 'Saved to Keepsakes ♡';
+          btnSaveVault.textContent = '✓ Preserved in Your Keepsake Shelf';
+          showToast('Letter tucked into your Keepsake Shelf! ♡');
         } catch (e) {}
       };
     }
 
-    const btnCreate = document.getElementById('btn-recip-letter-create');
-    if (btnCreate) {
-      btnCreate.onclick = () => {
-        recipientStage.style.display = 'none';
+    const btnMakeOwn = document.getElementById('btn-recipient-create');
+    if (btnMakeOwn) {
+      btnMakeOwn.textContent = '✨ Write Your Own Letter';
+      btnMakeOwn.onclick = () => {
+        const stage = document.getElementById('recipient-stage');
+        if (stage) stage.style.display = 'none';
         if (appHeader) appHeader.style.display = 'flex';
         if (appStage) appStage.style.display = 'block';
         if (appBottomNav) appBottomNav.style.display = 'flex';
+        window.isRecipientMode = false;
         selectMedium('letter');
       };
     }
   }
+  function renderRecipientLetterExperience(data) {
+    renderRecipientLetterInUnifiedStage(data);
+  }
+  window.renderRecipientLetterExperience = renderRecipientLetterExperience;
 
-  function renderRecipientCardExperience(data) {
-    window.renderRecipientCardExperience = renderRecipientCardExperience;
-    if (splashScreen) splashScreen.style.display = 'none';
-    if (appHeader) appHeader.style.display = 'none';
-    if (appStage) appStage.style.display = 'none';
-    if (appBottomNav) appBottomNav.style.display = 'none';
-
-    let recipientStage = document.getElementById('recipient-experience-stage');
-    if (!recipientStage) {
-      recipientStage = document.createElement('div');
-      recipientStage.id = 'recipient-experience-stage';
-      recipientStage.className = 'recipient-experience-stage';
-      document.body.appendChild(recipientStage);
-    }
-    recipientStage.style.display = 'flex';
-
+  function renderRecipientCardInUnifiedStage(data) {
     const toVal = data.to || 'You';
-    const fromVal = data.from || 'Someone who loves you';
+    const fromVal = data.fr || data.from || 'Someone Special';
     const bodyVal = data.m || data.body || '';
     const themeVal = data.th || data.theme || 'gingham-pressed';
     const fontVal = data.ff || data.fontFamily || "'Caveat', cursive";
@@ -5021,89 +5220,90 @@ document.addEventListener('DOMContentLoaded', () => {
     const keepsakesVal = data.ks || data.insideKeepsakes || [];
     const coverElementsVal = data.cv || data.coverElements || [];
 
-    let vesselHtml = '';
-    if (vesselVal === 'envelope') {
-      const envSrc = CARD_ENVELOPE_MAP[envVal] || 'assets/letter/envelopes/env_dusty_blue.jpg';
-      const sealSrc = CARD_SEAL_MAP[sealVal] || 'assets/letter/seals/seal_gold_celestial.png';
-      vesselHtml = `
-        <div class="card-envelope-arriving-package" style="position:relative; width:240px; height:160px; margin:0 auto; cursor:pointer;">
-          <img src="${envSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:10px; box-shadow:0 12px 28px rgba(82,19,25,0.18);" alt="Envelope" />
-          <img src="${sealSrc}" class="sealed-wax-seal" style="position:absolute; left:50%; top:54%; transform:translate(-50%, -50%); width:76px; height:76px; object-fit:contain; filter:drop-shadow(0 5px 12px rgba(0,0,0,0.36));" alt="Wax Seal" />
-          <div style="position:absolute; bottom:14px; left:0; width:100%; text-align:center; font-family:'Caveat', cursive; font-size:18px; color:rgba(255,255,255,0.92); text-shadow:0 1px 3px rgba(0,0,0,0.5);">For ${escapeHtml(toVal)}</div>
-        </div>
-      `;
-    } else if (vesselVal === 'box') {
-      const boxSrc = boxImages[boxIdx] || 'assets/boxes/box1.jpg';
-      vesselHtml = `
-        <div style="position:relative; width:170px; height:170px; margin:0 auto; cursor:pointer;">
-          <img src="${boxSrc}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply; filter:drop-shadow(0 10px 22px rgba(82,19,25,0.18));" alt="Gift Box" />
-        </div>
-      `;
-    } else {
-      vesselHtml = `
-        <div style="position:relative; width:230px; margin:0 auto; cursor:pointer; display:flex; flex-direction:column; align-items:center;">
-          <img src="assets/truck.png" style="width:100%; height:auto; object-fit:contain; filter:drop-shadow(0 8px 20px rgba(82,19,25,0.15));" alt="Delivery Truck" />
-          <p style="margin-top:8px; font-family:'Playfair Display', Georgia, serif; color:#521319; font-size:14px; font-weight:600;">Special Delivery Truck</p>
-        </div>
-      `;
-    }
+    // Update Dedication
+    const headingEl = document.getElementById('recipient-dedication-heading');
+    const fromToEl = document.getElementById('recipient-from-to-text');
+    if (headingEl) headingEl.textContent = 'A handwritten card for you ♡';
+    if (fromToEl) fromToEl.textContent = `From ${fromVal} to ${toVal}`;
 
-    recipientStage.innerHTML = `
-      <div class="recipient-card-wrapper" style="padding: 24px 16px; text-align: center; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px;">
-        <div style="font-family:'Playfair Display', Georgia, serif; font-size:22px; font-weight:600; color:#521319;">
-          A card for you ♡
-        </div>
+    // Hide other medium wraps
+    const postcardWrap = document.getElementById('recipient-postcard-wrap');
+    const bouquetWrap = document.getElementById('recipient-bouquet-wrap');
+    const letterWrap = document.getElementById('recipient-letter-wrap');
+    const bifoldCardWrap = document.getElementById('recipient-bifold-card-wrap');
+    if (postcardWrap) postcardWrap.style.display = 'none';
+    if (bouquetWrap) bouquetWrap.style.display = 'none';
+    if (letterWrap) letterWrap.style.display = 'none';
 
-        <!-- Arriving vessel view -->
-        <div id="recip-card-vessel-view" style="display:flex; flex-direction:column; align-items:center; gap:16px;">
-          ${vesselHtml}
-          <button id="btn-recip-open-card" class="btn-click-to-open">
-            Click to Open ♡
-          </button>
-        </div>
+    // Vessel Setup
+    const vesselStage = document.getElementById('recipient-vessel-stage');
+    const vesselArt = document.getElementById('recipient-vessel-art');
+    const btnOpen = document.getElementById('btn-recipient-open');
 
-        <!-- Revealed card view -->
-        <div id="recip-card-revealed-view" style="display:none; flex-direction:column; align-items:center; gap:16px; width:100%;">
-          <div id="recip-card-content-area" style="width:100%;"></div>
-          <div style="display:flex; gap:10px; justify-content:center; width:100%; margin-top:8px;">
-            <button id="btn-recip-card-flip" class="btn-flip-card-pill">
-              <span id="recip-flip-text">View Cover</span>
-            </button>
-            <button id="btn-recip-card-save" class="letter-action-btn secondary">Save to Vault ♡</button>
-            <button id="btn-recip-card-create" class="letter-action-btn primary">Design Your Own Card →</button>
+    if (vesselStage) vesselStage.style.display = 'block';
+    if (bifoldCardWrap) bifoldCardWrap.style.display = 'none';
+
+    if (vesselArt) {
+      if (vesselVal === 'envelope') {
+        const envSrc = CARD_ENVELOPE_MAP[envVal] || 'assets/letter/envelopes/env_dusty_blue.jpg';
+        const sealSrc = CARD_SEAL_MAP[sealVal] || 'assets/letter/seals/seal_gold_celestial.png';
+        vesselArt.innerHTML = `
+          <div class="card-envelope-arriving-package" style="position:relative; width:240px; height:160px; margin:0 auto; cursor:pointer;">
+            <img src="${envSrc}" style="width:100%; height:100%; object-fit:cover; border-radius:10px; box-shadow:0 12px 28px rgba(82,19,25,0.18);" alt="Envelope" />
+            <img src="${sealSrc}" class="sealed-wax-seal" style="position:absolute; left:50%; top:54%; transform:translate(-50%, -50%); width:76px; height:76px; object-fit:contain; filter:drop-shadow(0 5px 12px rgba(0,0,0,0.36));" alt="Wax Seal" />
+            <div style="position:absolute; bottom:14px; left:0; width:100%; text-align:center; font-family:'Caveat', cursive; font-size:18px; color:rgba(255,255,255,0.92); text-shadow:0 1px 3px rgba(0,0,0,0.5);">For ${escapeHtml(toVal)}</div>
           </div>
-        </div>
-      </div>
-    `;
+        `;
+      } else if (vesselVal === 'box') {
+        const boxSrc = boxImages[boxIdx] || 'assets/boxes/box1.jpg';
+        vesselArt.innerHTML = `
+          <div style="position:relative; width:170px; height:170px; margin:0 auto; cursor:pointer;">
+            <img src="${boxSrc}" style="width:100%; height:100%; object-fit:contain; mix-blend-mode:multiply; filter:drop-shadow(0 10px 22px rgba(82,19,25,0.18));" alt="Gift Box" />
+          </div>
+        `;
+      } else {
+        vesselArt.innerHTML = `
+          <div style="position:relative; width:230px; margin:0 auto; cursor:pointer; display:flex; flex-direction:column; align-items:center;">
+            <img src="assets/truck.png" style="width:100%; height:auto; object-fit:contain; filter:drop-shadow(0 8px 20px rgba(82,19,25,0.15));" alt="Delivery Truck" />
+            <p style="margin-top:8px; font-family:'Playfair Display', Georgia, serif; color:#521319; font-size:14px; font-weight:600;">Special Delivery Truck</p>
+          </div>
+        `;
+      }
+    }
 
     let recipFace = 'inside';
     const contentArea = document.getElementById('recip-card-content-area');
+    const flipBtn = document.getElementById('btn-recip-card-flip');
     const flipText = document.getElementById('recip-flip-text');
 
     function renderRecipCard() {
+      if (!contentArea) return;
       if (recipFace === 'inside') {
-        flipText.textContent = 'View Cover';
+        if (flipText) flipText.textContent = 'View Cover';
         let ksHtml = '';
         keepsakesVal.forEach(item => {
-          if (item.type === 'polaroid') {
+          const itType = item.type || item.t;
+          if (itType === 'polaroid' || itType === 'p') {
             ksHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 130}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.w || item.width || 130}px; transform: rotate(${item.r || item.rotation || 0}deg); pointer-events:auto;">
                 <div class="placed-polaroid-frame">
                   <div class="polaroid-pin"></div>
                   <img src="${item.src}" class="polaroid-photo" alt="Memory" />
-                  <div class="polaroid-caption">${escapeHtml(item.caption || 'Cherished Memory')}</div>
+                  <div class="polaroid-caption">${escapeHtml(item.caption || item.cap || 'Cherished Memory')}</div>
                 </div>
               </div>
             `;
-          } else if (item.type === 'flower') {
+          } else if (itType === 'flower' || itType === 'f') {
+            const flowerFile = item.file || item.f || 'peony.png';
             ksHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 90}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
-                <img src="assets/flowers/${item.file}" class="placed-flower-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12)); pointer-events:none;" />
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.w || item.width || 90}px; transform: rotate(${item.r || item.rotation || 0}deg); pointer-events:auto;">
+                <img src="assets/flowers/${flowerFile}" class="placed-flower-img" alt="${item.name || item.n || 'Flower'}" style="width:100%; height:auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12)); pointer-events:none;" />
               </div>
             `;
-          } else if (item.type === 'vinyl') {
+          } else if (itType === 'vinyl' || itType === 'v') {
+            const trackTitle = item.title || item.tit || 'Die With A Smile - Lady Gaga & Bruno Mars';
             ksHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 140}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.w || item.width || 140}px; transform: rotate(${item.r || item.rotation || 0}deg); pointer-events:auto;">
                 <div class="vinyl-disc-widget ${vinylIsPlaying ? 'is-playing' : ''}">
                   <div class="vinyl-disc-disc-wrap" title="Tap to ${vinylIsPlaying ? 'pause' : 'play'}">
                     <img src="assets/vinyl_disc_pretty.png" class="placed-vinyl-disc" alt="Vinyl Record" />
@@ -5111,15 +5311,16 @@ document.addEventListener('DOMContentLoaded', () => {
                   </div>
                   <div class="vinyl-floating-track-tag">
                     <span class="vinyl-tag-music-icon">🎵</span>
-                    <span class="vinyl-tag-text">${escapeHtml(item.title || 'Die With A Smile - Lady Gaga & Bruno Mars')}</span>
+                    <span class="vinyl-tag-text">${escapeHtml(trackTitle)}</span>
                   </div>
                 </div>
               </div>
             `;
-          } else if (item.type === 'sticker') {
+          } else if (itType === 'sticker' || itType === 's') {
+            const stkFile = item.file || item.f || 'cherub_kiss.png';
             ksHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width || 70}px; transform: rotate(${item.rotation || 0}deg); pointer-events:auto;">
-                <img src="assets/stickers/${item.file}" class="placed-sticker-img" alt="${item.name}" style="width:100%; height:auto; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18)); pointer-events:none;" />
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.w || item.width || 70}px; transform: rotate(${item.r || item.rotation || 0}deg); pointer-events:auto;">
+                <img src="assets/stickers/${stkFile}" class="placed-sticker-img" alt="${item.name || item.n || 'Sticker'}" style="width:100%; height:auto; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.18)); pointer-events:none;" />
               </div>
             `;
           }
@@ -5153,25 +5354,26 @@ document.addEventListener('DOMContentLoaded', () => {
         contentArea.querySelectorAll('.vinyl-disc-disc-wrap, .vinyl-disc-play-btn, .vinyl-play-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const itm = keepsakesVal.find(k => k.type === 'vinyl');
+            const itm = keepsakesVal.find(k => (k.type === 'vinyl' || k.t === 'v'));
             toggleVinylAudio(itm || null);
           });
         });
       } else {
-        flipText.textContent = 'View Inside';
+        if (flipText) flipText.textContent = 'View Inside';
         let cvHtml = '';
         coverElementsVal.forEach(item => {
-          if (item.type === 'photo') {
+          const itType = item.type || item.t;
+          if (itType === 'photo' || itType === 'ph') {
             cvHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '55%'}; transform: rotate(${item.rotation || 0}deg);">
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.w || item.width || '55%'}; transform: rotate(${item.r || item.rotation || 0}deg);">
                 <img src="${item.src}" class="card-cover-photo-img" style="width:100%; height:auto; border-radius:6px; display:block;" />
               </div>
             `;
-          } else if (item.type === 'text') {
+          } else if (itType === 'text' || itType === 'tx') {
             cvHtml += `
-              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.width ? (typeof item.width === 'number' ? item.width + 'px' : item.width) : '60%'}; transform: rotate(${item.rotation || 0}deg);">
-                <div class="card-item-content card-text-content" style="font-family:${item.fontFamily || "'Caveat', cursive"}; font-size:${item.fontSize || 24}px; text-align:center;">
-                  ${escapeHtml(item.text)}
+              <div class="card-placed-item static" style="left:${item.x}%; top:${item.y}%; width:${item.w || item.width || '60%'}; transform: rotate(${item.r || item.rotation || 0}deg);">
+                <div class="card-item-content card-text-content" style="font-family:${item.ff || item.fontFamily || "'Caveat', cursive"}; font-size:${item.sz || item.fontSize || 24}px; text-align:center;">
+                  ${escapeHtml(item.txt || item.text || '')}
                 </div>
               </div>
             `;
@@ -5188,36 +5390,30 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    const btnOpen = document.getElementById('btn-recip-open-card');
-    const vesselView = document.getElementById('recip-card-vessel-view');
-    const revealedView = document.getElementById('recip-card-revealed-view');
-    if (btnOpen) {
-      btnOpen.onclick = () => {
-        vesselView.style.display = 'none';
-        revealedView.style.display = 'flex';
-        renderRecipCard();
-      };
-    }
-    const vesselWrap = vesselView ? vesselView.querySelector('.card-envelope-arriving-package, div[style*="cursor:pointer"]') : null;
-    if (vesselWrap) {
-      vesselWrap.onclick = () => {
-        vesselView.style.display = 'none';
-        revealedView.style.display = 'flex';
-        renderRecipCard();
-      };
+    function revealCard() {
+      if (vesselStage) vesselStage.style.display = 'none';
+      if (bifoldCardWrap) bifoldCardWrap.style.display = 'block';
+      renderRecipCard();
     }
 
-    const btnFlip = document.getElementById('btn-recip-card-flip');
-    if (btnFlip) {
-      btnFlip.onclick = () => {
+    if (btnOpen) {
+      btnOpen.onclick = revealCard;
+    }
+    if (vesselArt) {
+      vesselArt.onclick = revealCard;
+    }
+
+    if (flipBtn) {
+      flipBtn.onclick = () => {
         recipFace = recipFace === 'inside' ? 'cover' : 'inside';
         renderRecipCard();
       };
     }
 
-    const btnSave = document.getElementById('btn-recip-card-save');
-    if (btnSave) {
-      btnSave.onclick = () => {
+    // Save to Vault
+    const btnSaveVault = document.getElementById('btn-recipient-save-vault');
+    if (btnSaveVault) {
+      btnSaveVault.onclick = () => {
         try {
           const vault = JSON.parse(localStorage.getItem('between_us_vault_items') || '[]');
           vault.unshift({
@@ -5239,22 +5435,34 @@ document.addEventListener('DOMContentLoaded', () => {
             savedAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
           });
           localStorage.setItem('between_us_vault_items', JSON.stringify(vault));
-          btnSave.textContent = 'Saved to Vault ✓';
-        } catch (e) {}
+          btnSaveVault.textContent = '✓ Preserved in Your Keepsake Shelf';
+          showToast('Card tucked into your Keepsake Shelf! ♡');
+        } catch (e) {
+          console.error(e);
+        }
       };
     }
 
-    const btnCreate = document.getElementById('btn-recip-card-create');
-    if (btnCreate) {
-      btnCreate.onclick = () => {
-        recipientStage.style.display = 'none';
+    // Create Own Card / Open in Studio
+    const btnMakeOwn = document.getElementById('btn-recipient-create');
+    if (btnMakeOwn) {
+      btnMakeOwn.textContent = '✨ Make Your Own Card';
+      btnMakeOwn.onclick = () => {
+        const stage = document.getElementById('recipient-stage');
+        if (stage) stage.style.display = 'none';
         if (appHeader) appHeader.style.display = 'flex';
         if (appStage) appStage.style.display = 'block';
         if (appBottomNav) appBottomNav.style.display = 'flex';
+        window.isRecipientMode = false;
         selectMedium('greeting-card');
       };
     }
   }
+
+  function renderRecipientCardExperience(data) {
+    renderRecipientCardInUnifiedStage(data);
+  }
+  window.renderRecipientCardExperience = renderRecipientCardExperience;
 
   // ================= VAULT ROOM DYNAMIC LIST =================
   function renderVaultItems() {
@@ -5335,6 +5543,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Check Recipient URL param on load
+  window.openUnifiedDispatchModal = openUnifiedDispatchModal;
+  window.renderRecipientCardInUnifiedStage = renderRecipientCardInUnifiedStage;
+  window.renderRecipientLetterInUnifiedStage = renderRecipientLetterInUnifiedStage;
+  window.checkUrlRecipientView = checkUrlRecipientView;
   checkUrlRecipientView();
 
   // ================= 7. KEEPSAKES TABS =================

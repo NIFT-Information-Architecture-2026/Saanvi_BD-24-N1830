@@ -2138,28 +2138,46 @@
         <button class="btn-modal-close" id="btn-close-dispatch-modal" title="Close">✕</button>
         <div class="dispatch-modal-header">
           <div class="dispatch-badge-icon" id="dispatch-badge-icon">💌</div>
-          <h3 class="dispatch-modal-title" id="dispatch-modal-title">Dispatch Your Postcard</h3>
-          <p class="dispatch-modal-subtitle" id="dispatch-modal-sub">Share your thoughtful gift with someone special.</p>
+          <h3 class="dispatch-modal-title" id="dispatch-modal-title">Dispatch Your Greeting Card</h3>
+          <p class="dispatch-modal-subtitle" id="dispatch-modal-sub">Share your personalized card and keepsakes.</p>
         </div>
         
         <div class="dispatch-modal-body">
-          <div class="dispatch-options-list">
-            <button class="dispatch-opt-card" id="btn-dispatch-copy-url">
-              <div class="dispatch-opt-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#521319" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          <!-- Custom Slug Personalizer -->
+          <div class="dispatch-custom-slug-section">
+            <label class="dispatch-section-label" for="dispatch-custom-slug">
+              <span class="dispatch-label-title">✨ Personalize Your Link</span>
+              <span class="dispatch-label-hint">Customize how your link looks when shared</span>
+            </label>
+            <div class="dispatch-slug-input-wrapper">
+              <span class="dispatch-slug-prefix" id="dispatch-slug-prefix">betweenus.love/#</span>
+              <input type="text" class="dispatch-slug-input" id="dispatch-custom-slug" placeholder="for-kabir" autocomplete="off" spellcheck="false">
+            </div>
+          </div>
+
+          <!-- Shortened Shareable URL Field -->
+          <div class="dispatch-input-row">
+            <input type="text" class="dispatch-url-input" id="dispatch-url-input" readonly>
+            <button class="btn-copy-small" id="btn-copy-small">Copy Link</button>
+          </div>
+
+          <!-- Sharing Actions Grid -->
+          <div class="dispatch-actions-grid">
+            <button class="dispatch-action-card dispatch-wa-btn" id="btn-dispatch-whatsapp" type="button">
+              <div class="dispatch-wa-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.584 1.838.89 2.791.89 3.182 0 5.768-2.587 5.768-5.766.001-3.18-2.585-5.766-5.768-5.766zm9.969 5.766c0 5.518-4.482 10-10 10-1.748 0-3.385-.45-4.819-1.24l-5.181 1.355 1.381-5.051c-.886-1.488-1.381-3.228-1.381-5.064 0-5.518 4.482-10 10-10 5.518 0 10 4.482 10 10z"/>
                 </svg>
               </div>
-              <div class="dispatch-opt-text">
-                <strong>Copy URL</strong>
-                <span id="dispatch-copy-desc">Anyone with this link can view and flip your postcard</span>
+              <div class="dispatch-action-text">
+                <strong>Share on WhatsApp</strong>
+                <span>Send with a romantic card message</span>
               </div>
             </button>
 
-            <button class="dispatch-opt-card" id="btn-dispatch-send-friends">
+            <button class="dispatch-action-card" id="btn-dispatch-send-friends" type="button">
               <div class="dispatch-opt-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#521319" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#521319" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="18" cy="5" r="3"></circle>
                   <circle cx="6" cy="12" r="3"></circle>
                   <circle cx="18" cy="19" r="3"></circle>
@@ -2167,16 +2185,16 @@
                   <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                 </svg>
               </div>
-              <div class="dispatch-opt-text">
-                <strong>Send to Friends</strong>
-                <span>Share via WhatsApp, Messages, or Email</span>
+              <div class="dispatch-action-text">
+                <strong>Other Apps</strong>
+                <span>AirDrop, Messages, or Socials</span>
               </div>
             </button>
           </div>
 
-          <div class="dispatch-input-row">
-            <input type="text" class="dispatch-url-input" id="dispatch-url-input" readonly>
-            <button class="btn-copy-small" id="btn-copy-small">Copy</button>
+          <div class="dispatch-privacy-badge">
+            <span class="privacy-lock-icon">🔒</span>
+            <span>Direct Recipient View • Friends see only your gift without studio controls</span>
           </div>
         </div>
       </div>
@@ -2199,19 +2217,32 @@
           <span class="recipient-brand-sub">BETWEEN US</span>
         </div>
 
-        <!-- Vessel & Postcard Card -->
+        <!-- Vessel & Gift Card Container -->
         <div class="recipient-card">
           <div class="recipient-dedication-box">
             <h2 class="recipient-greeting" id="recipient-dedication-heading">A little something for you</h2>
             <p class="recipient-from-to" id="recipient-from-to-text">From Saanvi to Kabir</p>
           </div>
 
-          <!-- Vessel Wrapper -->
+          <!-- Vessel Wrapper (Arriving Package) -->
           <div class="recipient-vessel-stage" id="recipient-vessel-stage">
             <div id="recipient-vessel-art"></div>
             <div class="recipient-open-row">
               <button class="btn-recipient-open" id="btn-recipient-open">
                 <span>Click to Open ♡</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Greeting Card Bifold View (Revealed after clicking open) -->
+          <div class="recipient-bifold-card-wrap" id="recipient-bifold-card-wrap" style="display:none;">
+            <div id="recip-card-content-area" style="width:100%;"></div>
+            <div class="recipient-actions-row">
+              <button class="btn-recipient-flip" id="btn-recip-card-flip">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                </svg>
+                <span id="recip-flip-text">View Cover</span>
               </button>
             </div>
           </div>
@@ -2231,6 +2262,11 @@
                 <span>Flip Postcard</span>
               </button>
             </div>
+          </div>
+
+          <!-- Letter View (Revealed after clicking open) -->
+          <div class="recipient-letter-wrap" id="recipient-letter-wrap" style="display:none;">
+            <div id="recip-letter-content-area" style="width:100%;"></div>
           </div>
 
           <!-- Bouquet View (For shared botanical bouquets) -->
@@ -2256,7 +2292,7 @@
           <!-- Recipient Footer actions -->
           <div class="recipient-footer-actions">
             <button class="btn-recipient-save-vault" id="btn-recipient-save-vault">🔖 Save to My Keepsakes</button>
-            <button class="btn-recipient-create" id="btn-recipient-create">✨ Make Your Own Postcard</button>
+            <button class="btn-recipient-create" id="btn-recipient-create">✨ Make Your Own Gift</button>
           </div>
         </div>
       </div>
